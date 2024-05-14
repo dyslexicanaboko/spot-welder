@@ -1,0 +1,5 @@
+﻿function {{ClassName}} (
+{{Parameters}}
+) {
+{{Properties}}
+}
