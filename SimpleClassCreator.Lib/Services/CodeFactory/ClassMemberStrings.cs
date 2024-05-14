@@ -4,7 +4,7 @@ using System.CodeDom.Compiler;
 using System.Data;
 using System.Reflection;
 using Microsoft.CSharp;
-using Microsoft.JScript;
+//using Microsoft.JScript;
 using Microsoft.VisualBasic;
 using SimpleClassCreator.Lib.Models;
 
@@ -34,7 +34,7 @@ namespace SimpleClassCreator.Lib.Services.CodeFactory
           break;
 
         case CodeType.JavaScript:
-          _provider = new JScriptCodeProvider();
+          //_provider = new JScriptCodeProvider(); //Not sure if I really need this anymore
 
           break;
 
