@@ -9,14 +9,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotWelder.Ui", "SpotWelder
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotWelder.Tests", "SpotWelder.Tests\SpotWelder.Tests.csproj", "{D0AF76F5-A53F-4D7E-8438-F3FBD63DB115}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D955E4A7-2DCF-47CA-9795-58DE803993FF}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SpotWelder.DatabaseForTests", "SpotWelder.DatabaseForTests\SpotWelder.DatabaseForTests.sqlproj", "{42F0B80F-7206-4B51-BD19-FA392D051DA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{ABDED572-E595-4A68-ACD8-65F202256957}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SpotWelder.DatabaseForTests", "SpotWelder.DatabaseForTests\SpotWelder.DatabaseForTests.sqlproj", "{42F0B80F-7206-4B51-BD19-FA392D051DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
