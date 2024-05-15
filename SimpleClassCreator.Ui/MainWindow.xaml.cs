@@ -1,18 +1,20 @@
 ﻿using SimpleClassCreator.Lib.DataAccess;
 using SimpleClassCreator.Lib.Services;
+using SimpleClassCreator.Lib.Services.CodeFactory;
 using SimpleClassCreator.Ui.Helpers;
 using SimpleClassCreator.Ui.Profile;
 using SimpleClassCreator.Ui.Services;
+using System;
 using System.Collections.Generic;
 using System.Windows;
-using SimpleClassCreator.Lib.Services.CodeFactory;
+using Application = System.Windows.Application;
 
 namespace SimpleClassCreator.Ui
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow
+  /// <summary>
+  /// Interaction logic for MainWindow.xaml
+  /// </summary>
+  public partial class MainWindow
         : Window
     {
         private readonly List<IUsesResultWindow> _hasResultWindows;
@@ -66,5 +68,12 @@ namespace SimpleClassCreator.Ui
                 obj.ShowDialog();
             }
         }
-    }
+
+        protected override void OnClosed(EventArgs e)
+        {
+          base.OnClosed(e);
+
+          Application.Current.Shutdown();
+        }
+  }
 }
