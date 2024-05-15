@@ -1,4 +1,4 @@
-﻿namespace SimpleClassCreator.Lib.Models
+﻿namespace SpotWelder.Lib.Models
 {
     public class QueryToClassParameters
     {

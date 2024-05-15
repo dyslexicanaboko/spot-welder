@@ -1,8 +1,8 @@
-﻿using SimpleClassCreator.Lib.Models.Meta;
-using SimpleClassCreator.Ui.ViewModels;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using SpotWelder.Lib.Models.Meta;
+using SpotWelder.Ui.ViewModels;
 
-namespace SimpleClassCreator.Ui.Services
+namespace SpotWelder.Ui.Services
 {
     public interface IMetaViewModelService
     {

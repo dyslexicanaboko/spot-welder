@@ -1,9 +1,9 @@
 ﻿using System;
-using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Lib.Models;
 using System.Data;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.Services
+namespace SpotWelder.Lib.Services
 {
     public abstract class ClassMetaDataBase
     {

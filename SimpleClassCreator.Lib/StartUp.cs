@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SimpleClassCreator.Lib
+namespace SpotWelder.Lib
 {
     public class StartUp
     {

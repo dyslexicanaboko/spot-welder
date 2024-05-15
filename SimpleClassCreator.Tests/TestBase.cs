@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using NUnit.Framework;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Services;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services;
 
-namespace SimpleClassCreator.Tests
+namespace SpotWelder.Tests
 {
     public abstract class TestBase
     {

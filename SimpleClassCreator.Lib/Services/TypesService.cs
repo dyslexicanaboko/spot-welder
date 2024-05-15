@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace SimpleClassCreator.Lib.Services
+namespace SpotWelder.Lib.Services
 {
   public class TypesService
   {

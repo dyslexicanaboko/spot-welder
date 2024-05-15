@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleClassCreator.Lib.Events
+namespace SpotWelder.Lib.Events
 {
     public class RowProcessedEventArgs
         : EventArgs

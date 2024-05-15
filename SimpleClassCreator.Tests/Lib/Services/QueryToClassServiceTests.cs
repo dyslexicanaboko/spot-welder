@@ -1,14 +1,14 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SimpleClassCreator.Lib;
-using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Services;
-using SimpleClassCreator.Tests.DummyObjects;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SpotWelder.Lib;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services;
+using SpotWelder.Tests.DummyObjects;
 
-namespace SimpleClassCreator.Tests.Lib.Services
+namespace SpotWelder.Tests.Lib.Services
 {
     [TestFixture]
     public class QueryToClassServiceTests

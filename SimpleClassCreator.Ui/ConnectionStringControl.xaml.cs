@@ -1,14 +1,14 @@
-﻿using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Ui.Profile;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using SimpleClassCreator.Lib.Models;
-using B = SimpleClassCreator.Ui.UserControlExtensions;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.Models;
+using SpotWelder.Ui.Profile;
+using B = SpotWelder.Ui.UserControlExtensions;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
     /// <summary>
     /// Interaction logic for ConnectionStringControl.xaml
@@ -108,7 +108,7 @@ namespace SimpleClassCreator.Ui
                 showMessage = !result.Success;
 
             if (showMessage)
-                B.ShowWarningMessage(result.Success ? "Connected Successfully" : "Connection Failed. Returned error: " + result.Message);
+                UserControlExtensions.ShowWarningMessage(result.Success ? "Connected Successfully" : "Connection Failed. Returned error: " + result.Message);
 
             return result.Success;
         }

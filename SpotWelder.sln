@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleClassCreator.Lib", "SimpleClassCreator.Lib\SimpleClassCreator.Lib.csproj", "{FD9A07F7-FBAF-4B2D-8F1B-E2499985F111}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotWelder.Lib", "SimpleClassCreator.Lib\SpotWelder.Lib.csproj", "{FD9A07F7-FBAF-4B2D-8F1B-E2499985F111}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleClassCreator.Ui", "SimpleClassCreator.Ui\SimpleClassCreator.Ui.csproj", "{2CE2565A-CF44-4BEF-B410-17C7AF179060}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotWelder.Ui", "SimpleClassCreator.Ui\SpotWelder.Ui.csproj", "{2CE2565A-CF44-4BEF-B410-17C7AF179060}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleClassCreator.Tests", "SimpleClassCreator.Tests\SimpleClassCreator.Tests.csproj", "{D0AF76F5-A53F-4D7E-8438-F3FBD63DB115}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotWelder.Tests", "SimpleClassCreator.Tests\SpotWelder.Tests.csproj", "{D0AF76F5-A53F-4D7E-8438-F3FBD63DB115}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D955E4A7-2DCF-47CA-9795-58DE803993FF}"
 	ProjectSection(SolutionItems) = preProject

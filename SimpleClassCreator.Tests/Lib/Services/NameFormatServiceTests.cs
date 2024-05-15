@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
-using SimpleClassCreator.Lib.Services;
 using System;
-using SimpleClassCreator.Lib;
+using SpotWelder.Lib;
+using SpotWelder.Lib.Services;
 
-namespace SimpleClassCreator.Tests.Lib.Services
+namespace SpotWelder.Tests.Lib.Services
 {
     [TestFixture]
     public class NameFormatServiceTests

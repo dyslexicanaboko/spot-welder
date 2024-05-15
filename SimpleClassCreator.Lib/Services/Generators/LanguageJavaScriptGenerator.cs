@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
 
-namespace SimpleClassCreator.Lib.Services.Generators
+namespace SpotWelder.Lib.Services.Generators
 {
   public class LanguageJavaScriptGenerator
     : GeneratorBase

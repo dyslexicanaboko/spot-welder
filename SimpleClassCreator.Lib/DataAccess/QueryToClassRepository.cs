@@ -1,11 +1,11 @@
-﻿using SimpleClassCreator.Lib.Exceptions;
-using SimpleClassCreator.Lib.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using SpotWelder.Lib.Exceptions;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.DataAccess
+namespace SpotWelder.Lib.DataAccess
 {
     /// <summary>
     /// The Data Access layer for the Code Generator

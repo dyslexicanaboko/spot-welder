@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SimpleClassCreator.Lib.Models.Meta
+namespace SpotWelder.Lib.Models.Meta
 {
     //NOTE: I want the interface to enforce a list of interface, but its not going to work. Not sure how to deal with this right now.
     public class MetaAssembly : IMetaAssembly

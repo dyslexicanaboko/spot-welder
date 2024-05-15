@@ -1,7 +1,7 @@
 ﻿using System;
-using SimpleClassCreator.Lib;
+using SpotWelder.Lib;
 
-namespace SimpleClassCreator.Ui.Profile
+namespace SpotWelder.Ui.Profile
 {
   [ExcludeFromDiScan]
   public class ProfileManager

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SimpleClassCreator.Ui.Helpers
+namespace SpotWelder.Ui.Helpers
 {
     public class ResultWindowManager
     {

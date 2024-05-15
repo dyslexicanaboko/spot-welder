@@ -1,11 +1,11 @@
 ﻿using NUnit.Framework;
-using SimpleClassCreator.Lib;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Services.CodeFactory;
-using SimpleClassCreator.Lib.Services.Generators;
 using System.Collections.Generic;
+using SpotWelder.Lib;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators;
 
-namespace SimpleClassCreator.Tests.Lib.Services.Generator
+namespace SpotWelder.Tests.Lib.Services.Generator
 {
     [TestFixture]
     public class ModelGeneratorTests

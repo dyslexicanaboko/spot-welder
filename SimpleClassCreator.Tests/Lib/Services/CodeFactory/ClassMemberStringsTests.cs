@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
-using SimpleClassCreator.Lib;
-using SimpleClassCreator.Lib.Services.CodeFactory;
 using System;
+using SpotWelder.Lib;
+using SpotWelder.Lib.Services.CodeFactory;
 
-namespace SimpleClassCreator.Tests.Lib.Services.CodeFactory
+namespace SpotWelder.Tests.Lib.Services.CodeFactory
 {
     [TestFixture]
     public class ClassMemberStringsTests

@@ -1,6 +1,6 @@
-﻿using SimpleClassCreator.Lib.Models;
+﻿using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.DataAccess
+namespace SpotWelder.Lib.DataAccess
 {
     public interface IQueryToClassRepository
         : IBaseRepository

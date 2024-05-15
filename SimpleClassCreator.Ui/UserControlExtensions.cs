@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
     public static class UserControlExtensions
     {

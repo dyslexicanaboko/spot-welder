@@ -1,4 +1,4 @@
-﻿namespace SimpleClassCreator.Ui.Profile
+﻿namespace SpotWelder.Ui.Profile
 {
     public class UserConnectionString
     {

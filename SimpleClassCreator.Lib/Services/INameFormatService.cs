@@ -1,6 +1,6 @@
-﻿using SimpleClassCreator.Lib.Models;
+﻿using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.Services
+namespace SpotWelder.Lib.Services
 {
     public interface INameFormatService
     {

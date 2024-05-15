@@ -1,4 +1,4 @@
-﻿namespace SimpleClassCreator.Ui.Helpers
+﻿namespace SpotWelder.Ui.Helpers
 {
     public interface IUsesResultWindow
     {

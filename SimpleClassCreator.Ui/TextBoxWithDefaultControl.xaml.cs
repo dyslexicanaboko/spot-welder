@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
     /// <summary>
     /// Interaction logic for TextBoxWithDefaultControl.xaml

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SimpleClassCreator.Ui.Properties {
+namespace SpotWelder.Ui.Properties {
     using System;
     
     

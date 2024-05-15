@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace SimpleClassCreator.Lib.Models
+namespace SpotWelder.Lib.Models
 {
     public class CompilerResult
     {

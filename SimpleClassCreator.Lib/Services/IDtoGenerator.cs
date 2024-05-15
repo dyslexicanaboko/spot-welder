@@ -1,11 +1,11 @@
-﻿using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Models.Meta;
-using SimpleClassCreator.Lib.Services.CodeFactory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Models.Meta;
+using SpotWelder.Lib.Services.CodeFactory;
 
-namespace SimpleClassCreator.Lib.Services
+namespace SpotWelder.Lib.Services
 {
     public interface IDtoGenerator
     {

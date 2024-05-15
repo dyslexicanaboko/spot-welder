@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace SimpleClassCreator.Lib.Models
+namespace SpotWelder.Lib.Models
 {
     public class SchemaRaw
     {

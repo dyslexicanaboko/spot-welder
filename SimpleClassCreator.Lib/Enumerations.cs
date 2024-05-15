@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleClassCreator.Lib
+namespace SpotWelder.Lib
 {
   public enum SourceSqlType
   {

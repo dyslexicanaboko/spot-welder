@@ -1,7 +1,7 @@
-﻿using SimpleClassCreator.Lib.Models;
-using System.Data;
+﻿using System.Data;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.DataAccess
+namespace SpotWelder.Lib.DataAccess
 {
     public interface IGeneralDatabaseQueries
         : IBaseRepository

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SimpleClassCreator.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.CodeFactory;
 
-namespace SimpleClassCreator.Lib.Models
+namespace SpotWelder.Lib.Models
 {
     public class DtoInstructions
     {

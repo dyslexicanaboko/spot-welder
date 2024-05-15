@@ -15,7 +15,7 @@
 		<AppDesigner Include="Properties\" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\SimpleClassCreator.Lib\SimpleClassCreator.Lib.csproj" />
+		<ProjectReference Include="..\SimpleClassCreator.Lib\SpotWelder.Lib.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Resource Include="images\Copy_16x.png" />

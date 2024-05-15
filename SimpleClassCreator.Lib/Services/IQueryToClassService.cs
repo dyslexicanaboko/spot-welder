@@ -1,7 +1,7 @@
-﻿using SimpleClassCreator.Lib.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.Services
+namespace SpotWelder.Lib.Services
 {
     public interface IQueryToClassService
     {

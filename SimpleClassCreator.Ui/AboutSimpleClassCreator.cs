@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
     partial class AboutSimpleClassCreator : Form
     {

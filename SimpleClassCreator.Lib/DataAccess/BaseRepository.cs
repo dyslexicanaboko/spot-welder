@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using SimpleClassCreator.Lib.Models;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.DataAccess
+namespace SpotWelder.Lib.DataAccess
 {
   /// <summary>
   ///   The base Data Access Layer

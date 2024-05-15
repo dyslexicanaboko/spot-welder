@@ -1,21 +1,21 @@
-﻿using SimpleClassCreator.Lib;
-using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Lib.Events;
-using SimpleClassCreator.Lib.Exceptions;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Services;
-using SimpleClassCreator.Ui.Helpers;
-using SimpleClassCreator.Ui.Profile;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using B = SimpleClassCreator.Ui.UserControlExtensions;
+using SpotWelder.Lib;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.Events;
+using SpotWelder.Lib.Exceptions;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services;
+using SpotWelder.Ui.Helpers;
+using SpotWelder.Ui.Profile;
+using B = SpotWelder.Ui.UserControlExtensions;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
     /// <summary>
     ///     Interaction logic for QueryToMockDataControl.xaml
@@ -64,7 +64,7 @@ namespace SimpleClassCreator.Ui
             }
             catch (Exception ex)
             {
-                B.ShowWarningMessage($"The table name you provided could not be formatted.\nPlease select the Query radio button if your source is not just a table name.\n\nError: {ex.Message}");
+                UserControlExtensions.ShowWarningMessage($"The table name you provided could not be formatted.\nPlease select the Query radio button if your source is not just a table name.\n\nError: {ex.Message}");
             }
         }
 
@@ -84,7 +84,7 @@ namespace SimpleClassCreator.Ui
             }
             catch (Exception ex)
             {
-                B.ShowErrorMessage(ex);
+                UserControlExtensions.ShowErrorMessage(ex);
             }
         }
 
@@ -184,11 +184,11 @@ namespace SimpleClassCreator.Ui
             }
             catch (NonUniqueColumnException nucEx)
             {
-                B.ShowWarningMessage(nucEx.Message);
+                UserControlExtensions.ShowWarningMessage(nucEx.Message);
             }
             catch (Exception ex)
             {
-                B.ShowErrorMessage(ex);
+                UserControlExtensions.ShowErrorMessage(ex);
             }
             finally
             {

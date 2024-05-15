@@ -1,15 +1,15 @@
-﻿using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Lib.Services;
-using SimpleClassCreator.Lib.Services.CodeFactory;
-using SimpleClassCreator.Ui.Helpers;
-using SimpleClassCreator.Ui.Profile;
-using SimpleClassCreator.Ui.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Ui.Helpers;
+using SpotWelder.Ui.Profile;
+using SpotWelder.Ui.Services;
 using Application = System.Windows.Application;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
   /// <summary>
   /// Interaction logic for MainWindow.xaml

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleClassCreator.Tests.Ui.Services
+namespace SpotWelder.Tests.Ui.Services
 {
     public class MetaViewModelServiceTests
     {

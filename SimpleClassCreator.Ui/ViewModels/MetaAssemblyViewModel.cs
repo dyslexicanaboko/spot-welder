@@ -1,7 +1,7 @@
-﻿using SimpleClassCreator.Lib.Models.Meta;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using SpotWelder.Lib.Models.Meta;
 
-namespace SimpleClassCreator.Ui.ViewModels
+namespace SpotWelder.Ui.ViewModels
 {
     public class MetaAssemblyViewModel : IMetaAssembly
     {

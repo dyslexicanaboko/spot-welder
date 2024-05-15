@@ -1,5 +1,5 @@
-﻿<Window xmlns:my="clr-namespace:SimpleClassCreator.Ui"
-        x:Class="SimpleClassCreator.Ui.MainWindow"
+﻿<Window xmlns:my="clr-namespace:SpotWelder.Ui"
+        x:Class="SpotWelder.Ui.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Simple Class Creator" Height="802" Width="753" Closing="Window_Closing">

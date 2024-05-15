@@ -6,9 +6,9 @@ using System.Reflection;
 using Microsoft.CSharp;
 //using Microsoft.JScript;
 using Microsoft.VisualBasic;
-using SimpleClassCreator.Lib.Models;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.Services.CodeFactory
+namespace SpotWelder.Lib.Services.CodeFactory
 {
   public class ClassMemberStrings
   {

@@ -1,8 +1,8 @@
-﻿using SimpleClassCreator.Lib.Services;
-using System;
+﻿using System;
 using System.Reflection;
+using SpotWelder.Lib.Services;
 
-namespace SimpleClassCreator.Lib.Models
+namespace SpotWelder.Lib.Models
 {
   public class SchemaColumn
   {

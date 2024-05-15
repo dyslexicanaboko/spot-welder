@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace SimpleClassCreator.Ui.Profile
+namespace SpotWelder.Ui.Profile
 {
     public class ProfileSaver
     {

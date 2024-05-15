@@ -1,7 +1,7 @@
-﻿using SimpleClassCreator.Lib.Models;
-using System.Text;
+﻿using System.Text;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.Services.Generators
+namespace SpotWelder.Lib.Services.Generators
 {
     public class ServiceSerializationCsvGenerator
         : GeneratorBase

@@ -1,10 +1,10 @@
-﻿using SimpleClassCreator.Lib.Models.Meta;
-using SimpleClassCreator.Ui.ViewModels;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using SpotWelder.Lib.Models.Meta;
+using SpotWelder.Ui.ViewModels;
 
-namespace SimpleClassCreator.Ui.Services
+namespace SpotWelder.Ui.Services
 {
     public class MetaViewModelService : IMetaViewModelService
     {

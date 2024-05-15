@@ -1,7 +1,7 @@
-﻿using SimpleClassCreator.Lib.Services.CodeFactory;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SpotWelder.Lib.Services.CodeFactory;
 
-namespace SimpleClassCreator.Lib.Models
+namespace SpotWelder.Lib.Models
 {
     public class ClassInstructions
     {

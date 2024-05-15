@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
     /// <summary>
     /// Interaction logic for ResultWindow.xaml

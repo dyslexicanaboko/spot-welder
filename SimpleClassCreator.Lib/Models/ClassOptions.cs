@@ -1,4 +1,4 @@
-﻿namespace SimpleClassCreator.Lib.Models
+﻿namespace SpotWelder.Lib.Models
 {
     /// <summary>
     /// Generation options. Each property should be read as "Generate PropertyName".

@@ -1,10 +1,10 @@
 ﻿<UserControl Name="ConnectionStringsComboBox"
-             x:Class="SimpleClassCreator.Ui.ConnectionStringControl"
+             x:Class="SpotWelder.Ui.ConnectionStringControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SimpleClassCreator.Ui"
+             xmlns:local="clr-namespace:SpotWelder.Ui"
              mc:Ignorable="d" 
              d:DesignHeight="79.185" d:DesignWidth="612.661">
     <Grid Background="White">

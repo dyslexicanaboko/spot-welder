@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleClassCreator.Lib.Models
+namespace SpotWelder.Lib.Models
 {
   public class TableQuery
     : IEquatable<TableQuery>

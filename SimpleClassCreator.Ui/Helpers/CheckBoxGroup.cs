@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Controls;
 
-namespace SimpleClassCreator.Ui.Helpers
+namespace SpotWelder.Ui.Helpers
 {
     public class CheckBoxGroup
     {

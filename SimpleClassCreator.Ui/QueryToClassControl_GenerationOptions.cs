@@ -1,12 +1,12 @@
-﻿using SimpleClassCreator.Lib;
-using SimpleClassCreator.Lib.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using SimpleClassCreator.Ui.Helpers;
-using B = SimpleClassCreator.Ui.UserControlExtensions;
+using SpotWelder.Lib;
+using SpotWelder.Lib.Models;
+using SpotWelder.Ui.Helpers;
+using B = SpotWelder.Ui.UserControlExtensions;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
     /// <summary>
     /// Any code related to obtaining parameters will live in this partial for the sake of legibility.
@@ -71,7 +71,7 @@ namespace SimpleClassCreator.Ui
             if (_classCheckBoxGroup.HasTickedCheckBox())
                 return obj;
 
-            B.ShowWarningMessage("You must select at least one construct for generation. None is not an option.");
+            UserControlExtensions.ShowWarningMessage("You must select at least one construct for generation. None is not an option.");
 
             return null;
         }

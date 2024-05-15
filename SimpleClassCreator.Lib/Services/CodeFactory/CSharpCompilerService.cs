@@ -1,11 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using SimpleClassCreator.Lib.Models;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.Services.CodeFactory
+namespace SpotWelder.Lib.Services.CodeFactory
 {
 	public class CSharpCompilerService : ICSharpCompilerService
 	{

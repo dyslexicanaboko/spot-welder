@@ -1,9 +1,9 @@
-﻿using SimpleClassCreator.Lib.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Lib.Services
+namespace SpotWelder.Lib.Services
 {
     public class NameFormatService
         : INameFormatService

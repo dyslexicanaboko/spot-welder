@@ -8,15 +8,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Models.Meta;
-using SimpleClassCreator.Lib.Services;
-using SimpleClassCreator.Lib.Services.CodeFactory;
-using SimpleClassCreator.Ui.Helpers;
-using SimpleClassCreator.Ui.Services;
-using SimpleClassCreator.Ui.ViewModels;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Models.Meta;
+using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Ui.Helpers;
+using SpotWelder.Ui.Services;
+using SpotWelder.Ui.ViewModels;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
   /// <summary>
   ///   Interaction logic for DtoMakerControl.xaml

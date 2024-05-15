@@ -1,4 +1,4 @@
-﻿namespace SimpleClassCreator.Ui
+﻿namespace SpotWelder.Ui
 {
     partial class AboutSimpleClassCreator
     {

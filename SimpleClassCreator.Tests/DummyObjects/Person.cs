@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Services;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services;
 
-namespace SimpleClassCreator.Tests.DummyObjects
+namespace SpotWelder.Tests.DummyObjects
 {
     public class Person
     {

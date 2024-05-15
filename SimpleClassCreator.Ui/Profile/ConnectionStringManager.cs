@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SimpleClassCreator.Ui.Profile
+namespace SpotWelder.Ui.Profile
 {
     public class ConnectionStringManager
     {

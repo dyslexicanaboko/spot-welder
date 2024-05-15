@@ -1,6 +1,6 @@
-﻿using SimpleClassCreator.Lib.Models.Meta;
+﻿using SpotWelder.Lib.Models.Meta;
 
-namespace SimpleClassCreator.Ui.ViewModels
+namespace SpotWelder.Ui.ViewModels
 {
     public class MetaPropertyViewModel 
         : ObservableObject, IMetaProperty

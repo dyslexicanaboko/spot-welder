@@ -1,6 +1,6 @@
 ﻿//using System.Collections.Generic;
 
-namespace SimpleClassCreator.Lib.Models.Meta
+namespace SpotWelder.Lib.Models.Meta
 {
     public interface IMetaClass
     {

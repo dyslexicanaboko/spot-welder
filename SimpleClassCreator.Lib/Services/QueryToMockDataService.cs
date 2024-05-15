@@ -1,11 +1,11 @@
-﻿using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Lib.Events;
-using SimpleClassCreator.Lib.Models;
-using SimpleClassCreator.Lib.Services.CodeFactory;
-using SimpleClassCreator.Lib.Services.Generators;
-using System.Linq;
+﻿using System.Linq;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.Events;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators;
 
-namespace SimpleClassCreator.Lib.Services
+namespace SpotWelder.Lib.Services
 {
     public interface IQueryToMockDataService
     {

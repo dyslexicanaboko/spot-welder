@@ -1,4 +1,4 @@
-﻿namespace SimpleClassCreator.Lib.Models.Meta
+﻿namespace SpotWelder.Lib.Models.Meta
 {
     public class MetaProperty : IMetaProperty
     {

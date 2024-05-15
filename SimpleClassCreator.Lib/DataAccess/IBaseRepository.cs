@@ -1,4 +1,4 @@
-﻿namespace SimpleClassCreator.Lib.DataAccess
+﻿namespace SpotWelder.Lib.DataAccess
 {
     public interface IBaseRepository
     {

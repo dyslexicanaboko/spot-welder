@@ -1,11 +1,11 @@
 ﻿<UserControl Name="QueryToClass"
-             xmlns:my="clr-namespace:SimpleClassCreator.Ui"
-             x:Class="SimpleClassCreator.Ui.QueryToClassControl"
+             xmlns:my="clr-namespace:SpotWelder.Ui"
+             x:Class="SpotWelder.Ui.QueryToClassControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SimpleClassCreator.Ui"
+             xmlns:local="clr-namespace:SpotWelder.Ui"
              mc:Ignorable="d" Height="682.333" Width="682">
     <Grid Background="White" Margin="0,0,10,0">
         <GroupBox Header="Step 1: Connection String" Height="100" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="652">

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SimpleClassCreator.Lib;
-using SimpleClassCreator.Ui.Profile;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using SpotWelder.Lib;
+using SpotWelder.Ui.Profile;
 
-namespace SimpleClassCreator.Ui
+namespace SpotWelder.Ui
 {
   /// <summary>
   ///   Interaction logic for App.xaml
@@ -49,13 +49,13 @@ namespace SimpleClassCreator.Ui
       services.AddTransient<MainWindow>();
 
       //Scanned services
-      var asm = Assembly.Load("SimpleClassCreator.Ui");
+      var asm = Assembly.Load("SpotWelder.Ui");
 
       //Namespaces that must be excluded from the DI scan
       var excludeNamespaces = asm.GetTypes()
         .Where(t =>
           t.Namespace != null &&
-          t.Namespace.Contains("SimpleClassCreator.Ui.ViewModels"))
+          t.Namespace.Contains("SpotWelder.Ui.ViewModels"))
         .Select(t => t.Namespace)
         .Distinct()
         .ToArray();
@@ -77,13 +77,13 @@ namespace SimpleClassCreator.Ui
       services.AddSingleton<IProfileManager>(_ => ProfileSaver.Load());
 
       //Scanned services
-      var asm = Assembly.Load("SimpleClassCreator.Lib");
+      var asm = Assembly.Load("SpotWelder.Lib");
 
       //Namespaces that must be excluded from the DI scan
       var excludeNamespaces = asm.GetTypes()
         .Where(t =>
           t.Namespace != null &&
-          t.Namespace.Contains("SimpleClassCreator.Lib.Models"))
+          t.Namespace.Contains("SpotWelder.Lib.Models"))
         .Select(t => t.Namespace)
         .Distinct()
         .ToArray();

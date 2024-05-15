@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Lib.Models;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.Models;
 
-namespace SimpleClassCreator.Tests.Lib.DataAccess
+namespace SpotWelder.Tests.Lib.DataAccess
 {
     [TestFixture]
     public class QueryToClassRepositoryTests

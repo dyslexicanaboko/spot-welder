@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SimpleClassCreator.Ui.ViewModels
+namespace SpotWelder.Ui.ViewModels
 {
     //Excellent explanation of how to handle observable collections
     //https://www.youtube.com/watch?v=gOf2FZ6dkbU&ab_channel=Payload

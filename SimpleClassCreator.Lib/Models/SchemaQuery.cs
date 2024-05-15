@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SimpleClassCreator.Lib.Models
+namespace SpotWelder.Lib.Models
 {
     public class SchemaQuery
     {

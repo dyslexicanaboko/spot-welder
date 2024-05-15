@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleClassCreator.Lib.Exceptions
+namespace SpotWelder.Lib.Exceptions
 {
     public class NonUniqueColumnException
     : Exception
