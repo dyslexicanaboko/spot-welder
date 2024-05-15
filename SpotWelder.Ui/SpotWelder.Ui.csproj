@@ -7,6 +7,17 @@
 		<UseWPF>true</UseWPF>
 		<Nullable>enable</Nullable>
 		<StartupObject></StartupObject>
+		<AssemblyVersion>3.0.0.0</AssemblyVersion>
+		<FileVersion>3.0.0.0</FileVersion>
+		<Title>Spot Welder</Title>
+		<Copyright>2004</Copyright>
+		<PackageProjectUrl>https://obscureproblemsandgotchas.com/dyslexicapps/</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/dyslexicanaboko/spot-welder</RepositoryUrl>
+		<Description>A straight forward code generation tool made for software developers to handle single purpose mundane scaffolding tasks.</Description>
+		<Product>Spot Welder</Product>
+		<Company>DyslexicAnaboko</Company>
+		<Authors>Eli Hayon / DyslexicAnaboko</Authors>
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Include="Profile.json">

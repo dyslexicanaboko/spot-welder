@@ -63,10 +63,9 @@ namespace SpotWelder.Ui
 
         private void btnAbout_Click(object sender, RoutedEventArgs e)
         {
-            using (var obj = new AboutSimpleClassCreator())
-            {
-                obj.ShowDialog();
-            }
+          using var obj = new AboutForm();
+
+          obj.ShowDialog();
         }
 
         protected override void OnClosed(EventArgs e)
