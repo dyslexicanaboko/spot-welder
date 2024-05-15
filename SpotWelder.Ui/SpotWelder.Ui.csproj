@@ -15,9 +15,6 @@
 		<AppDesigner Include="Properties\" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\SimpleClassCreator.Lib\SpotWelder.Lib.csproj" />
-	</ItemGroup>
-	<ItemGroup>
 		<Resource Include="images\Copy_16x.png" />
 	</ItemGroup>
 	<ItemGroup>
@@ -35,5 +32,8 @@
 		<PackageReference Include="Scrutor" Version="4.2.2" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\SpotWelder.Lib\SpotWelder.Lib.csproj" />
 	</ItemGroup>
 </Project>

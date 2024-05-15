@@ -3,14 +3,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyTitle>SimpleClassCreator.Tests</AssemblyTitle>
-    <Product>SimpleClassCreator.Tests</Product>
+    <AssemblyTitle>SpotWelder.Tests</AssemblyTitle>
+    <Product>SpotWelder.Tests</Product>
     <Copyright>Copyright ©  2021</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimpleClassCreator.Lib\SpotWelder.Lib.csproj" />
+    <ProjectReference Include="..\SpotWelder.Lib\SpotWelder.Lib.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.4.0" />
