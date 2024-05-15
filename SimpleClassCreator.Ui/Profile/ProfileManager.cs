@@ -1,26 +1,28 @@
 ﻿using System;
+using SimpleClassCreator.Lib;
 
 namespace SimpleClassCreator.Ui.Profile
 {
-    public class ProfileManager
-        : IProfileManager
+  [ExcludeFromDiScan]
+  public class ProfileManager
+    : IProfileManager
+  {
+    public delegate void SaveHandler(object sender, EventArgs e);
+
+    public ConnectionStringManager ConnectionStringManager { get; set; }
+
+    private event SaveHandler? Save;
+
+    public void RegisterSaveDelegate(SaveHandler saveHandler)
     {
-        public delegate void SaveHandler(object sender, EventArgs e);
+      Save += saveHandler;
 
-        private event SaveHandler Save;
-
-        public ConnectionStringManager ConnectionStringManager { get; set; }
-
-        public void RegisterSaveDelegate(SaveHandler saveHandler)
-        {
-            Save += saveHandler;
-
-            ConnectionStringManager.Save += RaiseSaveEvent;
-        }
-
-        private void RaiseSaveEvent(object sender, EventArgs e)
-        {
-            Save?.Invoke(this, new EventArgs());
-        }
+      ConnectionStringManager.Save += RaiseSaveEvent;
     }
+
+    private void RaiseSaveEvent(object sender, EventArgs e)
+    {
+      Save?.Invoke(this, EventArgs.Empty);
+    }
+  }
 }

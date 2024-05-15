@@ -6,7 +6,7 @@ namespace SimpleClassCreator.Ui.Profile
 {
     public class ProfileSaver
     {
-        private readonly object _fileLock = new object();
+        private readonly object _fileLock = new ();
 
         private readonly string _profileFilePath;
 

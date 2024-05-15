@@ -1,11 +1,10 @@
-﻿using System;
-using System.Windows;
-using SimpleClassCreator.Lib.DataAccess;
-using SimpleClassCreator.Lib.Services;
-using SimpleClassCreator.Lib.Services.CodeFactory;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SimpleClassCreator.Lib;
 using SimpleClassCreator.Ui.Profile;
-using SimpleClassCreator.Ui.Services;
-using SimpleInjector;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Windows;
 
 namespace SimpleClassCreator.Ui
 {
@@ -14,21 +13,23 @@ namespace SimpleClassCreator.Ui
   /// </summary>
   public partial class App : System.Windows.Application
   {
-    private static ProfileSaver _profileSaver;
+    private static readonly ProfileSaver ProfileSaver = new ();
+
+    public IServiceProvider ServiceProvider { get; private set; }
 
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
+      
+      var serviceCollection = new ServiceCollection();
 
-      _profileSaver = new ProfileSaver();
+      ConfigureServices(serviceCollection);
 
-      var container = Bootstrap();
-
-      // Any additional other configuration, e.g. of your desired MVVM toolkit.
+      ServiceProvider = serviceCollection.BuildServiceProvider();
 
       try
       {
-        var mainWindow = container.GetInstance<MainWindow>();
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
         mainWindow.Show();
       }
@@ -39,37 +40,63 @@ namespace SimpleClassCreator.Ui
       }
     }
 
-    private static Container Bootstrap()
+    private static void ConfigureServices(IServiceCollection services)
     {
-      // Create the container as usual.
-      var container = new Container();
+      //Library based services
+      ConfigureLibServices(services);
 
-      // Register your types, for instance:
-      container.Register<IMetaViewModelService, MetaViewModelService>();
-      container.Register<IGeneralDatabaseQueries, GeneralDatabaseQueries>();
-      container.Register<IQueryToClassRepository, QueryToClassRepository>();
-      container.Register<IDtoGenerator, DtoGenerator>();
-      container.Register<INameFormatService, NameFormatService>();
-      container.Register<IQueryToClassService, QueryToClassService>();
-      container.Register<IQueryToMockDataService, QueryToMockDataService>();
-      container.Register<IProfileManager>(GetProfileManager, Lifestyle.Singleton);
-      container.Register<ICSharpCompilerService, CSharpCompilerService>();
+      //WPF Forms and UI based services
+      services.AddTransient<MainWindow>();
 
-      // Register your windows and view models:
-      //container.Register<DtoMakerControl>();
-      //container.Register<QueryToClassControl>();
-      container.Register<MainWindow>();
+      //Scanned services
+      var asm = Assembly.Load("SimpleClassCreator.Ui");
 
-      container.Verify();
+      //Namespaces that must be excluded from the DI scan
+      var excludeNamespaces = asm.GetTypes()
+        .Where(t =>
+          t.Namespace != null &&
+          t.Namespace.Contains("SimpleClassCreator.Ui.ViewModels"))
+        .Select(t => t.Namespace)
+        .Distinct()
+        .ToArray();
 
-      return container;
+      services.Scan(scan =>
+      {
+        scan.FromAssemblies(asm)
+          .AddClasses(classes =>
+            classes.NotInNamespaces(excludeNamespaces)
+             .WithoutAttribute<ExcludeFromDiScanAttribute>())
+          .AsMatchingInterface()
+          .WithScopedLifetime();
+      });
     }
 
-    private static ProfileManager GetProfileManager()
+    private static void ConfigureLibServices(IServiceCollection services)
     {
-      var profileManager = _profileSaver.Load();
+      //Common services
+      services.AddSingleton<IProfileManager>(_ => ProfileSaver.Load());
 
-      return profileManager;
+      //Scanned services
+      var asm = Assembly.Load("SimpleClassCreator.Lib");
+
+      //Namespaces that must be excluded from the DI scan
+      var excludeNamespaces = asm.GetTypes()
+        .Where(t =>
+          t.Namespace != null &&
+          t.Namespace.Contains("SimpleClassCreator.Lib.Models"))
+        .Select(t => t.Namespace)
+        .Distinct()
+        .ToArray();
+
+      services.Scan(scan =>
+      {
+        scan.FromAssemblies(asm)
+          .AddClasses(classes =>
+            classes.NotInNamespaces(excludeNamespaces))
+          // .WithoutAttribute<ExcludeFromDiScanAttribute>())
+          .AsMatchingInterface()
+          .WithScopedLifetime();
+      });
     }
   }
 }
