@@ -30,7 +30,7 @@ namespace SimpleClassCreator.Tests.Lib.Services.Generator
             var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatClassAttributes", lst);
 
             //Assert
-            Assert.AreEqual(string.Empty, actual);
+            Assert.That(string.Empty, Is.EqualTo(actual));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace SimpleClassCreator.Tests.Lib.Services.Generator
             var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatNamespaces", lst);
 
             //Assert
-            Assert.AreEqual(string.Empty, actual);
+            Assert.That(string.Empty, Is.EqualTo(actual));
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace SimpleClassCreator.Tests.Lib.Services.Generator
             var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatProperties", lst);
 
             //Assert
-            Assert.AreEqual(string.Empty, actual);
+            Assert.That(string.Empty, Is.EqualTo(actual));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace SimpleClassCreator.Tests.Lib.Services.Generator
             var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatClassAttributes", lst);
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.That(expected, Is.EqualTo(actual));
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace SimpleClassCreator.Tests.Lib.Services.Generator
             var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatNamespaces", lst);
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.That(expected, Is.EqualTo(actual));
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace SimpleClassCreator.Tests.Lib.Services.Generator
             var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatProperties", lst);
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.That(expected, Is.EqualTo(actual));
         }
     }
 }

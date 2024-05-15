@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleClassCreator.Ui", "Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleClassCreator.Lib", "SimpleClassCreator.Lib\SimpleClassCreator.Lib.csproj", "{DF909277-02B4-4487-BF48-DEFE87EFF808}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleClassCreator.Tests", "SimpleClassCreator.Tests\SimpleClassCreator.Tests.csproj", "{C0E03C1F-BFD8-4BD5-B2CE-95C9827713DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleClassCreator.Tests", "SimpleClassCreator.Tests\SimpleClassCreator.Tests.csproj", "{C0E03C1F-BFD8-4BD5-B2CE-95C9827713DD}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SimpleClassCreator.DatabaseForTests", "SimpleClassCreator.DatabaseForTests\SimpleClassCreator.DatabaseForTests.sqlproj", "{42F0B80F-7206-4B51-BD19-FA392D051DA6}"
 EndProject

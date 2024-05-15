@@ -34,7 +34,7 @@ namespace SimpleClassCreator.Tests.Lib.Services
             var actual = svc.Generate(p);
 
             //Assert
-            Assert.IsNull(actual);
+            Assert.That(actual, Is.Null);
         }
 
         /*
@@ -98,7 +98,7 @@ namespace SimpleClassCreator.Tests.Lib.Services
             expected = re.Replace(expected, string.Empty);
             actual = re.Replace(actual, string.Empty);
 
-            Assert.AreEqual(expected, actual);
+            Assert.That(expected, Is.EqualTo(actual));
         }
     }
 }

@@ -33,7 +33,7 @@ namespace SimpleClassCreator.Tests.Lib.Services
             var actual = _service.FormatTableQuery(tq, TableQueryQualifiers.Schema | TableQueryQualifiers.Table);
 
             //Assert
-            Assert.IsTrue(expected.Equals(actual, StringComparison.InvariantCultureIgnoreCase));
+            Assert.That(expected.Equals(actual, StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestCase("TableName", "TableName")]
@@ -51,7 +51,7 @@ namespace SimpleClassCreator.Tests.Lib.Services
             var actual = _service.GetClassName(tq);
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.That(expected, Is.EqualTo(actual));
         }
     }
 }
