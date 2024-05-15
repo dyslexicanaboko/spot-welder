@@ -168,7 +168,7 @@
       lnkDyslexicApps.Text = "Dyslexic Apps";
       lnkDyslexicApps.LinkClicked += lnkDyslexicApps_LinkClicked;
       // 
-      // AboutSimpleClassCreator
+      // AboutForm
       // 
       AcceptButton = okButton;
       AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -180,7 +180,7 @@
       MaximizeBox = false;
       MinimizeBox = false;
       Name = "AboutForm";
-      Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+      Padding = new System.Windows.Forms.Padding(10);
       ShowIcon = false;
       ShowInTaskbar = false;
       StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
