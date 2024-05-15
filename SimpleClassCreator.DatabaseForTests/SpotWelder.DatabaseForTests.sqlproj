@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>SimpleClassCreator.DatabaseForTests</Name>
+    <Name>SpotWelder.DatabaseForTests</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{42f0b80f-7206-4b51-bd19-fa392d051da6}</ProjectGuid>
@@ -12,16 +12,17 @@
     <RootPath>
     </RootPath>
     <RootNamespace>SimpleClassCreator.DatabaseForTests</RootNamespace>
-    <AssemblyName>SimpleClassCreator.DatabaseForTests</AssemblyName>
+    <AssemblyName>SpotWelder.DatabaseForTests</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -64,6 +65,6 @@
     <Build Include="dbo\Tables\DataTypeTestNullable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SimpleClassCreator.DatabaseForTests.publish.xml" />
+    <None Include="SpotWelder.DatabaseForTests.publish.xml" />
   </ItemGroup>
 </Project>
