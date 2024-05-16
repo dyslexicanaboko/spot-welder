@@ -5,52 +5,30 @@ namespace {{Namespace}}
 	public partial class {{ClassName}} 
 		: IEquatable <{{ClassName}}>
 	{
-		public override bool Equals(object obj) => this.Equals(obj as {{ClassName}});
+		public override bool Equals(object? obj) => this.Equals(obj as {{ClassName}});
 
-		public bool Equals({{ClassName}} p)
+		public bool Equals({{ClassName}}? other)
 		{
-			if (p is null)
-			{
-				return false;
-			}
+			if (other is null) return false;
 
-			// Optimization for a common success case.
-			if (object.ReferenceEquals(this, p))
-			{
-				return true;
-			}
+			if (object.ReferenceEquals(this, other)) return true;
 
-			// If run-time types are not exactly the same, return false.
-			if (this.GetType() != p.GetType())
-			{
-				return false;
-			}
+			if (this.GetType() != other.GetType()) return false;
 
 			return
 {{PropertiesEquals}};
 		}
 
-		//Default sum of parts used
 		public override int GetHashCode() =>
 {{PropertiesHashCode}};
 
-		public static bool operator ==({{ClassName}} lhs, {{ClassName}} rhs)
+		public static bool operator ==({{ClassName}}? lhs, {{ClassName}}? rhs)
 		{
-			if (lhs is null)
-			{
-				if (rhs is null)
-				{
-					return true;
-				}
+			if (lhs is not null) return lhs.Equals(rhs);
 
-				// Only the left side is null.
-				return false;
-			}
-
-			// Equals handles case of null on right side.
-			return lhs.Equals(rhs);
+			return rhs is null;
 		}
 
-		public static bool operator !=({{ClassName}} lhs, {{ClassName}} rhs) => !(lhs == rhs);
+		public static bool operator !=({{ClassName}}? lhs, {{ClassName}}? rhs) => !(lhs == rhs);
 	}
 }
