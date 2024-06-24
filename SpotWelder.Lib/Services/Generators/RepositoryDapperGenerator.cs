@@ -70,6 +70,7 @@ namespace SpotWelder.Lib.Services.Generators
 			t = t.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
 			t = t.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
 			t = t.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(Instructions.Properties));
+			t = t.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
 
 			var r = GetResult();
 			r.Filename = Instructions.EntityName + "Repository.cs";

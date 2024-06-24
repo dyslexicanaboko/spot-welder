@@ -42,7 +42,7 @@ namespace SpotWelder.Lib.Services.Generators
         private string FormatForEquals(IList<ClassMemberStrings> properties)
         {
             var content = GetTextBlock(properties,
-                (p) => $"                x.{p.Property} == y.{p.Property}",
+                (p) => $"        left.{p.Property} == right.{p.Property}",
                 separator: " && " + Environment.NewLine);
 
             return content;
@@ -51,8 +51,8 @@ namespace SpotWelder.Lib.Services.Generators
         private string FormatForHashCode(IList<ClassMemberStrings> properties)
         {
             var content = GetTextBlock(properties,
-                (p) => $"                obj.{p.Property}",
-                separator: "," + Environment.NewLine);
+                (p) => $"        obj.{p.Property}.GetHashCode()",
+                separator: " + " + Environment.NewLine);
 
             return content;
         }
