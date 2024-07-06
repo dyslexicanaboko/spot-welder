@@ -27,7 +27,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{ClassName}}", Instructions.ClassEntityName);
+      template.Replace("{{ClassName}}", Instructions.EntityName);
 
       var t = template.ToString();
 
@@ -45,7 +45,7 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var lst = new List<string>(dataTable.Rows.Count);
 
-      var cn = Instructions.ClassEntityName;
+      var cn = Instructions.EntityName;
 
       var count = 0;
 

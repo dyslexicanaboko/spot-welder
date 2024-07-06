@@ -29,7 +29,7 @@ namespace SpotWelder.Lib.Services.Generators
         {
             var r = new GeneratedResult
             {
-                Filename = Instructions.ClassEntityName + "." + extension
+                Filename = Instructions.EntityName + "." + extension
             };
 
             return r;

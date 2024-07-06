@@ -28,8 +28,8 @@ namespace SpotWelder.Lib.Services.Generators
 			 * ModelName: Refers to the existing Model Class that compliments the Entity Class "Table1Model.cs" */
 
 			template.Replace("{{Namespace}}", Instructions.Namespace);
-			template.Replace("{{ClassName}}", Instructions.EntityName); //Prefix of the repository class name
-			template.Replace("{{EntityName}}", Instructions.ClassEntityName); //Class entity name
+			template.Replace("{{ClassName}}", Instructions.SubjectName); //Prefix of the repository class name
+			template.Replace("{{EntityName}}", Instructions.EntityName); //Class entity name
 			template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
 			var t = template.ToString();
@@ -78,7 +78,7 @@ namespace SpotWelder.Lib.Services.Generators
 			t = t.Replace("{{SetProperties}}", FormatSetProperties(Instructions.Properties));
 
 			var r = GetResult();
-			r.Filename = Instructions.EntityName + "Repository.cs";
+			r.Filename = Instructions.SubjectName + "Repository.cs";
 			r.Contents = t;
 
 			return r;

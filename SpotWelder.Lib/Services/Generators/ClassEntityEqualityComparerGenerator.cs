@@ -22,7 +22,7 @@ namespace SpotWelder.Lib.Services.Generators
             var template = new StringBuilder(strTemplate);
 
             template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.ClassEntityName);
+            template.Replace("{{ClassName}}", Instructions.EntityName);
             template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
             var t = template.ToString();
@@ -33,7 +33,7 @@ namespace SpotWelder.Lib.Services.Generators
             t = t.Replace("{{PropertiesHashCode}}", FormatForHashCode(Instructions.Properties));
 
             var r = GetResult();
-            r.Filename = Instructions.ClassEntityName + "EqualityComparer.cs";
+            r.Filename = Instructions.EntityName + "EqualityComparer.cs";
             r.Contents = t;
 
             return r;

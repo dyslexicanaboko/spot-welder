@@ -52,8 +52,8 @@ namespace SpotWelder.Lib.Services
 
       var ci = new ClassInstructions
       {
-        ClassEntityName = p.ClassName,
-        ClassModelName = p.ClassName + "Dto",
+        EntityName = p.ClassName,
+        ModelName = p.ClassName + "Dto",
         InterfaceName = "I" + p.ClassName,
         Namespace = "Namespace1",
         Properties = p.Properties,
@@ -62,8 +62,8 @@ namespace SpotWelder.Lib.Services
 
       var co = new ClassOptions
       {
-        ClassEntityName = ci.ClassEntityName,
-        ClassModelName = ci.ClassModelName,
+        EntityName = ci.EntityName,
+        ModelName = ci.ModelName,
         GenerateEntity = true,
         GenerateModel = true,
         GenerateEntityIEquatable = p.ImplementIEquatableOfTInterface,
@@ -91,15 +91,15 @@ namespace SpotWelder.Lib.Services
       var ins = new ClassInstructions();
 
       ins.Namespace = p.Namespace;
+      ins.SubjectName = p.ClassOptions.SubjectName;
       ins.EntityName = p.ClassOptions.EntityName;
-      ins.ClassEntityName = p.ClassOptions.ClassEntityName;
-      ins.ClassModelName = p.ClassOptions.ClassModelName;
+      ins.ModelName = p.ClassOptions.ModelName;
 
       ins.InterfaceName =
         "I" +
-        (string.IsNullOrEmpty(p.ClassOptions.ClassEntityName) ?
-          p.ClassOptions.ClassModelName :
-          p.ClassOptions.ClassEntityName);
+        (string.IsNullOrEmpty(p.ClassOptions.EntityName) ?
+          p.ClassOptions.ModelName :
+          p.ClassOptions.EntityName);
 
       ins.TableQuery = p.TableQuery;
 
@@ -135,7 +135,7 @@ namespace SpotWelder.Lib.Services
         interfaceName = baseInstructions.InterfaceName;
 
         var ins = baseInstructions.Clone();
-        ins.ClassEntityName = ins.InterfaceName;
+        ins.EntityName = ins.InterfaceName;
 
         var svc = new ClassInterfaceGenerator(ins);
 
@@ -145,7 +145,7 @@ namespace SpotWelder.Lib.Services
       if (co.GenerateEntity)
       {
         var ins = baseInstructions.Clone();
-        ins.ClassEntityName = co.ClassEntityName;
+        ins.EntityName = co.EntityName;
         ins.InterfaceName = interfaceName;
         ins.IsPartial = co.GenerateEntityIEquatable || co.GenerateEntityIComparable;
 
@@ -156,7 +156,7 @@ namespace SpotWelder.Lib.Services
         if (co.GenerateEntityIEquatable)
         {
           var insSub = baseInstructions.Clone();
-          insSub.ClassEntityName = co.ClassEntityName;
+          insSub.EntityName = co.EntityName;
 
           var svcSub = new ClassEntityIEquatableGenerator(insSub);
 
@@ -166,7 +166,7 @@ namespace SpotWelder.Lib.Services
         if (co.GenerateEntityIComparable)
         {
           var insSub = baseInstructions.Clone();
-          insSub.ClassEntityName = co.ClassEntityName;
+          insSub.EntityName = co.EntityName;
 
           var svcSub = new ClassEntityIComparableGenerator(insSub);
 
@@ -176,7 +176,7 @@ namespace SpotWelder.Lib.Services
         if (co.GenerateEntityEqualityComparer)
         {
           var insSub = baseInstructions.Clone();
-          insSub.ClassEntityName = co.ClassEntityName;
+          insSub.EntityName = co.EntityName;
 
           var svcSub = new ClassEntityEqualityComparerGenerator(insSub);
 
@@ -187,7 +187,7 @@ namespace SpotWelder.Lib.Services
       if (co.GenerateModel)
       {
         var ins = baseInstructions.Clone();
-        ins.ClassEntityName = co.ClassModelName;
+        ins.EntityName = co.ModelName;
         ins.InterfaceName = interfaceName;
 
         var svc = new ClassModelGenerator(ins);
@@ -253,7 +253,7 @@ namespace SpotWelder.Lib.Services
       return lst;
     }
 
-    private IList<GeneratedResult> GenerateRepositories(
+    private static IList<GeneratedResult> GenerateRepositories(
       QueryToClassParameters parameters,
       ClassInstructions baseInstructions)
     {

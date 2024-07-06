@@ -19,7 +19,7 @@ namespace SpotWelder.Lib.Services.Generators
             var template = new StringBuilder(strTemplate);
 
             template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.ClassEntityName);
+            template.Replace("{{ClassName}}", Instructions.EntityName);
             template.Replace("{{Partial}}", Instructions.IsPartial ? "partial " : string.Empty);
             template.Replace("{{Interface}}", FormatInterface(Instructions.InterfaceName));
             template.Replace("{{ClassAttributes}}", FormatClassAttributes(Instructions.ClassAttributes));

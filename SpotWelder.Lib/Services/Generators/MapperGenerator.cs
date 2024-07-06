@@ -24,8 +24,8 @@ namespace SpotWelder.Lib.Services.Generators
       //Instructions.InterfaceName
 
       template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{EntityName}}", Instructions.ClassEntityName);
-      template.Replace("{{ModelName}}", Instructions.ClassModelName);
+      template.Replace("{{EntityName}}", Instructions.EntityName);
+      template.Replace("{{ModelName}}", Instructions.ModelName);
       template.Replace("{{InterfaceName}}", Instructions.InterfaceName);
       template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 

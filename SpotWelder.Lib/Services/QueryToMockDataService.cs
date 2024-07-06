@@ -76,7 +76,7 @@ namespace SpotWelder.Lib.Services
         {
           //Only get the instructions if they are not already cached and have not changed since the last time
           if (_instructions != null &&
-              _instructions.ClassEntityName == parameters.ClassEntityName &&
+              _instructions.EntityName == parameters.ClassEntityName &&
               _instructions.TableQuery == parameters.TableQuery)
           {
             return _instructions;
@@ -86,7 +86,7 @@ namespace SpotWelder.Lib.Services
 
           var ins = new ClassInstructions();
 
-          ins.ClassEntityName = parameters.ClassEntityName;
+          ins.EntityName = parameters.ClassEntityName;
           ins.TableQuery = parameters.TableQuery;
           ins.Properties = schema.ColumnsAll.Select(x => new ClassMemberStrings(x)).ToList();
 

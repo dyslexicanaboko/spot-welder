@@ -63,7 +63,7 @@ namespace SpotWelder.Tests.Lib.Services
             };
 
             p.ClassOptions.GenerateEntity = true;
-            p.ClassOptions.ClassEntityName = sq.TableQuery.Table;
+            p.ClassOptions.EntityName = sq.TableQuery.Table;
 
             var repoQueryToClass = new Mock<IQueryToClassRepository>();
             repoQueryToClass.Setup(x => x.GetSchema(p.TableQuery, It.IsAny<string>())).Returns(sq); //TODO: Fix this later

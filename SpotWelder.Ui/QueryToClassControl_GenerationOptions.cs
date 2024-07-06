@@ -80,15 +80,15 @@ namespace SpotWelder.Ui
     {
       var c = new ClassOptions
       {
-        EntityName = TxtEntityName.Text,
-        ClassEntityName = TxtClassEntityName.Text,
+        SubjectName = TxtEntityName.Text,
+        EntityName = TxtClassEntityName.Text,
         GenerateEntity = CbClassEntity.IsChecked(),
         GenerateEntityIEquatable = CbClassEntityIEquatable.IsChecked(),
         GenerateEntityIComparable = CbClassEntityIComparable.IsChecked(),
         GenerateEntityEqualityComparer = CbClassEntityEqualityComparer.IsChecked(),
         GenerateInterface = CbClassInterface.IsChecked(),
         GenerateModel = CbClassModel.IsChecked(),
-        ClassModelName = TxtClassModelName.Text
+        ModelName = TxtClassModelName.Text
       };
 
       return c;

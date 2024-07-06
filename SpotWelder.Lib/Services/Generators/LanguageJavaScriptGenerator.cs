@@ -20,7 +20,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{ClassName}}", Instructions.ClassEntityName);
+      template.Replace("{{ClassName}}", Instructions.EntityName);
 
       var t = template.ToString();
 

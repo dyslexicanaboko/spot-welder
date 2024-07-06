@@ -20,7 +20,7 @@ namespace SpotWelder.Lib.Services.Generators
             var template = new StringBuilder(strTemplate);
 
             template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.ClassEntityName);
+            template.Replace("{{ClassName}}", Instructions.EntityName);
             template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
             var t = template.ToString();
@@ -30,7 +30,7 @@ namespace SpotWelder.Lib.Services.Generators
             t = t.Replace("{{Property1}}", Instructions.Properties.First().Property);
 
             var r = GetResult();
-            r.Filename = Instructions.ClassEntityName + "_IComparable.cs";
+            r.Filename = Instructions.EntityName + "_IComparable.cs";
             r.Contents = t;
 
             return r;

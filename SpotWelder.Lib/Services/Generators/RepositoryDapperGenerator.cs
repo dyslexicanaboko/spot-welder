@@ -23,8 +23,8 @@ namespace SpotWelder.Lib.Services.Generators
 			var template = new StringBuilder(strTemplate);
 
 			template.Replace("{{Namespace}}", Instructions.Namespace);
-			template.Replace("{{ClassName}}", Instructions.EntityName); //Prefix of the repository class
-			template.Replace("{{EntityName}}", Instructions.ClassEntityName); //Class entity name
+			template.Replace("{{ClassName}}", Instructions.SubjectName); //Prefix of the repository class
+			template.Replace("{{EntityName}}", Instructions.EntityName); //Class entity name
 			template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
 			var t = template.ToString();
@@ -73,7 +73,7 @@ namespace SpotWelder.Lib.Services.Generators
 			t = t.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
 
 			var r = GetResult();
-			r.Filename = Instructions.EntityName + "Repository.cs";
+			r.Filename = Instructions.SubjectName + "Repository.cs";
 			r.Contents = t;
 
 			return r;
