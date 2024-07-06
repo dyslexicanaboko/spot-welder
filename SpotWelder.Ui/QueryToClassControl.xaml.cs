@@ -22,8 +22,8 @@ namespace SpotWelder.Ui
     private readonly CheckBoxGroup _classCheckBoxGroup;
 
     private readonly Dictionary<ClassRepositories, CheckBox> _repositoryToCheckBoxMap;
-
-    private readonly ResultWindowManager _resultWindowManager;
+    
+    private readonly ParentResultsWindow _parentResultsWindow;
 
     private readonly Dictionary<ClassServices, CheckBox> _serviceToCheckBoxMap;
 
@@ -39,8 +39,8 @@ namespace SpotWelder.Ui
       InitializeComponent();
 
       SetPathAsDefault();
-
-      _resultWindowManager = new ResultWindowManager();
+      
+      _parentResultsWindow = new ParentResultsWindow();
 
       TxtNamespaceName.ApplyDefault();
 
@@ -91,7 +91,7 @@ namespace SpotWelder.Ui
     
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
 
-    public void CloseResultWindows() => _resultWindowManager.CloseAll();
+    public void CloseResultWindows() => _parentResultsWindow.Shutdown();
 
     public void Dependencies(
       INameFormatService nameFormatService,
@@ -311,7 +311,9 @@ namespace SpotWelder.Ui
 
         var results = await Task.Run(() => _svcQueryToClass.Generate(obj));
 
-        foreach (var g in results) _resultWindowManager.Show(g.Filename, g.Contents);
+        foreach (var g in results) _parentResultsWindow.AddTab(g.Filename, g.Contents);
+
+        _parentResultsWindow.Show();
       }
       catch (NonUniqueColumnException nucEx)
       {

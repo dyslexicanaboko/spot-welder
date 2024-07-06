@@ -171,7 +171,9 @@ for boiler plate starter code where I am maintaining this kind of code.
 You can find it here: 
 https://github.com/dyslexicanaboko/code-snippets/tree/develop/Visual%20C%23/BasicDataLayers";
 
-      _resultWindowManager.Show("Basic data layers", content);
+              
+       _parentResultsWindow.AddTab("Basic data layers", content);
+       _parentResultsWindow.Show();
     }
   }
 }
