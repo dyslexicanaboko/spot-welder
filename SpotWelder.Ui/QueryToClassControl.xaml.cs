@@ -58,8 +58,37 @@ namespace SpotWelder.Ui
       _serviceToCheckBoxMap = GetServiceToCheckBoxMap();
       _repositoryToCheckBoxMap = GetRepositoryToCheckBoxMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
+
+      DebugSetTestParameters();
     }
 
+    private void DebugSetTestParameters()
+    {
+      ConnectionStringCb.DebugSetTestParameters();
+
+      RbSourceTypeTableName.IsChecked = true;
+      RbSourceTypeQuery.IsChecked = false;
+
+      TxtSourceSqlText.Text = "dbo.Task";
+      TxtNamespaceName.Text = "Namespace1";
+      TxtEntityName.Text = "Task";
+      TxtClassEntityName.Text = "TaskEntity";
+      TxtClassModelName.Text = "TaskModel";
+      CbClassInterface.IsChecked = true;
+      CbSerializeCsv.IsChecked = true;
+      CbSerializeJson.IsChecked = true;
+      CbRepoDapper.IsChecked = true;
+      CbClassEntity.IsChecked = true;
+      CbClassEntityEqualityComparer.IsChecked = true;
+      CbClassEntityIEquatable.IsChecked = true;
+      CbClassEntityIComparable.IsChecked = true;
+      CbCloneInterfaceToEntity.IsChecked = true;
+      CbClassModel.IsChecked = true;
+      CbCloneInterfaceToModel.IsChecked = true;
+      CbCloneEntityToModel.IsChecked = true;
+      CbCloneModelToEntity.IsChecked = true;
+    }
+    
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
 
     public void CloseResultWindows() => _resultWindowManager.CloseAll();

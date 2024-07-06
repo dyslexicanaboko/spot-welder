@@ -31,7 +31,7 @@
                 <CheckBox x:Name="CbClassModel" Content="Model" HorizontalAlignment="Left" Margin="26,189,0,0" VerticalAlignment="Top" Height="15" Width="54" Checked="CbClassModel_Checked" Unchecked="CbClassModel_Unchecked" IsChecked="True"/>
                 <my:TextBoxWithDefaultControl x:Name="TxtClassModelName" DefaultText="Model1" Margin="85,185,344,0" VerticalAlignment="Top" Width="Auto"/>
                 <CheckBox x:Name="CbClassInterface" Content="Interface" HorizontalAlignment="Left" Margin="26,214,0,0" VerticalAlignment="Top" Height="15" Width="66"/>
-                <Label Content="Clone Services" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="304,4,0,0" FontWeight="Bold" FontSize="14" Width="105" />
+                <Label Content="Mappers" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="304,4,0,0" FontWeight="Bold" FontSize="14" Width="105" />
                 <CheckBox x:Name="CbCloneEntityToModel" Content="Entity to Model" HorizontalAlignment="Left" Margin="333,36,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
                 <CheckBox x:Name="CbCloneModelToEntity" Content="Model to Entity" HorizontalAlignment="Left" Margin="333,54,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
                 <CheckBox x:Name="CbCloneInterfaceToEntity" Content="Interface to Entity" HorizontalAlignment="Left" Margin="333,71,0,0" VerticalAlignment="Top" Height="15" Width="114"/>
