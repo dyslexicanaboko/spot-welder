@@ -15,7 +15,7 @@ namespace SpotWelder.Lib.Services.Generators
     public delegate void RowProcessedHandler(object sender, RowProcessedEventArgs e);
 
     public ClassEntitySimpleGenerator(ClassInstructions instructions)
-      : base(instructions, "EntitySimple.cs")
+      : base(instructions, "EntitySimple.cs.template")
     {
     }
 

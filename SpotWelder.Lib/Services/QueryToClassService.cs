@@ -245,7 +245,7 @@ namespace SpotWelder.Lib.Services
           services.HasFlag(ClassServices.CloneInterfaceToEntity) ||
           services.HasFlag(ClassServices.CloneInterfaceToModel))
       {
-        var svc = new ServiceCloningGenerator(baseInstructions, services);
+        var svc = new MapperGenerator(baseInstructions, services);
 
         lst.Add(svc.FillTemplate());
       }

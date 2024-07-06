@@ -141,7 +141,7 @@ namespace SpotWelder.Ui
 
       foreach (var tab in _viewModel.Tabs)
       {
-        var filePath = Path.Combine(dlg.SelectedPath, tab.Header + ".cs");
+        var filePath = Path.Combine(dlg.SelectedPath, tab.Header);
 
         File.WriteAllText(filePath, tab.Content);
       }

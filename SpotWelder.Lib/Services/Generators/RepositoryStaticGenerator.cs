@@ -12,7 +12,7 @@ namespace SpotWelder.Lib.Services.Generators
 		: GeneratorBase
 	{
 		public RepositoryStaticGenerator(ClassInstructions instructions)
-			: base(instructions, "RepositoryStatic.cs")
+			: base(instructions, "RepositoryStatic.cs.template")
 		{
 		}
 

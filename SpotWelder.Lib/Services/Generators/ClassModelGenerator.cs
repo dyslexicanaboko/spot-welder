@@ -7,7 +7,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ClassModelGenerator(ClassInstructions instructions)
-            : base(instructions, "Model.cs")
+            : base(instructions, "Model.cs.template")
         {
 
         }

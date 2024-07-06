@@ -7,7 +7,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ServiceSerializationJsonGenerator(ClassInstructions instructions)
-            : base(instructions, "ServiceSerializationJson.cs")
+            : base(instructions, "ServiceSerializationJson.cs.template")
         {
 
         }

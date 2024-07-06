@@ -10,7 +10,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ClassInterfaceGenerator(ClassInstructions instructions)
-            : base(instructions, "Interface.cs")
+            : base(instructions, "Interface.cs.template")
         {
 
         }

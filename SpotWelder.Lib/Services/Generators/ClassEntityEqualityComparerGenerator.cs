@@ -10,7 +10,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ClassEntityEqualityComparerGenerator(ClassInstructions instructions)
-            : base(instructions, "EntityEqualityComparer.cs")
+            : base(instructions, "EntityEqualityComparer.cs.template")
         {
 
         }

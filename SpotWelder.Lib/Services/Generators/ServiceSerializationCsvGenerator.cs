@@ -7,7 +7,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ServiceSerializationCsvGenerator(ClassInstructions instructions)
-            : base(instructions, "ServiceSerializationCsv.cs")
+            : base(instructions, "ServiceSerializationCsv.cs.template")
         {
 
         }

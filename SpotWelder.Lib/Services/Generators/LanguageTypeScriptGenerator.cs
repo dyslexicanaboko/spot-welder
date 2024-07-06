@@ -10,7 +10,7 @@ namespace SpotWelder.Lib.Services.Generators
     : GeneratorBase
   {
     public LanguageTypeScriptGenerator(ClassInstructions instructions)
-      : base(instructions, "Type.ts")
+      : base(instructions, "Type.ts.template")
     {
     }
 

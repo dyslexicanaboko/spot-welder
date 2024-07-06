@@ -12,7 +12,7 @@ namespace SpotWelder.Lib.Services.Generators
 		: GeneratorBase
 	{
 		public RepositoryDapperGenerator(ClassInstructions instructions)
-			: base(instructions, "RepositoryDapper.cs")
+			: base(instructions, "RepositoryDapper.cs.template")
 		{
 		}
 

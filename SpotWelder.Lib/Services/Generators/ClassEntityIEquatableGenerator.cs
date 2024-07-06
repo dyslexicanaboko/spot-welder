@@ -10,7 +10,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ClassEntityIEquatableGenerator(ClassInstructions instructions)
-            : base(instructions, "EntityIEquatable.cs")
+            : base(instructions, "EntityIEquatable.cs.template")
         {
 
         }

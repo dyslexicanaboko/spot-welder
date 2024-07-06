@@ -8,7 +8,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ClassEntityIComparableGenerator(ClassInstructions instructions)
-            : base(instructions, "EntityIComparable.cs")
+            : base(instructions, "EntityIComparable.cs.template")
         {
 
         }

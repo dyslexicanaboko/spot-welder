@@ -10,7 +10,7 @@ namespace SpotWelder.Lib.Services.Generators
     : GeneratorBase
   {
     public LanguageJavaScriptGenerator(ClassInstructions instructions)
-      : base(instructions, "Prototype.js")
+      : base(instructions, "Prototype.js.template")
     {
     }
 

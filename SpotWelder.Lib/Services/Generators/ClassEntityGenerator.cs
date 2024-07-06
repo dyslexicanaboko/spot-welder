@@ -7,7 +7,7 @@ namespace SpotWelder.Lib.Services.Generators
         : GeneratorBase
     {
         public ClassEntityGenerator(ClassInstructions instructions)
-            : base(instructions, "Entity.cs")
+            : base(instructions, "Entity.cs.template")
         {
 
         }
