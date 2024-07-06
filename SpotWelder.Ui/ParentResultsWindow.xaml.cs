@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Clipboard = System.Windows.Clipboard;
@@ -129,7 +130,28 @@ namespace SpotWelder.Ui
 
     private void BtnSaveAll_OnClick(object sender, RoutedEventArgs e)
     {
-      throw new System.NotImplementedException();
+      using var dlg = new FolderBrowserDialog();
+
+      dlg.Description = "Select a folder to save all your files to.";
+      dlg.ShowNewFolderButton = true;
+
+      var result = dlg.ShowDialog();
+
+      if (result != System.Windows.Forms.DialogResult.OK) return;
+
+      foreach (var tab in _viewModel.Tabs)
+      {
+        var filePath = Path.Combine(dlg.SelectedPath, tab.Header + ".cs");
+
+        File.WriteAllText(filePath, tab.Content);
+      }
+
+      HlSaveLocation.SetHyperLink(dlg.SelectedPath, dlg.SelectedPath);
+    }
+
+    private void HlSaveLocation_OnClick(object sender, RoutedEventArgs e)
+    {
+      ((Hyperlink)e.OriginalSource).NavigateUri.OpenUri();
     }
   }
 }

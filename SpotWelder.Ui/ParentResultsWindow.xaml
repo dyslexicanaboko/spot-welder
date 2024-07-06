@@ -60,6 +60,9 @@
         <Button Name="BtnSaveAll" Click="BtnSaveAll_OnClick">
           <Image Source="images/SaveAll_16x.png" ToolTip="Save all" />
         </Button>
+        <Label>
+          <Hyperlink Name="HlSaveLocation" Click="HlSaveLocation_OnClick" ToolTip="Open the folder where you saved your files."/>
+        </Label>
       </ToolBar>
     </ToolBarTray>
   </Grid>
