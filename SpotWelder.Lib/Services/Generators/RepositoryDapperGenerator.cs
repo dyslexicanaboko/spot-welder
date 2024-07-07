@@ -1,10 +1,10 @@
-﻿using System;
+﻿using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -14,6 +14,7 @@ namespace SpotWelder.Lib.Services.Generators
 		public RepositoryDapperGenerator(ClassInstructions instructions)
 			: base(instructions, "RepositoryDapper.cs.template")
 		{
+			instructions.ClassName = instructions.SubjectName;
 		}
 
 		public override GeneratedResult FillTemplate()
@@ -23,8 +24,8 @@ namespace SpotWelder.Lib.Services.Generators
 			var template = new StringBuilder(strTemplate);
 
 			template.Replace("{{Namespace}}", Instructions.Namespace);
-			template.Replace("{{ClassName}}", Instructions.SubjectName); //Prefix of the repository class
-			template.Replace("{{EntityName}}", Instructions.EntityName); //Class entity name
+			template.Replace("{{ClassName}}", Instructions.ClassName); //Prefix of the repository class
+			template.Replace("{{EntityName}}", Instructions.EntityName);
 			template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
 			var t = template.ToString();
@@ -39,10 +40,10 @@ namespace SpotWelder.Lib.Services.Generators
 			//TODO: What to do when there is no primary key?
 			if (pk != null)
 			{
-				t = t.Replace("{{PrimaryKeyParameter}}", pk.Parameter);
-				t = t.Replace("{{PrimaryKeyProperty}}", pk.Property);
-				t = t.Replace("{{PrimaryKeyColumn}}", pk.ColumnName);
-				t = t.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias);
+				t = t.Replace("{{PrimaryKeyParameter}}", pk.Parameter);  //taskId
+				t = t.Replace("{{PrimaryKeyProperty}}", pk.Property);    //TaskId
+				t = t.Replace("{{PrimaryKeyColumn}}", pk.ColumnName);    //TaskId or task_id
+				t = t.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
 
 				var scopeIdentity = string.Empty;
 
@@ -50,7 +51,7 @@ namespace SpotWelder.Lib.Services.Generators
 				{
 					//If the PK is identity then the PK needs to be returned
 					scopeIdentity = @"
-			SELECT SCOPE_IDENTITY() AS PK;";
+			SELECT SCOPE_IDENTITY() AS PK;"; //Don't change the spacing here, it's like this on purpose
 				}
 				else
 				{
@@ -72,11 +73,11 @@ namespace SpotWelder.Lib.Services.Generators
 			t = t.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(Instructions.Properties));
 			t = t.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
 
-			var r = GetResult();
-			r.Filename = Instructions.SubjectName + "Repository.cs";
-			r.Contents = t;
-
-			return r;
+			return new GeneratedResult
+			{
+				Filename = $"{Instructions.ClassName}Repository.cs",
+				Contents = t
+			};
 		}
 
 		private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)

@@ -67,7 +67,8 @@ namespace SpotWelder.Lib.Models
         EntityName = EntityName,
         ModelName = ModelName,
         Namespace = Namespace,
-        InterfaceName = InterfaceName
+        InterfaceName = InterfaceName,
+        TableQuery = TableQuery.Clone()
       };
 
       c.ClassAttributes = new List<string>(ClassAttributes);

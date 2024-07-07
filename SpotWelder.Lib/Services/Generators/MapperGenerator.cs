@@ -13,7 +13,11 @@ namespace SpotWelder.Lib.Services.Generators
 
     public MapperGenerator(ClassInstructions instructions, ClassServices services)
       : base(instructions, "Mapper.cs.template")
-      => _services = services;
+    {
+      _services = services;
+      
+      instructions.ClassName = instructions.SubjectName;
+    }
 
     public override GeneratedResult FillTemplate()
     {
@@ -22,7 +26,7 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(strTemplate);
 
       template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{ClassName}}", Instructions.SubjectName);
+      template.Replace("{{ClassName}}", Instructions.ClassName);
       template.Replace("{{EntityName}}", Instructions.EntityName);
       template.Replace("{{ModelName}}", Instructions.ModelName);
       template.Replace("{{InterfaceName}}", Instructions.InterfaceName);
@@ -65,12 +69,12 @@ namespace SpotWelder.Lib.Services.Generators
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
-
-      var r = GetResult();
-      r.Filename = "Mapper.cs";
-      r.Contents = t;
-
-      return r;
+      
+      return new GeneratedResult
+      {
+        Filename = $"{Instructions.ClassName}Mapper.cs",
+        Contents = t
+      };
     }
 
     private string FormatCloneBody(

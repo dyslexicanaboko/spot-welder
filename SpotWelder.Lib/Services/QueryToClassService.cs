@@ -16,19 +16,17 @@ namespace SpotWelder.Lib.Services
 
     public IList<GeneratedResult> Generate(QueryToClassParameters parameters)
     {
-      var p = parameters;
+      if (!parameters.HasElections) return null;
 
-      if (!p.HasElections) return null;
-
-      _queryToClassRepository.ChangeConnectionString(p.ConnectionString);
+      _queryToClassRepository.ChangeConnectionString(parameters.ConnectionString);
 
       var baseInstructions = GetBaseInstructions(parameters);
 
-      var rClasses = GenerateClasses(p, baseInstructions);
+      var rClasses = GenerateClasses(parameters, baseInstructions);
 
-      var rServices = GenerateServices(p, baseInstructions);
+      var rServices = GenerateServices(parameters, baseInstructions);
 
-      var rRepositories = GenerateRepositories(p, baseInstructions);
+      var rRepositories = GenerateRepositories(parameters, baseInstructions);
 
       var lst = new List<GeneratedResult>(
         rClasses.Count +
@@ -268,15 +266,15 @@ namespace SpotWelder.Lib.Services
 
       if (repositories.HasFlag(ClassRepositories.StaticStatements))
       {
-        var svc = new RepositoryStaticGenerator(baseInstructions);
+        var svc = new RepositoryStaticGenerator(baseInstructions.Clone());
 
         lst.Add(svc.FillTemplate());
       }
 
       if (repositories.HasFlag(ClassRepositories.Dapper))
       {
-        var svc = new RepositoryDapperGenerator(baseInstructions);
-
+        var svc = new RepositoryDapperGenerator(baseInstructions.Clone());
+        
         lst.Add(svc.FillTemplate());
       }
 
