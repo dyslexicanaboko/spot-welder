@@ -15,11 +15,15 @@
 	  <None Remove="Templates\ModelPatch.cs.template" />
 	  <None Remove="Templates\RepositoryDapper.cs.template" />
 	  <None Remove="Templates\RepositoryStatic.cs.template" />
+	  <None Remove="Templates\Service.cs.template" />
 	  <None Remove="Templates\ServiceSerializationCsv.cs.template" />
 	  <None Remove="Templates\ServiceSerializationJson.cs.template" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
+		<Content Include="Templates\Service.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\ModelPatch.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

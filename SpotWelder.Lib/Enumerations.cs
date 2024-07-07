@@ -63,7 +63,9 @@ namespace SpotWelder.Lib
 
     RepoDapper = 1024,
 
-    RepoEfFluentApi = 2048
+    RepoEfFluentApi = 2048,
+    
+    Service = 4096,
   }
 
   [Flags]

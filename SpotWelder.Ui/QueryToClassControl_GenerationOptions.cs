@@ -110,6 +110,10 @@ namespace SpotWelder.Ui
         e |= kvp.Key;
       }
 
+      //TODO: Hook this up to the UI
+      //This is temporarily hardcoded to true for testing
+      e |= ClassServices.Service;
+
       return e;
     }
 

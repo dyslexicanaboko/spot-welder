@@ -244,14 +244,21 @@ namespace SpotWelder.Lib.Services
 
       if (services.HasFlag(ClassServices.SerializeCsv))
       {
-        var svc = new ServiceSerializationCsvGenerator(baseInstructions);
+        var svc = new ServiceSerializationCsvGenerator(baseInstructions.Clone());
 
         lst.Add(svc.FillTemplate());
       }
 
       if (services.HasFlag(ClassServices.SerializeJson))
       {
-        var svc = new ServiceSerializationJsonGenerator(baseInstructions);
+        var svc = new ServiceSerializationJsonGenerator(baseInstructions.Clone());
+
+        lst.Add(svc.FillTemplate());
+      }
+
+      if (services.HasFlag(ClassServices.Service))
+      {
+        var svc = new ServiceGenerator(baseInstructions.Clone());
 
         lst.Add(svc.FillTemplate());
       }
@@ -261,7 +268,7 @@ namespace SpotWelder.Lib.Services
           services.HasFlag(ClassServices.CloneInterfaceToEntity) ||
           services.HasFlag(ClassServices.CloneInterfaceToModel))
       {
-        var svc = new MapperGenerator(baseInstructions, services);
+        var svc = new MapperGenerator(baseInstructions.Clone(), services);
 
         lst.Add(svc.FillTemplate());
       }
