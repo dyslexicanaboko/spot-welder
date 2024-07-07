@@ -2,19 +2,18 @@
 
 namespace {{Namespace}}
 {
-  public class {{EntityName}}Mapper
-  {
+	public class {{ClassName}}Mapper
+	{
+		public {{EntityName}}? ToEntity({{ModelName}}? model)
+			=> model == null ? null : new {{EntityName}}(model);
 
-    public {{EntityName}}? ToEntity({{ModelName}}? model)
-      => model == null ? null : new {{EntityName}}(model);
+		public {{ModelName}}? ToModel({{EntityName}}? entity)
+			=> entity == null ? null : new {{ModelName}}(entity);
 
-    public {{ModelName}}? ToModel({{EntityName}}? entity)
-	    => entity == null ? null : new {{ModelName}}(entity);
+		public {{EntityName}}? ToEntity({{InterfaceName}}? target)
+			=> target == null ? null : new {{EntityName}}(target);
 
-    public {{EntityName}}? ToEntity({{InterfaceName}}? target)
-      => target == null ? null : new {{EntityName}}(target);
-
-    public {{ModelName}}? ToModel({{InterfaceName}}? target)
-      => target == null ? null : new {{ModelName}}(target);
-  }
+		public {{ModelName}}? ToModel({{InterfaceName}}? target)
+			=> target == null ? null : new {{ModelName}}(target);
+	}
 }

@@ -21,14 +21,14 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(strTemplate);
 
-      //Instructions.InterfaceName
-
       template.Replace("{{Namespace}}", Instructions.Namespace);
+      template.Replace("{{ClassName}}", Instructions.SubjectName);
       template.Replace("{{EntityName}}", Instructions.EntityName);
       template.Replace("{{ModelName}}", Instructions.ModelName);
       template.Replace("{{InterfaceName}}", Instructions.InterfaceName);
       template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
+      //TODO: Keeping this stuff here for now - I might have to get rid of it.
       //Cloning method properties
       template.Replace(
         "{{PropertiesModelToEntity}}",

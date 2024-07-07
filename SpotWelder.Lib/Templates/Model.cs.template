@@ -2,8 +2,23 @@
 
 namespace {{Namespace}}
 {
-    public class {{ClassName}}{{Interface}}
-    {
+	public class {{ClassName}}{{Interface}}
+	{
+		public {{ClassName}}()
+		{
+			
+		}
+
+		public {{ClassName}}({{EntityName}} entity)
+		{
+			{{ConstructorFromEntity}}
+		}
+
+		public {{ClassName}}({{InterfaceName}} target)
+		{
+			{{ConstructorFromInterface}}
+		}
+
 {{Properties}}
-    }
+	}
 }

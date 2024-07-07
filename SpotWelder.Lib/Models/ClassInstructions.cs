@@ -8,6 +8,12 @@ namespace SpotWelder.Lib.Models
     public TableQuery TableQuery { get; set; }
 
     /// <summary>
+    /// Name of the class being generated. This is a property that is dedicated to being
+    /// the name of whatever is being generated regardless of its purpose.
+    /// </summary>
+    public string ClassName { get; set; }
+
+    /// <summary>
     ///   Name of the target subject for generation. The subject can be a source class, table or query.
     ///   Additionally, this name does not have a prefix or suffix such as `Entity`, `Model`, `Dto`, etc.
     ///   In other words, it's JUST the name of the subject.
@@ -36,7 +42,7 @@ namespace SpotWelder.Lib.Models
 
     /// <summary> Should class be a partial class? </summary>
     public bool IsPartial { get; set; }
-
+    
     /// <summary>Namespaces that the class being generated should be using (importing).</summary>
     public IList<string> Namespaces { get; set; } = new List<string>();
 
@@ -59,6 +65,7 @@ namespace SpotWelder.Lib.Models
       {
         SubjectName = SubjectName,
         EntityName = EntityName,
+        ModelName = ModelName,
         Namespace = Namespace,
         InterfaceName = InterfaceName
       };

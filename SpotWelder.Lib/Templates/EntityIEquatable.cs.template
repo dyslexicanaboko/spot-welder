@@ -3,11 +3,11 @@
 namespace {{Namespace}}
 {
 	public partial class {{ClassName}} 
-		: IEquatable <{{ClassName}}>
+		: IEquatable <{{EntityName}}>
 	{
-		public override bool Equals(object? obj) => this.Equals(obj as {{ClassName}});
+		public override bool Equals(object? obj) => this.Equals(obj as {{EntityName}});
 
-		public bool Equals({{ClassName}}? other)
+		public bool Equals({{EntityName}}? other)
 		{
 			if (other is null) return false;
 
@@ -22,13 +22,13 @@ namespace {{Namespace}}
 		public override int GetHashCode() =>
 {{PropertiesHashCode}};
 
-		public static bool operator ==({{ClassName}}? lhs, {{ClassName}}? rhs)
+		public static bool operator ==({{EntityName}}? lhs, {{EntityName}}? rhs)
 		{
 			if (lhs is not null) return lhs.Equals(rhs);
 
 			return rhs is null;
 		}
 
-		public static bool operator !=({{ClassName}}? lhs, {{ClassName}}? rhs) => !(lhs == rhs);
+		public static bool operator !=({{EntityName}}? lhs, {{EntityName}}? rhs) => !(lhs == rhs);
 	}
 }

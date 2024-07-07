@@ -22,7 +22,8 @@ namespace SpotWelder.Lib.Services.Generators
             var template = new StringBuilder(strTemplate);
 
             template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.EntityName);
+            template.Replace("{{ClassName}}", Instructions.ClassName);
+            template.Replace("{{EntityName}}", Instructions.EntityName);
             template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
             var t = template.ToString();
@@ -43,7 +44,7 @@ namespace SpotWelder.Lib.Services.Generators
         private string FormatForEquals(IList<ClassMemberStrings> properties)
         {
             var content = GetTextBlock(properties,
-                (p) => $"                {p.Property} == p.{p.Property}",
+                (p) => $"                {p.Property} == other.{p.Property}",
                 separator: " && " + Environment.NewLine);
 
             return content;

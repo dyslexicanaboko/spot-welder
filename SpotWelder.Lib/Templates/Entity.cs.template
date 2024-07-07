@@ -2,9 +2,24 @@
 
 namespace {{Namespace}}
 {
-    {{ClassAttributes}}
-    public {{Partial}}class {{ClassName}}{{Interface}}
-    {
+	{{ClassAttributes}}
+	public {{Partial}}class {{ClassName}}{{Interface}}
+	{
+		public {{ClassName}}()
+		{
+			
+		}
+
+	  public {{ClassName}}({{ModelName}} model)
+		{
+			{{ConstructorFromModel}}
+		}
+
+		public {{ClassName}}({{InterfaceName}} target)
+		{
+			{{ConstructorFromInterface}}
+		}
+
 {{Properties}}
-    }
+	}
 }

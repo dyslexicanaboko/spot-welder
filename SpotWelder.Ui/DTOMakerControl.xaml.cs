@@ -185,7 +185,7 @@ Please keep in mind casing matters.";
         ExtractInterface = CbExtractInterface.IsChecked(),
         EquivalentJavaScript = CbEquivalentJavaScript.IsChecked(),
         EquivalentTypeScript = CbEquivalentTypeScript.IsChecked(),
-        ClassName = t.Name
+        SourceClassName = t.Name
       };
 
       //There should only be one assembly and one class loaded

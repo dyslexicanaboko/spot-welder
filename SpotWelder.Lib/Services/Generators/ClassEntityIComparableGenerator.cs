@@ -21,6 +21,7 @@ namespace SpotWelder.Lib.Services.Generators
 
             template.Replace("{{Namespace}}", Instructions.Namespace);
             template.Replace("{{ClassName}}", Instructions.EntityName);
+            template.Replace("{{EntityName}}", Instructions.EntityName);
             template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
             var t = template.ToString();

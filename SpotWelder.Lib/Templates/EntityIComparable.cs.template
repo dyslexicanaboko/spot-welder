@@ -8,7 +8,7 @@ namespace {{Namespace}}
 		public int CompareTo(object obj)
 		{
 			//This is starter code - it is meant to be changed appropriately
-			var n = ({{ClassName}})obj;
+			var n = ({{EntityName}})obj;
 
 			if ({{Property1}} == n.{{Property1}})
 			{
