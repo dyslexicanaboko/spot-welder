@@ -35,6 +35,12 @@ namespace SpotWelder.Lib.Models
     /// <summary> Generate a model for the target <see cref="SubjectName"/>. </summary>
     public bool GenerateModel { get; set; }
 
+    /// <summary> Generate a REST API Create model for the target <see cref="SubjectName"/>. </summary>
+    public bool GenerateCreateModel { get; set; }
+
+    /// <summary> Generate a REST API Patch model for the target <see cref="SubjectName"/>. </summary>
+    public bool GeneratePatchModel { get; set; }
+
     /// <summary> Name of the subject with the `Model` suffix.</summary>
     /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
     public string ModelName { get; set; }

@@ -11,6 +11,8 @@
 	  <None Remove="Templates\Interface.cs.template" />
 	  <None Remove="Templates\Mapper.cs.template" />
 	  <None Remove="Templates\Model.cs.template" />
+	  <None Remove="Templates\ModelCreate.cs.template" />
+	  <None Remove="Templates\ModelPatch.cs.template" />
 	  <None Remove="Templates\RepositoryDapper.cs.template" />
 	  <None Remove="Templates\RepositoryStatic.cs.template" />
 	  <None Remove="Templates\ServiceSerializationCsv.cs.template" />
@@ -18,6 +20,12 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
+		<Content Include="Templates\ModelPatch.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\ModelCreate.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\Type.ts.template">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

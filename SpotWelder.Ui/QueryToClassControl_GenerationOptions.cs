@@ -12,7 +12,7 @@ namespace SpotWelder.Ui
   /// </summary>
   public partial class QueryToClassControl
   {
-    private QueryToClassParameters GetParameters()
+    private QueryToClassParameters? GetParameters()
     {
       var obj = CommonValidation();
 
@@ -34,7 +34,7 @@ namespace SpotWelder.Ui
       return obj;
     }
 
-    private QueryToClassParameters CommonValidation()
+    private QueryToClassParameters? CommonValidation()
     {
       var obj = new QueryToClassParameters();
 
@@ -88,7 +88,12 @@ namespace SpotWelder.Ui
         GenerateEntityEqualityComparer = CbClassEntityEqualityComparer.IsChecked(),
         GenerateInterface = CbClassInterface.IsChecked(),
         GenerateModel = CbClassModel.IsChecked(),
-        ModelName = TxtClassModelName.Text
+        ModelName = TxtClassModelName.Text,
+        
+        //TODO: Hook this up to the UI
+        //This is temporarily hardcoded to true for testing
+        GenerateCreateModel = true,
+        GeneratePatchModel = true
       };
 
       return c;

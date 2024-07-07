@@ -3,6 +3,7 @@
 namespace {{Namespace}}
 {
 	public class {{ClassName}}Mapper
+	  : BaseMapper
 	{
 		public {{EntityName}}? ToEntity({{ModelName}}? model)
 			=> model == null ? null : new {{EntityName}}(model);

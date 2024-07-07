@@ -50,9 +50,10 @@ namespace SpotWelder.Lib.Services
 
       var ci = new ClassInstructions
       {
+        ClassName = p.SourceClassName,
         EntityName = p.SourceClassName,
-        ModelName = p.SourceClassName + "Dto",
-        InterfaceName = "I" + p.SourceClassName,
+        ModelName = $"{p.SourceClassName}Dto",
+        InterfaceName = $"I{p.SourceClassName}",
         Namespace = "Namespace1",
         Properties = p.Properties,
         IsPartial = p.ImplementIEquatableOfTInterface
@@ -192,6 +193,20 @@ namespace SpotWelder.Lib.Services
         ins.InterfaceName = interfaceName;
 
         var svc = new ClassModelGenerator(ins);
+
+        lst.Add(svc.FillTemplate());
+      }
+
+      if (co.GenerateCreateModel)
+      {
+        var svc = new ClassModelCreateGenerator(baseInstructions.Clone());
+
+        lst.Add(svc.FillTemplate());
+      }
+
+      if (co.GeneratePatchModel)
+      {
+        var svc = new ClassModelPatchGenerator(baseInstructions.Clone());
 
         lst.Add(svc.FillTemplate());
       }

@@ -5,6 +5,10 @@ namespace SpotWelder.Lib.Models
 {
   public class ClassInstructions
   {
+    /// <summary>
+    /// Table query for the class being generated. This may not be in use depending
+    /// on the pathing being used.
+    /// </summary>
     public TableQuery TableQuery { get; set; }
 
     /// <summary>
@@ -27,7 +31,7 @@ namespace SpotWelder.Lib.Models
 
     /// <summary> Name of the subject with the `Model` suffix.</summary>
     /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
-    public string ModelName { get; internal set; }
+    public string ModelName { get; set; }
 
     /// <summary>Namespace used for all classes. It's just a container for the code and not intended for use.</summary>
     public string Namespace { get; set; }
