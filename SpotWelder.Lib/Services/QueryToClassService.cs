@@ -97,6 +97,7 @@ namespace SpotWelder.Lib.Services
         SubjectName = p.ClassOptions.SubjectName, 
         EntityName = p.ClassOptions.EntityName,
         ModelName = p.ClassOptions.ModelName,
+        ApiRoute = p.ClassOptions.ApiRoute,
         InterfaceName = $"I{p.ClassOptions.SubjectName}",
         TableQuery = p.TableQuery
       };
@@ -259,6 +260,13 @@ namespace SpotWelder.Lib.Services
       if (services.HasFlag(ClassServices.Service))
       {
         var svc = new ServiceGenerator(baseInstructions.Clone());
+
+        lst.Add(svc.FillTemplate());
+      }
+
+      if (services.HasFlag(ClassServices.ApiController))
+      {
+        var svc = new ApiControllerGenerator(baseInstructions.Clone());
 
         lst.Add(svc.FillTemplate());
       }

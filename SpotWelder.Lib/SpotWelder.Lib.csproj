@@ -3,6 +3,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Templates\ApiController.cs.template" />
 	  <None Remove="Templates\Entity.cs.template" />
 	  <None Remove="Templates\EntityEqualityComparer.cs.template" />
 	  <None Remove="Templates\EntityIComparable.cs.template" />
@@ -21,6 +22,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
+		<Content Include="Templates\ApiController.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\Service.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

@@ -43,29 +43,31 @@ namespace SpotWelder.Lib
   {
     None = 0,
 
-    CloneEntityToModel = 1,
+    CloneEntityToModel = 1, //2^0
 
-    CloneModelToEntity = 2,
+    CloneModelToEntity = 2, //2^1
 
-    CloneInterfaceToEntity = 4,
+    CloneInterfaceToEntity = 4, //2^2
 
-    CloneInterfaceToModel = 8,
+    CloneInterfaceToModel = 8, //2^3
 
-    SerializeCsv = 16,
+    SerializeCsv = 16, //2^4
 
-    SerializeJson = 32,
+    SerializeJson = 32, //2^5
 
-    RepoStatic = 64,
+    RepoStatic = 64, //2^6
 
-    RepoDynamic = 128,
+    RepoDynamic = 128, //2^7
 
-    RepoBulkCopy = 512,
+    RepoBulkCopy = 256, //2^8
 
-    RepoDapper = 1024,
+    RepoDapper = 512, //2^9
 
-    RepoEfFluentApi = 2048,
-    
-    Service = 4096,
+    RepoEfFluentApi = 1024, //2^10
+
+    Service = 2048, //2^11
+
+    ApiController = 4096, //2^12
   }
 
   [Flags]

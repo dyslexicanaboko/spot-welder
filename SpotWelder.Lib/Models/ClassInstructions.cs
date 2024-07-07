@@ -33,6 +33,10 @@ namespace SpotWelder.Lib.Models
     /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
     public string ModelName { get; set; }
 
+    /// <summary> Name of the subject in camelCase and pluralized.</summary>
+    /// <example> Subject named: `Task`, the API Route would be `tasks` as in `api/v1/tasks`.</example>
+    public string ApiRoute { get; set; }
+
     /// <summary>Namespace used for all classes. It's just a container for the code and not intended for use.</summary>
     public string Namespace { get; set; }
 
@@ -72,6 +76,7 @@ namespace SpotWelder.Lib.Models
         ModelName = ModelName,
         Namespace = Namespace,
         InterfaceName = InterfaceName,
+        ApiRoute = ApiRoute,
         TableQuery = TableQuery.Clone()
       };
 

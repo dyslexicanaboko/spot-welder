@@ -93,7 +93,8 @@ namespace SpotWelder.Ui
         //TODO: Hook this up to the UI
         //This is temporarily hardcoded to true for testing
         GenerateCreateModel = true,
-        GeneratePatchModel = true
+        GeneratePatchModel = true,
+        ApiRoute = "tasks"
       };
 
       return c;
@@ -113,6 +114,7 @@ namespace SpotWelder.Ui
       //TODO: Hook this up to the UI
       //This is temporarily hardcoded to true for testing
       e |= ClassServices.Service;
+      e |= ClassServices.ApiController;
 
       return e;
     }

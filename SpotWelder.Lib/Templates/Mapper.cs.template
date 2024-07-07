@@ -3,7 +3,7 @@
 namespace {{Namespace}}
 {
 	public class {{ClassName}}Mapper
-	  : BaseMapper
+		: BaseMapper
 	{
 		public {{EntityName}}? ToEntity({{ModelName}}? model)
 			=> model == null ? null : new {{EntityName}}(model);
@@ -16,5 +16,14 @@ namespace {{Namespace}}
 
 		public {{ModelName}}? ToModel({{InterfaceName}}? target)
 			=> target == null ? null : new {{ModelName}}(target);
+
+		public {{EntityName}}? ToEntity({{ClassName}}V1CreateModel? model)
+			=> model == null ? null : new {{EntityName}}(model);
+
+		public {{ClassName}}V1PatchModel? ToPatchModel({{EntityName}}? entity)
+			=> entity == null ? null : new {{ClassName}}V1PatchModel(entity);
+
+		public {{EntityName}} ToEntity({{ClassName}}V1PatchModel model)
+			=> new (model);
 	}
 }

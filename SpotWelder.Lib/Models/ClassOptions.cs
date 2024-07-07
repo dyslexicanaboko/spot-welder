@@ -16,6 +16,18 @@ namespace SpotWelder.Lib.Models
     /// <example> Table named: `dbo.Task`, the subject would just be `Task`.</example>
     public string SubjectName { get; set; }
 
+    /// <summary> Name of the subject with the `Entity` suffix.</summary>
+    /// <example> Subject named: `Task`, the entity would be `TaskEntity`.</example>
+    public string EntityName { get; set; }
+
+    /// <summary> Name of the subject with the `Model` suffix.</summary>
+    /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
+    public string ModelName { get; set; }
+
+    /// <summary> Name of the subject in camelCase and pluralized.</summary>
+    /// <example> Subject named: `Task`, the API Route would be `tasks` as in `api/v1/tasks`.</example>
+    public string ApiRoute { get; set; }
+
     /// <summary> Generate an entity for the target <see cref="SubjectName"/>. </summary>
     public bool GenerateEntity { get; set; }
 
@@ -27,23 +39,15 @@ namespace SpotWelder.Lib.Models
 
     /// <summary> Generate an <see cref="EqualityComparer{T}"/> class for the target entity. </summary>
     public bool GenerateEntityEqualityComparer { get; set; }
-
-    /// <summary> Name of the subject with the `Entity` suffix.</summary>
-    /// <example> Subject named: `Task`, the entity would be `TaskEntity`.</example>
-    public string EntityName { get; set; }
-
+    
     /// <summary> Generate a model for the target <see cref="SubjectName"/>. </summary>
     public bool GenerateModel { get; set; }
-
+    
     /// <summary> Generate a REST API Create model for the target <see cref="SubjectName"/>. </summary>
     public bool GenerateCreateModel { get; set; }
 
     /// <summary> Generate a REST API Patch model for the target <see cref="SubjectName"/>. </summary>
     public bool GeneratePatchModel { get; set; }
-
-    /// <summary> Name of the subject with the `Model` suffix.</summary>
-    /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
-    public string ModelName { get; set; }
 
     /// <summary> Name of the subject with the `I` prefix.</summary>
     /// <example> Subject named: `Task`, the interface would be `ITask`.</example>
