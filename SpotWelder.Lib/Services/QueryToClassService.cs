@@ -16,7 +16,7 @@ namespace SpotWelder.Lib.Services
     {
     }
 
-    public IList<GeneratedResult> Generate(QueryToClassParameters parameters)
+    public IList<GeneratedResult>? Generate(QueryToClassParameters parameters)
     {
       if (!parameters.HasElections) return null;
 
@@ -217,18 +217,14 @@ namespace SpotWelder.Lib.Services
 
       if (co.Languages.HasFlag(CodeType.JavaScript))
       {
-        var ins = baseInstructions.Clone();
-
-        var svc = new LanguageJavaScriptGenerator(ins);
+        var svc = new LanguageJavaScriptGenerator(baseInstructions.Clone());
 
         lst.Add(svc.FillTemplate());
       }
 
       if (co.Languages.HasFlag(CodeType.TypeScript))
       {
-        var ins = baseInstructions.Clone();
-
-        var svc = new LanguageTypeScriptGenerator(ins);
+        var svc = new LanguageTypeScriptGenerator(baseInstructions.Clone());
 
         lst.Add(svc.FillTemplate());
       }
