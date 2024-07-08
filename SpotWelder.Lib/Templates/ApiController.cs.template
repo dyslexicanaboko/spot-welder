@@ -26,9 +26,9 @@ namespace {{Namespace}}
 		[HttpGet("{id:{{PrimaryKeyType}}}")]
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{InterfaceName}}))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
-		public ActionResult<{{InterfaceName}}> Get({{PrimaryKeyType}} id)
+		public async Task<ActionResult<{{InterfaceName}}>> Get({{PrimaryKeyType}} id)
 		{
-			var entity = _service.Get{{SubjectName}}(id);
+			var entity = [AMO]_service.Get{{SubjectName}}(id)[AMC];
 
 			if (entity == null) throw Lib.Exceptions.NotFound.{{SubjectName}}(id);
 
@@ -47,7 +47,7 @@ namespace {{Namespace}}
 
 			Validations.IsNotNull(entity, nameof(model));
 
-			var result = (await Task.FromResult(_service.Add(entity)));
+			var result = [AMO]_service.Add(entity)[AMC];
 
 			var m = _mapper.ToModel(result);
 
@@ -60,9 +60,9 @@ namespace {{Namespace}}
 		[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorModel))]
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorModel))]
-		public ActionResult Patch({{PrimaryKeyType}} id, [FromBody] JsonPatchDocument<{{SubjectName}}V1PatchModel> patchDoc)
+		public async Task<ActionResult> Patch({{PrimaryKeyType}} id, [FromBody] JsonPatchDocument<{{SubjectName}}V1PatchModel> patchDoc)
 		{
-			var db = _service.Get{{SubjectName}}(id);
+			var db = [AMO]_service.Get{{SubjectName}}(id)[AMC];
 						
 			var model = _mapper.ToPatchModel(db);
 
@@ -72,7 +72,7 @@ namespace {{Namespace}}
 
 			var entity = _mapper.ToEntity(model);
 
-			_service.Edit(entity);
+			[AMO]_service.Edit(entity)[AMC];
 
 			return NoContent();
 		}
@@ -80,9 +80,9 @@ namespace {{Namespace}}
 		// DELETE api/{{ApiRoute}}/5
 		[HttpDelete("{id:{{PrimaryKeyType}}}")]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
-		public ActionResult Delete({{PrimaryKeyType}} id)
+		public async Task<ActionResult> Delete({{PrimaryKeyType}} id)
 		{
-			_service.Remove(id);
+			[AMO]_service.Remove(id)[AMC];
 
 			return NoContent();
 		}

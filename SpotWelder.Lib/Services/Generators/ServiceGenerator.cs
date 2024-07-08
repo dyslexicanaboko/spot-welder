@@ -23,6 +23,8 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{ClassName}}", Instructions.ClassName);
       template.Replace("{{EntityName}}", Instructions.EntityName);
       template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      
+      GetAsynchronicityFormatStrategy(Instructions.IsAsynchronous).ReplaceTags(template);
 
       var pk = Instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
 

@@ -28,6 +28,9 @@ namespace SpotWelder.Lib.Models
     /// <example> Subject named: `Task`, the API Route would be `tasks` as in `api/v1/tasks`.</example>
     public string ApiRoute { get; set; }
 
+    /// <summary> Should class methods be asynchronous? </summary>
+    public bool IsAsynchronous { get; set; }
+
     /// <summary> Generate an entity for the target <see cref="SubjectName"/>. </summary>
     public bool GenerateEntity { get; set; }
 

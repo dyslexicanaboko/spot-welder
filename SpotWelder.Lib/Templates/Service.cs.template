@@ -15,42 +15,36 @@ namespace {{Namespace}}
 			_validation = validation;
 		}
 
-		public {{EntityName}}? Get{{ClassName}}({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		public [AO]{{EntityName}}?[AC] Get{{ClassName}}({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
 
-			var dbEntity = _repository.Using(x => x.Select({{PrimaryKeyParameter}}));
+			var dbEntity = [A]_repository.Using(x => x.Select({{PrimaryKeyParameter}}));
 
 			return dbEntity;
 		}
 
-		public {{EntityName}} Add({{EntityName}}? entity)
+		public [AO]{{EntityName}}[AC] Add({{EntityName}}? entity)
 		{
 			Validations.IsValid(_validation, entity, nameof(entity));
 
-			using (_repository)
-			{
-				entity.{{PrimaryKeyProperty}}Id = _repository.Insert(entity);
-			}
-
+			entity.{{PrimaryKeyProperty}} = [A]_repository.Using(x => x.Insert(entity));
+			
 			return entity;
 		}
 
-		public void Edit({{EntityName}} entity)
+		public [void] Edit({{EntityName}} entity)
 		{
 			Validations.IsNotNull(entity, nameof(entity));
 
-			using (_repository)
-			{
-				_repository.Update(entity);
-			}
+			[A]_repository.Using(x => x.Update(entity));
 		}
 
-		public void Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		public [void] Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
 
-			_repository.Using(x => x.Delete({{PrimaryKeyParameter}}));
+			[A]_repository.Using(x => x.Delete({{PrimaryKeyParameter}}));
 		}
 	}
 }

@@ -9,9 +9,9 @@ namespace SpotWelder.Lib.Services.Generators
 {
   public abstract class GeneratorBase
   {
-    protected readonly Regex _reBlankLines = new Regex(@"^\s+$[\r\n]*", RegexOptions.Multiline);
+    protected readonly Regex _reBlankLines = new (@"^\s+$[\r\n]*", RegexOptions.Multiline);
 
-    protected readonly Regex _reBlankSpace = new Regex(@"^\s+$^[\r\n]", RegexOptions.Multiline);
+    protected readonly Regex _reBlankSpace = new (@"^\s+$^[\r\n]", RegexOptions.Multiline);
 
     private readonly string _templatesPath;
 
@@ -80,11 +80,6 @@ namespace SpotWelder.Lib.Services.Generators
 
     public abstract GeneratedResult FillTemplate();
 
-    /* Need to move what can be reused to the base class
-     * Need to make sure this is backwards compatible with VB or maybe not, I am not sure.
-     * Need to account for using clauses that need to be imported as a result of which properties are being generated.
-     * Create unit tests for each part of the ModelGenerator.
-     */
     protected virtual string FormatClassAttributes(IList<string> classAttributes)
     {
       var content = GetTextBlock(classAttributes, ca => $"[{ca}]");
@@ -139,6 +134,18 @@ namespace SpotWelder.Lib.Services.Generators
         Environment.NewLine);
 
       return content;
+    }
+
+    //TODO: Need to use DI for this
+    protected AsynchronicityFormatStrategyBase GetAsynchronicityFormatStrategy(bool isAsynchronous)
+    {
+      AsynchronicityFormatStrategyBase strategy = isAsynchronous
+        ? new AsyncFormatStrategy()
+        : new SyncFormatStrategy();
+      
+      strategy.Configure();
+
+      return strategy;
     }
   }
 }

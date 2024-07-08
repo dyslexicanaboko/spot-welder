@@ -28,6 +28,8 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{EntityName}}", Instructions.EntityName);
 			template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
 
+			GetAsynchronicityFormatStrategy(Instructions.IsAsynchronous).ReplaceTags(template);
+
 			var t = template.ToString();
 
 			t = RemoveExcessBlankSpace(t);
@@ -60,7 +62,7 @@ namespace SpotWelder.Lib.Services.Generators
 				}
 
 				t = t.Replace("{{ScopeIdentity}}", scopeIdentity);
-				t = t.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk));
+				t = t.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, Instructions.IsAsynchronous));
 			}
 
 			t = t.Replace("{{Schema}}", Instructions.TableQuery.Schema);
@@ -107,7 +109,7 @@ namespace SpotWelder.Lib.Services.Generators
 			return content;
 		}
 
-		private string FormatDynamicParameter(ClassMemberStrings properties)
+		private static string FormatDynamicParameter(ClassMemberStrings properties)
 		{
 			var t = properties.DatabaseType;
 
@@ -144,23 +146,26 @@ namespace SpotWelder.Lib.Services.Generators
 			return content;
 		}
 
-		private string FormatInsertExecution(ClassMemberStrings primaryKey)
+		private static string FormatInsertExecution(ClassMemberStrings primaryKey, bool isAsynchronous)
 		{
-			string content;
+			var ak = string.Empty;
+			var suf = string.Empty;
+
+			if (isAsynchronous)
+			{
+				ak = "await ";
+				suf = "Async";
+			}
 
 			if (primaryKey.IsIdentity)
 			{
-				content = $"            return connection.ExecuteScalar<{primaryKey.SystemTypeAlias}>(sql, entity);";
+				return $"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, entity);";
 			}
-			else
-			{
-				content = 
-$@"            connection.Execute(sql, p);
+
+			return
+$@"            {ak}connection.Execute{suf}(sql, p);
 
 				return entity.{primaryKey.Property};";
-			}
-
-			return content;
 		}
 	}
 }

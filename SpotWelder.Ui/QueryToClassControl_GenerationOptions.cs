@@ -94,7 +94,8 @@ namespace SpotWelder.Ui
         //This is temporarily hardcoded to true for testing
         GenerateCreateModel = true,
         GeneratePatchModel = true,
-        ApiRoute = "tasks"
+        ApiRoute = "tasks",
+        IsAsynchronous = true
       };
 
       return c;

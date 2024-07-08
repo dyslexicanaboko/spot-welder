@@ -9,7 +9,9 @@ namespace SpotWelder.Lib.Services
   public class QueryToClassService
     : ClassMetaDataBase, IQueryToClassService
   {
-    public QueryToClassService(IQueryToClassRepository repository, IGeneralDatabaseQueries genericDatabaseQueries)
+    public QueryToClassService(
+      IQueryToClassRepository repository, 
+      IGeneralDatabaseQueries genericDatabaseQueries)
       : base(repository, genericDatabaseQueries)
     {
     }
@@ -98,6 +100,7 @@ namespace SpotWelder.Lib.Services
         EntityName = p.ClassOptions.EntityName,
         ModelName = p.ClassOptions.ModelName,
         ApiRoute = p.ClassOptions.ApiRoute,
+        IsAsynchronous = p.ClassOptions.IsAsynchronous,
         InterfaceName = $"I{p.ClassOptions.SubjectName}",
         TableQuery = p.TableQuery
       };

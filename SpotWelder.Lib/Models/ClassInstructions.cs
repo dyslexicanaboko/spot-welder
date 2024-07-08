@@ -50,7 +50,10 @@ namespace SpotWelder.Lib.Models
 
     /// <summary> Should class be a partial class? </summary>
     public bool IsPartial { get; set; }
-    
+
+    /// <summary> Should class methods be asynchronous? </summary>
+    public bool IsAsynchronous { get; set; }
+
     /// <summary>Namespaces that the class being generated should be using (importing).</summary>
     public IList<string> Namespaces { get; set; } = new List<string>();
 
@@ -77,6 +80,7 @@ namespace SpotWelder.Lib.Models
         Namespace = Namespace,
         InterfaceName = InterfaceName,
         ApiRoute = ApiRoute,
+        IsAsynchronous = IsAsynchronous,
         TableQuery = TableQuery.Clone()
       };
 
