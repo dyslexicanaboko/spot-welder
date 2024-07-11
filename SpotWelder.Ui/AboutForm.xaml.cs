@@ -32,5 +32,15 @@ namespace SpotWelder.Ui
 
       DataContext = _versionInfoService;
     }
+
+    private void BtnGoToRepository_OnClick(object sender, RoutedEventArgs e)
+    {
+      VersionInfoService.GitHub.OpenUri();
+    }
+
+    private void BtnGoToWebsite_OnClick(object sender, RoutedEventArgs e)
+    {
+      VersionInfoService.Website.OpenUri();
+    }
   }
 }

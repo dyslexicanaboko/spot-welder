@@ -8,11 +8,14 @@
         xmlns:viewmodels="clr-namespace:SpotWelder.Ui.ViewModels"
         d:DataContext="{d:DesignInstance Type=services:VersionInfoService}"
         mc:Ignorable="d"
-        Title="AboutForm" Height="282" Width="565">
+        Icon="images/Spot Welder icon.jpg"
+        Title="AboutForm" Height="447" Width="565">
   <Grid>
-    <ListView 
-      ItemsSource="{Binding Properties}" 
-       Margin="0,0,0,44" HorizontalAlignment="Left" Width="282">
+    <ListView ItemsSource="{Binding Properties}" 
+              HorizontalAlignment="Left" 
+              Width="290" 
+              Height="266" 
+              VerticalAlignment="Top">
       <ListView.View>
         <GridView>
           <GridViewColumn Width="80">
@@ -32,5 +35,33 @@
         </GridView>
       </ListView.View>
     </ListView>
+    <Image HorizontalAlignment="Left" 
+           Height="256" 
+           Margin="299,10,0,0" 
+           VerticalAlignment="Top" 
+           Width="256"
+           Source="images/Welder using welders wand 256.jpg" />
+    
+    
+    <Button x:Name="BtnGoToRepository"
+            HorizontalAlignment="Left" 
+            Margin="10,280,0,0" 
+            VerticalAlignment="Top"
+            Click="BtnGoToRepository_OnClick"
+            Height="100"
+            Width="100">
+      <Image Source="images/github-mark.png" />
+    </Button>
+    <Label Content="GitHub Repository" HorizontalAlignment="Left" Margin="6,375,0,0" VerticalAlignment="Top"/>
+    <Button x:Name="BtnGoToWebsite"
+            HorizontalAlignment="Left" 
+            Margin="134,280,0,0" 
+            VerticalAlignment="Top"
+            Click="BtnGoToWebsite_OnClick"
+            Height="100"
+            Width="100">
+      <Image Source="images/Sad and confused coffee cup.jpg" />
+    </Button>
+    <Label Content="OPAG" HorizontalAlignment="Left" Margin="164,375,0,0" VerticalAlignment="Top"/>
   </Grid>
 </Window>
