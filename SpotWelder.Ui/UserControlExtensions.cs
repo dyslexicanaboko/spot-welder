@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SpotWelder.Lib;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -35,6 +37,20 @@ namespace SpotWelder.Ui
       target.IsEnabled && IsChecked(target);
 
     public static bool IsChecked(this CheckBox target) => target.IsChecked.GetValueOrDefault();
+
+    public static GenerationElections GetChosenGenerationElections(this Dictionary<GenerationElections, CheckBox> map)
+    {
+      var e = GenerationElections.None;
+
+      foreach (var kvp in map)
+      {
+        if (!kvp.Value.IsChecked()) continue;
+
+        e |= kvp.Key;
+      }
+      
+      return e;
+    }
 
     public static void CopyToClipboard(this ContentControl label)
       => Clipboard.SetText(label.Content.ToString() ?? string.Empty);

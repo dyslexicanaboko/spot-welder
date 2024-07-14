@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using SpotWelder.Lib.Services.CodeFactory;
+﻿using SpotWelder.Lib.Services.CodeFactory;
+using System.Collections.Generic;
 
 namespace SpotWelder.Lib.Models
 {

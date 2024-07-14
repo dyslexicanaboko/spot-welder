@@ -30,37 +30,20 @@ namespace SpotWelder.Ui
       obj.SubjectName = TxtEntityName.Text;
       obj.EntityName = TxtClassEntityName.Text;
       obj.ModelName = TxtClassModelName.Text;
-      obj.Elections = GetChosenGenerationElections();
+      obj.Elections = _electionToCheckBoxMap.GetChosenGenerationElections();
 
       //TODO: Hook this up to the UI
       //This is temporarily hardcoded to true for testing
+      obj.Elections |= GenerationElections.Service;
+      obj.Elections |= GenerationElections.ApiController;
+      obj.Elections |= GenerationElections.GenerateCreateModel;
+      obj.Elections |= GenerationElections.GeneratePatchModel;
+      obj.Elections |= GenerationElections.MakeAsynchronous;
       obj.ApiRoute = "tasks";
 
       return obj;
     }
-
-    private GenerationElections GetChosenGenerationElections()
-    {
-      var e = GenerationElections.None;
-
-      foreach (var kvp in _electionToCheckBoxMap)
-      {
-        if (!kvp.Value.IsChecked()) continue;
-
-        e |= kvp.Key;
-      }
-
-      //TODO: Hook this up to the UI
-      //This is temporarily hardcoded to true for testing
-      e |= GenerationElections.Service;
-      e |= GenerationElections.ApiController;
-      e |= GenerationElections.GenerateCreateModel;
-      e |= GenerationElections.GeneratePatchModel;
-      e |= GenerationElections.MakeAsynchronous;
-
-      return e;
-    }
-
+    
     private QueryToClassParameters? CommonValidation()
     {
       var obj = new QueryToClassParameters();
