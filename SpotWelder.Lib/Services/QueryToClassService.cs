@@ -104,7 +104,11 @@ namespace SpotWelder.Lib.Services
           GenerationElections.CloneModelToEntity,
           GenerationElections.CloneEntityToModel,
           GenerationElections.CloneInterfaceToEntity,
-          GenerationElections.CloneInterfaceToModel
+          GenerationElections.CloneInterfaceToModel,
+          GenerationElections.MakeAsynchronous,
+          GenerationElections.RepoEfFluentApi,
+          GenerationElections.RepoDynamic,
+          GenerationElections.RepoBulkCopy,
         }.Contains(e))
         .ToList();
 

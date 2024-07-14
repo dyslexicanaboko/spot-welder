@@ -16,14 +16,14 @@ namespace SpotWelder.Lib
   {
     None = 0,
 
-    CSharp = 2^0,
+    CSharp = 1 << 0,
 
     [Obsolete("Looking to get rid of this option and therefore this Enum all together. VB sucks.")]
-    VbNet = 2^1,
+    VbNet = 1 << 1,
 
-    JavaScript = 2^2,
+    JavaScript = 1 << 2,
 
-    TypeScript = 2^3
+    TypeScript = 1 << 3
   }
 
   [Flags]
@@ -31,13 +31,13 @@ namespace SpotWelder.Lib
   {
     None = 0,
 
-    Table = 2^0,
+    Table = 1 << 0,
 
-    Schema = 2^1,
+    Schema = 1 << 1,
 
-    Database = 2^2,
+    Database = 1 << 2,
 
-    LinkedServer = 2^3
+    LinkedServer = 1 << 3
   }
 
   [Flags]
@@ -46,68 +46,68 @@ namespace SpotWelder.Lib
     None = 0,
 
     /// <summary> Should class methods be asynchronous? </summary>
-    MakeAsynchronous = 2^0,
+    MakeAsynchronous = 1 << 0,
 
     /// <summary> Generate an entity for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-    GenerateEntity = 2^1,
+    GenerateEntity = 1 << 1,
 
     /// <summary> Generate the <see cref="IEquatable{T}"/> interface implementation for the target entity. </summary>
-    GenerateEntityIEquatable = 2^2,
+    GenerateEntityIEquatable = 1 << 2,
 
     /// <summary> Generate the <see cref="IComparable"/> interface implementation for the target entity. </summary>
-    GenerateEntityIComparable = 2^3,
+    GenerateEntityIComparable = 1 << 3,
 
     /// <summary> Generate an <see cref="EqualityComparer{T}"/> class for the target entity. </summary>
-    GenerateEntityEqualityComparer = 2^4,
+    GenerateEntityEqualityComparer = 1 << 4,
 
     /// <summary> Generate a model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-    GenerateModel = 2^5,
+    GenerateModel = 1 << 5,
 
     /// <summary> Generate a REST API Create model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-    GenerateCreateModel = 2^6,
+    GenerateCreateModel = 1 << 6,
 
     /// <summary> Generate a REST API Patch model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-    GeneratePatchModel = 2^7,
+    GeneratePatchModel = 1 << 7,
 
     /// <summary> Name of the subject with the `I` prefix.</summary>
     /// <example> Subject named: `Task`, the interface would be `ITask`.</example>
-    GenerateInterface = 2^8,
+    GenerateInterface = 1 << 8,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneEntityToModel = 2^9,
+    CloneEntityToModel = 1 << 9,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneModelToEntity = 2^10,
+    CloneModelToEntity = 1 << 10,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneInterfaceToEntity = 2 ^ 11,
+    CloneInterfaceToEntity = 1 << 11,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneInterfaceToModel = 2^ 12,
+    CloneInterfaceToModel = 1 << 12,
 
-    SerializeCsv = 2^13,
+    SerializeCsv = 1 << 13,
 
-    SerializeJson = 2^14,
+    SerializeJson = 1 << 14,
 
-    RepoStatic = 2^15,
+    RepoStatic = 1 << 15,
 
-    RepoDynamic = 2^16,
+    RepoDynamic = 1 << 16,
 
-    RepoBulkCopy = 2^17,
+    RepoBulkCopy = 1 << 17,
 
-    RepoDapper = 2^18,
+    RepoDapper = 1 << 18,
 
-    RepoEfFluentApi = 2^19,
+    RepoEfFluentApi = 1 << 19,
 
-    Service = 2^20,
+    Service = 1 << 20,
 
-    ApiController = 2^21,
+    ApiController = 1 << 21,
 
-    GenerateEntityAsTypeScript = 2^22,
+    GenerateEntityAsTypeScript = 1 << 22,
     
-    GenerateEntityAsJavaScript = 2^23,
+    GenerateEntityAsJavaScript = 1 << 23,
     
     /// <summary> Services all of the clone elections. </summary>
-    GenerateMapper = 2^ 24,
+    GenerateMapper = 1 << 24,
   }
 }

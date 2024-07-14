@@ -12,6 +12,8 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
+      instructions.ClassName = instructions.EntityName;
+
       instructions.IsPartial = 
         instructions.Elections.HasFlag(GenerationElections.GenerateEntityIEquatable) ||
         instructions.Elections.HasFlag(GenerationElections.GenerateEntityIComparable);

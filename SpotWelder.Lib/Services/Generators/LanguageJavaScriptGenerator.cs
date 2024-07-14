@@ -29,10 +29,7 @@ namespace SpotWelder.Lib.Services.Generators
       t = t.Replace("{{Parameters}}", FormatParameters(instructions.Properties));
       t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var r = GetResult("js");
-      r.Contents = t;
-
-      return r;
+      return new GeneratedResult($"{instructions.SubjectName}.js", t);
     }
 
     private string FormatParameters(IList<ClassMemberStrings> properties)

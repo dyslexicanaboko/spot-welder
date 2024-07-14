@@ -16,7 +16,9 @@ namespace SpotWelder.Lib.Services.CodeFactory
     /// <summary>All classes that extend the <see cref="GeneratorBase"/> will be initialized and turned into an enumerable.</summary>
     public CodeGenerationFactory(IEnumerable<GeneratorBase> generators)
     {
-      _generators = generators.ToDictionary(g => g.Election);
+      _generators = generators
+        .Where(g => g.GetType().Name != nameof(ClassEntitySimpleGenerator))
+        .ToDictionary(g => g.Election);
     }
 
     public GeneratedResult? Generate(ClassInstructions instructions, GenerationElections electionToTest)

@@ -30,7 +30,7 @@ namespace {{Namespace}}
 			return lst.SingleOrDefault();
 		}
 
-		public [AO]IEnumerable<{{EntityName}}> SelectAll()
+		public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
 		{
 			const string sql = @"
 			SELECT
@@ -43,7 +43,7 @@ namespace {{Namespace}}
 		}
 
 		//Preference on whether or not insert method returns a value is up to the user and the object being inserted
-		public [AO]{{PrimaryKeyType}} Insert({{EntityName}} entity)
+		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
 		{
 			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (
 	{{InsertColumnList}}

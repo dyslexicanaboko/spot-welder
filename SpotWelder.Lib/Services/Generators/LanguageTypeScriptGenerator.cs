@@ -27,10 +27,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var r = GetResult("ts");
-      r.Contents = t;
-
-      return r;
+      return new GeneratedResult($"{instructions.SubjectName}.ts", t);
     }
 
     protected override string FormatProperties(IList<ClassMemberStrings> properties)
