@@ -6,29 +6,32 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassEntityGenerator
     : GeneratorBase
   {
-    public ClassEntityGenerator(ClassInstructions instructions)
-      : base(instructions, "Entity.cs.template")
-    {
-    }
+    public override GenerationElections Election => GenerationElections.GenerateEntity;
 
-    public override GeneratedResult FillTemplate()
+    protected override string TemplateName => "Entity.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
+      instructions.IsPartial = 
+        instructions.Elections.HasFlag(GenerationElections.GenerateEntityIEquatable) ||
+        instructions.Elections.HasFlag(GenerationElections.GenerateEntityIComparable);
+
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{ClassName}}", Instructions.ClassName);
-      template.Replace("{{ModelName}}", Instructions.ModelName);
-      template.Replace("{{InterfaceName}}", Instructions.InterfaceName);
-      template.Replace("{{Partial}}", Instructions.IsPartial ? "partial " : string.Empty);
-      template.Replace("{{Interface}}", FormatInterface(Instructions.InterfaceName));
-      template.Replace("{{ClassAttributes}}", FormatClassAttributes(Instructions.ClassAttributes));
-      template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{ModelName}}", instructions.ModelName);
+      template.Replace("{{InterfaceName}}", instructions.InterfaceName);
+      template.Replace("{{Partial}}", instructions.IsPartial ? "partial " : string.Empty);
+      template.Replace("{{Interface}}", FormatInterface(instructions.InterfaceName));
+      template.Replace("{{ClassAttributes}}", FormatClassAttributes(instructions.ClassAttributes));
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
       //Constructors
-      template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(Instructions.Properties, "target"));
-      template.Replace("{{ConstructorFromModel}}", FormatConstructorBody(Instructions.Properties, "model"));
+      template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
+      template.Replace("{{ConstructorFromModel}}", FormatConstructorBody(instructions.Properties, "model"));
 
       var t = template.ToString();
 
@@ -36,9 +39,9 @@ namespace SpotWelder.Lib.Services.Generators
 
       //t = RemoveBlankLines(t);
 
-      t = t.Replace("{{Properties}}", FormatProperties(Instructions.Properties));
+      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var r = GetResult();
+      var r = GetResult(instructions.ClassName);
       r.Contents = t;
 
       return r;

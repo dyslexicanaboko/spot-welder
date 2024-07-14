@@ -9,34 +9,31 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassEntityEqualityComparerGenerator
     : GeneratorBase
   {
-    public ClassEntityEqualityComparerGenerator(ClassInstructions instructions)
-      : base(instructions, "EntityEqualityComparer.cs.template")
-    {
-    }
+    public override GenerationElections Election => GenerationElections.GenerateEntityEqualityComparer;
 
-    public override GeneratedResult FillTemplate()
+    protected override string TemplateName => "EntityEqualityComparer.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
+      instructions.ClassName = instructions.EntityName;
+      
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{ClassName}}", Instructions.ClassName);
-      template.Replace("{{EntityName}}", Instructions.EntityName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
 
-      t = t.Replace("{{PropertiesEquals}}", FormatForEquals(Instructions.Properties));
-      t = t.Replace("{{PropertiesHashCode}}", FormatForHashCode(Instructions.Properties));
+      t = t.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
+      t = t.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
 
-      var r = GetResult();
-      r.Filename = Instructions.EntityName + "EqualityComparer.cs";
-      r.Contents = t;
-
-      return r;
+      return new(instructions.EntityName + "EqualityComparer.cs", t);
     }
 
     private string FormatForEquals(IList<ClassMemberStrings> properties)

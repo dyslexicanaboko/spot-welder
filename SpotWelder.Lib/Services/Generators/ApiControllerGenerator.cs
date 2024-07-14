@@ -7,30 +7,30 @@ namespace SpotWelder.Lib.Services.Generators
   public class ApiControllerGenerator
     : GeneratorBase
   {
-    public ApiControllerGenerator(ClassInstructions instructions)
-      : base(instructions, "ApiController.cs.template")
+    public override GenerationElections Election => GenerationElections.ApiController;
+
+    protected override string TemplateName => "ApiController.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
-    }
 
-    public override GeneratedResult FillTemplate()
-    {
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{ApiRoute}}", Instructions.ApiRoute);
-      template.Replace("{{SubjectName}}", Instructions.SubjectName);
-      template.Replace("{{ClassName}}", Instructions.ClassName);
-      template.Replace("{{ModelName}}", Instructions.EntityName);
-      template.Replace("{{EntityName}}", Instructions.EntityName);
-      template.Replace("{{InterfaceName}}", Instructions.InterfaceName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
-      
-      GetAsynchronicityFormatStrategy(Instructions.IsAsynchronous).ReplaceTags(template);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ApiRoute}}", instructions.ApiRoute);
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{ModelName}}", instructions.EntityName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{InterfaceName}}", instructions.InterfaceName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-      var pk = Instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
+      GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
+
+      var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
 
       if (pk != null)
       {
@@ -41,12 +41,8 @@ namespace SpotWelder.Lib.Services.Generators
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
-      
-      return new GeneratedResult
-      {
-        Filename = $"{Instructions.ClassName}Controller.cs",
-        Contents = t
-      };
+
+      return new GeneratedResult($"{instructions.ClassName}Controller.cs", t);
     }
   }
 }

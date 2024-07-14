@@ -1,40 +1,36 @@
-﻿using System.Linq;
+﻿using SpotWelder.Lib.Models;
+using System.Linq;
 using System.Text;
-using SpotWelder.Lib.Models;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-    public class ClassEntityIComparableGenerator
-        : GeneratorBase
+  public class ClassEntityIComparableGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.GenerateEntityIComparable;
+
+    protected override string TemplateName => "EntityIComparable.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-        public ClassEntityIComparableGenerator(ClassInstructions instructions)
-            : base(instructions, "EntityIComparable.cs.template")
-        {
+      instructions.ClassName = instructions.EntityName;
 
-        }
+      var strTemplate = GetTemplate(TemplateName);
 
-        public override GeneratedResult FillTemplate()
-        {
-            var strTemplate = GetTemplate(TemplateName);
+      var template = new StringBuilder(strTemplate);
 
-            var template = new StringBuilder(strTemplate);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.EntityName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-            template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.EntityName);
-            template.Replace("{{EntityName}}", Instructions.EntityName);
-            template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      var t = template.ToString();
 
-            var t = template.ToString();
+      t = RemoveExcessBlankSpace(t);
 
-            t = RemoveExcessBlankSpace(t);
+      t = t.Replace("{{Property1}}", instructions.Properties.First().Property);
 
-            t = t.Replace("{{Property1}}", Instructions.Properties.First().Property);
-
-            var r = GetResult();
-            r.Filename = Instructions.EntityName + "_IComparable.cs";
-            r.Contents = t;
-
-            return r;
-        }
+      return new(instructions.EntityName + "_IComparable.cs", t);
     }
+  }
 }

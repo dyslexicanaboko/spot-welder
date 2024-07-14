@@ -1,32 +1,31 @@
-﻿using System;
+﻿using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Services.Generators
 {
   public class LanguageTypeScriptGenerator
     : GeneratorBase
   {
-    public LanguageTypeScriptGenerator(ClassInstructions instructions)
-      : base(instructions, "Type.ts.template")
-    {
-    }
+    public override GenerationElections Election => GenerationElections.GenerateEntityAsTypeScript;
 
-    public override GeneratedResult FillTemplate()
+    protected override string TemplateName => "Type.ts.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{ClassName}}", Instructions.EntityName);
+      template.Replace("{{ClassName}}", instructions.EntityName);
 
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
 
-      t = t.Replace("{{Properties}}", FormatProperties(Instructions.Properties));
+      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
       var r = GetResult("ts");
       r.Contents = t;
@@ -37,9 +36,10 @@ namespace SpotWelder.Lib.Services.Generators
     protected override string FormatProperties(IList<ClassMemberStrings> properties)
     {
       //FYI: The `Parameter` property is being used because it's camelCase
-      var content = GetTextBlock(properties,
-        (p) => $"    {p.Parameter}{(p.IsDbNullable ? "?" : string.Empty)}: {p.TypeScriptType};",
-        separator: Environment.NewLine);
+      var content = GetTextBlock(
+        properties,
+        p => $"    {p.Parameter}{(p.IsDbNullable ? "?" : string.Empty)}: {p.TypeScriptType};",
+        Environment.NewLine);
 
       return content;
     }

@@ -65,6 +65,9 @@ namespace SpotWelder.Lib.Models
     /// generate something in. Vague explanation for a vague implementation.
     /// </summary>
     public CodeType Languages { get; set; }
+    
+    /// <summary> The user's elections. In other words, what should be generated. </summary>
+    public GenerationElections Elections { get; set; } = GenerationElections.None;
 
     /// <summary>Properties of the source entity.</summary>
     public IList<ClassMemberStrings> Properties { get; set; } = new List<ClassMemberStrings>();
@@ -88,6 +91,7 @@ namespace SpotWelder.Lib.Models
         ApiRoute = ApiRoute,
         IsAsynchronous = IsAsynchronous,
         Languages = Languages,
+        Elections = Elections,
         TableQuery = TableQuery.Clone()
       };
 

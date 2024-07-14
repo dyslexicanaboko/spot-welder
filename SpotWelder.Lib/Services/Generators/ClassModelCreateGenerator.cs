@@ -6,37 +6,33 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassModelCreateGenerator
     : GeneratorBase
   {
-    public ClassModelCreateGenerator(ClassInstructions instructions)
-      : base(instructions, "ModelCreate.cs.template")
+    public override GenerationElections Election => GenerationElections.GenerateCreateModel;
+
+    protected override string TemplateName => "ModelCreate.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
-    }
 
-    public override GeneratedResult FillTemplate()
-    {
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{ClassName}}", Instructions.ClassName); //Subject is the prefix
-      template.Replace("{{InterfaceName}}", Instructions.InterfaceName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName); //Subject is the prefix
+      template.Replace("{{InterfaceName}}", instructions.InterfaceName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
       //Constructors
-      template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(Instructions.Properties, "target"));
+      template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
 
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
 
-      t = t.Replace("{{Properties}}", FormatProperties(Instructions.Properties));
+      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      return new GeneratedResult
-      {
-        Filename = $"{Instructions.ClassName}V1CreateModel.cs",
-        Contents = t
-      };
+      return new($"{instructions.ClassName}V1CreateModel.cs", t);
     }
   }
 }

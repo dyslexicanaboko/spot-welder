@@ -1,62 +1,61 @@
-﻿using System;
+﻿using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-    public class ClassEntityIEquatableGenerator
-        : GeneratorBase
+  public class ClassEntityIEquatableGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.GenerateEntityIEquatable;
+
+    protected override string TemplateName => "EntityIEquatable.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-        public ClassEntityIEquatableGenerator(ClassInstructions instructions)
-            : base(instructions, "EntityIEquatable.cs.template")
-        {
+      instructions.ClassName = instructions.EntityName;
 
-        }
+      var strTemplate = GetTemplate(TemplateName);
 
-        public override GeneratedResult FillTemplate()
-        {
-            var strTemplate = GetTemplate(TemplateName);
+      var template = new StringBuilder(strTemplate);
 
-            var template = new StringBuilder(strTemplate);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-            template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.ClassName);
-            template.Replace("{{EntityName}}", Instructions.EntityName);
-            template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      var t = template.ToString();
 
-            var t = template.ToString();
+      t = RemoveExcessBlankSpace(t);
 
-            t = RemoveExcessBlankSpace(t);
-            //t = RemoveBlankLines(t);
+      //t = RemoveBlankLines(t);
 
-            t = t.Replace("{{PropertiesEquals}}", FormatForEquals(Instructions.Properties));
-            t = t.Replace("{{PropertiesHashCode}}", FormatForHashCode(Instructions.Properties));
+      t = t.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
+      t = t.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
 
-            var r = GetResult();
-            r.Filename = Instructions.EntityName + "_IEquatable.cs";
-            r.Contents = t;
-
-            return r;
-        }
-
-        private string FormatForEquals(IList<ClassMemberStrings> properties)
-        {
-            var content = GetTextBlock(properties,
-                (p) => $"                {p.Property} == other.{p.Property}",
-                separator: " && " + Environment.NewLine);
-
-            return content;
-        }
-
-        private string FormatForHashCode(IList<ClassMemberStrings> properties)
-        {
-            var content = GetTextBlock(properties,
-                (p) => $"                {p.Property}.GetHashCode()",
-                separator: " + " + Environment.NewLine);
-
-            return content;
-        }
+      return new(instructions.EntityName + "_IEquatable.cs", t);
     }
+
+    private string FormatForEquals(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"                {p.Property} == other.{p.Property}",
+        " && " + Environment.NewLine);
+
+      return content;
+    }
+
+    private string FormatForHashCode(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"                {p.Property}.GetHashCode()",
+        " + " + Environment.NewLine);
+
+      return content;
+    }
+  }
 }

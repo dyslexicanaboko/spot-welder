@@ -9,31 +9,20 @@ namespace SpotWelder.Lib.Services.Generators
 {
   public abstract class GeneratorBase
   {
-    protected readonly Regex _reBlankLines = new (@"^\s+$[\r\n]*", RegexOptions.Multiline);
+    protected readonly Regex _reBlankLines = new(@"^\s+$[\r\n]*", RegexOptions.Multiline);
 
-    protected readonly Regex _reBlankSpace = new (@"^\s+$^[\r\n]", RegexOptions.Multiline);
+    protected readonly Regex _reBlankSpace = new(@"^\s+$^[\r\n]", RegexOptions.Multiline);
 
-    private readonly string _templatesPath;
+    private readonly string _templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
 
-    protected GeneratorBase(ClassInstructions instructions, string templateName)
-    {
-      _templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
+    public abstract GenerationElections Election { get; }
 
-      TemplateName = templateName;
+    protected abstract string TemplateName { get; }
 
-      Instructions = instructions;
-    }
+    public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
 
-    protected ClassInstructions Instructions { get; set; }
-
-    public string TemplateName { get; protected set; }
-
-    protected virtual GeneratedResult GetResult(string extension = "cs")
-    {
-      var r = new GeneratedResult { Filename = Instructions.ClassName + "." + extension };
-
-      return r;
-    }
+    protected virtual GeneratedResult GetResult(string className, string extension = "cs")
+      => new(className + "." + extension);
 
     protected virtual string GetTemplate(string templateName)
     {
@@ -77,8 +66,6 @@ namespace SpotWelder.Lib.Services.Generators
 
       return replacement;
     }
-
-    public abstract GeneratedResult FillTemplate();
 
     protected virtual string FormatClassAttributes(IList<string> classAttributes)
     {
@@ -139,10 +126,8 @@ namespace SpotWelder.Lib.Services.Generators
     //TODO: Need to use DI for this
     protected AsynchronicityFormatStrategyBase GetAsynchronicityFormatStrategy(bool isAsynchronous)
     {
-      AsynchronicityFormatStrategyBase strategy = isAsynchronous
-        ? new AsyncFormatStrategy()
-        : new SyncFormatStrategy();
-      
+      AsynchronicityFormatStrategyBase strategy = isAsynchronous ? new AsyncFormatStrategy() : new SyncFormatStrategy();
+
       strategy.Configure();
 
       return strategy;

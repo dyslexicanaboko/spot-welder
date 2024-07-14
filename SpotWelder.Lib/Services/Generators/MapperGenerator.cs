@@ -1,7 +1,5 @@
 ﻿using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
@@ -9,36 +7,36 @@ namespace SpotWelder.Lib.Services.Generators
   public class MapperGenerator
     : GeneratorBase
   {
-    private readonly GenerationElections _services;
+    /// <summary>
+    /// In this particular case the mapper accounts for these elections in one shot:
+    ///   GenerationElections.CloneModelToEntity
+    ///   GenerationElections.CloneEntityToModel
+    ///   GenerationElections.CloneInterfaceToEntity
+    ///   GenerationElections.CloneInterfaceToModel
+    /// </summary>
+    public override GenerationElections Election => GenerationElections.GenerateMapper;
+    
+    protected override string TemplateName => "Mapper.cs.template";
 
-    public MapperGenerator(ClassInstructions instructions, GenerationElections services)
-      : base(instructions, "Mapper.cs.template")
-    {
-      _services = services;
-      
-      instructions.ClassName = instructions.SubjectName;
-    }
-
-    public override GeneratedResult FillTemplate()
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{ClassName}}", Instructions.ClassName);
-      template.Replace("{{EntityName}}", Instructions.EntityName);
-      template.Replace("{{ModelName}}", Instructions.ModelName);
-      template.Replace("{{InterfaceName}}", Instructions.InterfaceName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{ModelName}}", instructions.ModelName);
+      template.Replace("{{InterfaceName}}", instructions.InterfaceName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-      //TODO: Keeping this stuff here for now - I might have to get rid of it.
       //Cloning method properties
       template.Replace(
         "{{PropertiesModelToEntity}}",
         FormatCloneBody(
           GenerationElections.CloneModelToEntity,
-          Instructions.Properties,
+          instructions,
           "model",
           "entity"));
 
@@ -46,7 +44,7 @@ namespace SpotWelder.Lib.Services.Generators
         "{{PropertiesEntityToModel}}",
         FormatCloneBody(
           GenerationElections.CloneEntityToModel,
-          Instructions.Properties,
+          instructions,
           "entity",
           "model"));
 
@@ -54,7 +52,7 @@ namespace SpotWelder.Lib.Services.Generators
         "{{PropertiesInterfaceToEntity}}",
         FormatCloneBody(
           GenerationElections.CloneInterfaceToEntity,
-          Instructions.Properties,
+          instructions,
           "target",
           "entity"));
 
@@ -62,28 +60,24 @@ namespace SpotWelder.Lib.Services.Generators
         "{{PropertiesInterfaceToModel}}",
         FormatCloneBody(
           GenerationElections.CloneInterfaceToModel,
-          Instructions.Properties,
+          instructions,
           "target",
           "model"));
 
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
-      
-      return new GeneratedResult
-      {
-        Filename = $"{Instructions.ClassName}Mapper.cs",
-        Contents = t
-      };
+
+      return new($"{instructions.ClassName}Mapper.cs", t);
     }
 
     private string FormatCloneBody(
       GenerationElections flag,
-      IList<ClassMemberStrings> properties,
+      ClassInstructions instructions,
       string from,
       string to)
     {
-      if (!_services.HasFlag(flag))
+      if (!instructions.Elections.HasFlag(flag))
       {
         var exception = GetNotImplementedException(
           $"Cloning option \"{flag}\" was excluded from generation. Delete this method.");
@@ -92,7 +86,7 @@ namespace SpotWelder.Lib.Services.Generators
       }
 
       var content = GetTextBlock(
-        properties,
+        instructions.Properties,
         p => $"			{to}.{p.Property} = {from}.{p.Property};",
         Environment.NewLine);
 

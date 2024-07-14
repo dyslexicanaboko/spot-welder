@@ -1,19 +1,24 @@
 ﻿using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Lib.Services.Generators;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpotWelder.Lib.Services
 {
   public class QueryToClassService
     : ClassMetaDataBase, IQueryToClassService
   {
+    private readonly ICodeGenerationFactory _factory;
+
     public QueryToClassService(
       IQueryToClassRepository repository, 
-      IGeneralDatabaseQueries genericDatabaseQueries)
+      IGeneralDatabaseQueries genericDatabaseQueries,
+      ICodeGenerationFactory factory)
       : base(repository, genericDatabaseQueries)
     {
+      _factory = factory;
     }
 
     public IList<GeneratedResult>? Generate(QueryToClassParameters parameters)
@@ -24,7 +29,7 @@ namespace SpotWelder.Lib.Services
 
       var baseInstructions = GetBaseInstructions(parameters);
 
-      return GenerateClasses(parameters.Elections, baseInstructions);
+      return GenerateClasses(baseInstructions);
 
       //Writing to files will be handled again later
       //if (p.SaveAsFile)
@@ -45,7 +50,7 @@ namespace SpotWelder.Lib.Services
         IsPartial = instructions.Elections.HasFlag(GenerationElections.GenerateEntityIEquatable)
       };
       
-      return GenerateClasses(instructions.Elections, ci);
+      return GenerateClasses(ci);
     }
 
     /// <summary>
@@ -67,7 +72,8 @@ namespace SpotWelder.Lib.Services
         ApiRoute = p.ApiRoute,
         IsAsynchronous = p.Elections.HasFlag(GenerationElections.MakeAsynchronous),
         InterfaceName = $"I{p.SubjectName}",
-        TableQuery = p.TableQuery
+        TableQuery = p.TableQuery,
+        Elections = p.Elections,
       };
 
       foreach (var sc in schema.ColumnsAll)
@@ -87,161 +93,33 @@ namespace SpotWelder.Lib.Services
     ///   The main internal method that orchestrates the code generation for the provided parameters
     /// </summary>
     /// <returns>The generated class code as a StringBuilder</returns>
-    private static IList<GeneratedResult> GenerateClasses(
-      GenerationElections elections,
-      ClassInstructions baseInstructions)
+    private IList<GeneratedResult> GenerateClasses(ClassInstructions baseInstructions)
     {
-      var lst = new List<GeneratedResult>();
-
-      var interfaceName = string.Empty;
-
-      if (elections.HasFlag(GenerationElections.GenerateInterface))
-      {
-        interfaceName = baseInstructions.InterfaceName;
-
-        var ins = baseInstructions.Clone();
-        ins.ClassName = ins.InterfaceName;
-
-        var svc = new ClassInterfaceGenerator(ins);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.GenerateEntity))
-      {
-        var ins = baseInstructions.Clone();
-        //Interface is only included if it was elected to be generated
-        ins.InterfaceName = interfaceName;
-        ins.IsPartial = elections.HasFlag(GenerationElections.GenerateEntityIEquatable) || elections.HasFlag(GenerationElections.GenerateEntityIComparable);
-
-        var svc = new ClassEntityGenerator(ins);
-
-        lst.Add(svc.FillTemplate());
-
-        if (elections.HasFlag(GenerationElections.GenerateEntityIEquatable))
+      //Get all elections that can be generated directly, leave out the ones that cannot
+      var allTests = Enum.GetValues(typeof(GenerationElections))
+        .Cast<GenerationElections>()
+        .Where(e => !new []
         {
-          var insSub = baseInstructions.Clone();
-          //This is the same name as the Entity because it's a partial class implementation
-          insSub.ClassName = baseInstructions.EntityName;
+          GenerationElections.None,
+          GenerationElections.CloneModelToEntity,
+          GenerationElections.CloneEntityToModel,
+          GenerationElections.CloneInterfaceToEntity,
+          GenerationElections.CloneInterfaceToModel
+        }.Contains(e))
+        .ToList();
 
-          var svcSub = new ClassEntityIEquatableGenerator(insSub);
+      var lst = new List<GeneratedResult>(allTests.Count);
 
-          lst.Add(svcSub.FillTemplate());
-        }
-
-        if (elections.HasFlag(GenerationElections.GenerateEntityIComparable))
-        {
-          var insSub = baseInstructions.Clone();
-          //This is the same name as the Entity because it's a partial class implementation
-          insSub.ClassName = baseInstructions.EntityName;
-
-          var svcSub = new ClassEntityIComparableGenerator(insSub);
-
-          lst.Add(svcSub.FillTemplate());
-        }
-
-        if (elections.HasFlag(GenerationElections.GenerateEntityEqualityComparer))
-        {
-          var insSub = baseInstructions.Clone();
-          //This is a prefix, the template appends EqualityComparer to it
-          insSub.ClassName = baseInstructions.EntityName;
-
-          var svcSub = new ClassEntityEqualityComparerGenerator(insSub);
-
-          lst.Add(svcSub.FillTemplate());
-        }
-      }
-
-      if (elections.HasFlag(GenerationElections.GenerateModel))
+      foreach (var e in allTests)
       {
-        var ins = baseInstructions.Clone();
-        ins.ClassName = baseInstructions.ModelName;
-        ins.InterfaceName = interfaceName;
+        var result = _factory.Generate(baseInstructions, e);
 
-        var svc = new ClassModelGenerator(ins);
+        if(result == null) continue;
 
-        lst.Add(svc.FillTemplate());
+        lst.Add(result);
       }
-
-      if (elections.HasFlag(GenerationElections.GenerateCreateModel))
-      {
-        var svc = new ClassModelCreateGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.GeneratePatchModel))
-      {
-        var svc = new ClassModelPatchGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (baseInstructions.Languages.HasFlag(CodeType.JavaScript))
-      {
-        var svc = new LanguageJavaScriptGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (baseInstructions.Languages.HasFlag(CodeType.TypeScript))
-      {
-        var svc = new LanguageTypeScriptGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.SerializeCsv))
-      {
-        var svc = new ServiceSerializationCsvGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.SerializeJson))
-      {
-        var svc = new ServiceSerializationJsonGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.Service))
-      {
-        var svc = new ServiceGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.ApiController))
-      {
-        var svc = new ApiControllerGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.CloneModelToEntity) ||
-          elections.HasFlag(GenerationElections.CloneEntityToModel) ||
-          elections.HasFlag(GenerationElections.CloneInterfaceToEntity) ||
-          elections.HasFlag(GenerationElections.CloneInterfaceToModel))
-      {
-        var svc = new MapperGenerator(baseInstructions.Clone(), elections);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.RepoStatic))
-      {
-        var svc = new RepositoryStaticGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (elections.HasFlag(GenerationElections.RepoDapper))
-      {
-        var svc = new RepositoryDapperGenerator(baseInstructions.Clone());
-
-        lst.Add(svc.FillTemplate());
-      }
+      
+      lst.TrimExcess();
 
       return lst;
     }

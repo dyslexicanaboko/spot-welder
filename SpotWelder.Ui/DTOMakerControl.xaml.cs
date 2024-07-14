@@ -61,7 +61,9 @@ namespace SpotWelder.Ui
         { GenerationElections.GenerateInterface, CbExtractInterface },
         { GenerationElections.GenerateEntityIEquatable, CbImplementIEquatableOfTInterface },
         { GenerationElections.CloneEntityToModel, CbMethodEntityToDto },
-        { GenerationElections.CloneModelToEntity, CbMethodDtoToEntity }
+        { GenerationElections.CloneModelToEntity, CbMethodDtoToEntity },
+        { GenerationElections.GenerateEntityAsJavaScript, CbEquivalentJavaScript },
+        { GenerationElections.GenerateEntityAsTypeScript, CbEquivalentTypeScript }
       };
     }
 
@@ -197,10 +199,6 @@ Please keep in mind casing matters.";
           GenerationElections.GenerateModel |
           _electionToCheckBoxMap.GetChosenGenerationElections()
       };
-      
-      if (CbEquivalentJavaScript.IsChecked()) p.Languages |= CodeType.JavaScript;
-      
-      if (CbEquivalentTypeScript.IsChecked()) p.Languages |= CodeType.TypeScript;
       
       //There should only be one assembly and one class loaded
       var electedProperties =

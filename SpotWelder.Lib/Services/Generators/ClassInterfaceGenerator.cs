@@ -1,49 +1,50 @@
-﻿using System;
+﻿using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-    public class ClassInterfaceGenerator
-        : GeneratorBase
+  public class ClassInterfaceGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.GenerateInterface;
+
+    protected override string TemplateName => "Interface.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-        public ClassInterfaceGenerator(ClassInstructions instructions)
-            : base(instructions, "Interface.cs.template")
-        {
+      instructions.ClassName = instructions.InterfaceName;
 
-        }
+      var strTemplate = GetTemplate(TemplateName);
 
-        public override GeneratedResult FillTemplate()
-        {
-            var strTemplate = GetTemplate(TemplateName);
+      var template = new StringBuilder(strTemplate);
 
-            var template = new StringBuilder(strTemplate);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-            template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.ClassName);
-            template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      var t = template.ToString();
 
-            var t = template.ToString();
+      t = RemoveExcessBlankSpace(t);
 
-            t = RemoveExcessBlankSpace(t);
+      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-            t = t.Replace("{{Properties}}", FormatProperties(Instructions.Properties));
+      var r = GetResult(instructions.ClassName);
+      r.Contents = t;
 
-            var r = GetResult();
-            r.Contents = t;
-
-            return r;
-        }
-
-        protected override string FormatProperties(IList<ClassMemberStrings> properties)
-        {
-            var content = GetTextBlock(properties, 
-                (p) => $"        {p.SystemTypeAlias} {p.Property} {{ get; set; }}", 
-                separator: Environment.NewLine + Environment.NewLine);
-
-            return content;
-        }
+      return r;
     }
+
+    protected override string FormatProperties(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"        {p.SystemTypeAlias} {p.Property} {{ get; set; }}",
+        Environment.NewLine + Environment.NewLine);
+
+      return content;
+    }
+  }
 }

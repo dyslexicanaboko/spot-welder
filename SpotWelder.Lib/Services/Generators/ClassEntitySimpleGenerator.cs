@@ -1,51 +1,53 @@
-﻿using System;
+﻿using SpotWelder.Lib.Events;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using SpotWelder.Lib.Events;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Services.Generators
 {
+  /// <summary>
+  /// This is a one off generator that's not part of the normal generation process.
+  /// </summary>
   public class ClassEntitySimpleGenerator
     : GeneratorBase
   {
+    public override GenerationElections Election => GenerationElections.None; //Cannot be elected
+
     public delegate void RowProcessedHandler(object sender, RowProcessedEventArgs e);
 
-    public ClassEntitySimpleGenerator(ClassInstructions instructions)
-      : base(instructions, "EntitySimple.cs.template")
-    {
-    }
+    protected override string TemplateName => "EntitySimple.cs.template";
 
     public event RowProcessedHandler RowProcessed;
 
-    public override GeneratedResult FillTemplate()
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{ClassName}}", Instructions.EntityName);
+      template.Replace("{{ClassName}}", instructions.EntityName);
 
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
 
-      t = t.Replace("{{Properties}}", FormatProperties(Instructions.Properties));
+      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var r = GetResult();
+      var r = GetResult(instructions.ClassName);
       r.Contents = t;
 
       return r;
     }
 
-    public GeneratedResult FillMockDataTemplate(DataTable dataTable)
+    public GeneratedResult FillMockDataTemplate(ClassInstructions instructions, DataTable dataTable)
     {
       var lst = new List<string>(dataTable.Rows.Count);
 
-      var cn = Instructions.EntityName;
+      var cn = instructions.EntityName;
 
       var count = 0;
 
@@ -58,7 +60,7 @@ namespace SpotWelder.Lib.Services.Generators
 
         foreach (DataColumn c in dataTable.Columns)
         {
-          var p = Instructions.Properties.Single(
+          var p = instructions.Properties.Single(
             x =>
               x.Property.Equals(c.ColumnName, StringComparison.OrdinalIgnoreCase));
 
@@ -81,7 +83,7 @@ namespace SpotWelder.Lib.Services.Generators
         .Append(string.Join("," + Environment.NewLine, lst))
         .AppendLine("};");
 
-      var result = GetResult();
+      var result = GetResult(instructions.ClassName);
       result.Contents = sbFinal.ToString();
 
       return result;

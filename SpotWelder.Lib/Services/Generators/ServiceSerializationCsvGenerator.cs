@@ -1,35 +1,29 @@
-﻿using System.Text;
-using SpotWelder.Lib.Models;
+﻿using SpotWelder.Lib.Models;
+using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-    public class ServiceSerializationCsvGenerator
-        : GeneratorBase
+  public class ServiceSerializationCsvGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.SerializeCsv;
+
+    protected override string TemplateName => "ServiceSerializationCsv.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-        public ServiceSerializationCsvGenerator(ClassInstructions instructions)
-            : base(instructions, "ServiceSerializationCsv.cs.template")
-        {
+      var strTemplate = GetTemplate(TemplateName);
 
-        }
+      var template = new StringBuilder(strTemplate);
 
-        public override GeneratedResult FillTemplate()
-        {
-            var strTemplate = GetTemplate(TemplateName);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.EntityName);
 
-            var template = new StringBuilder(strTemplate);
+      var t = template.ToString();
 
-            template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.EntityName);
+      t = RemoveExcessBlankSpace(t);
 
-            var t = template.ToString();
-
-            t = RemoveExcessBlankSpace(t);
-
-            var r = GetResult();
-            r.Filename = "SerializationService_Csv.cs";
-            r.Contents = t;
-
-            return r;
-        }
+      return new("SerializationService_Csv.cs", t);
     }
+  }
 }

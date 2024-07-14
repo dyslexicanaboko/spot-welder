@@ -73,13 +73,17 @@ namespace SpotWelder.Lib
     /// <example> Subject named: `Task`, the interface would be `ITask`.</example>
     GenerateInterface = 2^8,
 
+    /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
     CloneEntityToModel = 2^9,
 
+    /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
     CloneModelToEntity = 2^10,
 
-    CloneInterfaceToEntity = 2^11,
+    /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
+    CloneInterfaceToEntity = 2 ^ 11,
 
-    CloneInterfaceToModel = 2^12,
+    /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
+    CloneInterfaceToModel = 2^ 12,
 
     SerializeCsv = 2^13,
 
@@ -98,5 +102,12 @@ namespace SpotWelder.Lib
     Service = 2^20,
 
     ApiController = 2^21,
+
+    GenerateEntityAsTypeScript = 2^22,
+    
+    GenerateEntityAsJavaScript = 2^23,
+    
+    /// <summary> Services all of the clone elections. </summary>
+    GenerateMapper = 2^ 24,
   }
 }

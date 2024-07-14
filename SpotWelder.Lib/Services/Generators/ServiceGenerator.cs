@@ -7,26 +7,24 @@ namespace SpotWelder.Lib.Services.Generators
   public class ServiceGenerator
     : GeneratorBase
   {
-    public ServiceGenerator(ClassInstructions instructions)
-      : base(instructions, "Service.cs.template")
-    {
-      instructions.ClassName = instructions.SubjectName;
-    }
+    public override GenerationElections Election => GenerationElections.Service;
 
-    public override GeneratedResult FillTemplate()
+    protected override string TemplateName => "Service.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", Instructions.Namespace);
-      template.Replace("{{ClassName}}", Instructions.ClassName);
-      template.Replace("{{EntityName}}", Instructions.EntityName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
-      
-      GetAsynchronicityFormatStrategy(Instructions.IsAsynchronous).ReplaceTags(template);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-      var pk = Instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
+      GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
+
+      var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
 
       if (pk != null)
       {
@@ -38,12 +36,8 @@ namespace SpotWelder.Lib.Services.Generators
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
-      
-      return new GeneratedResult
-      {
-        Filename = $"{Instructions.ClassName}Service.cs",
-        Contents = t
-      };
+
+      return new($"{instructions.ClassName}Service.cs", t);
     }
   }
 }

@@ -8,164 +8,161 @@ using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-	public class RepositoryDapperGenerator
-		: GeneratorBase
-	{
-		public RepositoryDapperGenerator(ClassInstructions instructions)
-			: base(instructions, "RepositoryDapper.cs.template")
-		{
-			instructions.ClassName = instructions.SubjectName;
-		}
+  public class RepositoryDapperGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.RepoDapper;
 
-		public override GeneratedResult FillTemplate()
-		{
-			var strTemplate = GetTemplate(TemplateName);
+    protected override string TemplateName => "RepositoryDapper.cs.template";
 
-			var template = new StringBuilder(strTemplate);
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
+    {
+      var strTemplate = GetTemplate(TemplateName);
 
-			template.Replace("{{Namespace}}", Instructions.Namespace);
-			template.Replace("{{ClassName}}", Instructions.ClassName); //Prefix of the repository class
-			template.Replace("{{EntityName}}", Instructions.EntityName);
-			template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+      var template = new StringBuilder(strTemplate);
 
-			GetAsynchronicityFormatStrategy(Instructions.IsAsynchronous).ReplaceTags(template);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-			var t = template.ToString();
+      GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
 
-			t = RemoveExcessBlankSpace(t);
-			//t = RemoveBlankLines(t);
+      var t = template.ToString();
 
-			var pk = Instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
-			var lstNoPk = Instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
-			var lstInsert = new List<ClassMemberStrings>(lstNoPk);
+      t = RemoveExcessBlankSpace(t);
 
-			//TODO: What to do when there is no primary key?
-			if (pk != null)
-			{
-				t = t.Replace("{{PrimaryKeyParameter}}", pk.Parameter);  //taskId
-				t = t.Replace("{{PrimaryKeyProperty}}", pk.Property);    //TaskId
-				t = t.Replace("{{PrimaryKeyColumn}}", pk.ColumnName);    //TaskId or task_id
-				t = t.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
+      //t = RemoveBlankLines(t);
 
-				var scopeIdentity = string.Empty;
+      var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
+      var lstNoPk = instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
+      var lstInsert = new List<ClassMemberStrings>(lstNoPk);
 
-				if (pk.IsIdentity)
-				{
-					//If the PK is identity then the PK needs to be returned
-					scopeIdentity = @"
+      //TODO: What to do when there is no primary key?
+      if (pk != null)
+      {
+        t = t.Replace("{{PrimaryKeyParameter}}", pk.Parameter); //taskId
+        t = t.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
+        t = t.Replace("{{PrimaryKeyColumn}}", pk.ColumnName); //TaskId or task_id
+        t = t.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
+
+        var scopeIdentity = string.Empty;
+
+        if (pk.IsIdentity)
+
+          //If the PK is identity then the PK needs to be returned
+          scopeIdentity = @"
 			SELECT SCOPE_IDENTITY() AS PK;"; //Don't change the spacing here, it's like this on purpose
-				}
-				else
-				{
-					//If the PK is not identity, then the PK needs to explicitly be provided and inserted
-					lstInsert.Insert(0, pk);
-				}
+        else
 
-				t = t.Replace("{{ScopeIdentity}}", scopeIdentity);
-				t = t.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, Instructions.IsAsynchronous));
-			}
+          //If the PK is not identity, then the PK needs to explicitly be provided and inserted
+          lstInsert.Insert(0, pk);
 
-			t = t.Replace("{{Schema}}", Instructions.TableQuery.Schema);
-			t = t.Replace("{{Table}}", Instructions.TableQuery.Table);
-			t = t.Replace("{{SelectAllList}}", FormatSelectList(Instructions.Properties));
-			t = t.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
-			t = t.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
-			t = t.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
-			t = t.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
-			t = t.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(Instructions.Properties));
-			t = t.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
+        t = t.Replace("{{ScopeIdentity}}", scopeIdentity);
+        t = t.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, instructions.IsAsynchronous));
+      }
 
-			return new GeneratedResult
-			{
-				Filename = $"{Instructions.ClassName}Repository.cs",
-				Contents = t
-			};
-		}
+      t = t.Replace("{{Schema}}", instructions.TableQuery.Schema);
+      t = t.Replace("{{Table}}", instructions.TableQuery.Table);
+      t = t.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
+      t = t.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
+      t = t.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
+      t = t.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
+      t = t.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
+      t = t.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
+      t = t.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
 
-		private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)
-		{
-			var content = GetTextBlock(properties,
-				p => $"                {prefix}{p.Property}",
-				"," + Environment.NewLine);
+      return new($"{instructions.ClassName}Repository.cs", t);
+    }
 
-			return content;
-		}
+    private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"                {prefix}{p.Property}",
+        "," + Environment.NewLine);
 
-		private string FormatUpdateList(IList<ClassMemberStrings> properties)
-		{
-			var content = GetTextBlock(properties,
-				p => $"                {p.Property} = @{p.Property}",
-				"," + Environment.NewLine);
+      return content;
+    }
 
-			return content;
-		}
+    private string FormatUpdateList(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"                {p.Property} = @{p.Property}",
+        "," + Environment.NewLine);
 
-		private string FormatDynamicParameterList(IList<ClassMemberStrings> properties)
-		{
-			var content = GetTextBlock(properties, 
-				p => $"{FormatDynamicParameter(p)}",
-				Environment.NewLine);
+      return content;
+    }
 
-			return content;
-		}
+    private string FormatDynamicParameterList(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"{FormatDynamicParameter(p)}",
+        Environment.NewLine);
 
-		private static string FormatDynamicParameter(ClassMemberStrings properties)
-		{
-			var t = properties.DatabaseType;
+      return content;
+    }
 
-			var strDbType = TypesService.MapSqlDbTypeToDbTypeLoose.TryGetValue(t, out var dbType) ? 
-				dbType.ToString() : 
-				$"SqlDbType.{t}_MissingMapping";
+    private static string FormatDynamicParameter(ClassMemberStrings properties)
+    {
+      var t = properties.DatabaseType;
 
-			var lst = new List<string>
-			{
-				$"name: \"@{properties.Property}\"",
-				$"dbType: DbType.{strDbType}",
-				$"value: entity.{properties.Property}"
-			};
+      var strDbType = TypesService.MapSqlDbTypeToDbTypeLoose.TryGetValue(t, out var dbType) ?
+        dbType.ToString() :
+        $"SqlDbType.{t}_MissingMapping";
 
-			//TODO: Need to work through every type to see what the combinations are
-			switch (t)
-			{
-				case SqlDbType.DateTime2:
-					lst.Add($"scale: {properties.Scale}");
-					break;
-				case SqlDbType.Decimal:
-					lst.Add($"precision: {properties.Precision}, scale: {properties.Scale}");
-					break;
-				case SqlDbType.VarChar:
-				case SqlDbType.NVarChar:
-				case SqlDbType.Char:
-				case SqlDbType.NChar:
-					lst.Add($"size: {properties.Size}");
-					break;
-			}
+      var lst = new List<string>
+      {
+        $"name: \"@{properties.Property}\"", $"dbType: DbType.{strDbType}", $"value: entity.{properties.Property}"
+      };
 
-			var content = $"				p.Add({string.Join(", ", lst)});";
+      //TODO: Need to work through every type to see what the combinations are
+      switch (t)
+      {
+        case SqlDbType.DateTime2:
+          lst.Add($"scale: {properties.Scale}");
 
-			return content;
-		}
+          break;
 
-		private static string FormatInsertExecution(ClassMemberStrings primaryKey, bool isAsynchronous)
-		{
-			var ak = string.Empty;
-			var suf = string.Empty;
+        case SqlDbType.Decimal:
+          lst.Add($"precision: {properties.Precision}, scale: {properties.Scale}");
 
-			if (isAsynchronous)
-			{
-				ak = "await ";
-				suf = "Async";
-			}
+          break;
 
-			if (primaryKey.IsIdentity)
-			{
-				return $"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, entity);";
-			}
+        case SqlDbType.VarChar:
+        case SqlDbType.NVarChar:
+        case SqlDbType.Char:
+        case SqlDbType.NChar:
+          lst.Add($"size: {properties.Size}");
 
-			return
-$@"            {ak}connection.Execute{suf}(sql, p);
+          break;
+      }
+
+      var content = $"				p.Add({string.Join(", ", lst)});";
+
+      return content;
+    }
+
+    private static string FormatInsertExecution(ClassMemberStrings primaryKey, bool isAsynchronous)
+    {
+      var ak = string.Empty;
+      var suf = string.Empty;
+
+      if (isAsynchronous)
+      {
+        ak = "await ";
+        suf = "Async";
+      }
+
+      if (primaryKey.IsIdentity)
+        return $"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, entity);";
+
+      return
+        $@"            {ak}connection.Execute{suf}(sql, p);
 
 				return entity.{primaryKey.Property};";
-		}
-	}
+    }
+  }
 }
