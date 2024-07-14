@@ -27,11 +27,38 @@ namespace SpotWelder.Ui
         return null;
 
       obj.TableQuery = _svcNameFormat.ParseTableName(TxtSourceSqlText.Text);
-      obj.ClassOptions = GetClassOptions();
-      obj.ClassServices = GetClassServices();
-      obj.ClassRepositories = GetClassRepositories();
+      obj.SubjectName = TxtEntityName.Text;
+      obj.EntityName = TxtClassEntityName.Text;
+      obj.ModelName = TxtClassModelName.Text;
+      obj.Elections = GetChosenGenerationElections();
+
+      //TODO: Hook this up to the UI
+      //This is temporarily hardcoded to true for testing
+      obj.ApiRoute = "tasks";
 
       return obj;
+    }
+
+    private GenerationElections GetChosenGenerationElections()
+    {
+      var e = GenerationElections.None;
+
+      foreach (var kvp in _electionToCheckBoxMap)
+      {
+        if (!kvp.Value.IsChecked()) continue;
+
+        e |= kvp.Key;
+      }
+
+      //TODO: Hook this up to the UI
+      //This is temporarily hardcoded to true for testing
+      e |= GenerationElections.Service;
+      e |= GenerationElections.ApiController;
+      e |= GenerationElections.GenerateCreateModel;
+      e |= GenerationElections.GeneratePatchModel;
+      e |= GenerationElections.MakeAsynchronous;
+
+      return e;
     }
 
     private QueryToClassParameters? CommonValidation()
@@ -75,88 +102,26 @@ namespace SpotWelder.Ui
 
       return null;
     }
-
-    private ClassOptions GetClassOptions()
+    
+    private Dictionary<GenerationElections, CheckBox> GetGenerationElectionsMap()
     {
-      var c = new ClassOptions
+      var dict = new Dictionary<GenerationElections, CheckBox>
       {
-        SubjectName = TxtEntityName.Text,
-        EntityName = TxtClassEntityName.Text,
-        GenerateEntity = CbClassEntity.IsChecked(),
-        GenerateEntityIEquatable = CbClassEntityIEquatable.IsChecked(),
-        GenerateEntityIComparable = CbClassEntityIComparable.IsChecked(),
-        GenerateEntityEqualityComparer = CbClassEntityEqualityComparer.IsChecked(),
-        GenerateInterface = CbClassInterface.IsChecked(),
-        GenerateModel = CbClassModel.IsChecked(),
-        ModelName = TxtClassModelName.Text,
-        
-        //TODO: Hook this up to the UI
-        //This is temporarily hardcoded to true for testing
-        GenerateCreateModel = true,
-        GeneratePatchModel = true,
-        ApiRoute = "tasks",
-        IsAsynchronous = true
-      };
-
-      return c;
-    }
-
-    private ClassServices GetClassServices()
-    {
-      var e = ClassServices.None;
-
-      foreach (var kvp in _serviceToCheckBoxMap)
-      {
-        if (!kvp.Value.IsChecked()) continue;
-
-        e |= kvp.Key;
-      }
-
-      //TODO: Hook this up to the UI
-      //This is temporarily hardcoded to true for testing
-      e |= ClassServices.Service;
-      e |= ClassServices.ApiController;
-
-      return e;
-    }
-
-    private ClassRepositories GetClassRepositories()
-    {
-      var e = ClassRepositories.None;
-
-      foreach (var kvp in _repositoryToCheckBoxMap)
-      {
-        if (!kvp.Value.IsChecked()) continue;
-
-        e |= kvp.Key;
-      }
-
-      return e;
-    }
-
-    private Dictionary<ClassServices, CheckBox> GetServiceToCheckBoxMap()
-    {
-      var dict = new Dictionary<ClassServices, CheckBox>
-      {
-        { ClassServices.CloneEntityToModel, CbCloneEntityToModel },
-        { ClassServices.CloneModelToEntity, CbCloneModelToEntity },
-        { ClassServices.CloneInterfaceToEntity, CbCloneInterfaceToEntity },
-        { ClassServices.CloneInterfaceToModel, CbCloneInterfaceToModel },
-        { ClassServices.SerializeCsv, CbSerializeCsv },
-        { ClassServices.SerializeJson, CbSerializeJson },
-        { ClassServices.RepoStatic, CbRepoStatic },
-        { ClassServices.RepoDapper, CbRepoDapper },
-        { ClassServices.RepoEfFluentApi, CbRepoEfFluentApi }
-      };
-
-      return dict;
-    }
-
-    private Dictionary<ClassRepositories, CheckBox> GetRepositoryToCheckBoxMap()
-    {
-      var dict = new Dictionary<ClassRepositories, CheckBox>
-      {
-        { ClassRepositories.StaticStatements, CbRepoStatic }, { ClassRepositories.Dapper, CbRepoDapper }
+        { GenerationElections.GenerateEntity, CbClassEntity },
+        { GenerationElections.GenerateEntityIEquatable, CbClassEntityIEquatable },
+        { GenerationElections.GenerateEntityIComparable, CbClassEntityIComparable },
+        { GenerationElections.GenerateEntityEqualityComparer, CbClassEntityEqualityComparer },
+        { GenerationElections.GenerateInterface, CbClassInterface },
+        { GenerationElections.GenerateModel, CbClassModel },
+        { GenerationElections.CloneEntityToModel, CbCloneEntityToModel },
+        { GenerationElections.CloneModelToEntity, CbCloneModelToEntity },
+        { GenerationElections.CloneInterfaceToEntity, CbCloneInterfaceToEntity },
+        { GenerationElections.CloneInterfaceToModel, CbCloneInterfaceToModel },
+        { GenerationElections.SerializeCsv, CbSerializeCsv },
+        { GenerationElections.SerializeJson, CbSerializeJson },
+        { GenerationElections.RepoStatic, CbRepoStatic },
+        { GenerationElections.RepoDapper, CbRepoDapper },
+        { GenerationElections.RepoEfFluentApi, CbRepoEfFluentApi }
       };
 
       return dict;
@@ -183,9 +148,8 @@ for boiler plate starter code where I am maintaining this kind of code.
 You can find it here: 
 https://github.com/dyslexicanaboko/code-snippets/tree/develop/Visual%20C%23/BasicDataLayers";
 
-              
-       _parentResultsWindow.AddTab("Basic data layers", content);
-       _parentResultsWindow.Show();
+      _parentResultsWindow.AddTab("Basic data layers", content);
+      _parentResultsWindow.Show();
     }
   }
 }

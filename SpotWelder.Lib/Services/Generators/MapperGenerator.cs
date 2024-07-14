@@ -9,9 +9,9 @@ namespace SpotWelder.Lib.Services.Generators
   public class MapperGenerator
     : GeneratorBase
   {
-    private readonly ClassServices _services;
+    private readonly GenerationElections _services;
 
-    public MapperGenerator(ClassInstructions instructions, ClassServices services)
+    public MapperGenerator(ClassInstructions instructions, GenerationElections services)
       : base(instructions, "Mapper.cs.template")
     {
       _services = services;
@@ -37,7 +37,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesModelToEntity}}",
         FormatCloneBody(
-          ClassServices.CloneModelToEntity,
+          GenerationElections.CloneModelToEntity,
           Instructions.Properties,
           "model",
           "entity"));
@@ -45,7 +45,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesEntityToModel}}",
         FormatCloneBody(
-          ClassServices.CloneEntityToModel,
+          GenerationElections.CloneEntityToModel,
           Instructions.Properties,
           "entity",
           "model"));
@@ -53,7 +53,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesInterfaceToEntity}}",
         FormatCloneBody(
-          ClassServices.CloneInterfaceToEntity,
+          GenerationElections.CloneInterfaceToEntity,
           Instructions.Properties,
           "target",
           "entity"));
@@ -61,7 +61,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesInterfaceToModel}}",
         FormatCloneBody(
-          ClassServices.CloneInterfaceToModel,
+          GenerationElections.CloneInterfaceToModel,
           Instructions.Properties,
           "target",
           "model"));
@@ -78,7 +78,7 @@ namespace SpotWelder.Lib.Services.Generators
     }
 
     private string FormatCloneBody(
-      ClassServices flag,
+      GenerationElections flag,
       IList<ClassMemberStrings> properties,
       string from,
       string to)

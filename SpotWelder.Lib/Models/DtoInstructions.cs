@@ -3,6 +3,7 @@ using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Models
 {
+  /// <summary> Instructions for generating DTOs. </summary>
   public class DtoInstructions
   {
     //Right now I am going to stop at top level implementation, no automatic nested implementations.
@@ -14,18 +15,10 @@ namespace SpotWelder.Lib.Models
     /// This is different subject in that it is actually a class name, not just a subject.
     /// </summary>
     public string SourceClassName { get; set; }
+    
+    public CodeType Languages { get; set; } = CodeType.None;
 
-    public bool MethodEntityToDto { get; set; }
-
-    public bool MethodDtoToEntity { get; set; }
-
-    public bool ImplementIEquatableOfTInterface { get; set; }
-
-    public bool ExtractInterface { get; set; }
-
-    public bool EquivalentJavaScript { get; set; }
-
-    public bool EquivalentTypeScript { get; set; }
+    public GenerationElections Elections { get; set; } = GenerationElections.None;
 
     public IList<ClassMemberStrings> Properties { get; set; } = new List<ClassMemberStrings>();
   }

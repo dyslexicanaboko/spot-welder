@@ -7,6 +7,6 @@ namespace SpotWelder.Lib.Services
   {
     IList<GeneratedResult>? Generate(QueryToClassParameters parameters);
 
-    IList<GeneratedResult> Generate(DtoInstructions parameters);
+    IList<GeneratedResult> Generate(DtoInstructions instructions);
   }
 }

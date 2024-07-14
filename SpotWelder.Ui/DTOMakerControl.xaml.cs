@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32;
+using SpotWelder.Lib;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Models.Meta;
 using SpotWelder.Lib.Services;
@@ -179,14 +180,21 @@ Please keep in mind casing matters.";
 
       var p = new DtoInstructions
       {
-        MethodEntityToDto = CbMethodEntityToDto.IsChecked(),
-        MethodDtoToEntity = CbMethodDtoToEntity.IsChecked(),
-        ImplementIEquatableOfTInterface = CbImplementIEquatableOfTInterface.IsChecked(),
-        ExtractInterface = CbExtractInterface.IsChecked(),
-        EquivalentJavaScript = CbEquivalentJavaScript.IsChecked(),
-        EquivalentTypeScript = CbEquivalentTypeScript.IsChecked(),
-        SourceClassName = t.Name
+        SourceClassName = t.Name,
+        Elections = GenerationElections.GenerateEntity | GenerationElections.GenerateModel
       };
+      
+      if (CbEquivalentJavaScript.IsChecked()) p.Languages |= CodeType.JavaScript;
+      
+      if (CbEquivalentTypeScript.IsChecked()) p.Languages |= CodeType.TypeScript;
+
+      if (CbMethodEntityToDto.IsChecked()) p.Elections |= GenerationElections.CloneEntityToModel;
+      
+      if (CbMethodDtoToEntity.IsChecked()) p.Elections |= GenerationElections.CloneModelToEntity;
+
+      if (CbExtractInterface.IsChecked()) p.Elections |= GenerationElections.GenerateInterface;
+
+      if (CbImplementIEquatableOfTInterface.IsChecked()) p.Elections |= GenerationElections.GenerateEntityIEquatable;
 
       //There should only be one assembly and one class loaded
       var electedProperties =

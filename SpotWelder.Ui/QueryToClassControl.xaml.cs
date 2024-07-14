@@ -21,11 +21,9 @@ namespace SpotWelder.Ui
   {
     private readonly CheckBoxGroup _classCheckBoxGroup;
 
-    private readonly Dictionary<ClassRepositories, CheckBox> _repositoryToCheckBoxMap;
-    
     private readonly ParentResultsWindow _parentResultsWindow;
 
-    private readonly Dictionary<ClassServices, CheckBox> _serviceToCheckBoxMap;
+    private readonly Dictionary<GenerationElections, CheckBox> _electionToCheckBoxMap;
 
     private IGeneralDatabaseQueries _generalRepo;
 
@@ -53,10 +51,9 @@ namespace SpotWelder.Ui
       TxtClassEntityName.DefaultButton.Click += BtnClassEntityNameDefault_Click;
 
       TxtClassModelName.DefaultButton_UnregisterDefaultEvent();
-      TxtClassModelName.DefaultButton.Click += (sender, args) => SetModelName();
+      TxtClassModelName.DefaultButton.Click += (_, _) => SetModelName();
 
-      _serviceToCheckBoxMap = GetServiceToCheckBoxMap();
-      _repositoryToCheckBoxMap = GetRepositoryToCheckBoxMap();
+      _electionToCheckBoxMap = GetGenerationElectionsMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
 
       DebugSetTestParameters();

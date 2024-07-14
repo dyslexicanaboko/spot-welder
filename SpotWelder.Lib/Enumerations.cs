@@ -1,12 +1,14 @@
-﻿using System;
+﻿using SpotWelder.Lib.Models;
+using System;
+using System.Collections.Generic;
 
 namespace SpotWelder.Lib
 {
   public enum SourceSqlType
   {
-    Query,
+    Query = 0,
 
-    TableName
+    TableName = 1
   }
 
   [Flags]
@@ -14,14 +16,14 @@ namespace SpotWelder.Lib
   {
     None = 0,
 
-    CSharp = 1,
+    CSharp = 2^0,
 
     [Obsolete("Looking to get rid of this option and therefore this Enum all together. VB sucks.")]
-    VbNet = 2,
+    VbNet = 2^1,
 
-    JavaScript = 4,
+    JavaScript = 2^2,
 
-    TypeScript = 8
+    TypeScript = 2^3
   }
 
   [Flags]
@@ -29,54 +31,72 @@ namespace SpotWelder.Lib
   {
     None = 0,
 
-    Table = 1,
+    Table = 2^0,
 
-    Schema = 2,
+    Schema = 2^1,
 
-    Database = 4,
+    Database = 2^2,
 
-    LinkedServer = 8
+    LinkedServer = 2^3
   }
 
   [Flags]
-  public enum ClassServices
+  public enum GenerationElections
   {
     None = 0,
 
-    CloneEntityToModel = 1, //2^0
+    /// <summary> Should class methods be asynchronous? </summary>
+    MakeAsynchronous = 2^0,
 
-    CloneModelToEntity = 2, //2^1
+    /// <summary> Generate an entity for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
+    GenerateEntity = 2^1,
 
-    CloneInterfaceToEntity = 4, //2^2
+    /// <summary> Generate the <see cref="IEquatable{T}"/> interface implementation for the target entity. </summary>
+    GenerateEntityIEquatable = 2^2,
 
-    CloneInterfaceToModel = 8, //2^3
+    /// <summary> Generate the <see cref="IComparable"/> interface implementation for the target entity. </summary>
+    GenerateEntityIComparable = 2^3,
 
-    SerializeCsv = 16, //2^4
+    /// <summary> Generate an <see cref="EqualityComparer{T}"/> class for the target entity. </summary>
+    GenerateEntityEqualityComparer = 2^4,
 
-    SerializeJson = 32, //2^5
+    /// <summary> Generate a model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
+    GenerateModel = 2^5,
 
-    RepoStatic = 64, //2^6
+    /// <summary> Generate a REST API Create model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
+    GenerateCreateModel = 2^6,
 
-    RepoDynamic = 128, //2^7
+    /// <summary> Generate a REST API Patch model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
+    GeneratePatchModel = 2^7,
 
-    RepoBulkCopy = 256, //2^8
+    /// <summary> Name of the subject with the `I` prefix.</summary>
+    /// <example> Subject named: `Task`, the interface would be `ITask`.</example>
+    GenerateInterface = 2^8,
 
-    RepoDapper = 512, //2^9
+    CloneEntityToModel = 2^9,
 
-    RepoEfFluentApi = 1024, //2^10
+    CloneModelToEntity = 2^10,
 
-    Service = 2048, //2^11
+    CloneInterfaceToEntity = 2^11,
 
-    ApiController = 4096, //2^12
-  }
+    CloneInterfaceToModel = 2^12,
 
-  [Flags]
-  public enum ClassRepositories
-  {
-    None = 0,
+    SerializeCsv = 2^13,
 
-    StaticStatements = 1,
+    SerializeJson = 2^14,
 
-    Dapper = 2
+    RepoStatic = 2^15,
+
+    RepoDynamic = 2^16,
+
+    RepoBulkCopy = 2^17,
+
+    RepoDapper = 2^18,
+
+    RepoEfFluentApi = 2^19,
+
+    Service = 2^20,
+
+    ApiController = 2^21,
   }
 }

@@ -60,6 +60,12 @@ namespace SpotWelder.Lib.Models
     /// <summary>Class attributes</summary>
     public IList<string> ClassAttributes { get; set; } = new List<string>();
 
+    /// <summary>
+    /// This is a temporary concept until I can do better. The different languages to
+    /// generate something in. Vague explanation for a vague implementation.
+    /// </summary>
+    public CodeType Languages { get; set; }
+
     /// <summary>Properties of the source entity.</summary>
     public IList<ClassMemberStrings> Properties { get; set; } = new List<ClassMemberStrings>();
 
@@ -81,6 +87,7 @@ namespace SpotWelder.Lib.Models
         InterfaceName = InterfaceName,
         ApiRoute = ApiRoute,
         IsAsynchronous = IsAsynchronous,
+        Languages = Languages,
         TableQuery = TableQuery.Clone()
       };
 
