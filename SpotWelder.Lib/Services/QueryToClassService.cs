@@ -24,26 +24,11 @@ namespace SpotWelder.Lib.Services
 
       var baseInstructions = GetBaseInstructions(parameters);
 
-      var rClasses = GenerateClasses(parameters.Elections, baseInstructions);
-
-      var rServices = GenerateServices(parameters.Elections, baseInstructions);
-
-      var rRepositories = GenerateRepositories(parameters.Elections, baseInstructions);
-
-      var lst = new List<GeneratedResult>(
-        rClasses.Count +
-        rServices.Count +
-        rRepositories.Count);
-
-      lst.AddRange(rClasses);
-      lst.AddRange(rServices);
-      lst.AddRange(rRepositories);
+      return GenerateClasses(parameters.Elections, baseInstructions);
 
       //Writing to files will be handled again later
       //if (p.SaveAsFile)
       //    WriteClassToFile(p, content);
-
-      return lst;
     }
 
     public IList<GeneratedResult> Generate(DtoInstructions instructions)
@@ -206,17 +191,6 @@ namespace SpotWelder.Lib.Services
         lst.Add(svc.FillTemplate());
       }
 
-      return lst;
-    }
-
-    private static IList<GeneratedResult> GenerateServices(
-      GenerationElections elections,
-      ClassInstructions baseInstructions)
-    {
-      if (elections == GenerationElections.None) return new List<GeneratedResult>(0);
-      
-      var lst = new List<GeneratedResult>();
-
       if (elections.HasFlag(GenerationElections.SerializeCsv))
       {
         var svc = new ServiceSerializationCsvGenerator(baseInstructions.Clone());
@@ -255,15 +229,6 @@ namespace SpotWelder.Lib.Services
         lst.Add(svc.FillTemplate());
       }
 
-      return lst;
-    }
-
-    private static IList<GeneratedResult> GenerateRepositories(
-      GenerationElections elections,
-      ClassInstructions baseInstructions)
-    {
-      var lst = new List<GeneratedResult>();
-
       if (elections.HasFlag(GenerationElections.RepoStatic))
       {
         var svc = new RepositoryStaticGenerator(baseInstructions.Clone());
@@ -274,7 +239,7 @@ namespace SpotWelder.Lib.Services
       if (elections.HasFlag(GenerationElections.RepoDapper))
       {
         var svc = new RepositoryDapperGenerator(baseInstructions.Clone());
-        
+
         lst.Add(svc.FillTemplate());
       }
 
