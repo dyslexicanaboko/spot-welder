@@ -60,8 +60,8 @@ namespace SpotWelder.Ui
       {
         { GenerationElections.GenerateInterface, CbExtractInterface },
         { GenerationElections.GenerateEntityIEquatable, CbImplementIEquatableOfTInterface },
-        { GenerationElections.CloneEntityToModel, CbMethodEntityToDto },
-        { GenerationElections.CloneModelToEntity, CbMethodDtoToEntity },
+        { GenerationElections.MapEntityToModel, CbMethodEntityToDto },
+        { GenerationElections.MapModelToEntity, CbMethodDtoToEntity },
         { GenerationElections.GenerateEntityAsJavaScript, CbEquivalentJavaScript },
         { GenerationElections.GenerateEntityAsTypeScript, CbEquivalentTypeScript }
       };

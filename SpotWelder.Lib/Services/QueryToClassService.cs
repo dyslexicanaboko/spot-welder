@@ -101,10 +101,10 @@ namespace SpotWelder.Lib.Services
         .Where(e => !new []
         {
           GenerationElections.None,
-          GenerationElections.CloneModelToEntity,
-          GenerationElections.CloneEntityToModel,
-          GenerationElections.CloneInterfaceToEntity,
-          GenerationElections.CloneInterfaceToModel,
+          GenerationElections.MapModelToEntity,
+          GenerationElections.MapEntityToModel,
+          GenerationElections.MapInterfaceToEntity,
+          GenerationElections.MapInterfaceToModel,
           GenerationElections.MakeAsynchronous,
           GenerationElections.RepoEfFluentApi,
           GenerationElections.RepoDynamic,

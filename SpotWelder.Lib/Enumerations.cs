@@ -74,16 +74,16 @@ namespace SpotWelder.Lib
     GenerateInterface = 1 << 8,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneEntityToModel = 1 << 9,
+    MapEntityToModel = 1 << 9,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneModelToEntity = 1 << 10,
+    MapModelToEntity = 1 << 10,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneInterfaceToEntity = 1 << 11,
+    MapInterfaceToEntity = 1 << 11,
 
     /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-    CloneInterfaceToModel = 1 << 12,
+    MapInterfaceToModel = 1 << 12,
 
     SerializeCsv = 1 << 13,
 
@@ -107,7 +107,13 @@ namespace SpotWelder.Lib
     
     GenerateEntityAsJavaScript = 1 << 23,
     
-    /// <summary> Services all of the clone elections. </summary>
+    /// <summary> Services all of the mapper elections. </summary>
     GenerateMapper = 1 << 24,
+
+    /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
+    MapCreateModelToEntity = 1 << 25,
+
+    /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
+    MapPatchModelToEntity = 1 << 26,
   }
 }

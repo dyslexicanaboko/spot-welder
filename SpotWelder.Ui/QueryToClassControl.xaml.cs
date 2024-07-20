@@ -79,11 +79,11 @@ namespace SpotWelder.Ui
       CbClassEntityEqualityComparer.IsChecked = true;
       CbClassEntityIEquatable.IsChecked = true;
       CbClassEntityIComparable.IsChecked = true;
-      CbCloneInterfaceToEntity.IsChecked = true;
+      CbMapInterfaceToEntity.IsChecked = true;
       CbClassModel.IsChecked = true;
-      CbCloneInterfaceToModel.IsChecked = true;
-      CbCloneEntityToModel.IsChecked = true;
-      CbCloneModelToEntity.IsChecked = true;
+      CbMapInterfaceToModel.IsChecked = true;
+      CbMapEntityToModel.IsChecked = true;
+      CbMapModelToEntity.IsChecked = true;
     }
     
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
@@ -356,18 +356,18 @@ namespace SpotWelder.Ui
       CbClassEntityEqualityComparer.IsEnabled = isChecked;
       CbClassEntityIEquatable.IsEnabled = isChecked;
       CbClassEntityIComparable.IsEnabled = isChecked;
-      CbCloneInterfaceToEntity.IsEnabled = isChecked;
+      CbMapInterfaceToEntity.IsEnabled = isChecked;
 
       CbClassModelAndEntity_ToggleJointDependents(isChecked, CbClassModel.IsChecked());
     }
 
     private void CbClassModel_ToggleDependents()
     {
-      if (CbCloneEntityToModel == null) return; //On Startup controls are still null
+      if (CbMapEntityToModel == null) return; //On Startup controls are still null
 
       var isChecked = CbClassModel.IsChecked();
 
-      CbCloneInterfaceToModel.IsEnabled = isChecked;
+      CbMapInterfaceToModel.IsEnabled = isChecked;
 
       CbClassModelAndEntity_ToggleJointDependents(CbClassEntity.IsChecked(), isChecked);
     }
@@ -376,8 +376,8 @@ namespace SpotWelder.Ui
     {
       var both = isEntityChecked && isModelChecked;
 
-      CbCloneEntityToModel.IsEnabled = both;
-      CbCloneModelToEntity.IsEnabled = both;
+      CbMapEntityToModel.IsEnabled = both;
+      CbMapModelToEntity.IsEnabled = both;
     }
   }
 }

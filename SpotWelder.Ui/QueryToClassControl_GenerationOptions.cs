@@ -2,6 +2,7 @@
 using SpotWelder.Lib.Models;
 using SpotWelder.Ui.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -32,13 +33,20 @@ namespace SpotWelder.Ui
       obj.ModelName = TxtClassModelName.Text;
       obj.Elections = _electionToCheckBoxMap.GetChosenGenerationElections();
 
+      if(obj.Elections.HasAnyFlag(
+           GenerationElections.MapCreateModelToEntity, 
+           GenerationElections.MapCreateModelToEntity, 
+           GenerationElections.MapCreateModelToEntity,
+           GenerationElections.MapCreateModelToEntity))
+        obj.Elections |= GenerationElections.GenerateMapper;
+
       //TODO: Hook this up to the UI
       //This is temporarily hardcoded to true for testing
-      obj.Elections |= GenerationElections.Service;
-      obj.Elections |= GenerationElections.ApiController;
-      obj.Elections |= GenerationElections.GenerateCreateModel;
-      obj.Elections |= GenerationElections.GeneratePatchModel;
-      obj.Elections |= GenerationElections.MakeAsynchronous;
+      //obj.Elections |= GenerationElections.Service;
+      //obj.Elections |= GenerationElections.ApiController;
+      //obj.Elections |= GenerationElections.GenerateCreateModel;
+      //obj.Elections |= GenerationElections.GeneratePatchModel;
+      //obj.Elections |= GenerationElections.MakeAsynchronous;
       obj.ApiRoute = "tasks";
 
       return obj;
@@ -96,15 +104,23 @@ namespace SpotWelder.Ui
         { GenerationElections.GenerateEntityEqualityComparer, CbClassEntityEqualityComparer },
         { GenerationElections.GenerateInterface, CbClassInterface },
         { GenerationElections.GenerateModel, CbClassModel },
-        { GenerationElections.CloneEntityToModel, CbCloneEntityToModel },
-        { GenerationElections.CloneModelToEntity, CbCloneModelToEntity },
-        { GenerationElections.CloneInterfaceToEntity, CbCloneInterfaceToEntity },
-        { GenerationElections.CloneInterfaceToModel, CbCloneInterfaceToModel },
+        { GenerationElections.MapEntityToModel, CbMapEntityToModel },
+        { GenerationElections.MapModelToEntity, CbMapModelToEntity },
+        { GenerationElections.MapInterfaceToEntity, CbMapInterfaceToEntity },
+        { GenerationElections.MapInterfaceToModel, CbMapInterfaceToModel },
+        { GenerationElections.MapCreateModelToEntity, CbMapCreateModelToEntity },
+        { GenerationElections.MapPatchModelToEntity, CbMapPatchModelToEntity },
         { GenerationElections.SerializeCsv, CbSerializeCsv },
         { GenerationElections.SerializeJson, CbSerializeJson },
         { GenerationElections.RepoStatic, CbRepoStatic },
         { GenerationElections.RepoDapper, CbRepoDapper },
-        { GenerationElections.RepoEfFluentApi, CbRepoEfFluentApi }
+        { GenerationElections.RepoEfFluentApi, CbRepoEfFluentApi },
+        { GenerationElections.Service, CbService },
+        { GenerationElections.ApiController, CbApiController },
+        { GenerationElections.GenerateCreateModel, CbCreateModel },
+        { GenerationElections.GeneratePatchModel, CbPatchModel },
+        { GenerationElections.MakeAsynchronous, CbMakeAsynchronous },
+        { GenerationElections.GeneratePatchModel, CbPatchModel },
       };
 
       return dict;

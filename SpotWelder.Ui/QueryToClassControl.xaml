@@ -7,62 +7,70 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SpotWelder.Ui"
              mc:Ignorable="d" Height="682.333" Width="682">
-    <Grid Background="White" Margin="0,0,10,0">
-        <GroupBox Header="Step 1: Connection String" Height="100" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="652">
-            <my:ConnectionStringControl x:Name="ConnectionStringCb" />
-        </GroupBox>
-        <GroupBox Header="Step 2: Class Source" Height="146" HorizontalAlignment="Left" Margin="12,118,0,0" VerticalAlignment="Top" Width="652">
-            <Grid>
-                <RadioButton Content="Query" Height="16" HorizontalAlignment="Left" Margin="95,8,0,0" Name="RbSourceTypeQuery" VerticalAlignment="Top" IsChecked="True" GroupName="rbgSourceType" RenderTransformOrigin="1.059,0.5" />
-                <RadioButton Content="Table Name" Height="16" HorizontalAlignment="Left" Margin="12,8,0,0" Name="RbSourceTypeTableName" VerticalAlignment="Top" GroupName="rbgSourceType" IsChecked="True" />
-                <TextBox Height="89" HorizontalAlignment="Left" Margin="10,29,0,0" Name="TxtSourceSqlText" VerticalAlignment="Top" Width="596" LostKeyboardFocus="TxtSqlSourceText_LostKeyboardFocus" AcceptsReturn="True" />
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Step 3: Options" Height="254" HorizontalAlignment="Left" Margin="12,270,0,0" VerticalAlignment="Top" Width="652">
-            <Grid>
-                <Label Content="Namespace" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" FontWeight="Bold" FontSize="14" Width="86" Margin="0,48,0,0" />
-                <my:TextBoxWithDefaultControl x:Name="TxtNamespaceName" Margin="29,74,400,0" DefaultText="Namespace1" VerticalAlignment="Top" Width="Auto"/>
-                <Label Content="Classes" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" Margin="-1,93,0,0" FontWeight="Bold" FontSize="14" Width="56" />
-                <CheckBox x:Name="CbClassEntity" Content="Entity" HorizontalAlignment="Left" Margin="29,122,0,0" VerticalAlignment="Top" Height="15" Width="50" IsChecked="True" Checked="CbClassEntity_OnChecked" Unchecked="CbClassEntity_OnUnchecked" />
-                <my:TextBoxWithDefaultControl x:Name="TxtClassEntityName" DefaultText="Entity1" Margin="85,120,341,0" VerticalAlignment="Top" Width="Auto"/>
-                <CheckBox x:Name="CbClassEntityIEquatable" Content="IEquatable" HorizontalAlignment="Left" Margin="48,147,0,0" VerticalAlignment="Top" Height="15" Width="78"/>
-                <CheckBox x:Name="CbClassEntityIComparable" Content="IComparable" HorizontalAlignment="Left" Margin="48,165,0,0" VerticalAlignment="Top" Height="15" Width="91"/>
-                <CheckBox x:Name="CbClassEntityEqualityComparer" Content="EqualityComparer" HorizontalAlignment="Left" Margin="138,147,0,0" VerticalAlignment="Top" Height="15" Width="119"/>
-                <CheckBox x:Name="CbClassModel" Content="Model" HorizontalAlignment="Left" Margin="26,189,0,0" VerticalAlignment="Top" Height="15" Width="54" Checked="CbClassModel_Checked" Unchecked="CbClassModel_Unchecked" IsChecked="True"/>
-                <my:TextBoxWithDefaultControl x:Name="TxtClassModelName" DefaultText="Model1" Margin="85,185,344,0" VerticalAlignment="Top" Width="Auto"/>
-                <CheckBox x:Name="CbClassInterface" Content="Interface" HorizontalAlignment="Left" Margin="26,214,0,0" VerticalAlignment="Top" Height="15" Width="66"/>
-                <Label Content="Mappers" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="304,4,0,0" FontWeight="Bold" FontSize="14" Width="105" />
-                <CheckBox x:Name="CbCloneEntityToModel" Content="Entity to Model" HorizontalAlignment="Left" Margin="333,36,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
-                <CheckBox x:Name="CbCloneModelToEntity" Content="Model to Entity" HorizontalAlignment="Left" Margin="333,54,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
-                <CheckBox x:Name="CbCloneInterfaceToEntity" Content="Interface to Entity" HorizontalAlignment="Left" Margin="333,71,0,0" VerticalAlignment="Top" Height="15" Width="114"/>
-                <CheckBox x:Name="CbCloneInterfaceToModel" Content="Interface to Model" HorizontalAlignment="Left" Margin="333,89,0,0" VerticalAlignment="Top" Height="15" Width="118"/>
-                <Label Content="Serialization Services" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="304,108,0,0" FontWeight="Bold" FontSize="14" Width="149" />
-                <CheckBox x:Name="CbSerializeCsv" Content="CSV" HorizontalAlignment="Left" Margin="333,134,0,0" VerticalAlignment="Top" Height="15" Width="57"/>
-                <CheckBox x:Name="CbSerializeJson" Content="JSON" HorizontalAlignment="Left" Margin="333,152,0,0" VerticalAlignment="Top" Height="15" Width="64"/>
-                <Label Content="Repository" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="458,3,0,0" FontWeight="Bold" FontSize="14" Width="81" />
-                <CheckBox x:Name="CbRepoStatic" Content="Static statements" HorizontalAlignment="Left" Margin="485,31,0,0" VerticalAlignment="Top" Height="15" Width="110"/>
-                <CheckBox x:Name="CbRepoDapper" Content="Dapper" HorizontalAlignment="Left" Margin="485,48,0,0" VerticalAlignment="Top" Height="15" Width="59"/>
-                <CheckBox x:Name="CbRepoEfFluentApi" Content="EF Fluent API" HorizontalAlignment="Left" Margin="485,64,0,0" VerticalAlignment="Top" Height="15" Width="89" IsEnabled="False"/>
-                <Label Content="Entity" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" FontWeight="Bold" FontSize="14" Width="86" Margin="0,1,0,0" />
-                <local:TextBoxWithDefaultControl x:Name="TxtEntityName" Margin="29,29,352,0" DefaultText="Entity1" VerticalAlignment="Top" Width="Auto"/>
-                <Button x:Name="BtnDynamicStatements" HorizontalAlignment="Left" Margin="485,84,0,0" VerticalAlignment="Top" Width="145" Height="37" Click="BtnDynamicStatements_OnClick">
-                    <TextBlock Text="Need dynamic statements and bulk copy?" TextWrapping="Wrap" />
-                </Button>
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Step 4: Generate" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,524,0,0" Width="652" Height="137">
-            <Grid>
-                <Button Content="Generate Code" Height="89" HorizontalAlignment="Left" Margin="6,10,0,0" Name="BtnGenerate" VerticalAlignment="Top" Width="186" Click="BtnGenerate_Click" FontSize="20" Background="#FFD62A2A" Foreground="White" />
-                <CheckBox Content="Save as file on generation" Height="16" HorizontalAlignment="Left" Margin="197,10,0,0" Name="CbSaveFileOnGeneration" VerticalAlignment="Top" Checked="CbSaveFileOnGeneration_Checked" Unchecked="CbSaveFileOnGeneration_Checked" IsEnabled="False" />
-                <TextBox Height="23" HorizontalAlignment="Left" Margin="276,76,0,0" Name="TxtFileName" VerticalAlignment="Top" Width="120" IsEnabled="False" TextChanged="TxtFileName_TextChanged" />
-                <CheckBox Content="Replace existing files" Height="16" HorizontalAlignment="Left" Margin="217,32,0,0" Name="CbReplaceExistingFiles" VerticalAlignment="Top" IsEnabled="False" />
-                <Label Content="File name" Height="28" HorizontalAlignment="Left" Margin="213,76,0,0" Name="LblFileName" VerticalAlignment="Top" IsEnabled="False" />
-                <TextBox Height="23" HorizontalAlignment="Left" Margin="276,50,0,0" Name="TxtPath" VerticalAlignment="Top" Width="120" IsEnabled="False" />
-                <Label Content="Path" Height="28" HorizontalAlignment="Left" Margin="213,50,0,0" Name="LblPath" VerticalAlignment="Top" IsEnabled="False" />
-                <Button Content="Default" Height="23" HorizontalAlignment="Left" Margin="402,76,0,0" Name="BtnFileNameDefault" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="BtnFileNameDefault_Click" />
-                <Button Content="Default" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="402,49,0,0" Name="BtnPathDefault" VerticalAlignment="Top" Width="75" Click="BtnPathDefault_Click" />
-                <ProgressBar Name="PbGenerator" HorizontalAlignment="Left" Height="34" Margin="365,10,0,0" VerticalAlignment="Top" Width="265"/>
-            </Grid>
-        </GroupBox>
-    </Grid>
+  <Grid Background="White" Margin="0,0,10,0">
+    <GroupBox Header="Step 1: Connection String" Height="100" HorizontalAlignment="Left" Margin="12,12,0,0" VerticalAlignment="Top" Width="652">
+      <my:ConnectionStringControl x:Name="ConnectionStringCb" />
+    </GroupBox>
+    <GroupBox Header="Step 2: Class Source" Height="146" HorizontalAlignment="Left" Margin="12,118,0,0" VerticalAlignment="Top" Width="652">
+      <Grid>
+        <RadioButton Content="Query" Height="16" HorizontalAlignment="Left" Margin="95,8,0,0" Name="RbSourceTypeQuery" VerticalAlignment="Top" IsChecked="True" GroupName="rbgSourceType" RenderTransformOrigin="1.059,0.5" />
+        <RadioButton Content="Table Name" Height="16" HorizontalAlignment="Left" Margin="12,8,0,0" Name="RbSourceTypeTableName" VerticalAlignment="Top" GroupName="rbgSourceType" IsChecked="True" />
+        <TextBox Height="89" HorizontalAlignment="Left" Margin="10,29,0,0" Name="TxtSourceSqlText" VerticalAlignment="Top" Width="596" LostKeyboardFocus="TxtSqlSourceText_LostKeyboardFocus" AcceptsReturn="True" />
+      </Grid>
+    </GroupBox>
+    <GroupBox Header="Step 3: Options" Height="254" HorizontalAlignment="Left" Margin="12,270,0,0" VerticalAlignment="Top" Width="652">
+      <Grid>
+        <Label Content="Namespace" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" FontWeight="Bold" FontSize="14" Width="86" Margin="0,48,0,0" />
+        <my:TextBoxWithDefaultControl x:Name="TxtNamespaceName" Margin="29,74,400,0" DefaultText="Namespace1" VerticalAlignment="Top" Width="Auto"/>
+        <Label Content="Classes" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" Margin="-1,93,0,0" FontWeight="Bold" FontSize="14" Width="56" />
+        <CheckBox x:Name="CbClassEntity" Content="Entity" HorizontalAlignment="Left" Margin="29,122,0,0" VerticalAlignment="Top" Height="15" Width="50" IsChecked="True" Checked="CbClassEntity_OnChecked" Unchecked="CbClassEntity_OnUnchecked" />
+        <my:TextBoxWithDefaultControl x:Name="TxtClassEntityName" DefaultText="Entity1" Margin="85,120,341,0" VerticalAlignment="Top" Width="Auto"/>
+        <CheckBox x:Name="CbClassEntityIEquatable" Content="IEquatable" HorizontalAlignment="Left" Margin="48,147,0,0" VerticalAlignment="Top" Height="15" Width="78"/>
+        <CheckBox x:Name="CbClassEntityIComparable" Content="IComparable" HorizontalAlignment="Left" Margin="48,165,0,0" VerticalAlignment="Top" Height="15" Width="91"/>
+        <CheckBox x:Name="CbClassEntityEqualityComparer" Content="EqualityComparer" HorizontalAlignment="Left" Margin="138,147,0,0" VerticalAlignment="Top" Height="15" Width="119"/>
+        <CheckBox x:Name="CbClassModel" Content="Model" HorizontalAlignment="Left" Margin="26,189,0,0" VerticalAlignment="Top" Height="15" Width="54" Checked="CbClassModel_Checked" Unchecked="CbClassModel_Unchecked" IsChecked="True"/>
+        <my:TextBoxWithDefaultControl x:Name="TxtClassModelName" DefaultText="Model1" Margin="85,185,344,0" VerticalAlignment="Top" Width="Auto"/>
+        <CheckBox x:Name="CbClassInterface" Content="Interface" HorizontalAlignment="Left" Margin="26,214,0,0" VerticalAlignment="Top" Height="15" Width="66"/>
+        <Label Content="Mappers" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="304,4,0,0" FontWeight="Bold" FontSize="14" Width="105" />
+        <CheckBox x:Name="CbMapEntityToModel" Content="Entity to Model" HorizontalAlignment="Left" Margin="333,36,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
+        <CheckBox x:Name="CbMapModelToEntity" Content="Model to Entity" HorizontalAlignment="Left" Margin="333,54,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
+        <CheckBox x:Name="CbMapInterfaceToEntity" Content="Interface to Entity" HorizontalAlignment="Left" Margin="333,71,0,0" VerticalAlignment="Top" Height="15" Width="114"/>
+        <CheckBox x:Name="CbMapInterfaceToModel" Content="Interface to Model" HorizontalAlignment="Left" Margin="333,89,0,0" VerticalAlignment="Top" Height="15" Width="118"/>
+        <Label Content="Serialization Services" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="304,149,0,0" FontWeight="Bold" FontSize="14" Width="149" />
+        <CheckBox x:Name="CbSerializeCsv" Content="CSV" HorizontalAlignment="Left" Margin="333,175,0,0" VerticalAlignment="Top" Height="15" Width="57"/>
+        <CheckBox x:Name="CbSerializeJson" Content="JSON" HorizontalAlignment="Left" Margin="333,193,0,0" VerticalAlignment="Top" Height="15" Width="64"/>
+        <Label Content="Repository" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="458,3,0,0" FontWeight="Bold" FontSize="14" Width="81" />
+        <CheckBox x:Name="CbRepoStatic" Content="Static statements" HorizontalAlignment="Left" Margin="485,31,0,0" VerticalAlignment="Top" Height="15" Width="110"/>
+        <CheckBox x:Name="CbRepoDapper" Content="Dapper" HorizontalAlignment="Left" Margin="485,48,0,0" VerticalAlignment="Top" Height="15" Width="59"/>
+        <CheckBox x:Name="CbRepoEfFluentApi" Content="EF Fluent API" HorizontalAlignment="Left" Margin="485,64,0,0" VerticalAlignment="Top" Height="15" Width="89" IsEnabled="False"/>
+        <Label Content="Entity" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" FontWeight="Bold" FontSize="14" Width="86" Margin="0,1,0,0" />
+        <local:TextBoxWithDefaultControl x:Name="TxtEntityName" Margin="29,29,352,0" DefaultText="Entity1" VerticalAlignment="Top" Width="Auto"/>
+        <Button x:Name="BtnDynamicStatements" HorizontalAlignment="Left" Margin="485,84,0,0" VerticalAlignment="Top" Width="145" Height="37" Click="BtnDynamicStatements_OnClick">
+          <TextBlock Text="Need dynamic statements and bulk copy?" TextWrapping="Wrap" />
+        </Button>
+        <CheckBox x:Name="CbMapCreateModelToEntity" Content="Create Model to Entity" HorizontalAlignment="Left" Margin="333,106,0,0" VerticalAlignment="Top" Height="15" Width="147"/>
+        <CheckBox x:Name="CbMapPatchModelToEntity" Content="Patch Model to Entity" HorizontalAlignment="Left" Margin="333,122,0,0" VerticalAlignment="Top" Height="15" Width="138"/>
+        <CheckBox x:Name="CbCreateModel" Content="Create Model" HorizontalAlignment="Left" Margin="96,214,0,0" VerticalAlignment="Top" Height="15" Width="96"/>
+        <CheckBox x:Name="CbPatchModel" Content="Patch Model" HorizontalAlignment="Left" Margin="198,214,0,0" VerticalAlignment="Top" Height="15" Width="96"/>
+        <Label Content="Layers" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="458,149,0,0" FontWeight="Bold" FontSize="14" Width="56" />
+        <CheckBox x:Name="CbApiController" Content="API Controller" HorizontalAlignment="Left" Margin="485,175,0,0" VerticalAlignment="Top" Height="15" Width="100"/>
+        <CheckBox x:Name="CbService" Content="Service" HorizontalAlignment="Left" Margin="485,192,0,0" VerticalAlignment="Top" Height="15" Width="57"/>
+        <CheckBox x:Name="CbMakeAsynchronous" Content="Make Async" HorizontalAlignment="Left" Margin="512,157,0,0" VerticalAlignment="Top" Height="15" Width="89"/>
+      </Grid>
+    </GroupBox>
+    <GroupBox Header="Step 4: Generate" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,524,0,0" Width="652" Height="137">
+      <Grid>
+        <Button Content="Generate Code" Height="89" HorizontalAlignment="Left" Margin="6,10,0,0" Name="BtnGenerate" VerticalAlignment="Top" Width="186" Click="BtnGenerate_Click" FontSize="20" Background="#FFD62A2A" Foreground="White" />
+        <CheckBox Content="Save as file on generation" Height="16" HorizontalAlignment="Left" Margin="197,10,0,0" Name="CbSaveFileOnGeneration" VerticalAlignment="Top" Checked="CbSaveFileOnGeneration_Checked" Unchecked="CbSaveFileOnGeneration_Checked" IsEnabled="False" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="276,76,0,0" Name="TxtFileName" VerticalAlignment="Top" Width="120" IsEnabled="False" TextChanged="TxtFileName_TextChanged" />
+        <CheckBox Content="Replace existing files" Height="16" HorizontalAlignment="Left" Margin="217,32,0,0" Name="CbReplaceExistingFiles" VerticalAlignment="Top" IsEnabled="False" />
+        <Label Content="File name" Height="28" HorizontalAlignment="Left" Margin="213,76,0,0" Name="LblFileName" VerticalAlignment="Top" IsEnabled="False" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="276,50,0,0" Name="TxtPath" VerticalAlignment="Top" Width="120" IsEnabled="False" />
+        <Label Content="Path" Height="28" HorizontalAlignment="Left" Margin="213,50,0,0" Name="LblPath" VerticalAlignment="Top" IsEnabled="False" />
+        <Button Content="Default" Height="23" HorizontalAlignment="Left" Margin="402,76,0,0" Name="BtnFileNameDefault" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="BtnFileNameDefault_Click" />
+        <Button Content="Default" Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="402,49,0,0" Name="BtnPathDefault" VerticalAlignment="Top" Width="75" Click="BtnPathDefault_Click" />
+        <ProgressBar Name="PbGenerator" HorizontalAlignment="Left" Height="34" Margin="365,10,0,0" VerticalAlignment="Top" Width="265"/>
+      </Grid>
+    </GroupBox>
+  </Grid>
 </UserControl>

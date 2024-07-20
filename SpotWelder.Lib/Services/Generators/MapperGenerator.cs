@@ -37,7 +37,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesModelToEntity}}",
         FormatCloneBody(
-          GenerationElections.CloneModelToEntity,
+          GenerationElections.MapModelToEntity,
           instructions,
           "model",
           "entity"));
@@ -45,7 +45,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesEntityToModel}}",
         FormatCloneBody(
-          GenerationElections.CloneEntityToModel,
+          GenerationElections.MapEntityToModel,
           instructions,
           "entity",
           "model"));
@@ -53,7 +53,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesInterfaceToEntity}}",
         FormatCloneBody(
-          GenerationElections.CloneInterfaceToEntity,
+          GenerationElections.MapInterfaceToEntity,
           instructions,
           "target",
           "entity"));
@@ -61,7 +61,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace(
         "{{PropertiesInterfaceToModel}}",
         FormatCloneBody(
-          GenerationElections.CloneInterfaceToModel,
+          GenerationElections.MapInterfaceToModel,
           instructions,
           "target",
           "model"));
