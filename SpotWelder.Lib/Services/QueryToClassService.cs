@@ -1,13 +1,14 @@
 ﻿using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators.Elections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SpotWelder.Lib.Services
 {
-  public class QueryToClassService
+    public class QueryToClassService
     : ClassMetaDataBase, IQueryToClassService
   {
     private readonly ICodeGenerationFactory _factory;
@@ -95,21 +96,11 @@ namespace SpotWelder.Lib.Services
     /// <returns>The generated class code as a StringBuilder</returns>
     private IList<GeneratedResult> GenerateClasses(ClassInstructions baseInstructions)
     {
-      //Get all elections that can be generated directly, leave out the ones that cannot
+      //Get all elections that can be generated directly, leave out the ones that cannot.
+      //Look at the enumeration directly for more information.
       var allTests = Enum.GetValues(typeof(GenerationElections))
         .Cast<GenerationElections>()
-        .Where(e => !new []
-        {
-          GenerationElections.None,
-          GenerationElections.MapModelToEntity,
-          GenerationElections.MapEntityToModel,
-          GenerationElections.MapInterfaceToEntity,
-          GenerationElections.MapInterfaceToModel,
-          GenerationElections.MakeAsynchronous,
-          GenerationElections.RepoEfFluentApi,
-          GenerationElections.RepoDynamic,
-          GenerationElections.RepoBulkCopy,
-        }.Contains(e))
+        .Where(IsParent)
         .ToList();
 
       var lst = new List<GeneratedResult>(allTests.Count);
@@ -126,6 +117,15 @@ namespace SpotWelder.Lib.Services
       lst.TrimExcess();
 
       return lst;
+    }
+
+    private static bool IsParent(GenerationElections election)
+    {
+      var fi = election.GetType().GetField(election.ToString());
+
+      if (fi == null) return false;
+      
+      return fi.GetCustomAttributes(false).Length == 0;
     }
 
     #region Generate GridView

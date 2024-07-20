@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
@@ -18,54 +19,32 @@ namespace SpotWelder.Lib.Services.Generators
     
     protected override string TemplateName => "Mapper.cs.template";
 
-    public override GeneratedResult FillTemplate(ClassInstructions instructions)
+    private static readonly Dictionary<GenerationElections, string> ChildTemplates = new()
+    {
+      { GenerationElections.MapEntityToModel, "MapEntityToModel.cs.template" },
+      { GenerationElections.MapModelToEntity, "MapModelToEntity.cs.template" },
+      { GenerationElections.MapInterfaceToEntity, "MapInterfaceToEntity.cs.template" },
+      { GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
+      { GenerationElections.MapCreateModelToEntity, "MapCreateModelToEntity.cs.template" },
+      { GenerationElections.MapPatchModelToEntity, "MapPatchModelToEntity.cs.template" }
+    };
+
+  public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
 
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);
-
+      
+      template.Replace("{{Body}}", BuildBodyTemplate(instructions.Elections));
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-
-      //Cloning method properties
-      template.Replace(
-        "{{PropertiesModelToEntity}}",
-        FormatCloneBody(
-          GenerationElections.MapModelToEntity,
-          instructions,
-          "model",
-          "entity"));
-
-      template.Replace(
-        "{{PropertiesEntityToModel}}",
-        FormatCloneBody(
-          GenerationElections.MapEntityToModel,
-          instructions,
-          "entity",
-          "model"));
-
-      template.Replace(
-        "{{PropertiesInterfaceToEntity}}",
-        FormatCloneBody(
-          GenerationElections.MapInterfaceToEntity,
-          instructions,
-          "target",
-          "entity"));
-
-      template.Replace(
-        "{{PropertiesInterfaceToModel}}",
-        FormatCloneBody(
-          GenerationElections.MapInterfaceToModel,
-          instructions,
-          "target",
-          "model"));
-
+      
       var t = template.ToString();
 
       t = RemoveExcessBlankSpace(t);
@@ -73,6 +52,25 @@ namespace SpotWelder.Lib.Services.Generators
       return new($"{instructions.ClassName}Mapper.cs", t);
     }
 
+    private string BuildBodyTemplate(GenerationElections elections)
+    {
+      var childElections = GetChildElections(elections, Election);
+
+      var sb = new StringBuilder();
+
+      foreach (var child in childElections)
+      {
+        sb
+          .AppendLine(GetTemplate(ChildTemplates[child]))
+          .AppendLine();
+      }
+
+      return sb.ToString();
+    }
+
+    //FYI: 07/20/2024 This is a literal clone method, which I don't want to get rid of yet, but I won't be using right now.
+    //There is a place for this, I am just not sure where yet. This is more of a DTO Maker thing,
+    //but I could see needing this for scaffolding potentially too.
     private string FormatCloneBody(
       GenerationElections flag,
       ClassInstructions instructions,

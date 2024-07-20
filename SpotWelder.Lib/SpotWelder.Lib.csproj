@@ -11,6 +11,12 @@
 	  <None Remove="Templates\EntityIEquatable.cs.template" />
 	  <None Remove="Templates\EntitySimple.cs.template" />
 	  <None Remove="Templates\Interface.cs.template" />
+	  <None Remove="Templates\MapCreateModelToEntity.cs.template" />
+	  <None Remove="Templates\MapEntityToModel.cs.template" />
+	  <None Remove="Templates\MapInterfaceToEntity.cs.template" />
+	  <None Remove="Templates\MapInterfaceToModel.cs.template" />
+	  <None Remove="Templates\MapModelToEntity.cs.template" />
+	  <None Remove="Templates\MapPatchModelToEntity.cs.template" />
 	  <None Remove="Templates\Mapper.cs.template" />
 	  <None Remove="Templates\Model.cs.template" />
 	  <None Remove="Templates\ModelCreate.cs.template" />
@@ -24,6 +30,24 @@
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
 		<Content Include="Templates\ApiController.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapPatchModelToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapCreateModelToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapInterfaceToModel.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapInterfaceToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapEntityToModel.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapModelToEntity.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\Service.cs.template">

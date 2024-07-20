@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators.Elections;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -131,6 +132,30 @@ namespace SpotWelder.Lib.Services.Generators
       strategy.Configure();
 
       return strategy;
+    }
+
+    protected static List<GenerationElections> GetChildElections(
+      GenerationElections elections,
+      GenerationElections parent)
+    {
+      var lst = new List<GenerationElections>();
+
+      elections.GetFlags().ForEach(e =>
+      {
+        var fi = e.GetType().GetField(e.ToString());
+
+        if (fi == null) return;
+
+        var attr = fi.GetCustomAttributes(false);
+
+        if (attr.Length == 0) return;
+
+        var child = attr[0];
+
+        if(child is GenerationElectionChildAttribute childAttr && childAttr.Parent == parent) lst.Add(e);
+      });
+
+      return lst;
     }
   }
 }

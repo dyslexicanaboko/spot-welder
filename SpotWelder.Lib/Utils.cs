@@ -15,6 +15,21 @@ namespace SpotWelder.Lib
     public static bool HasAnyFlag(this GenerationElections elections, params GenerationElections[] flags)
       => flags.Any(f => elections.HasFlag(f));
 
+    public static List<T> GetFlags<T>(this T enumValue) where T : Enum
+    {
+      var flags = new List<T>();
+
+      foreach (T value in Enum.GetValues(typeof(T)))
+      {
+        if (enumValue.HasFlag(value) && Convert.ToInt64(value) != 0) // Exclude the 'None' value, assuming it's represented by 0
+        {
+          flags.Add(value);
+        }
+      }
+
+      return flags;
+    }
+
     public static Dictionary<string, T> GetEnumDictionary<T>(bool? keyIsLowerCase = null)
       where T : struct, IConvertible
     {
