@@ -2,7 +2,6 @@
 using SpotWelder.Lib.Models;
 using SpotWelder.Ui.Helpers;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -34,21 +33,14 @@ namespace SpotWelder.Ui
       obj.Elections = _electionToCheckBoxMap.GetChosenGenerationElections();
 
       if(obj.Elections.HasAnyFlag(
-           GenerationElections.MapCreateModelToEntity, 
-           GenerationElections.MapCreateModelToEntity, 
+           GenerationElections.MapModelToEntity, 
+           GenerationElections.MapEntityToModel, 
+           GenerationElections.MapInterfaceToEntity,
+           GenerationElections.MapInterfaceToModel,
            GenerationElections.MapCreateModelToEntity,
-           GenerationElections.MapCreateModelToEntity))
+           GenerationElections.MapPatchModelToEntity))
         obj.Elections |= GenerationElections.GenerateMapper;
-
-      //TODO: Hook this up to the UI
-      //This is temporarily hardcoded to true for testing
-      //obj.Elections |= GenerationElections.Service;
-      //obj.Elections |= GenerationElections.ApiController;
-      //obj.Elections |= GenerationElections.GenerateCreateModel;
-      //obj.Elections |= GenerationElections.GeneratePatchModel;
-      //obj.Elections |= GenerationElections.MakeAsynchronous;
-      obj.ApiRoute = "tasks";
-
+      
       return obj;
     }
     
@@ -117,10 +109,9 @@ namespace SpotWelder.Ui
         { GenerationElections.RepoEfFluentApi, CbRepoEfFluentApi },
         { GenerationElections.Service, CbService },
         { GenerationElections.ApiController, CbApiController },
-        { GenerationElections.GenerateCreateModel, CbCreateModel },
-        { GenerationElections.GeneratePatchModel, CbPatchModel },
+        { GenerationElections.GenerateCreateModel, CbClassCreateModel },
+        { GenerationElections.GeneratePatchModel, CbClassPatchModel },
         { GenerationElections.MakeAsynchronous, CbMakeAsynchronous },
-        { GenerationElections.GeneratePatchModel, CbPatchModel },
       };
 
       return dict;

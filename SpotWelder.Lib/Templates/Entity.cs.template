@@ -3,23 +3,12 @@
 namespace {{Namespace}}
 {
 	{{ClassAttributes}}
-	public {{Partial}}class {{ClassName}}{{Interface}}
+	public class {{ClassName}}{{Interfaces}}
 	{
-		public {{ClassName}}()
-		{
-			
-		}
+		{{Constructors}}
+		
+		{{Properties}}
 
-	  public {{ClassName}}({{ModelName}} model)
-		{
-			{{ConstructorFromModel}}
-		}
-
-		public {{ClassName}}({{InterfaceName}} target)
-		{
-			{{ConstructorFromInterface}}
-		}
-
-{{Properties}}
+		{{InterfaceMethods}}
 	}
 }

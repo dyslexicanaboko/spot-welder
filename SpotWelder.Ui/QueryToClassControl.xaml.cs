@@ -71,19 +71,39 @@ namespace SpotWelder.Ui
       TxtEntityName.Text = "Task";
       TxtClassEntityName.Text = "TaskEntity";
       TxtClassModelName.Text = "TaskModel";
-      CbClassInterface.IsChecked = true;
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
+      
       CbRepoDapper.IsChecked = true;
+
+      //Entity
       CbClassEntity.IsChecked = true;
-      CbClassEntityEqualityComparer.IsChecked = true;
       CbClassEntityIEquatable.IsChecked = true;
       CbClassEntityIComparable.IsChecked = true;
-      CbMapInterfaceToEntity.IsChecked = true;
+
+      //Interface
+      CbClassInterface.IsChecked = true;
+
+      //Models
       CbClassModel.IsChecked = true;
+      CbClassCreateModel.IsChecked = true;
+      CbClassPatchModel.IsChecked = true;
+
+      //Services
+      CbClassEntityEqualityComparer.IsChecked = true;
+      CbSerializeCsv.IsChecked = true;
+      CbSerializeJson.IsChecked = true;
+
+      //Layers
+      CbMakeAsynchronous.IsChecked = true;
+      CbApiController.IsChecked = true;
+      CbService.IsChecked = true;
+
+      //Mappings
       CbMapInterfaceToModel.IsChecked = true;
+      CbMapInterfaceToEntity.IsChecked = true;
       CbMapEntityToModel.IsChecked = true;
       CbMapModelToEntity.IsChecked = true;
+      CbMapCreateModelToEntity.IsChecked = true;
+      CbMapPatchModelToEntity.IsChecked = true;
     }
     
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;

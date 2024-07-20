@@ -6,6 +6,7 @@
 	<ItemGroup>
 	  <None Remove="Templates\ApiController.cs.template" />
 	  <None Remove="Templates\Entity.cs.template" />
+	  <None Remove="Templates\EntityConstructor.cs.template" />
 	  <None Remove="Templates\EntityEqualityComparer.cs.template" />
 	  <None Remove="Templates\EntityIComparable.cs.template" />
 	  <None Remove="Templates\EntityIEquatable.cs.template" />
@@ -30,6 +31,9 @@
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
 		<Content Include="Templates\ApiController.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\EntityConstructor.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\MapPatchModelToEntity.cs.template">

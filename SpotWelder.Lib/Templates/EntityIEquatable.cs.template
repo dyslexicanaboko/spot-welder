@@ -1,34 +1,25 @@
-﻿{{Namespaces}}
+﻿	public override bool Equals(object? obj) => this.Equals(obj as {{ClassName}});
 
-namespace {{Namespace}}
-{
-	public partial class {{ClassName}} 
-		: IEquatable <{{EntityName}}>
+	public bool Equals({{ClassName}}? other)
 	{
-		public override bool Equals(object? obj) => this.Equals(obj as {{EntityName}});
+		if (other is null) return false;
 
-		public bool Equals({{EntityName}}? other)
-		{
-			if (other is null) return false;
+		if (object.ReferenceEquals(this, other)) return true;
 
-			if (object.ReferenceEquals(this, other)) return true;
+		if (this.GetType() != other.GetType()) return false;
 
-			if (this.GetType() != other.GetType()) return false;
-
-			return
+		return
 {{PropertiesEquals}};
-		}
+	}
 
-		public override int GetHashCode() =>
+	public override int GetHashCode() =>
 {{PropertiesHashCode}};
 
-		public static bool operator ==({{EntityName}}? lhs, {{EntityName}}? rhs)
-		{
-			if (lhs is not null) return lhs.Equals(rhs);
+	public static bool operator ==({{ClassName}}? lhs, {{ClassName}}? rhs)
+	{
+		if (lhs is not null) return lhs.Equals(rhs);
 
-			return rhs is null;
-		}
-
-		public static bool operator !=({{EntityName}}? lhs, {{EntityName}}? rhs) => !(lhs == rhs);
+		return rhs is null;
 	}
-}
+
+	public static bool operator !=({{ClassName}}? lhs, {{ClassName}}? rhs) => !(lhs == rhs);

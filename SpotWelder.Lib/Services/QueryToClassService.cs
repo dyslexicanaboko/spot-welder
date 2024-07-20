@@ -70,7 +70,7 @@ namespace SpotWelder.Lib.Services
         SubjectName = p.SubjectName, 
         EntityName = p.EntityName,
         ModelName = p.ModelName,
-        ApiRoute = p.ApiRoute,
+        ApiRoute = p.SubjectName.ToLower(), //TODO: Use a humanizer that makes this plural and camel case https://github.com/Humanizr/Humanizer
         IsAsynchronous = p.Elections.HasFlag(GenerationElections.MakeAsynchronous),
         InterfaceName = $"I{p.SubjectName}",
         TableQuery = p.TableQuery,

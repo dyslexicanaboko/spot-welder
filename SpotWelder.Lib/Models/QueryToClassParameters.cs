@@ -70,11 +70,7 @@
     /// <summary> Name of the subject with the `Model` suffix.</summary>
     /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
     public string ModelName { get; set; }
-
-    /// <summary> Name of the subject in camelCase and pluralized.</summary>
-    /// <example> Subject named: `Task`, the API Route would be `tasks` as in `api/v1/tasks`.</example>
-    public string ApiRoute { get; set; }
-
+    
     //Future: If there are too many options, then use a dictionary of data, like <string, bool> encapsulated in a class
     /// <summary> The user's elections. In other words, what should be generated. </summary>
     public GenerationElections Elections { get; set; } = GenerationElections.None;
