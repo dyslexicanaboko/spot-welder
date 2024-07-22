@@ -1,4 +1,7 @@
-﻿using SpotWelder.Lib.Models;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Formatting;
+using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.Generators.Elections;
 using System;
@@ -23,8 +26,8 @@ namespace SpotWelder.Lib.Services.Generators
 
     public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
 
-    protected virtual GeneratedResult GetResult(string className, string extension = "cs")
-      => new(className + "." + extension);
+    protected virtual GeneratedResult GetFormattedCSharpResult(string fileNameWithExtension, StringBuilder contents)
+      => new(fileNameWithExtension, FormatCSharp(contents.ToString()));
 
     protected virtual string GetTemplate(string templateName)
     {
@@ -175,9 +178,22 @@ namespace SpotWelder.Lib.Services.Generators
       return sb.ToString();
     }
 
-    protected string FormatCSharp()
+    protected string FormatCSharp(string code)
     {
+      // Parse the code into a SyntaxTree
+      var syntaxTree = CSharpSyntaxTree.ParseText(code);
 
+      // Create a workspace
+      var workspace = new AdhocWorkspace();
+      
+      // Format the syntax tree
+      var formattedRoot = Formatter.Format(syntaxTree.GetRoot(), workspace, workspace.Options);
+
+      // Convert the formatted syntax tree back to a string
+      var formattedCode = formattedRoot.ToFullString();
+
+      // Output the formatted code
+      return formattedCode;
     }
   }
 }

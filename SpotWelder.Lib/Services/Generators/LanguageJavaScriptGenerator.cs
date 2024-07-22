@@ -20,16 +20,12 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(strTemplate);
 
       template.Replace("{{ClassName}}", instructions.EntityName);
+      
+      //FYI: The `Parameters` property is being used because it's camelCase
+      template.Replace("{{Parameters}}", FormatParameters(instructions.Properties));
+      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      //FYI: The `Parameter` property is being used because it's camelCase
-      t = t.Replace("{{Parameters}}", FormatParameters(instructions.Properties));
-      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
-
-      return new GeneratedResult($"{instructions.SubjectName}.js", t);
+      return new GeneratedResult($"{instructions.SubjectName}.js", template);
     }
 
     private string FormatParameters(IList<ClassMemberStrings> properties)

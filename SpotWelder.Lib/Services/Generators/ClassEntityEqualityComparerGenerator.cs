@@ -26,14 +26,11 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-      var t = template.ToString();
+      //Method bodies
+      template.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
+      template.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
 
-      t = RemoveExcessBlankSpace(t);
-
-      t = t.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
-      t = t.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
-
-      return new(instructions.EntityName + "EqualityComparer.cs", t);
+      return GetFormattedCSharpResult($"{instructions.EntityName}EqualityComparer.cs", template);
     }
 
     private string FormatForEquals(IList<ClassMemberStrings> properties)

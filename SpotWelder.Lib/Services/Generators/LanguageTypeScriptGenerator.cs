@@ -20,14 +20,9 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(strTemplate);
 
       template.Replace("{{ClassName}}", instructions.EntityName);
+      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
-
-      return new GeneratedResult($"{instructions.SubjectName}.ts", t);
+      return new GeneratedResult($"{instructions.SubjectName}.ts", template);
     }
 
     protected override string FormatProperties(IList<ClassMemberStrings> properties)

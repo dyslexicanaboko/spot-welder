@@ -36,17 +36,9 @@ namespace SpotWelder.Lib.Services.Generators
       //Constructors
       template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
       template.Replace("{{ConstructorFromEntity}}", FormatConstructorBody(instructions.Properties, "entity"));
-
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
-
-      var r = GetResult(instructions.ClassName);
-      r.Contents = t;
-
-      return r;
+      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
+      
+      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
     }
 
     private string FillConstructors(GenerationElections elections)

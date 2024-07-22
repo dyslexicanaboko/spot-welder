@@ -30,12 +30,6 @@ namespace SpotWelder.Lib.Services.Generators
 
 			GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
 
-			var t = template.ToString();
-
-			t = RemoveExcessBlankSpace(t);
-
-			//t = RemoveBlankLines(t);
-
 			var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
 			var lstNoPk = instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
 			var lstInsert = new List<ClassMemberStrings>(lstNoPk);
@@ -43,10 +37,10 @@ namespace SpotWelder.Lib.Services.Generators
 			//TODO: What to do when there is no primary key?
 			if (pk != null)
 			{
-				t = t.Replace("{{PrimaryKeyParameter}}", pk.Parameter); //taskId
-				t = t.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
-				t = t.Replace("{{PrimaryKeyColumn}}", pk.ColumnName); //TaskId or task_id
-				t = t.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
+				template.Replace("{{PrimaryKeyParameter}}", pk.Parameter); //taskId
+				template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
+				template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName); //TaskId or task_id
+				template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
 
 				var scopeIdentity = string.Empty;
 
@@ -60,21 +54,21 @@ namespace SpotWelder.Lib.Services.Generators
 					//If the PK is not identity, then the PK needs to explicitly be provided and inserted
 					lstInsert.Insert(0, pk);
 
-				t = t.Replace("{{ScopeIdentity}}", scopeIdentity);
-				t = t.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, instructions.IsAsynchronous));
+				template.Replace("{{ScopeIdentity}}", scopeIdentity);
+				template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, instructions.IsAsynchronous));
 			}
 
-			t = t.Replace("{{Schema}}", instructions.TableQuery.Schema);
-			t = t.Replace("{{Table}}", instructions.TableQuery.Table);
-			t = t.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
-			t = t.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
-			t = t.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
-			t = t.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
-			t = t.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
-			t = t.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
-			t = t.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
+			template.Replace("{{Schema}}", instructions.TableQuery.Schema);
+			template.Replace("{{Table}}", instructions.TableQuery.Table);
+			template.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
+			template.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
+			template.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
+			template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
+			template.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
+			template.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
+			template.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
 
-			return new($"{instructions.ClassName}Repository.cs", t);
+			return GetFormattedCSharpResult($"{instructions.ClassName}Repository.cs", template);
 		}
 
 		private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)

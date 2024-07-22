@@ -47,12 +47,8 @@ namespace SpotWelder.Lib.Services.Generators
 
       //IComparable
       template.Replace("{{Property1}}", instructions.Properties.First().Property);
-
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
       
-      return new($"{instructions.ClassName}.cs", t);
+      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
     }
 
     private static string FillInterfaceImplementations(GenerationElections elections)

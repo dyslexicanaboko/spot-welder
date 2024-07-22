@@ -18,12 +18,8 @@ namespace SpotWelder.Lib.Services.Generators
 
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.EntityName);
-
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      return new("SerializationService_Json.cs", t);
+      
+      return GetFormattedCSharpResult("SerializationService_Json.cs", template);
     }
   }
 }

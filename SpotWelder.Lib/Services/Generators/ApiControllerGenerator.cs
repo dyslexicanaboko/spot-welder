@@ -38,11 +38,7 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
 
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      return new GeneratedResult($"{instructions.ClassName}Controller.cs", t);
+      return GetFormattedCSharpResult($"{instructions.ClassName}Controller.cs", template);
     }
   }
 }

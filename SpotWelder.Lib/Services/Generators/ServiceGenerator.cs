@@ -32,12 +32,8 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
-
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      return new($"{instructions.ClassName}Service.cs", t);
+      
+      return GetFormattedCSharpResult($"{instructions.ClassName}Service.cs", template);
     }
   }
 }

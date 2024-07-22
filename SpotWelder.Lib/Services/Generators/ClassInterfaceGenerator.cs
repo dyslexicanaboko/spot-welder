@@ -24,17 +24,9 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
-
-      var r = GetResult(instructions.ClassName);
-      r.Contents = t;
-
-      return r;
+      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
     }
 
     protected override string FormatProperties(IList<ClassMemberStrings> properties)

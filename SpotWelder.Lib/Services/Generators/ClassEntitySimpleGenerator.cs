@@ -30,17 +30,9 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(strTemplate);
 
       template.Replace("{{ClassName}}", instructions.EntityName);
+      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var t = template.ToString();
-
-      t = RemoveExcessBlankSpace(t);
-
-      t = t.Replace("{{Properties}}", FormatProperties(instructions.Properties));
-
-      var r = GetResult(instructions.ClassName);
-      r.Contents = t;
-
-      return r;
+      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
     }
 
     public GeneratedResult FillMockDataTemplate(ClassInstructions instructions, DataTable dataTable)
@@ -83,10 +75,7 @@ namespace SpotWelder.Lib.Services.Generators
         .Append(string.Join("," + Environment.NewLine, lst))
         .AppendLine("};");
 
-      var result = GetResult(instructions.ClassName);
-      result.Contents = sbFinal.ToString();
-
-      return result;
+      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", sbFinal);
     }
 
     private static string GetValueString(ClassMemberStrings property, object value)
