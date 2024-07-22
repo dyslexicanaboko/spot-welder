@@ -1,0 +1,50 @@
+﻿{{Namespaces}}
+
+namespace {{Namespace}}
+{
+	public class {{ClassName}}Service
+	{
+		private readonly I{{ClassName}}Repository _repository;
+		private readonly I{{ClassName}}Validation _validation;
+
+		public {{ClassName}}Service(
+			I{{ClassName}}Repository repository,
+			I{{ClassName}}Validation validation)
+		{
+			_repository = repository;
+			_validation = validation;
+		}
+
+		public [AO]{{EntityName}}?[AC] Get{{ClassName}}({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
+
+			var dbEntity = [A]_repository.Using(x => x.Select({{PrimaryKeyParameter}}));
+
+			return dbEntity;
+		}
+
+		public [AO]{{EntityName}}[AC] Add({{EntityName}}? entity)
+		{
+			Validations.IsValid(_validation, entity, nameof(entity));
+
+			entity.{{PrimaryKeyProperty}} = [A]_repository.Using(x => x.Insert(entity));
+			
+			return entity;
+		}
+
+		public [void] Edit({{EntityName}} entity)
+		{
+			Validations.IsNotNull(entity, nameof(entity));
+
+			[A]_repository.Using(x => x.Update(entity));
+		}
+
+		public [void] Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
+
+			[A]_repository.Using(x => x.Delete({{PrimaryKeyParameter}}));
+		}
+	}
+}

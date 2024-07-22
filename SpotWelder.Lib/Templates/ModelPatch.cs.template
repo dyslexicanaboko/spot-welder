@@ -1,0 +1,19 @@
+﻿{{Namespaces}}
+
+namespace {{Namespace}}
+{
+	public class {{ClassName}}V1PatchModel
+	{
+		public {{ClassName}}()
+		{
+			
+		}
+
+		public {{ClassName}}({{InterfaceName}} target)
+		{
+			{{ConstructorFromInterface}}
+		}
+
+{{Properties}}
+	}
+}

@@ -1,0 +1,2 @@
+﻿public {{EntityName}}? ToEntity({{ModelName}}? model)
+			=> model == null ? null : new {{EntityName}}(model);

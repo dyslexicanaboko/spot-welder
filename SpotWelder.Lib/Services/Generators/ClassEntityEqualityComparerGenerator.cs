@@ -1,60 +1,56 @@
-﻿using System;
+﻿using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-    public class ClassEntityEqualityComparerGenerator
-        : GeneratorBase
+  public class ClassEntityEqualityComparerGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.GenerateEntityEqualityComparer;
+
+    protected override string TemplateName => "EntityEqualityComparer.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-        public ClassEntityEqualityComparerGenerator(ClassInstructions instructions)
-            : base(instructions, "EntityEqualityComparer.cs")
-        {
+      instructions.ClassName = instructions.EntityName;
+      
+      var strTemplate = GetTemplate(TemplateName);
 
-        }
+      var template = new StringBuilder(strTemplate);
 
-        public override GeneratedResult FillTemplate()
-        {
-            var strTemplate = GetTemplate(TemplateName);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-            var template = new StringBuilder(strTemplate);
+      //Method bodies
+      template.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
+      template.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
 
-            template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.ClassEntityName);
-            template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
-
-            var t = template.ToString();
-
-            t = RemoveExcessBlankSpace(t);
-
-            t = t.Replace("{{PropertiesEquals}}", FormatForEquals(Instructions.Properties));
-            t = t.Replace("{{PropertiesHashCode}}", FormatForHashCode(Instructions.Properties));
-
-            var r = GetResult();
-            r.Filename = Instructions.ClassEntityName + "EqualityComparer.cs";
-            r.Contents = t;
-
-            return r;
-        }
-
-        private string FormatForEquals(IList<ClassMemberStrings> properties)
-        {
-            var content = GetTextBlock(properties,
-                (p) => $"        left.{p.Property} == right.{p.Property}",
-                separator: " && " + Environment.NewLine);
-
-            return content;
-        }
-
-        private string FormatForHashCode(IList<ClassMemberStrings> properties)
-        {
-            var content = GetTextBlock(properties,
-                (p) => $"        obj.{p.Property}.GetHashCode()",
-                separator: " + " + Environment.NewLine);
-
-            return content;
-        }
+      return GetFormattedCSharpResult($"{instructions.EntityName}EqualityComparer.cs", template);
     }
+
+    private string FormatForEquals(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"        left.{p.Property} == right.{p.Property}",
+        " && " + Environment.NewLine);
+
+      return content;
+    }
+
+    private string FormatForHashCode(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"        obj.{p.Property}.GetHashCode()",
+        " + " + Environment.NewLine);
+
+      return content;
+    }
+  }
 }

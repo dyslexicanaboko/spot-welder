@@ -1,0 +1,85 @@
+//https://www.nuget.org/packages/Dapper/
+using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+{{Namespaces}}
+
+namespace {{Namespace}}
+{
+	public class {{ClassName}}Repository
+	{
+		public {{ClassName}}Repository(IAppConfiguration configuration)
+			: base(configuration)
+		{
+		}
+
+		public [AO]{{EntityName}}[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			const string sql = @"
+			SELECT
+	{{SelectAllList}}
+			FROM {{Schema}}.{{Table}}
+			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
+
+			[A]using var connection = new SqlConnection(ConnectionString);
+			
+			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, {{PrimaryKeyParameter}})[AWC].ToList();
+				
+			return lst.SingleOrDefault();
+		}
+
+		public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
+		{
+			const string sql = @"
+			SELECT
+	{{SelectAllList}}
+			FROM {{Schema}}.{{Table}}";
+
+			[A]using var connection = new SqlConnection(ConnectionString);
+			
+			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
+		}
+
+		//Preference on whether or not insert method returns a value is up to the user and the object being inserted
+		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
+		{
+			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (
+	{{InsertColumnList}}
+						) VALUES (
+	{{InsertValuesList}});
+	{{ScopeIdentity}}";
+
+			[A]using var connection = new SqlConnection(ConnectionString);
+
+			var p = new DynamicParameters();
+	{{DynamicParametersInsert}}
+				
+	{{PrimaryKeyInsertExecution}}
+		}
+
+		public [void] Update({{EntityName}} entity)
+		{
+			const string sql = @"UPDATE {{Schema}}.{{Table}} SET 
+	{{UpdateParameters}}
+						WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyProperty}}";
+
+			[A]using var connection = new SqlConnection(ConnectionString);
+
+			var p = new DynamicParameters();
+	{{DynamicParametersUpdate}}
+
+			[A]connection.Execute[AS](sql, p);
+		}
+
+		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			const string sql = "DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
+
+			[A]using var connection = new SqlConnection(ConnectionString);
+
+			[A]connection.Execute[AS](sql, {{PrimaryKeyParameter}});
+		}
+	}
+}

@@ -1,35 +1,25 @@
-﻿using System.Text;
-using SpotWelder.Lib.Models;
+﻿using SpotWelder.Lib.Models;
+using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-    public class ServiceSerializationJsonGenerator
-        : GeneratorBase
+  public class ServiceSerializationJsonGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.SerializeJson;
+
+    protected override string TemplateName => "ServiceSerializationJson.cs.template";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-        public ServiceSerializationJsonGenerator(ClassInstructions instructions)
-            : base(instructions, "ServiceSerializationJson.cs")
-        {
+      var strTemplate = GetTemplate(TemplateName);
 
-        }
+      var template = new StringBuilder(strTemplate);
 
-        public override GeneratedResult FillTemplate()
-        {
-            var strTemplate = GetTemplate(TemplateName);
-
-            var template = new StringBuilder(strTemplate);
-
-            template.Replace("{{Namespace}}", Instructions.Namespace);
-            template.Replace("{{ClassName}}", Instructions.ClassEntityName);
-
-            var t = template.ToString();
-
-            t = RemoveExcessBlankSpace(t);
-
-            var r = GetResult();
-            r.Filename = "SerializationService_Json.cs";
-            r.Contents = t;
-
-            return r;
-        }
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.EntityName);
+      
+      return GetFormattedCSharpResult("SerializationService_Json.cs", template);
     }
+  }
 }

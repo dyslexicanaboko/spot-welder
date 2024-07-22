@@ -1,87 +1,80 @@
-﻿using System;
+﻿using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 
 namespace SpotWelder.Lib.Services.Generators
 {
 	public class RepositoryDapperGenerator
 		: GeneratorBase
 	{
-		public RepositoryDapperGenerator(ClassInstructions instructions)
-			: base(instructions, "RepositoryDapper.cs")
-		{
-		}
+		public override GenerationElections Election => GenerationElections.RepoDapper;
 
-		public override GeneratedResult FillTemplate()
+		protected override string TemplateName => "RepositoryDapper.cs.template";
+
+		public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
+			instructions.ClassName = instructions.SubjectName;
+
 			var strTemplate = GetTemplate(TemplateName);
 
 			var template = new StringBuilder(strTemplate);
 
-			template.Replace("{{Namespace}}", Instructions.Namespace);
-			template.Replace("{{ClassName}}", Instructions.EntityName); //Prefix of the repository class
-			template.Replace("{{EntityName}}", Instructions.ClassEntityName); //Class entity name
-			template.Replace("{{Namespaces}}", FormatNamespaces(Instructions.Namespaces));
+			template.Replace("{{Namespace}}", instructions.Namespace);
+			template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
+			template.Replace("{{EntityName}}", instructions.EntityName);
+			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-			var t = template.ToString();
+			GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
 
-			t = RemoveExcessBlankSpace(t);
-			//t = RemoveBlankLines(t);
-
-			var pk = Instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
-			var lstNoPk = Instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
+			var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
+			var lstNoPk = instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
 			var lstInsert = new List<ClassMemberStrings>(lstNoPk);
 
 			//TODO: What to do when there is no primary key?
 			if (pk != null)
 			{
-				t = t.Replace("{{PrimaryKeyParameter}}", pk.Parameter);
-				t = t.Replace("{{PrimaryKeyProperty}}", pk.Property);
-				t = t.Replace("{{PrimaryKeyColumn}}", pk.ColumnName);
-				t = t.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias);
+				template.Replace("{{PrimaryKeyParameter}}", pk.Parameter); //taskId
+				template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
+				template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName); //TaskId or task_id
+				template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
 
 				var scopeIdentity = string.Empty;
 
 				if (pk.IsIdentity)
-				{
+
 					//If the PK is identity then the PK needs to be returned
 					scopeIdentity = @"
-			SELECT SCOPE_IDENTITY() AS PK;";
-				}
+			SELECT SCOPE_IDENTITY() AS PK;"; //Don't change the spacing here, it's like this on purpose
 				else
-				{
+
 					//If the PK is not identity, then the PK needs to explicitly be provided and inserted
 					lstInsert.Insert(0, pk);
-				}
 
-				t = t.Replace("{{ScopeIdentity}}", scopeIdentity);
-				t = t.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk));
+				template.Replace("{{ScopeIdentity}}", scopeIdentity);
+				template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, instructions.IsAsynchronous));
 			}
 
-			t = t.Replace("{{Schema}}", Instructions.TableQuery.Schema);
-			t = t.Replace("{{Table}}", Instructions.TableQuery.Table);
-			t = t.Replace("{{SelectAllList}}", FormatSelectList(Instructions.Properties));
-			t = t.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
-			t = t.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
-			t = t.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
-			t = t.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
-			t = t.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(Instructions.Properties));
-			t = t.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
+			template.Replace("{{Schema}}", instructions.TableQuery.Schema);
+			template.Replace("{{Table}}", instructions.TableQuery.Table);
+			template.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
+			template.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
+			template.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
+			template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
+			template.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
+			template.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
+			template.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
 
-			var r = GetResult();
-			r.Filename = Instructions.EntityName + "Repository.cs";
-			r.Contents = t;
-
-			return r;
+			return GetFormattedCSharpResult($"{instructions.ClassName}Repository.cs", template);
 		}
 
 		private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)
 		{
-			var content = GetTextBlock(properties,
+			var content = GetTextBlock(
+				properties,
 				p => $"                {prefix}{p.Property}",
 				"," + Environment.NewLine);
 
@@ -90,7 +83,8 @@ namespace SpotWelder.Lib.Services.Generators
 
 		private string FormatUpdateList(IList<ClassMemberStrings> properties)
 		{
-			var content = GetTextBlock(properties,
+			var content = GetTextBlock(
+				properties,
 				p => $"                {p.Property} = @{p.Property}",
 				"," + Environment.NewLine);
 
@@ -99,26 +93,25 @@ namespace SpotWelder.Lib.Services.Generators
 
 		private string FormatDynamicParameterList(IList<ClassMemberStrings> properties)
 		{
-			var content = GetTextBlock(properties, 
+			var content = GetTextBlock(
+				properties,
 				p => $"{FormatDynamicParameter(p)}",
 				Environment.NewLine);
 
 			return content;
 		}
 
-		private string FormatDynamicParameter(ClassMemberStrings properties)
+		private static string FormatDynamicParameter(ClassMemberStrings properties)
 		{
 			var t = properties.DatabaseType;
 
-			var strDbType = TypesService.MapSqlDbTypeToDbTypeLoose.TryGetValue(t, out var dbType) ? 
-				dbType.ToString() : 
+			var strDbType = TypesService.MapSqlDbTypeToDbTypeLoose.TryGetValue(t, out var dbType) ?
+				dbType.ToString() :
 				$"SqlDbType.{t}_MissingMapping";
 
 			var lst = new List<string>
 			{
-				$"name: \"@{properties.Property}\"",
-				$"dbType: DbType.{strDbType}",
-				$"value: entity.{properties.Property}"
+				$"name: \"@{properties.Property}\"", $"dbType: DbType.{strDbType}", $"value: entity.{properties.Property}"
 			};
 
 			//TODO: Need to work through every type to see what the combinations are
@@ -126,15 +119,20 @@ namespace SpotWelder.Lib.Services.Generators
 			{
 				case SqlDbType.DateTime2:
 					lst.Add($"scale: {properties.Scale}");
+
 					break;
+
 				case SqlDbType.Decimal:
 					lst.Add($"precision: {properties.Precision}, scale: {properties.Scale}");
+
 					break;
+
 				case SqlDbType.VarChar:
 				case SqlDbType.NVarChar:
 				case SqlDbType.Char:
 				case SqlDbType.NChar:
 					lst.Add($"size: {properties.Size}");
+
 					break;
 			}
 
@@ -143,23 +141,24 @@ namespace SpotWelder.Lib.Services.Generators
 			return content;
 		}
 
-		private string FormatInsertExecution(ClassMemberStrings primaryKey)
+		private static string FormatInsertExecution(ClassMemberStrings primaryKey, bool isAsynchronous)
 		{
-			string content;
+			var ak = string.Empty;
+			var suf = string.Empty;
+
+			if (isAsynchronous)
+			{
+				ak = "await ";
+				suf = "Async";
+			}
 
 			if (primaryKey.IsIdentity)
-			{
-				content = $"            return connection.ExecuteScalar<{primaryKey.SystemTypeAlias}>(sql, entity);";
-			}
-			else
-			{
-				content = 
-$@"            connection.Execute(sql, p);
+				return $"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, entity);";
+
+			return
+				$@"            {ak}connection.Execute{suf}(sql, p);
 
 				return entity.{primaryKey.Property};";
-			}
-
-			return content;
 		}
 	}
 }

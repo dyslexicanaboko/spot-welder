@@ -1,65 +1,110 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="Templates\Entity.cs" />
-	  <Compile Remove="Templates\EntityEqualityComparer.cs" />
-	  <Compile Remove="Templates\EntityIComparable.cs" />
-	  <Compile Remove="Templates\EntityIEquatable.cs" />
-	  <Compile Remove="Templates\EntitySimple.cs" />
-	  <Compile Remove="Templates\Interface.cs" />
-	  <Compile Remove="Templates\Model.cs" />
-	  <Compile Remove="Templates\RepositoryDapper.cs" />
-	  <Compile Remove="Templates\RepositoryStatic.cs" />
-	  <Compile Remove="Templates\ServiceCloning.cs" />
-	  <Compile Remove="Templates\ServiceSerializationCsv.cs" />
-	  <Compile Remove="Templates\ServiceSerializationJson.cs" />
+	  <None Remove="Templates\ApiController.cs.template" />
+	  <None Remove="Templates\ClassConstructor.cs.template" />
+	  <None Remove="Templates\Entity.cs.template" />
+	  <None Remove="Templates\EntityEqualityComparer.cs.template" />
+	  <None Remove="Templates\EntityIComparable.cs.template" />
+	  <None Remove="Templates\EntityIEquatable.cs.template" />
+	  <None Remove="Templates\EntitySimple.cs.template" />
+	  <None Remove="Templates\Interface.cs.template" />
+	  <None Remove="Templates\MapCreateModelToEntity.cs.template" />
+	  <None Remove="Templates\MapEntityToModel.cs.template" />
+	  <None Remove="Templates\MapInterfaceToEntity.cs.template" />
+	  <None Remove="Templates\MapInterfaceToModel.cs.template" />
+	  <None Remove="Templates\MapModelToEntity.cs.template" />
+	  <None Remove="Templates\MapPatchModelToEntity.cs.template" />
+	  <None Remove="Templates\Mapper.cs.template" />
+	  <None Remove="Templates\Model.cs.template" />
+	  <None Remove="Templates\ModelCreate.cs.template" />
+	  <None Remove="Templates\ModelPatch.cs.template" />
+	  <None Remove="Templates\RepositoryDapper.cs.template" />
+	  <None Remove="Templates\RepositoryStatic.cs.template" />
+	  <None Remove="Templates\Service.cs.template" />
+	  <None Remove="Templates\ServiceSerializationCsv.cs.template" />
+	  <None Remove="Templates\ServiceSerializationJson.cs.template" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
-		<Content Include="Templates\Type.ts">
+		<Content Include="Templates\ApiController.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\ClassConstructor.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapPatchModelToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapCreateModelToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapInterfaceToModel.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapInterfaceToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapEntityToModel.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapModelToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Service.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\ModelPatch.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\ModelCreate.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Type.ts.template">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="Templates\Prototype.js">
+		<Content Include="Templates\Prototype.js.template">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Include="Templates\Entity.cs">
+	  <Content Include="Templates\Entity.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\EntityEqualityComparer.cs">
+	  <Content Include="Templates\EntityEqualityComparer.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\EntityIComparable.cs">
+	  <Content Include="Templates\EntityIComparable.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\EntityIEquatable.cs">
+	  <Content Include="Templates\EntityIEquatable.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\EntitySimple.cs">
+	  <Content Include="Templates\EntitySimple.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\Interface.cs">
+	  <Content Include="Templates\Interface.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\Model.cs">
+	  <Content Include="Templates\Model.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\RepositoryDapper.cs">
+	  <Content Include="Templates\RepositoryDapper.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\RepositoryStatic.cs">
+	  <Content Include="Templates\RepositoryStatic.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\ServiceCloning.cs">
+	  <Content Include="Templates\Mapper.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\ServiceSerializationCsv.cs">
+	  <Content Include="Templates\ServiceSerializationCsv.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="Templates\ServiceSerializationJson.cs">
+	  <Content Include="Templates\ServiceSerializationJson.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
@@ -67,9 +112,10 @@
 	  <Folder Include="Properties\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2" />
-	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-	  <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis" Version="4.10.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
 	  <PackageReference Include="System.CodeDom" Version="8.0.0" />
 	  <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
 	</ItemGroup>

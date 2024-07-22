@@ -1,0 +1,4 @@
+﻿public {{ClassName}}([ParameterType] [ParameterName])
+{
+	[ConstructorBody]
+}

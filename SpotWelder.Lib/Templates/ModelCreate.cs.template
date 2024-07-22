@@ -1,0 +1,19 @@
+﻿{{Namespaces}}
+
+namespace {{Namespace}}
+{
+	public class {{ClassName}}V1CreateModel
+	{
+		public {{ClassName}}()
+		{
+			
+		}
+
+		public {{ClassName}}({{InterfaceName}} target)
+		{
+			{{ConstructorFromInterface}}
+		}
+
+{{Properties}}
+	}
+}

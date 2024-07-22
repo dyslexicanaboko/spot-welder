@@ -1,107 +1,80 @@
-﻿using System.Collections.Generic;
-using SpotWelder.Lib.DataAccess;
+﻿using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Lib.Services.Generators;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpotWelder.Lib.Services
 {
   public class QueryToClassService
     : ClassMetaDataBase, IQueryToClassService
   {
-    public QueryToClassService(IQueryToClassRepository repository, IGeneralDatabaseQueries genericDatabaseQueries)
+    private readonly ICodeGenerationFactory _factory;
+
+    public QueryToClassService(
+      IQueryToClassRepository repository, 
+      IGeneralDatabaseQueries genericDatabaseQueries,
+      ICodeGenerationFactory factory)
       : base(repository, genericDatabaseQueries)
     {
+      _factory = factory;
     }
 
-    public IList<GeneratedResult> Generate(QueryToClassParameters parameters)
+    public IList<GeneratedResult>? Generate(QueryToClassParameters parameters)
     {
-      var p = parameters;
+      if (!parameters.HasElections) return null;
 
-      if (!p.HasElections) return null;
+      _queryToClassRepository.ChangeConnectionString(parameters.ConnectionString);
 
-      _queryToClassRepository.ChangeConnectionString(p.ConnectionString);
+      var baseInstructions = GetBaseInstructions(parameters);
 
-      var baseInstructions = GetInstructions(parameters);
-
-      var rClasses = GenerateClasses(p, baseInstructions);
-
-      var rServices = GenerateServices(p, baseInstructions);
-
-      var rRepositories = GenerateRepositories(p, baseInstructions);
-
-      var lst = new List<GeneratedResult>(
-        rClasses.Count +
-        rServices.Count +
-        rRepositories.Count);
-
-      lst.AddRange(rClasses);
-      lst.AddRange(rServices);
-      lst.AddRange(rRepositories);
+      return GenerateClasses(baseInstructions);
 
       //Writing to files will be handled again later
       //if (p.SaveAsFile)
       //    WriteClassToFile(p, content);
-
-      return lst;
     }
 
-    public IList<GeneratedResult> Generate(DtoInstructions parameters)
+    public IList<GeneratedResult> Generate(DtoInstructions instructions)
     {
-      var p = parameters;
-
       var ci = new ClassInstructions
       {
-        ClassEntityName = p.ClassName,
-        ClassModelName = p.ClassName + "Dto",
-        InterfaceName = "I" + p.ClassName,
+        ClassName = instructions.SourceClassName,
+        EntityName = instructions.SourceClassName,
+        ModelName = $"{instructions.SourceClassName}Dto",
+        InterfaceName = $"I{instructions.SourceClassName}",
         Namespace = "Namespace1",
-        Properties = p.Properties,
-        IsPartial = p.ImplementIEquatableOfTInterface
+        Languages = instructions.Languages,
+        Properties = instructions.Properties,
+        IsPartial = instructions.Elections.HasFlag(GenerationElections.GenerateEntityIEquatable)
       };
-
-      var co = new ClassOptions
-      {
-        ClassEntityName = ci.ClassEntityName,
-        ClassModelName = ci.ClassModelName,
-        GenerateEntity = true,
-        GenerateModel = true,
-        GenerateEntityIEquatable = p.ImplementIEquatableOfTInterface,
-        GenerateInterface = p.ExtractInterface
-      };
-
-      if (p.EquivalentJavaScript) co.Languages |= CodeType.JavaScript;
-      if (p.EquivalentTypeScript) co.Languages |= CodeType.TypeScript;
-
-      var qtcParameters = new QueryToClassParameters { ClassOptions = co };
-
-      if (p.MethodEntityToDto) qtcParameters.ClassServices |= ClassServices.CloneEntityToModel;
-
-      if (p.MethodDtoToEntity) qtcParameters.ClassServices |= ClassServices.CloneModelToEntity;
-
-      return GenerateClasses(qtcParameters, ci);
+      
+      return GenerateClasses(ci);
     }
 
-    private ClassInstructions GetInstructions(QueryToClassParameters parameters)
+    /// <summary>
+    /// This is to be thought of as factual information. The properties provided here
+    /// should not be overwritten, but can be when necessary.
+    /// </summary>
+    /// <param name="p">User elections</param>
+    /// <returns>Instructions</returns>
+    private ClassInstructions GetBaseInstructions(QueryToClassParameters p)
     {
-      var p = parameters;
-
       var schema = GetSchema(p.SourceSqlType, p.SourceSqlText, p.TableQuery);
 
-      var ins = new ClassInstructions();
-
-      ins.Namespace = p.Namespace;
-      ins.EntityName = p.ClassOptions.EntityName;
-      ins.ClassEntityName = p.ClassOptions.ClassEntityName;
-      ins.ClassModelName = p.ClassOptions.ClassModelName;
-
-      ins.InterfaceName =
-        "I" +
-        (string.IsNullOrEmpty(p.ClassOptions.ClassEntityName) ?
-          p.ClassOptions.ClassModelName :
-          p.ClassOptions.ClassEntityName);
-
-      ins.TableQuery = p.TableQuery;
+      var ins = new ClassInstructions
+      {
+        Namespace = p.Namespace, 
+        SubjectName = p.SubjectName, 
+        EntityName = p.EntityName,
+        ModelName = p.ModelName,
+        ApiRoute = p.SubjectName.ToLower(), //TODO: Use a humanizer that makes this plural and camel case https://github.com/Humanizr/Humanizer
+        IsAsynchronous = p.Elections.HasFlag(GenerationElections.MakeAsynchronous),
+        InterfaceName = $"I{p.SubjectName}",
+        TableQuery = p.TableQuery,
+        Elections = p.Elections,
+      };
 
       foreach (var sc in schema.ColumnsAll)
       {
@@ -120,164 +93,38 @@ namespace SpotWelder.Lib.Services
     ///   The main internal method that orchestrates the code generation for the provided parameters
     /// </summary>
     /// <returns>The generated class code as a StringBuilder</returns>
-    private IList<GeneratedResult> GenerateClasses(
-      QueryToClassParameters parameters,
-      ClassInstructions baseInstructions)
+    private IList<GeneratedResult> GenerateClasses(ClassInstructions baseInstructions)
     {
-      var co = parameters.ClassOptions;
+      //Get all elections that can be generated directly, leave out the ones that cannot.
+      //Look at the enumeration directly for more information.
+      var allTests = Enum.GetValues(typeof(GenerationElections))
+        .Cast<GenerationElections>()
+        .Where(IsParent)
+        .ToList();
 
-      var lst = new List<GeneratedResult>();
+      var lst = new List<GeneratedResult>(allTests.Count);
 
-      var interfaceName = string.Empty;
-
-      if (co.GenerateInterface)
+      foreach (var e in allTests)
       {
-        interfaceName = baseInstructions.InterfaceName;
+        var result = _factory.Generate(baseInstructions, e);
 
-        var ins = baseInstructions.Clone();
-        ins.ClassEntityName = ins.InterfaceName;
+        if(result == null) continue;
 
-        var svc = new ClassInterfaceGenerator(ins);
-
-        lst.Add(svc.FillTemplate());
+        lst.Add(result);
       }
-
-      if (co.GenerateEntity)
-      {
-        var ins = baseInstructions.Clone();
-        ins.ClassEntityName = co.ClassEntityName;
-        ins.InterfaceName = interfaceName;
-        ins.IsPartial = co.GenerateEntityIEquatable || co.GenerateEntityIComparable;
-
-        var svc = new ClassEntityGenerator(ins);
-
-        lst.Add(svc.FillTemplate());
-
-        if (co.GenerateEntityIEquatable)
-        {
-          var insSub = baseInstructions.Clone();
-          insSub.ClassEntityName = co.ClassEntityName;
-
-          var svcSub = new ClassEntityIEquatableGenerator(insSub);
-
-          lst.Add(svcSub.FillTemplate());
-        }
-
-        if (co.GenerateEntityIComparable)
-        {
-          var insSub = baseInstructions.Clone();
-          insSub.ClassEntityName = co.ClassEntityName;
-
-          var svcSub = new ClassEntityIComparableGenerator(insSub);
-
-          lst.Add(svcSub.FillTemplate());
-        }
-
-        if (co.GenerateEntityEqualityComparer)
-        {
-          var insSub = baseInstructions.Clone();
-          insSub.ClassEntityName = co.ClassEntityName;
-
-          var svcSub = new ClassEntityEqualityComparerGenerator(insSub);
-
-          lst.Add(svcSub.FillTemplate());
-        }
-      }
-
-      if (co.GenerateModel)
-      {
-        var ins = baseInstructions.Clone();
-        ins.ClassEntityName = co.ClassModelName;
-        ins.InterfaceName = interfaceName;
-
-        var svc = new ClassModelGenerator(ins);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (co.Languages.HasFlag(CodeType.JavaScript))
-      {
-        var ins = baseInstructions.Clone();
-
-        var svc = new LanguageJavaScriptGenerator(ins);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (co.Languages.HasFlag(CodeType.TypeScript))
-      {
-        var ins = baseInstructions.Clone();
-
-        var svc = new LanguageTypeScriptGenerator(ins);
-
-        lst.Add(svc.FillTemplate());
-      }
+      
+      lst.TrimExcess();
 
       return lst;
     }
 
-    private IList<GeneratedResult> GenerateServices(
-      QueryToClassParameters parameters,
-      ClassInstructions baseInstructions)
+    private static bool IsParent(GenerationElections election)
     {
-      if (parameters.ClassServices == ClassServices.None) return new List<GeneratedResult>(0);
+      var fi = election.GetType().GetField(election.ToString());
 
-      var services = parameters.ClassServices;
-
-      var lst = new List<GeneratedResult>();
-
-      if (services.HasFlag(ClassServices.SerializeCsv))
-      {
-        var svc = new ServiceSerializationCsvGenerator(baseInstructions);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (services.HasFlag(ClassServices.SerializeJson))
-      {
-        var svc = new ServiceSerializationJsonGenerator(baseInstructions);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (services.HasFlag(ClassServices.CloneModelToEntity) ||
-          services.HasFlag(ClassServices.CloneEntityToModel) ||
-          services.HasFlag(ClassServices.CloneInterfaceToEntity) ||
-          services.HasFlag(ClassServices.CloneInterfaceToModel))
-      {
-        var svc = new ServiceCloningGenerator(baseInstructions, services);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      return lst;
-    }
-
-    private IList<GeneratedResult> GenerateRepositories(
-      QueryToClassParameters parameters,
-      ClassInstructions baseInstructions)
-    {
-      if (parameters.ClassRepositories == ClassRepositories.None) return new List<GeneratedResult>(0);
-
-      var repositories = parameters.ClassRepositories;
-
-      var lst = new List<GeneratedResult>();
-
-      if (repositories.HasFlag(ClassRepositories.StaticStatements))
-      {
-        var svc = new RepositoryStaticGenerator(baseInstructions);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      if (repositories.HasFlag(ClassRepositories.Dapper))
-      {
-        var svc = new RepositoryDapperGenerator(baseInstructions);
-
-        lst.Add(svc.FillTemplate());
-      }
-
-      return lst;
+      if (fi == null) return false;
+      
+      return fi.GetCustomAttributes(false).Length == 0;
     }
 
     #region Generate GridView

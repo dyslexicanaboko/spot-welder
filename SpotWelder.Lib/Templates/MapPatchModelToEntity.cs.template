@@ -1,0 +1,5 @@
+﻿public {{ClassName}}V1PatchModel? ToPatchModel({{EntityName}}? entity)
+	=> entity == null ? null : new {{ClassName}}V1PatchModel(entity);
+
+public {{EntityName}} ToEntity({{ClassName}}V1PatchModel model)
+	=> new (model);

@@ -3,7 +3,7 @@
 namespace SpotWelder.Lib.Models
 {
   public class TableQuery
-    : IEquatable<TableQuery>
+      : IEquatable<TableQuery>
   {
     public string LinkedServer { get; set; }
 
@@ -18,7 +18,6 @@ namespace SpotWelder.Lib.Models
     public string TableUnqualified { get; set; }
 
     public override bool Equals(object obj) => Equals(obj as TableQuery);
-
 
     public bool Equals(TableQuery other)
     {
@@ -41,19 +40,19 @@ namespace SpotWelder.Lib.Models
       }
 
       var areEqual =
-        LinkedServer == other.LinkedServer &&
-        Database == other.Database &&
-        Table == other.Table &&
-        TableUnqualified == other.TableUnqualified;
+          LinkedServer == other.LinkedServer &&
+          Database == other.Database &&
+          Table == other.Table &&
+          TableUnqualified == other.TableUnqualified;
 
       return areEqual;
     }
 
-    public override int GetHashCode() => 
-      LinkedServer.GetHashCode() +
-      Database.GetHashCode() +
-      Table.GetHashCode() +
-      TableUnqualified.GetHashCode();
+    public override int GetHashCode() =>
+        LinkedServer.GetHashCode() +
+        Database.GetHashCode() +
+        Table.GetHashCode() +
+        TableUnqualified.GetHashCode();
 
     public static bool operator ==(TableQuery lhs, TableQuery rhs)
     {
@@ -73,5 +72,17 @@ namespace SpotWelder.Lib.Models
     }
 
     public static bool operator !=(TableQuery lhs, TableQuery rhs) => !(lhs == rhs);
+
+    public TableQuery Clone()
+    {
+      return new TableQuery
+      {
+        LinkedServer = LinkedServer,
+        Database = Database,
+        Schema = Schema,
+        Table = Table,
+        TableUnqualified = TableUnqualified
+      };
+    }
   }
 }

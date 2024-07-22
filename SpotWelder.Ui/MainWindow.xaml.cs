@@ -63,7 +63,7 @@ namespace SpotWelder.Ui
 
         private void btnAbout_Click(object sender, RoutedEventArgs e)
         {
-          using var obj = new AboutForm();
+          var obj = new AboutForm();
 
           obj.ShowDialog();
         }

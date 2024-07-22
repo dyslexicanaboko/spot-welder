@@ -1,0 +1,2 @@
+﻿public {{EntityName}}? ToEntity({{InterfaceName}}? target)
+	=> target == null ? null : new {{EntityName}}(target);

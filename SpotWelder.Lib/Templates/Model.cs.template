@@ -1,0 +1,11 @@
+﻿{{Namespaces}}
+
+namespace {{Namespace}}
+{
+	public class {{ClassName}}{{Interface}}
+	{
+		{{Constructors}}
+
+		{{Properties}}
+	}
+}

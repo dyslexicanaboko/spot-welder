@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using SpotWelder.Lib;
+using SpotWelder.Lib.Services.Generators;
 using SpotWelder.Ui.Profile;
 
 namespace SpotWelder.Ui
@@ -88,6 +89,7 @@ namespace SpotWelder.Ui
         .Distinct()
         .ToArray();
 
+      //This is specifically targeting classes with an interface
       services.Scan(scan =>
       {
         scan.FromAssemblies(asm)
@@ -95,6 +97,16 @@ namespace SpotWelder.Ui
             classes.NotInNamespaces(excludeNamespaces))
           // .WithoutAttribute<ExcludeFromDiScanAttribute>())
           .AsMatchingInterface()
+          .WithScopedLifetime();
+      });
+
+      //This is specifically targeting classes that all share the same abstract class
+      services.Scan(scan =>
+      {
+        scan.FromAssemblies(asm)
+          .AddClasses(classes =>
+            classes.AssignableTo<GeneratorBase>())
+          .As<GeneratorBase>()
           .WithScopedLifetime();
       });
     }

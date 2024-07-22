@@ -39,10 +39,10 @@ namespace SpotWelder.Lib.Services
             //Get the meta data needed about the entity
             var instructions = GetInstructions(parameters);
 
-            var generator = new ClassEntitySimpleGenerator(instructions);
+            var generator = new ClassEntitySimpleGenerator();
 
             //Generate the string representation of the class for preview
-            var res = generator.FillTemplate();
+            var res = generator.FillTemplate(instructions);
 
             return res.Contents;
         }
@@ -61,11 +61,11 @@ namespace SpotWelder.Lib.Services
 
             var dt = GetRowData(parameters.SourceSqlType, parameters.SourceSqlText, top);
 
-            var generator = new ClassEntitySimpleGenerator(instructions);
+            var generator = new ClassEntitySimpleGenerator();
             generator.RowProcessed += MockData_RowProcessed;
 
             //Generate the string representation of the class for preview
-            var res = generator.FillMockDataTemplate(dt);
+            var res = generator.FillMockDataTemplate(instructions, dt);
 
             return res;
         }
@@ -76,7 +76,7 @@ namespace SpotWelder.Lib.Services
         {
           //Only get the instructions if they are not already cached and have not changed since the last time
           if (_instructions != null &&
-              _instructions.ClassEntityName == parameters.ClassEntityName &&
+              _instructions.EntityName == parameters.ClassEntityName &&
               _instructions.TableQuery == parameters.TableQuery)
           {
             return _instructions;
@@ -86,7 +86,7 @@ namespace SpotWelder.Lib.Services
 
           var ins = new ClassInstructions();
 
-          ins.ClassEntityName = parameters.ClassEntityName;
+          ins.EntityName = parameters.ClassEntityName;
           ins.TableQuery = parameters.TableQuery;
           ins.Properties = schema.ColumnsAll.Select(x => new ClassMemberStrings(x)).ToList();
 

@@ -1,4 +1,14 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using SpotWelder.Lib;
+using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Models.Meta;
+using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Ui.Helpers;
+using SpotWelder.Ui.Services;
+using SpotWelder.Ui.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -7,14 +17,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Win32;
-using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Models.Meta;
-using SpotWelder.Lib.Services;
-using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Ui.Helpers;
-using SpotWelder.Ui.Services;
-using SpotWelder.Ui.ViewModels;
 
 namespace SpotWelder.Ui
 {
@@ -41,6 +43,8 @@ namespace SpotWelder.Ui
 
     private IMetaViewModelService _viewModelService;
 
+    private readonly Dictionary<GenerationElections, CheckBox> _electionToCheckBoxMap;
+
     public DtoMakerControl()
     {
       InitializeComponent();
@@ -51,6 +55,16 @@ namespace SpotWelder.Ui
       _resultWindowManager = new ResultWindowManager();
 
       ResetInputs();
+      
+      _electionToCheckBoxMap = new Dictionary<GenerationElections, CheckBox>
+      {
+        { GenerationElections.GenerateInterface, CbExtractInterface },
+        { GenerationElections.GenerateEntityIEquatable, CbImplementIEquatableOfTInterface },
+        { GenerationElections.MapEntityToModel, CbMethodEntityToDto },
+        { GenerationElections.MapModelToEntity, CbMethodDtoToEntity },
+        { GenerationElections.GenerateEntityAsJavaScript, CbEquivalentJavaScript },
+        { GenerationElections.GenerateEntityAsTypeScript, CbEquivalentTypeScript }
+      };
     }
 
     public void CloseResultWindows() => _resultWindowManager.CloseAll();
@@ -179,15 +193,13 @@ Please keep in mind casing matters.";
 
       var p = new DtoInstructions
       {
-        MethodEntityToDto = CbMethodEntityToDto.IsChecked(),
-        MethodDtoToEntity = CbMethodDtoToEntity.IsChecked(),
-        ImplementIEquatableOfTInterface = CbImplementIEquatableOfTInterface.IsChecked(),
-        ExtractInterface = CbExtractInterface.IsChecked(),
-        EquivalentJavaScript = CbEquivalentJavaScript.IsChecked(),
-        EquivalentTypeScript = CbEquivalentTypeScript.IsChecked(),
-        ClassName = t.Name
+        SourceClassName = t.Name,
+        Elections = 
+          GenerationElections.GenerateEntity | 
+          GenerationElections.GenerateModel |
+          _electionToCheckBoxMap.GetChosenGenerationElections()
       };
-
+      
       //There should only be one assembly and one class loaded
       var electedProperties =
         _treeViewItemSource.Single() //Only one Assembly

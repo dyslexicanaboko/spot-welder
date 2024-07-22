@@ -1,0 +1,67 @@
+﻿<Window x:Class="SpotWelder.Ui.AboutForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpotWelder.Ui"
+        xmlns:services="clr-namespace:SpotWelder.Ui.Services"
+        xmlns:viewmodels="clr-namespace:SpotWelder.Ui.ViewModels"
+        d:DataContext="{d:DesignInstance Type=services:VersionInfoService}"
+        mc:Ignorable="d"
+        Icon="images/Spot Welder icon.jpg"
+        Title="AboutForm" Height="447" Width="565">
+  <Grid>
+    <ListView ItemsSource="{Binding Properties}" 
+              HorizontalAlignment="Left" 
+              Width="290" 
+              Height="266" 
+              VerticalAlignment="Top">
+      <ListView.View>
+        <GridView>
+          <GridViewColumn Width="80">
+            <GridViewColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Key}" FontWeight="Bold"/>
+              </DataTemplate>
+            </GridViewColumn.CellTemplate>
+          </GridViewColumn>
+          <GridViewColumn Width="200">
+            <GridViewColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Value}" TextWrapping="Wrap" />
+              </DataTemplate>
+            </GridViewColumn.CellTemplate>
+          </GridViewColumn>
+        </GridView>
+      </ListView.View>
+    </ListView>
+    <Image HorizontalAlignment="Left" 
+           Height="256" 
+           Margin="299,10,0,0" 
+           VerticalAlignment="Top" 
+           Width="256"
+           Source="images/Welder using welders wand 256.jpg" />
+    
+    
+    <Button x:Name="BtnGoToRepository"
+            HorizontalAlignment="Left" 
+            Margin="10,280,0,0" 
+            VerticalAlignment="Top"
+            Click="BtnGoToRepository_OnClick"
+            Height="100"
+            Width="100">
+      <Image Source="images/github-mark.png" />
+    </Button>
+    <Label Content="GitHub Repository" HorizontalAlignment="Left" Margin="6,375,0,0" VerticalAlignment="Top"/>
+    <Button x:Name="BtnGoToWebsite"
+            HorizontalAlignment="Left" 
+            Margin="134,280,0,0" 
+            VerticalAlignment="Top"
+            Click="BtnGoToWebsite_OnClick"
+            Height="100"
+            Width="100">
+      <Image Source="images/Sad and confused coffee cup.jpg" />
+    </Button>
+    <Label Content="OPAG" HorizontalAlignment="Left" Margin="164,375,0,0" VerticalAlignment="Top"/>
+  </Grid>
+</Window>

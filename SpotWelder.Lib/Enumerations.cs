@@ -4,9 +4,9 @@ namespace SpotWelder.Lib
 {
   public enum SourceSqlType
   {
-    Query,
+    Query = 0,
 
-    TableName
+    TableName = 1
   }
 
   [Flags]
@@ -14,14 +14,14 @@ namespace SpotWelder.Lib
   {
     None = 0,
 
-    CSharp = 1,
+    CSharp = 1 << 0,
 
     [Obsolete("Looking to get rid of this option and therefore this Enum all together. VB sucks.")]
-    VbNet = 2,
+    VbNet = 1 << 1,
 
-    JavaScript = 4,
+    JavaScript = 1 << 2,
 
-    TypeScript = 8
+    TypeScript = 1 << 3
   }
 
   [Flags]
@@ -29,50 +29,12 @@ namespace SpotWelder.Lib
   {
     None = 0,
 
-    Table = 1,
+    Table = 1 << 0,
 
-    Schema = 2,
+    Schema = 1 << 1,
 
-    Database = 4,
+    Database = 1 << 2,
 
-    LinkedServer = 8
-  }
-
-  [Flags]
-  public enum ClassServices
-  {
-    None = 0,
-
-    CloneEntityToModel = 1,
-
-    CloneModelToEntity = 2,
-
-    CloneInterfaceToEntity = 4,
-
-    CloneInterfaceToModel = 8,
-
-    SerializeCsv = 16,
-
-    SerializeJson = 32,
-
-    RepoStatic = 64,
-
-    RepoDynamic = 128,
-
-    RepoBulkCopy = 512,
-
-    RepoDapper = 1024,
-
-    RepoEfFluentApi = 2048
-  }
-
-  [Flags]
-  public enum ClassRepositories
-  {
-    None = 0,
-
-    StaticStatements = 1,
-
-    Dapper = 2
+    LinkedServer = 1 << 3
   }
 }
