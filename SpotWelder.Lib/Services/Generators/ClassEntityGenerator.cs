@@ -160,23 +160,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       return string.Join(Environment.NewLine + Environment.NewLine, lst);
     }
-
-    private string ConstructorTemplate(
-      string parameterType, 
-      string parameterName, 
-      string constructorBody)
-    {
-      var sb = new StringBuilder(GetTemplate("EntityConstructor.cs.template"));
-
-      //This is setting up a constructor template with tags for replacement
-      sb
-        .Replace("[ParameterType]", parameterType)
-        .Replace("[ParameterName]", parameterName)
-        .Replace("[ConstructorBody]", constructorBody);
-
-      return sb.ToString();
-    }
-
+    
     private string FormatForEquals(IList<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(

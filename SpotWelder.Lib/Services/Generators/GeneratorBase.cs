@@ -4,6 +4,7 @@ using SpotWelder.Lib.Services.Generators.Elections;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SpotWelder.Lib.Services.Generators
@@ -156,6 +157,27 @@ namespace SpotWelder.Lib.Services.Generators
       });
 
       return lst;
+    }
+
+    protected string ConstructorTemplate(
+      string parameterType,
+      string parameterName,
+      string constructorBody)
+    {
+      var sb = new StringBuilder(GetTemplate("ClassConstructor.cs.template"));
+
+      //This is setting up a constructor template with tags for replacement
+      sb
+        .Replace("[ParameterType]", parameterType)
+        .Replace("[ParameterName]", parameterName)
+        .Replace("[ConstructorBody]", constructorBody);
+
+      return sb.ToString();
+    }
+
+    protected string FormatCSharp()
+    {
+
     }
   }
 }

@@ -4,21 +4,8 @@ namespace {{Namespace}}
 {
 	public class {{ClassName}}{{Interface}}
 	{
-		public {{ClassName}}()
-		{
-			
-		}
+		{{Constructors}}
 
-		public {{ClassName}}({{EntityName}} entity)
-		{
-			{{ConstructorFromEntity}}
-		}
-
-		public {{ClassName}}({{InterfaceName}} target)
-		{
-			{{ConstructorFromInterface}}
-		}
-
-{{Properties}}
+		{{Properties}}
 	}
 }
