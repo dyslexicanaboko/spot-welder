@@ -1,14 +1,13 @@
 ﻿using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Lib.Services.Generators.Elections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SpotWelder.Lib.Services
 {
-    public class QueryToClassService
+  public class QueryToClassService
     : ClassMetaDataBase, IQueryToClassService
   {
     private readonly ICodeGenerationFactory _factory;

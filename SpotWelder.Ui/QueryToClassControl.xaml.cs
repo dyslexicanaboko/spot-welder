@@ -61,6 +61,7 @@ namespace SpotWelder.Ui
 
     private void DebugSetTestParameters()
     {
+      #if DEBUG
       ConnectionStringCb.DebugSetTestParameters();
 
       RbSourceTypeTableName.IsChecked = true;
@@ -104,6 +105,7 @@ namespace SpotWelder.Ui
       CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
+      #endif
     }
     
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
