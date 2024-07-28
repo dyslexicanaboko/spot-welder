@@ -6,6 +6,8 @@ using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators;
 using SpotWelder.Tests.DummyObjects;
 
 namespace SpotWelder.Tests.Lib.Services
@@ -28,7 +30,14 @@ namespace SpotWelder.Tests.Lib.Services
             var repoQueryToClass = new Mock<IQueryToClassRepository>();
             var repoGeneral = new Mock<IGeneralDatabaseQueries>();
 
-            var svc = new QueryToClassService(repoQueryToClass.Object, repoGeneral.Object);
+            var svc = new QueryToClassService(
+              repoQueryToClass.Object, 
+              repoGeneral.Object, 
+              new CodeGenerationFactory(new []
+              {
+                new ApiControllerGenerator() 
+
+              }));
 
             //Act
             var actual = svc.Generate(p);
@@ -59,11 +68,11 @@ namespace SpotWelder.Tests.Lib.Services
                 SourceSqlText = sq.TableQuery.Table,
                 LanguageType = CodeType.CSharp,
                 Namespace = "SimpleClassCreator.Tests.DummyObjects",
-                TableQuery = sq.TableQuery
+                TableQuery = sq.TableQuery,
+                EntityName = $"{sq.TableQuery.Table}Entity",
+                Elections = GenerationElections.GenerateEntity,
+                SubjectName = sq.TableQuery.Table
             };
-
-            p.ClassOptions.GenerateEntity = true;
-            p.ClassOptions.EntityName = sq.TableQuery.Table;
 
             var repoQueryToClass = new Mock<IQueryToClassRepository>();
             repoQueryToClass.Setup(x => x.GetSchema(p.TableQuery, It.IsAny<string>())).Returns(sq); //TODO: Fix this later
@@ -71,7 +80,11 @@ namespace SpotWelder.Tests.Lib.Services
             var repoGeneral = new Mock<IGeneralDatabaseQueries>();
 
 
-            var svc = new QueryToClassService(repoQueryToClass.Object, repoGeneral.Object);
+            var svc = new QueryToClassService(repoQueryToClass.Object, repoGeneral.Object, new CodeGenerationFactory(new[]
+            {
+              new ClassEntityGenerator()
+
+            }));
 
             //Act
             var actual = svc.Generate(p).Single().Contents;

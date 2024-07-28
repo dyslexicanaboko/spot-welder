@@ -252,6 +252,6 @@ namespace SpotWelder.Lib.Services.CodeFactory
       ColumnName = trimmedColumnName.Contains(" ") ? "[" + trimmedColumnName + "]" : trimmedColumnName;
     }
 
-    public ClassMemberStrings Clone() => new ClassMemberStrings(this, _provider);
+    public ClassMemberStrings Clone() => new (this, _provider);
   }
 }

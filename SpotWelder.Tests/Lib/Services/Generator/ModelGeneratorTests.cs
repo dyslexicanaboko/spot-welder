@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using SpotWelder.Lib;
-using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.Generators;
 
@@ -15,9 +14,7 @@ namespace SpotWelder.Tests.Lib.Services.Generator
 
         public ModelGeneratorTests()
         {
-            var instructions = new ClassInstructions();
-
-            _generator = new ClassEntityGenerator(instructions);
+            _generator = new ClassEntityGenerator();
         }
 
         [Test]

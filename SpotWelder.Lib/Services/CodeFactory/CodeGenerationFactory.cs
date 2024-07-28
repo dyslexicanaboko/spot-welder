@@ -26,6 +26,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
       //If the user did not make this election, then nothing will be generated.
       if (!instructions.Elections.HasFlag(electionToTest)) return null;
       
+      //TODO: Protect against not having a filled dictionary. Raise a proper exception.
       return _generators[electionToTest].FillTemplate(instructions.Clone());
     }
   }

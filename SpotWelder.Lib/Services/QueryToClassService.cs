@@ -61,6 +61,8 @@ namespace SpotWelder.Lib.Services
     /// <returns>Instructions</returns>
     private ClassInstructions GetBaseInstructions(QueryToClassParameters p)
     {
+      //TODO: Incoming parameters require validation.
+
       var schema = GetSchema(p.SourceSqlType, p.SourceSqlText, p.TableQuery);
 
       var ins = new ClassInstructions
