@@ -114,7 +114,7 @@ namespace SpotWelder.Lib.Services
       return strTableQuery;
     }
 
-    private void Qualify(IList<string> segments, TableQueryQualifiers qualifier, string segment)
+    private static void Qualify(ICollection<string> segments, TableQueryQualifiers qualifier, string segment)
     {
       if (string.IsNullOrWhiteSpace(segment)) throw new ArgumentException($"{qualifier} cannot be null or whitespace.");
 
