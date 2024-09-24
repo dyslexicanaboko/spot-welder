@@ -25,7 +25,7 @@ namespace SpotWelder.Lib.Services
     {
       if (!parameters.HasElections) return null;
 
-      _queryToClassRepository.ChangeConnectionString(parameters.ConnectionString);
+      _queryToClassRepository.ChangeConnectionString(parameters.ServerConnection.ConnectionString);
 
       var baseInstructions = GetBaseInstructions(parameters);
 
@@ -63,7 +63,7 @@ namespace SpotWelder.Lib.Services
     {
       //TODO: Incoming parameters require validation.
 
-      var schema = GetSchema(p.SourceSqlType, p.SourceSqlText, p.TableQuery);
+      var schema = GetSchema(p.ServerConnection);
 
       var ins = new ClassInstructions
       {
@@ -74,7 +74,7 @@ namespace SpotWelder.Lib.Services
         ApiRoute = p.SubjectName.ToLower(), //TODO: Use a humanizer that makes this plural and camel case https://github.com/Humanizr/Humanizer
         IsAsynchronous = p.Elections.HasFlag(GenerationElections.MakeAsynchronous),
         InterfaceName = $"I{p.SubjectName}",
-        TableQuery = p.TableQuery,
+        TableQuery = p.ServerConnection.TableQuery,
         Elections = p.Elections,
       };
 

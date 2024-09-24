@@ -37,4 +37,11 @@ namespace SpotWelder.Lib
 
     LinkedServer = 1 << 3
   }
+
+  public enum SqlEngine
+  {
+    SqlServer = 0,
+
+    PostgreSql = 1
+  }
 }

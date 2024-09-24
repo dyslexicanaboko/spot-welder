@@ -3,9 +3,9 @@
   public class QueryToClassParameters
   {
     /// <summary>
-    ///   Connection string to use for executing the provided SQL
+    ///  SQL Engine, with connection string and source SQL text to execute.
     /// </summary>
-    public string ConnectionString { get; set; }
+    public ServerConnection ServerConnection { get; set; } = new();
 
     /// <summary>
     ///   This may be phased out, offers the option of C# versus VB.Net but this may not matter anymore because this project is
@@ -14,22 +14,7 @@
     ///   template for it.
     /// </summary>
     public CodeType LanguageType { get; set; }
-
-    /// <summary>
-    ///   Determines if the Source SQL Text contains just a table name or a full SQL Query
-    /// </summary>
-    public SourceSqlType SourceSqlType { get; set; }
-
-    /// <summary>
-    ///   Can be just the name of a table or a full SQL query
-    /// </summary>
-    public string SourceSqlText { get; set; }
-
-    /// <summary>
-    ///   Structured object that formats the incoming Source SQL Text
-    /// </summary>
-    public TableQuery TableQuery { get; set; } = new();
-
+    
     /// <summary>
     ///   File name only
     /// </summary>
