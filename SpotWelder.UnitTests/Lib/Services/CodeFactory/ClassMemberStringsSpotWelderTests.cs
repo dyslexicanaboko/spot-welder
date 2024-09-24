@@ -2,12 +2,13 @@
 using System;
 using SpotWelder.Lib;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.UnitTests;
 
 namespace SpotWelder.Tests.Lib.Services.CodeFactory
 {
     [TestFixture]
-    public class ClassMemberStringsTests
-        : TestBase
+    public class ClassMemberStringsSpotWelderTests
+        : SpotWelderTestBase
     {
         [TestCase(typeof(DateTime), ExpectedResult = "DateTime")]
         [TestCase(typeof(DateTimeOffset), ExpectedResult = "DateTimeOffset")]

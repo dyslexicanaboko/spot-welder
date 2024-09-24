@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotWelder.UnitTests", "Spo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotWelder.IntegrationTests", "SpotWelder.IntegrationTests\SpotWelder.IntegrationTests.csproj", "{21F04FB5-93DB-4E70-890E-8BEA9EC9CBB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotWelder.Tests.Common", "SpotWelder.Tests.Common\SpotWelder.Tests.Common.csproj", "{04C1BC07-C30B-4F71-AB47-7F9C181F9B16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{21F04FB5-93DB-4E70-890E-8BEA9EC9CBB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21F04FB5-93DB-4E70-890E-8BEA9EC9CBB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21F04FB5-93DB-4E70-890E-8BEA9EC9CBB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04C1BC07-C30B-4F71-AB47-7F9C181F9B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04C1BC07-C30B-4F71-AB47-7F9C181F9B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04C1BC07-C30B-4F71-AB47-7F9C181F9B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04C1BC07-C30B-4F71-AB47-7F9C181F9B16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{42F0B80F-7206-4B51-BD19-FA392D051DA6} = {023C2E4B-DBCB-45B3-8D02-D73EA266622C}
 		{AD2E8AB4-41C4-403D-9163-7F434EEBAAFB} = {023C2E4B-DBCB-45B3-8D02-D73EA266622C}
 		{21F04FB5-93DB-4E70-890E-8BEA9EC9CBB1} = {023C2E4B-DBCB-45B3-8D02-D73EA266622C}
+		{04C1BC07-C30B-4F71-AB47-7F9C181F9B16} = {023C2E4B-DBCB-45B3-8D02-D73EA266622C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6FCCB39A-43B1-4F5F-9739-53BC3FC763C5}

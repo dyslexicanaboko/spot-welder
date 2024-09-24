@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using SpotWelder.Lib;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.Generators;
+using SpotWelder.UnitTests;
 
 namespace SpotWelder.Tests.Lib.Services.Generator
 {
     [TestFixture]
-    public class ModelGeneratorTests
-        : TestBase
+    public class ModelGeneratorSpotWelderTests
+        : SpotWelderTestBase
     {
         private readonly ClassEntityGenerator _generator;
 
-        public ModelGeneratorTests()
+        public ModelGeneratorSpotWelderTests()
         {
             _generator = new ClassEntityGenerator();
         }

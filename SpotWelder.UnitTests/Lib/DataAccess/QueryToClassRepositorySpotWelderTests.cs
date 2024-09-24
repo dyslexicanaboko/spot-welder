@@ -1,12 +1,13 @@
 ﻿using NUnit.Framework;
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
+using SpotWelder.UnitTests;
 
 namespace SpotWelder.Tests.Lib.DataAccess
 {
     [TestFixture]
-    public class QueryToClassRepositoryTests
-        : TestBase
+    public class QueryToClassRepositorySpotWelderTests
+        : SpotWelderTestBase
     {
         [Test]
         public void BadTest()
