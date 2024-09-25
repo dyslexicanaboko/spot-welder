@@ -6,7 +6,7 @@ using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.Generators;
-using SpotWelder.Tests.DummyObjects;
+using SpotWelder.Tests.Common.DummyObjects;
 using SpotWelder.UnitTests;
 using System.IO;
 using System.Linq;
