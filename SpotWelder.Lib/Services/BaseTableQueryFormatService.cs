@@ -5,22 +5,22 @@ using System.Text.RegularExpressions;
 
 namespace SpotWelder.Lib.Services
 {
-  public class NameFormatService
-    : INameFormatService
+  public abstract class BaseTableQueryFormatService
   {
-    private const string DefaultSchema = "dbo";
+    protected abstract string DefaultSchema { get; }
 
-    private readonly Regex _whiteSpace = new (@"\s+");
+    protected readonly Regex _whiteSpace = new(@"\s+");
 
-    public TableQuery ParseTableName(string tableNameQuery)
+    public virtual string GetClassName(TableQuery tableQuery)
+      =>_whiteSpace.Replace(tableQuery.TableUnqualified, string.Empty);
+
+    protected abstract string RemoveQualifiers(string tableNameQuery);
+
+    protected abstract void Qualify(ICollection<string> segments, TableQueryQualifiers qualifier, string segment);
+    
+    public virtual TableQuery ParseTableName(string tableNameQuery)
     {
-      //Regex.Replace(tableNameQuery, @"\s+", string.Empty)
-
-      //Remove all square brackets so they can just be reapplied again later
-      //Skip the guess work on which segment does or does not have them
-      var q = tableNameQuery
-        .Replace("[", string.Empty)
-        .Replace("]", string.Empty);
+      var q = RemoveQualifiers(tableNameQuery);
 
       var arr = q.Split('.');
 
@@ -66,25 +66,7 @@ namespace SpotWelder.Lib.Services
       return tbl;
     }
 
-    public string GetClassName(TableQuery tableQuery)
-    {
-      var c = _whiteSpace.Replace(tableQuery.TableUnqualified, string.Empty);
-
-      return c;
-    }
-
-    public string FormatTableQuery(
-      string tableQuery,
-      TableQueryQualifiers qualifiers = TableQueryQualifiers.Schema | TableQueryQualifiers.Table)
-    {
-      var tq = ParseTableName(tableQuery);
-
-      var str = FormatTableQuery(tq, qualifiers);
-
-      return str;
-    }
-
-    public string FormatTableQuery(
+    public virtual string FormatTableQuery(
       TableQuery tableQuery,
       TableQueryQualifiers qualifiers = TableQueryQualifiers.Schema | TableQueryQualifiers.Table)
     {
@@ -114,13 +96,15 @@ namespace SpotWelder.Lib.Services
       return strTableQuery;
     }
 
-    private static void Qualify(ICollection<string> segments, TableQueryQualifiers qualifier, string segment)
+    public virtual string FormatTableQuery(
+      string tableQuery,
+      TableQueryQualifiers qualifiers = TableQueryQualifiers.Schema | TableQueryQualifiers.Table)
     {
-      if (string.IsNullOrWhiteSpace(segment)) throw new ArgumentException($"{qualifier} cannot be null or whitespace.");
+      var tq = ParseTableName(tableQuery);
 
-      var qualified = $"[{segment}]";
+      var str = FormatTableQuery(tq, qualifiers);
 
-      segments.Add(qualified);
+      return str;
     }
   }
 }

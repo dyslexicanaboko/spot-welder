@@ -15,7 +15,14 @@ public class PostgresTests
   [Test]
   public void HappyPathTest()
   {
+    var svcNameFormat = new SqlServerTableQueryFormatService();
+
     var p = GetParameters();
+    p.ServerConnection.SqlEngine = SqlEngine.PostgreSql;
+    p.ServerConnection.ConnectionString = "Host=localhost;Username=postgres;Password=postgres;Database=millions_of_things";
+    p.ServerConnection.SourceSqlType = SourceSqlType.TableName;
+    p.ServerConnection.SourceSqlText = "public.category";
+    p.ServerConnection.TableQuery = svcNameFormat.ParseTableName(p.ServerConnection.SourceSqlText);
 
     var svc = new QueryToClassService(
       new QueryToClassRepository(),
@@ -23,22 +30,20 @@ public class PostgresTests
       new CodeGenerationFactory(new[] { new ApiControllerGenerator() }));
 
     //Bad test - does it blow up?
-    svc.Generate(p);
+    var lst = svc.Generate(p);
 
-    Assert.Pass();
+    Assert.That(lst, Is.Not.Null);
+    Assert.That(lst.Count, Is.GreaterThan(0));
   }
 
-  private QueryToClassParameters GetParameters()
+  private static QueryToClassParameters GetParameters()
   {
-    var svcNameFormat = new NameFormatService();
 
     var obj = new QueryToClassParameters();
 
     obj.LanguageType = CodeType.CSharp;
     obj.OverwriteExistingFiles = true;
     obj.Namespace = "NoOneCares";
-    obj.ServerConnection.SqlEngine = SqlEngine.SqlServer;
-    obj.ServerConnection.TableQuery = svcNameFormat.ParseTableName("public.category");
     obj.SubjectName = "Category";
     obj.EntityName = "CategoryEntity";
     obj.ModelName = "CategoryModel";

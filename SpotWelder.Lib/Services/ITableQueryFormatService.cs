@@ -2,7 +2,7 @@
 
 namespace SpotWelder.Lib.Services
 {
-  public interface INameFormatService
+  public interface ITableQueryFormatService
   {
     TableQuery ParseTableName(string tableNameQuery);
 

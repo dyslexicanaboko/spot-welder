@@ -19,7 +19,7 @@ namespace SpotWelder.Ui
     {
         private readonly List<IUsesResultWindow> _hasResultWindows;
 
-        public MainWindow(INameFormatService classService,
+        public MainWindow(ITableQueryFormatService classService,
             IQueryToClassService queryToClassService,
             IQueryToMockDataService queryToMockDataService,
             IGeneralDatabaseQueries repository,

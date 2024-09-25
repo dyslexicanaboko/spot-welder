@@ -22,7 +22,7 @@ namespace SpotWelder.Ui
     /// </summary>
     public partial class QueryToMockDataControl : UserControl, IUsesResultWindow
     {
-        private INameFormatService _svcNameFormat;
+        private ITableQueryFormatService _svcTableQueryFormat;
         private IQueryToMockDataService _svcQueryToMockData;
         private IGeneralDatabaseQueries _repoGeneral;
         private readonly ResultWindowManager _resultWindowManager;
@@ -39,12 +39,12 @@ namespace SpotWelder.Ui
         }
 
         public void Dependencies(
-            INameFormatService nameFormatService, 
+            ITableQueryFormatService tableQueryFormatService, 
             IQueryToMockDataService queryToMockDataService,
             IGeneralDatabaseQueries repository,
             IProfileManager profileManager)
         {
-            _svcNameFormat = nameFormatService;
+            _svcTableQueryFormat = tableQueryFormatService;
             _repoGeneral = repository;
 
             _svcQueryToMockData = queryToMockDataService;
@@ -95,7 +95,7 @@ namespace SpotWelder.Ui
             if (string.IsNullOrWhiteSpace(strName))
                 return;
 
-            target.Text = _svcNameFormat.FormatTableQuery(strName);
+            target.Text = _svcTableQueryFormat.FormatTableQuery(strName);
         }
 
         private QueryToMockDataParameters GetParameters()
@@ -110,7 +110,7 @@ namespace SpotWelder.Ui
 
             obj.ClassEntityName = TxtClassEntityName.Text;
 
-            obj.TableQuery = _svcNameFormat.ParseTableName(TxtSourceSqlText.Text);
+            obj.TableQuery = _svcTableQueryFormat.ParseTableName(TxtSourceSqlText.Text);
 
             return obj;
         }
@@ -149,9 +149,9 @@ namespace SpotWelder.Ui
             {
                 if (RbSourceTypeTableName.IsChecked == true)
                 {
-                    var tbl = _svcNameFormat.ParseTableName(TxtSourceSqlText.Text);
+                    var tbl = _svcTableQueryFormat.ParseTableName(TxtSourceSqlText.Text);
 
-                    strName = _svcNameFormat.GetClassName(tbl);
+                    strName = _svcTableQueryFormat.GetClassName(tbl);
                 }
                 else
                 {

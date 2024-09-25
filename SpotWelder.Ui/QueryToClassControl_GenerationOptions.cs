@@ -27,7 +27,7 @@ namespace SpotWelder.Ui
         return null;
 
       obj.ServerConnection.SqlEngine = SqlEngine.SqlServer;
-      obj.ServerConnection.TableQuery = _svcNameFormat.ParseTableName(TxtSourceSqlText.Text);
+      obj.ServerConnection.TableQuery = _svcTableQueryFormat.ParseTableName(TxtSourceSqlText.Text);
       obj.SubjectName = TxtEntityName.Text;
       obj.EntityName = TxtClassEntityName.Text;
       obj.ModelName = TxtClassModelName.Text;

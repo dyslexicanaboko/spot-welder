@@ -27,7 +27,7 @@ namespace SpotWelder.Ui
 
     private IGeneralDatabaseQueries _generalRepo;
 
-    private INameFormatService _svcNameFormat;
+    private ITableQueryFormatService _svcTableQueryFormat;
 
     private IQueryToClassService _svcQueryToClass;
 
@@ -113,12 +113,12 @@ namespace SpotWelder.Ui
     public void CloseResultWindows() => _parentResultsWindow.Shutdown();
 
     public void Dependencies(
-      INameFormatService nameFormatService,
+      ITableQueryFormatService tableQueryFormatService,
       IQueryToClassService queryToClassService,
       IGeneralDatabaseQueries repository,
       IProfileManager profileManager)
     {
-      _svcNameFormat = nameFormatService;
+      _svcTableQueryFormat = tableQueryFormatService;
       _svcQueryToClass = queryToClassService;
       _generalRepo = repository;
 
@@ -151,7 +151,7 @@ namespace SpotWelder.Ui
       if (string.IsNullOrWhiteSpace(strName))
         return;
 
-      target.Text = _svcNameFormat.FormatTableQuery(strName);
+      target.Text = _svcTableQueryFormat.FormatTableQuery(strName);
     }
 
     private void BtnClassEntityNameDefault_Click(object sender, RoutedEventArgs e)
@@ -183,9 +183,9 @@ namespace SpotWelder.Ui
 
     private string GetDefaultEntityName()
     {
-      var tbl = _svcNameFormat.ParseTableName(TxtSourceSqlText.Text);
+      var tbl = _svcTableQueryFormat.ParseTableName(TxtSourceSqlText.Text);
 
-      var entity = _svcNameFormat.GetClassName(tbl);
+      var entity = _svcTableQueryFormat.GetClassName(tbl);
 
       return entity;
     }
