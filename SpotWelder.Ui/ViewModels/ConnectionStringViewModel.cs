@@ -3,6 +3,7 @@
 namespace SpotWelder.Ui.ViewModels
 {
   public class ConnectionStringViewModel
+    : ObservableObject
   {
     public SqlEngine SqlEngine { get; set; } = SqlEngine.SqlServer;
 
@@ -19,5 +20,7 @@ namespace SpotWelder.Ui.ViewModels
     public bool IsEncrypted { get; set; }
 
     public string ConnectionString { get; set; } = string.Empty;
+
+    public SqlEngineViewModel[] SqlEngines { get; set; } = { };
   }
 }

@@ -1,19 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using SpotWelder.Lib;
+﻿using SpotWelder.Lib;
 using SpotWelder.Ui.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SpotWelder.Ui
 {
@@ -29,7 +19,9 @@ namespace SpotWelder.Ui
     {
       InitializeComponent();
 
-      //SqlEngines = Enum.GetValues<SqlEngine>();
+      _viewModel.SqlEngines = Enum.GetValues<SqlEngine>()
+          .Select(x => new SqlEngineViewModel(x))
+          .ToArray();
 
       DataContext = _viewModel;
     }
@@ -38,7 +30,9 @@ namespace SpotWelder.Ui
 
     private void CbSqlEngine_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      if(_viewModel.SqlEngine == SqlEngine.SqlServer)
+      _viewModel.SqlEngine = ((SqlEngineViewModel)CbSqlEngine.SelectedItem).Value;
+
+      if (_viewModel.SqlEngine == SqlEngine.SqlServer)
       {
         LblIsEncrypted.Visibility = Visibility.Visible;
         LblIntegratedSecurity.Visibility = Visibility.Visible;
@@ -75,10 +69,15 @@ namespace SpotWelder.Ui
         var sbS = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder();
         sbS.DataSource = viewModel.ServerName;
         sbS.InitialCatalog = viewModel.DatabaseName;
+        sbS.Encrypt = viewModel.IsEncrypted;
+        sbS.IntegratedSecurity = viewModel.IsIntegratedSecurity;
+        
+        if(viewModel.IsIntegratedSecurity)
+          return sbS.ToString();
+
+        //Only set the username and password if integrated security is false
         sbS.UserID = viewModel.Username;
         sbS.Password = viewModel.Password;
-        sbS.IntegratedSecurity = viewModel.IsIntegratedSecurity;
-        sbS.Encrypt = viewModel.IsEncrypted;
 
         return sbS.ToString();
       }
@@ -90,6 +89,11 @@ namespace SpotWelder.Ui
       sbP.Password = viewModel.Password;
 
       return sbP.ToString();
+    }
+
+    private void BtnSave_OnClick_OnClick(object sender, RoutedEventArgs e)
+    {
+      if (true) ;
     }
   }
 }

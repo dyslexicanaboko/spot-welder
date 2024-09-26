@@ -8,7 +8,7 @@
         d:DataContext="{d:DesignInstance Type=viewModels:ConnectionStringViewModel}"
         xmlns:lib="clr-namespace:SpotWelder.Lib;assembly=SpotWelder.Lib"
         mc:Ignorable="d"
-        Title="Connection String Builder" Height="260" Width="338">
+        Title="Connection String Builder" Height="278" Width="346">
   <Window.Resources>
     <!--<viewModels:ConnectionStringViewModel x:Key="ConnectionStringViewModel"/>-->
   </Window.Resources>
@@ -31,45 +31,47 @@
 
     <TextBlock Text="Sql Engine:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <ComboBox x:Name="CbSqlEngine" Grid.Row="0" Grid.Column="1" Width="200" Margin="0,0,0,10" 
-              ItemsSource="{Binding 
-              Source={x:Static lib:SqlEngine.SqlServer}}"
+              ItemsSource="{Binding SqlEngines}"
+              DisplayMemberPath="Text"
+              SelectedValuePath="Value"
               SelectionChanged="CbSqlEngine_OnSelectionChanged" />
 
     <TextBlock Text="Server Name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <TextBox x:Name="TxtServerName" Grid.Row="1" Grid.Column="1" Width="200" Margin="0,0,0,10"
-             Text="{Binding ServerName}"
+             Text="{Binding ServerName, Mode=TwoWay}"
              TextChanged="TxtField_OnTextChanged" />
 
     <TextBlock Text="Database Name:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <TextBox x:Name="TxtDatabaseName" Grid.Row="2" Grid.Column="1" Width="200" Margin="0,0,0,10"
-             Text="{Binding ServerName}"
+             Text="{Binding DatabaseName, Mode=TwoWay}"
              TextChanged="TxtField_OnTextChanged" />
 
     <TextBlock Text="Username:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <TextBox x:Name="TxtUsername" Grid.Row="3" Grid.Column="1" Width="200" Margin="0,0,0,10"
-             Text="{Binding Username}" />
+             Text="{Binding Username, Mode=TwoWay}" />
 
     <TextBlock Text="Password:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <TextBox x:Name="TextPassword" Grid.Row="4" Grid.Column="1" Width="200" Margin="0,0,0,10"
-                  Text="{Binding Password}"
+                  Text="{Binding Password, Mode=TwoWay}"
                   TextChanged="TxtField_OnTextChanged"/>
 
     <TextBlock x:Name="LblIntegratedSecurity" Text="Integrated Security:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <CheckBox x:Name="CbIntegratedSecurity" Grid.Row="5" Grid.Column="1" 
-              IsChecked="{Binding IsIntegratedSecurity}"
+              IsChecked="{Binding IsIntegratedSecurity, Mode=TwoWay}"
               Checked="CheckBox_OnToggle"
               Unchecked="CheckBox_OnToggle" />
 
     <TextBlock x:Name="LblIsEncrypted" Text="Is Encrypted:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <CheckBox x:Name="CbIsEncrypted" Grid.Row="6" Grid.Column="1" 
-              IsChecked="{Binding IsEncrypted}"
+              IsChecked="{Binding IsEncrypted, Mode=TwoWay}"
               Checked="CheckBox_OnToggle"
               Unchecked="CheckBox_OnToggle" />
 
     <TextBlock Text="Preview:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
     <TextBlock x:Name="TxtPreview" Text="{Binding ConnectionString}" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,3,0" />
 
-    <Button Grid.Column="0" Grid.Row="8" Content="Delete" Width="71" HorizontalAlignment="Left" Margin="10,10,0,77"/>
-    <Button Grid.Row="8" Grid.Column="1" Content="Save" Width="62" HorizontalAlignment="Left" Margin="10,10,0,77"/>
+    <Button x:Name="BtnDelete" Grid.Column="0" Grid.Row="8" Content="Delete" Width="71" HorizontalAlignment="Left" Margin="10,10,0,77"/>
+    <Button x:Name="BtnSave" Grid.Row="8" Grid.Column="1" Content="Save" Width="62" HorizontalAlignment="Left" Margin="10,10,0,77"
+            Click="BtnSave_OnClick_OnClick"/>
   </Grid>
 </Window>
