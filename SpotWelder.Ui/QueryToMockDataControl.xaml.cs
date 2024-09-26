@@ -4,6 +4,7 @@ using SpotWelder.Lib.Events;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.TableQueryFormats;
 using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Profile;
 using System;
@@ -28,7 +29,7 @@ namespace SpotWelder.Ui
 
     private IQueryToMockDataService _svcQueryToMockData;
 
-    private ITableQueryFormatService _svcTableQueryFormat;
+    private ITableQueryFormatFactory _tableQueryFormatFactory;
 
     // Empty constructor Required by WPF
     public QueryToMockDataControl()
@@ -44,12 +45,12 @@ namespace SpotWelder.Ui
     public void CloseResultWindows() => _resultWindowManager.CloseAll();
 
     public void Dependencies(
-      ITableQueryFormatService tableQueryFormatService,
+      ITableQueryFormatFactory tableQueryFormatFactory,
       IQueryToMockDataService queryToMockDataService,
       IGeneralDatabaseQueries repository,
       IProfileManager profileManager)
     {
-      _svcTableQueryFormat = tableQueryFormatService;
+      _tableQueryFormatFactory = tableQueryFormatFactory;
       _repoGeneral = repository;
 
       _svcQueryToMockData = queryToMockDataService;
@@ -94,6 +95,9 @@ namespace SpotWelder.Ui
       }
     }
 
+    private ITableQueryFormatStrategy GetTableQueryFormatStrategy()
+      => _tableQueryFormatFactory.GetStrategy(ConnectionStringCb.CurrentConnection.SqlEngine);
+
     private void FormatTableName(TextBox target)
     {
       var strName = target.Text;
@@ -101,7 +105,7 @@ namespace SpotWelder.Ui
       if (string.IsNullOrWhiteSpace(strName))
         return;
 
-      target.Text = _svcTableQueryFormat.FormatTableQuery(strName);
+      target.Text = GetTableQueryFormatStrategy().FormatTableQuery(strName);
     }
 
     private QueryToMockDataParameters? GetParameters()
@@ -116,7 +120,7 @@ namespace SpotWelder.Ui
 
       obj.ClassEntityName = TxtClassEntityName.Text;
 
-      obj.ServerConnection.TableQuery = _svcTableQueryFormat.ParseTableName(TxtSourceSqlText.Text);
+      obj.ServerConnection.TableQuery = GetTableQueryFormatStrategy().ParseTableName(TxtSourceSqlText.Text);
 
       return obj;
     }
@@ -155,9 +159,11 @@ namespace SpotWelder.Ui
       {
         if (RbSourceTypeTableName.IsChecked == true)
         {
-          var tbl = _svcTableQueryFormat.ParseTableName(TxtSourceSqlText.Text);
+          var strategy = GetTableQueryFormatStrategy();
 
-          strName = _svcTableQueryFormat.GetClassName(tbl);
+          var tbl = strategy.ParseTableName(TxtSourceSqlText.Text);
+
+          strName = strategy.GetClassName(tbl);
         }
         else
         {

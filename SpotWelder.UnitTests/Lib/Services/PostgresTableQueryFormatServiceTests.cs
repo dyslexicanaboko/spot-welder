@@ -1,19 +1,20 @@
 ﻿using NUnit.Framework;
 using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.TableQueryFormats;
 using System;
 
 namespace SpotWelder.Tests.Lib.Services
 {
-  [TestFixture]
+    [TestFixture]
   public class PostgresTableQueryFormatServiceTests
   {
     [SetUp]
     public void Setup()
     {
-      _service = new PostgresTableQueryFormatService();
+      _service = new PostgresTableQueryFormatStrategy();
     }
 
-    private ITableQueryFormatService _service;
+    private ITableQueryFormatStrategy _service;
 
     [TestCase("a", "public.a")]
     [TestCase("a.b", "a.b")]

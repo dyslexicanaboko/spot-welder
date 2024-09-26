@@ -2,6 +2,7 @@
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.TableQueryFormats;
 using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Profile;
 using System;
@@ -14,10 +15,10 @@ using System.Windows.Input;
 
 namespace SpotWelder.Ui
 {
-  /// <summary>
-  ///   Interaction logic for QueryToClassControl.xaml
-  /// </summary>
-  public partial class QueryToClassControl : UserControl, IUsesResultWindow
+    /// <summary>
+    ///   Interaction logic for QueryToClassControl.xaml
+    /// </summary>
+    public partial class QueryToClassControl : UserControl, IUsesResultWindow
   {
     private readonly CheckBoxGroup _classCheckBoxGroup;
 
@@ -27,7 +28,7 @@ namespace SpotWelder.Ui
 
     private IGeneralDatabaseQueries _generalRepo;
 
-    private ITableQueryFormatService _svcTableQueryFormat;
+    private ITableQueryFormatFactory _tableQueryFormatFactory;
 
     private IQueryToClassService _svcQueryToClass;
 
@@ -108,17 +109,20 @@ namespace SpotWelder.Ui
       #endif
     }
     
+    private ITableQueryFormatStrategy GetTableQueryFormatStrategy()
+      => _tableQueryFormatFactory.GetStrategy(ConnectionStringCb.CurrentConnection.SqlEngine);
+
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
 
     public void CloseResultWindows() => _parentResultsWindow.Shutdown();
 
     public void Dependencies(
-      ITableQueryFormatService tableQueryFormatService,
+      ITableQueryFormatFactory tableQueryFormatFactory,
       IQueryToClassService queryToClassService,
       IGeneralDatabaseQueries repository,
       IProfileManager profileManager)
     {
-      _svcTableQueryFormat = tableQueryFormatService;
+      _tableQueryFormatFactory = tableQueryFormatFactory;
       _svcQueryToClass = queryToClassService;
       _generalRepo = repository;
 
@@ -151,7 +155,7 @@ namespace SpotWelder.Ui
       if (string.IsNullOrWhiteSpace(strName))
         return;
 
-      target.Text = _svcTableQueryFormat.FormatTableQuery(strName);
+      target.Text = GetTableQueryFormatStrategy().FormatTableQuery(strName);
     }
 
     private void BtnClassEntityNameDefault_Click(object sender, RoutedEventArgs e)
@@ -183,9 +187,11 @@ namespace SpotWelder.Ui
 
     private string GetDefaultEntityName()
     {
-      var tbl = _svcTableQueryFormat.ParseTableName(TxtSourceSqlText.Text);
+      var strategy = GetTableQueryFormatStrategy();
 
-      var entity = _svcTableQueryFormat.GetClassName(tbl);
+      var tbl = strategy.ParseTableName(TxtSourceSqlText.Text);
+
+      var entity = strategy.GetClassName(tbl);
 
       return entity;
     }

@@ -4,10 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpotWelder.Ui"
+        xmlns:viewModels="clr-namespace:SpotWelder.Ui.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewModels:ConnectionStringViewModel}"
+        xmlns:lib="clr-namespace:SpotWelder.Lib;assembly=SpotWelder.Lib"
         mc:Ignorable="d"
-        Title="Connection String Builder" Height="244" Width="338">
+        Title="Connection String Builder" Height="260" Width="338">
+  <Window.Resources>
+    <!--<viewModels:ConnectionStringViewModel x:Key="ConnectionStringViewModel"/>-->
+  </Window.Resources>
   <Grid Margin="10">
     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
@@ -23,30 +30,46 @@
     </Grid.ColumnDefinitions>
 
     <TextBlock Text="Sql Engine:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-    <ComboBox x:Name="CbDatabaseType" Grid.Row="0" Grid.Column="1" Width="200" Margin="0,0,0,10">
-      <ComboBoxItem Content="SQL Server"/>
-      <ComboBoxItem Content="Postgres"/>
-    </ComboBox>
+    <ComboBox x:Name="CbSqlEngine" Grid.Row="0" Grid.Column="1" Width="200" Margin="0,0,0,10" 
+              ItemsSource="{Binding 
+              Source={x:Static lib:SqlEngine.SqlServer}}"
+              SelectionChanged="CbSqlEngine_OnSelectionChanged" />
 
     <TextBlock Text="Server Name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-    <TextBox x:Name="TbServerName" Grid.Row="1" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+    <TextBox x:Name="TxtServerName" Grid.Row="1" Grid.Column="1" Width="200" Margin="0,0,0,10"
+             Text="{Binding ServerName}"
+             TextChanged="TxtField_OnTextChanged" />
 
     <TextBlock Text="Database Name:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-    <TextBox x:Name="TbDatabaseName" Grid.Row="2" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+    <TextBox x:Name="TxtDatabaseName" Grid.Row="2" Grid.Column="1" Width="200" Margin="0,0,0,10"
+             Text="{Binding ServerName}"
+             TextChanged="TxtField_OnTextChanged" />
 
     <TextBlock Text="Username:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-    <TextBox x:Name="TbUsername" Grid.Row="3" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+    <TextBox x:Name="TxtUsername" Grid.Row="3" Grid.Column="1" Width="200" Margin="0,0,0,10"
+             Text="{Binding Username}" />
 
     <TextBlock Text="Password:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-    <PasswordBox x:Name="PbPassword" Grid.Row="4" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+    <TextBox x:Name="TextPassword" Grid.Row="4" Grid.Column="1" Width="200" Margin="0,0,0,10"
+                  Text="{Binding Password}"
+                  TextChanged="TxtField_OnTextChanged"/>
 
-    <TextBlock Text="Integrated Security:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-    <CheckBox x:Name="CbIntegratedSecurity" Grid.Row="5" Grid.Column="1"  />
+    <TextBlock x:Name="LblIntegratedSecurity" Text="Integrated Security:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <CheckBox x:Name="CbIntegratedSecurity" Grid.Row="5" Grid.Column="1" 
+              IsChecked="{Binding IsIntegratedSecurity}"
+              Checked="CheckBox_OnToggle"
+              Unchecked="CheckBox_OnToggle" />
 
-    <TextBlock Text="Is Encrypted:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
-    <CheckBox x:Name="CbIsEncrypted" Grid.Row="6" Grid.Column="1"  />
+    <TextBlock x:Name="LblIsEncrypted" Text="Is Encrypted:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <CheckBox x:Name="CbIsEncrypted" Grid.Row="6" Grid.Column="1" 
+              IsChecked="{Binding IsEncrypted}"
+              Checked="CheckBox_OnToggle"
+              Unchecked="CheckBox_OnToggle" />
 
-    <Button Grid.Column="0" Grid.Row="7" Content="Delete" Width="71" HorizontalAlignment="Left" Margin="10,10,0,77"/>
-    <Button Grid.Row="7" Grid.Column="1" Content="Save" Width="62" HorizontalAlignment="Left" Margin="10,10,0,77"/>
+    <TextBlock Text="Preview:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <TextBlock x:Name="TxtPreview" Text="{Binding ConnectionString}" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,3,0" />
+
+    <Button Grid.Column="0" Grid.Row="8" Content="Delete" Width="71" HorizontalAlignment="Left" Margin="10,10,0,77"/>
+    <Button Grid.Row="8" Grid.Column="1" Content="Save" Width="62" HorizontalAlignment="Left" Margin="10,10,0,77"/>
   </Grid>
 </Window>

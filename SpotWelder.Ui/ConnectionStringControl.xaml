@@ -11,10 +11,14 @@
     <Button Content="Test" Height="65" HorizontalAlignment="Left" Margin="567,6,0,0" Name="BtnConnectionStringTest" VerticalAlignment="Top" Width="40" Click="BtnConnectionStringTest_Click" />
     <ComboBox Height="48" HorizontalAlignment="Left" Margin="39,6,0,0" Name="CbConnectionString" VerticalAlignment="Top" Width="522" IsEditable="True" ItemsSource="{Binding}" DisplayMemberPath="ConnectionString" SelectedValuePath="ConnectionString" KeyDown="CbConnectionString_KeyDown" />
     <ProgressBar Name="PbConnectionTest" HorizontalAlignment="Left" Height="12" Margin="8,59,0,0" VerticalAlignment="Top" Width="553"/>
-    <Button x:Name="BtnAdd" ToolTip="Add a new connection" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Height="24" Width="24">
+    <Button x:Name="BtnAdd" ToolTip="Add a new connection" 
+            HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Height="24" Width="24"
+            Click="BtnAdd_OnClick" >
       <Image Source="images/Add_16x.png" />
     </Button>
-    <Button x:Name="BtnEdit" ToolTip="Edit an existing connection" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Height="24" Width="24">
+    <Button x:Name="BtnEdit" ToolTip="Edit an existing connection" 
+            HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Height="24" Width="24"
+            Click="BtnEdit_OnClick" >
       <Image Source="images/Edit_16x.png" />
     </Button>
   </Grid>

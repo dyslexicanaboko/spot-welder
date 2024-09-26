@@ -103,7 +103,7 @@ namespace SpotWelder.Ui
 
       userConnectionString.Verified = obj.Success;
 
-      UserConnectionStrings.Update(userConnectionString);
+      UserConnectionStrings.Upsert(userConnectionString);
 
       return obj;
     }
@@ -129,6 +129,28 @@ namespace SpotWelder.Ui
       var obj = TestConnectionString(CurrentConnection);
 
       return ShowResult(obj, showMessageOnFailureOnly);
+    }
+
+    private void BtnEdit_OnClick(object sender, RoutedEventArgs e)
+    {
+      
+    }
+
+    private void BtnAdd_OnClick(object sender, RoutedEventArgs e)
+    {
+      var win = new ConnectionStringBuilder();
+
+      if (!win.ShowDialog().GetValueOrDefault()) return;
+
+      var con = win.GetConnectionString();
+
+      UserConnectionStrings.Upsert(new UserConnectionString
+      {
+        ConnectionString = con.Item2,
+        SqlEngine = con.Item1
+      });
+
+      CbConnectionString_Refresh();
     }
   }
 }

@@ -5,6 +5,7 @@ using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.Generators;
+using SpotWelder.Lib.Services.TableQueryFormats;
 
 namespace SpotWelder.IntegrationTests;
 
@@ -15,7 +16,7 @@ public class PostgresTests
   [Test]
   public void HappyPathTest()
   {
-    var svcNameFormat = new PostgresTableQueryFormatService();
+    var svcNameFormat = new PostgresTableQueryFormatStrategy();
 
     var p = GetParameters();
     p.ServerConnection.SqlEngine = SqlEngine.Postgres;

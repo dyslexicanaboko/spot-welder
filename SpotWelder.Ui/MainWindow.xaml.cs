@@ -1,78 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using SpotWelder.Lib.DataAccess;
+﻿using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.TableQueryFormats;
 using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Profile;
 using SpotWelder.Ui.Services;
-using Application = System.Windows.Application;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows;
 
 namespace SpotWelder.Ui
 {
-  /// <summary>
-  /// Interaction logic for MainWindow.xaml
-  /// </summary>
-  public partial class MainWindow
-        : Window
+    /// <summary>
+    ///   Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow
+    : Window
+  {
+    private readonly List<IUsesResultWindow> _hasResultWindows;
+
+    public MainWindow(
+      ITableQueryFormatFactory tableQueryFormatFactory,
+      IQueryToClassService queryToClassService,
+      IQueryToMockDataService queryToMockDataService,
+      IGeneralDatabaseQueries repository,
+      IProfileManager profileManager,
+      IDtoGenerator dtoGenerator,
+      IMetaViewModelService metaViewModelService,
+      ICSharpCompilerService compilerService)
     {
-        private readonly List<IUsesResultWindow> _hasResultWindows;
+      InitializeComponent();
 
-        public MainWindow(ITableQueryFormatService classService,
-            IQueryToClassService queryToClassService,
-            IQueryToMockDataService queryToMockDataService,
-            IGeneralDatabaseQueries repository,
-            IProfileManager profileManager,
-            IDtoGenerator dtoGenerator,
-            IMetaViewModelService metaViewModelService,
-            ICSharpCompilerService compilerService)
-        {
-            InitializeComponent();
+      //I am probably doing this wrong, but I don't care right now. I will have to circle back and try to do it right later.
+      //The MVVM model seems like a lot of extra unnecessary work.
+      CtrlQueryToClass.Dependencies(
+        tableQueryFormatFactory,
+        queryToClassService,
+        repository,
+        profileManager);
 
-            //I am probably doing this wrong, but I don't care right now. I will have to circle back and try to do it right later.
-            //The MVVM model seems like a lot of extra unnecessary work.
-            CtrlQueryToClass.Dependencies(
-                classService,
-                queryToClassService,
-                repository,
-                profileManager);
+      CtrlQueryToMockData.Dependencies(
+        tableQueryFormatFactory,
+        queryToMockDataService,
+        repository,
+        profileManager);
 
-            CtrlQueryToMockData.Dependencies(
-                classService,
-                queryToMockDataService,
-                repository,
-                profileManager);
+      CtrlDtoMaker.Dependencies(
+        dtoGenerator,
+        metaViewModelService,
+        queryToClassService,
+        compilerService);
 
-            CtrlDtoMaker.Dependencies(
-                dtoGenerator,
-                metaViewModelService,
-                queryToClassService,
-                compilerService);
+      _hasResultWindows = new List<IUsesResultWindow> { CtrlQueryToMockData, CtrlDtoMaker, CtrlQueryToClass };
+    }
 
-            _hasResultWindows = new List<IUsesResultWindow>
-            {
-                CtrlQueryToMockData,
-                CtrlDtoMaker,
-                CtrlQueryToClass
-            };
-        }
+    private void Window_Closing(object sender, CancelEventArgs e)
+      => _hasResultWindows.ForEach(x => x.CloseResultWindows());
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-            =>_hasResultWindows.ForEach(x => x.CloseResultWindows());
+    private void btnAbout_Click(object sender, RoutedEventArgs e)
+    {
+      var obj = new AboutForm();
 
-        private void btnAbout_Click(object sender, RoutedEventArgs e)
-        {
-          var obj = new AboutForm();
+      obj.ShowDialog();
+    }
 
-          obj.ShowDialog();
-        }
+    protected override void OnClosed(EventArgs e)
+    {
+      base.OnClosed(e);
 
-        protected override void OnClosed(EventArgs e)
-        {
-          base.OnClosed(e);
-
-          Application.Current.Shutdown();
-        }
+      Application.Current.Shutdown();
+    }
   }
 }

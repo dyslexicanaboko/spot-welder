@@ -1,9 +1,12 @@
 ﻿using SpotWelder.Lib.Models;
 
-namespace SpotWelder.Lib.Services
+namespace SpotWelder.Lib.Services.TableQueryFormats
 {
-  public interface ITableQueryFormatService
+  [ExcludeFromDiScan]
+  public interface ITableQueryFormatStrategy
   {
+    SqlEngine SqlEngine { get; }
+
     TableQuery ParseTableName(string tableNameQuery);
 
     string GetClassName(TableQuery tableQuery);

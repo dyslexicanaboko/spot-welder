@@ -1,19 +1,20 @@
 ﻿using NUnit.Framework;
 using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.TableQueryFormats;
 using System;
 
 namespace SpotWelder.Tests.Lib.Services
 {
-  [TestFixture]
+    [TestFixture]
   public class SqlServerTableQueryFormatServiceTests
   {
     [SetUp]
     public void Setup()
     {
-      _service = new SqlServerTableQueryFormatService();
+      _service = new SqlServerTableQueryFormatStrategy();
     }
 
-    private ITableQueryFormatService _service;
+    private ITableQueryFormatStrategy _service;
 
     [TestCase("a", "[dbo].[a]")]
     [TestCase("a.b", "[a].[b]")]

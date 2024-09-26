@@ -13,7 +13,7 @@ namespace SpotWelder.Ui.Profile
 
     public event SaveHandler? Save;
 
-    public void Update(UserConnectionString target)
+    public void Upsert(UserConnectionString target)
     {
       var inList = ConnectionStrings.Find(x => x.ConnectionString == target.ConnectionString);
 

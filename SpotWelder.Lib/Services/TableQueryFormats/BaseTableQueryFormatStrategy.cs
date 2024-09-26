@@ -3,21 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace SpotWelder.Lib.Services
+namespace SpotWelder.Lib.Services.TableQueryFormats
 {
-  public abstract class BaseTableQueryFormatService
+  public abstract class BaseTableQueryFormatStrategy
   {
-    protected abstract string DefaultSchema { get; }
-
     protected readonly Regex _whiteSpace = new(@"\s+");
 
+    public abstract SqlEngine SqlEngine { get; }
+
+    protected abstract string DefaultSchema { get; }
+
     public virtual string GetClassName(TableQuery tableQuery)
-      =>_whiteSpace.Replace(tableQuery.TableUnqualified, string.Empty);
+      => _whiteSpace.Replace(tableQuery.TableUnqualified, string.Empty);
 
     protected abstract string RemoveQualifiers(string tableNameQuery);
 
     protected abstract void Qualify(ICollection<string> segments, TableQueryQualifiers qualifier, string segment);
-    
+
     public virtual TableQuery ParseTableName(string tableNameQuery)
     {
       var q = RemoveQualifiers(tableNameQuery);
@@ -78,7 +80,8 @@ namespace SpotWelder.Lib.Services
       if (qualifiers.HasFlag(TableQueryQualifiers.LinkedServer))
         Qualify(lst, TableQueryQualifiers.LinkedServer, tableQuery.LinkedServer);
 
-      if (qualifiers.HasFlag(TableQueryQualifiers.Database)) Qualify(lst, TableQueryQualifiers.Database, tableQuery.Database);
+      if (qualifiers.HasFlag(TableQueryQualifiers.Database))
+        Qualify(lst, TableQueryQualifiers.Database, tableQuery.Database);
 
       if (qualifiers.HasFlag(TableQueryQualifiers.Schema))
       {
