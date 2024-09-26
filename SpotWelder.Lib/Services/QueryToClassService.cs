@@ -25,7 +25,7 @@ namespace SpotWelder.Lib.Services
     {
       if (!parameters.HasElections) return null;
 
-      _queryToClassRepository.ChangeConnectionString(parameters.ServerConnection.ConnectionString);
+      _queryToClassRepository.ConfigureSqlClient(parameters.ServerConnection);
 
       var baseInstructions = GetBaseInstructions(parameters);
 

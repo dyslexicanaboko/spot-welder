@@ -42,6 +42,6 @@ namespace SpotWelder.Lib
   {
     SqlServer = 0,
 
-    PostgreSql = 1
+    Postgres = 1
   }
 }

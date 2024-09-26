@@ -20,7 +20,9 @@
 		<Authors>Eli Hayon / DyslexicAnaboko</Authors>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="images\Add_16x.png" />
 	  <None Remove="images\Close_red_16x.png" />
+	  <None Remove="images\Edit_16x.png" />
 	  <None Remove="images\github-mark.png" />
 	  <None Remove="images\Sad and confused coffee cup.jpg" />
 	  <None Remove="images\SaveAll_16x.png" />
@@ -34,8 +36,10 @@
 		<AppDesigner Include="Properties\" />
 	</ItemGroup>
 	<ItemGroup>
+		<Resource Include="images\Add_16x.png" />
 		<Resource Include="images\Close_red_16x.png" />
 		<Resource Include="images\Copy_16x.png" />
+		<Resource Include="images\Edit_16x.png" />
 		<Resource Include="images\github-mark.png" />
 		<Resource Include="images\Sad and confused coffee cup.jpg" />
 		<Resource Include="images\SaveAll_16x.png" />

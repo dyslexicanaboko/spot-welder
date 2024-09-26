@@ -1,8 +1,7 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Models;
+using System;
+using System.Data;
 
 namespace SpotWelder.Lib.DataAccess
 {
@@ -13,96 +12,90 @@ namespace SpotWelder.Lib.DataAccess
   public abstract class BaseRepository
     : IBaseRepository
   {
-    private string _connectionString;
+    private BaseSqlClient? _sqlClient;
+    private ServerConnection? _serverConnection;
 
-    public void ChangeConnectionString(string connectionString)
+    public void ConfigureSqlClient(ServerConnection serverConnection)
     {
-      _connectionString = connectionString;
+      _serverConnection = serverConnection;
+      
+      _sqlClient = _serverConnection.SqlEngine switch
+      {
+        SqlEngine.SqlServer => new SqlServerClient(),
+        SqlEngine.Postgres => new PostgresClient(),
+        _ => throw new NotImplementedException("Selected SQL engine not supported yet. 0x202409252104")
+      };
+    }
+
+    private void ValidateServerConnection()
+    {
+      if (_serverConnection == null || _sqlClient == null)
+        throw new InvalidOperationException("You must configure the SQL client first. 0x202409252113");
     }
 
     protected SchemaRaw GetFullSchemaInformation(string sql)
     {
-      using var con = new SqlConnection(_connectionString);
+      ValidateServerConnection();
 
-      using (var cmd = new SqlCommand(sql, con))
-      {
-        con.Open();
+      using var con = _sqlClient!.GetDbConnection(_serverConnection!.ConnectionString);
 
-        var rs = new SchemaRaw();
+      using var cmd = _sqlClient.GetDbCommand(sql, con);
 
-        using (var dr = cmd.ExecuteReader())
-        {
-          var tblSqlServer = dr.GetSchemaTable();
+      con.Open();
+      
+      using var dr = cmd.ExecuteReader();
 
-          var tblGeneric = new DataTable();
-          tblGeneric.Load(dr);
+      var schemaTable = dr.GetSchemaTable();
 
-          rs.SqlServerSchema = tblSqlServer;
-        }
+      //This should never happen
+      if (schemaTable == null) throw new InvalidOperationException("Schema table cannot be null. 0x202409252126");
 
-        using (var da = new SqlDataAdapter(cmd))
-        {
-          var tblGeneric = new DataTable();
+      var dt1 = new DataTable();
+      dt1.Load(dr);
+      
+      var da = _sqlClient.GetDbDataAdapter(cmd);
 
-          da.FillSchema(tblGeneric, SchemaType.Source);
+      var ds = new DataSet();
 
-          rs.GenericSchema = tblGeneric;
-        }
+      da.FillSchema(ds, SchemaType.Source);
 
-        return rs;
-      }
+      return new SchemaRaw(ds.Tables[0], schemaTable);
     }
 
-    protected IDataReader ExecuteStoredProcedure(string storedProcedure, params SqlParameter[] parameters)
+    protected object? ExecuteScalar(string sql)
     {
-      var con = new SqlConnection(_connectionString);
+      ValidateServerConnection();
+      
+      using var con = _sqlClient!.GetDbConnection(_serverConnection!.ConnectionString);
 
       con.Open();
 
-      var cmd = new SqlCommand(storedProcedure, con);
-      cmd.CommandType = CommandType.StoredProcedure;
+      using var cmd = _sqlClient.GetDbCommand(sql, con);
+
       cmd.CommandTimeout = 0;
 
-      if (parameters.Any()) cmd.Parameters.AddRange(parameters);
-
-      var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-      return reader;
-    }
-
-    protected object ExecuteScalar(string sql)
-    {
-      using var con = new SqlConnection(_connectionString);
-
-      con.Open();
-
-      using (var cmd = new SqlCommand(sql, con))
-      {
-        cmd.CommandTimeout = 0;
-
-        return cmd.ExecuteScalar();
-      }
+      return cmd.ExecuteScalar();
     }
 
     protected virtual DataTable ExecuteDataTable(string sql)
     {
-      using var con = new SqlConnection(_connectionString);
+      ValidateServerConnection();
+      
+      using var con = _sqlClient!.GetDbConnection(_serverConnection!.ConnectionString);
 
       con.Open();
 
-      using (var cmd = new SqlCommand(sql, con))
-      {
-        cmd.CommandTimeout = 0;
+      using var cmd = _sqlClient.GetDbCommand(sql, con);
 
-        var dt = new DataTable("Table1");
+      cmd.CommandTimeout = 0;
 
-        using (var da = new SqlDataAdapter(cmd))
-        {
-          da.Fill(dt);
-        }
+      var ds = new DataSet();
 
-        return dt;
-      }
+      var da = _sqlClient.GetDbDataAdapter(cmd);
+
+      da.Fill(ds);
+
+      return ds.Tables[0];
     }
 
     public ConnectionResult TestConnectionString()
@@ -125,3 +118,26 @@ namespace SpotWelder.Lib.DataAccess
     }
   }
 }
+
+
+/*
+// Not sure why I kept this around, but I will keep it here just in case for now
+
+//protected IDataReader ExecuteStoredProcedure(string storedProcedure, params SqlParameter[] parameters)
+//{
+//  var con = new SqlConnection(_connectionString);
+
+//  con.Open();
+
+//  var cmd = new SqlCommand(storedProcedure, con);
+//  cmd.CommandType = CommandType.StoredProcedure;
+//  cmd.CommandTimeout = 0;
+
+//  if (parameters.Any()) cmd.Parameters.AddRange(parameters);
+
+//  var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+//  return reader;
+//}
+
+ */

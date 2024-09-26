@@ -14,7 +14,7 @@ namespace SpotWelder.Tests.Lib.DataAccess
         {
             var repo = new QueryToClassRepository();
             
-            repo.ChangeConnectionString("Server=.;Database=ScratchSpace;Integrated Security=SSPI;");
+            repo.ConfigureSqlClient("Server=.;Database=ScratchSpace;Integrated Security=SSPI;");
 
             var tq = new TableQuery { Schema = "dbo", Table = "NumberCollection" };
 

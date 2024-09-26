@@ -1,0 +1,52 @@
+﻿<Window x:Class="SpotWelder.Ui.ConnectionStringBuilder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpotWelder.Ui"
+        mc:Ignorable="d"
+        Title="Connection String Builder" Height="244" Width="338">
+  <Grid Margin="10">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <TextBlock Text="Sql Engine:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <ComboBox x:Name="CbDatabaseType" Grid.Row="0" Grid.Column="1" Width="200" Margin="0,0,0,10">
+      <ComboBoxItem Content="SQL Server"/>
+      <ComboBoxItem Content="Postgres"/>
+    </ComboBox>
+
+    <TextBlock Text="Server Name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <TextBox x:Name="TbServerName" Grid.Row="1" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+
+    <TextBlock Text="Database Name:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <TextBox x:Name="TbDatabaseName" Grid.Row="2" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+
+    <TextBlock Text="Username:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <TextBox x:Name="TbUsername" Grid.Row="3" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+
+    <TextBlock Text="Password:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <PasswordBox x:Name="PbPassword" Grid.Row="4" Grid.Column="1" Width="200" Margin="0,0,0,10"/>
+
+    <TextBlock Text="Integrated Security:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <CheckBox x:Name="CbIntegratedSecurity" Grid.Row="5" Grid.Column="1"  />
+
+    <TextBlock Text="Is Encrypted:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+    <CheckBox x:Name="CbIsEncrypted" Grid.Row="6" Grid.Column="1"  />
+
+    <Button Grid.Column="0" Grid.Row="7" Content="Delete" Width="71" HorizontalAlignment="Left" Margin="10,10,0,77"/>
+    <Button Grid.Row="7" Grid.Column="1" Content="Save" Width="62" HorizontalAlignment="Left" Margin="10,10,0,77"/>
+  </Grid>
+</Window>

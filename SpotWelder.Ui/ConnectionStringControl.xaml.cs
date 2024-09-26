@@ -93,7 +93,13 @@ namespace SpotWelder.Ui
 
     private ConnectionResult TestConnectionString(UserConnectionString userConnectionString)
     {
-      var obj = _generalRepo.TestConnectionString(userConnectionString.ConnectionString);
+      var serverConnection = new ServerConnection
+      {
+        SqlEngine = userConnectionString.SqlEngine,
+        ConnectionString = userConnectionString.ConnectionString
+      };
+
+      var obj = _generalRepo.TestConnectionString(serverConnection);
 
       userConnectionString.Verified = obj.Success;
 

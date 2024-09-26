@@ -15,10 +15,10 @@ public class PostgresTests
   [Test]
   public void HappyPathTest()
   {
-    var svcNameFormat = new SqlServerTableQueryFormatService();
+    var svcNameFormat = new PostgresTableQueryFormatService();
 
     var p = GetParameters();
-    p.ServerConnection.SqlEngine = SqlEngine.PostgreSql;
+    p.ServerConnection.SqlEngine = SqlEngine.Postgres;
     p.ServerConnection.ConnectionString = "Host=localhost;Username=postgres;Password=postgres;Database=millions_of_things";
     p.ServerConnection.SourceSqlType = SourceSqlType.TableName;
     p.ServerConnection.SourceSqlText = "public.category";

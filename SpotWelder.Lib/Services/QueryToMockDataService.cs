@@ -23,7 +23,7 @@ namespace SpotWelder.Lib.Services
 
     private readonly IQueryToClassRepository _repository;
 
-    private ClassInstructions _instructions;
+    private ClassInstructions? _instructions;
 
     public QueryToMockDataService(IQueryToClassRepository repository, IGeneralDatabaseQueries genericDatabaseQueries)
       : base(repository, genericDatabaseQueries)
@@ -33,7 +33,7 @@ namespace SpotWelder.Lib.Services
 
     public string GetEntity(QueryToMockDataParameters parameters)
     {
-      _repository.ChangeConnectionString(parameters.ServerConnection.ConnectionString);
+      _repository.ConfigureSqlClient(parameters.ServerConnection);
 
       //Get the meta data needed about the entity
       var instructions = GetInstructions(parameters);
@@ -51,9 +51,9 @@ namespace SpotWelder.Lib.Services
       //Generate the mock data constructs using the entity for as much data as is requested.
       //Most of this is going to be contained inside of this service because there is no other way
 
-      _repository.ChangeConnectionString(parameters.ServerConnection.ConnectionString);
+      _repository.ConfigureSqlClient(parameters.ServerConnection);
 
-      _genericDatabaseQueries.ChangeConnectionString(parameters.ServerConnection.ConnectionString);
+      _genericDatabaseQueries.ConfigureSqlClient(parameters.ServerConnection);
 
       //Get the meta data needed about the entity
       var instructions = GetInstructions(parameters);
@@ -69,7 +69,7 @@ namespace SpotWelder.Lib.Services
       return res;
     }
 
-    private void MockData_RowProcessed(object sender, RowProcessedEventArgs e) => RowProcessed?.Invoke(this, e);
+    private void MockData_RowProcessed(object sender, RowProcessedEventArgs e) => RowProcessed.Invoke(this, e);
 
     private ClassInstructions GetInstructions(QueryToMockDataParameters parameters)
     {

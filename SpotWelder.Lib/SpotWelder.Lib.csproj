@@ -116,8 +116,8 @@
 	  <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
 	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" />
 	  <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+	  <PackageReference Include="Npgsql" Version="8.0.4" />
 	  <PackageReference Include="System.CodeDom" Version="8.0.0" />
-	  <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
 	</ItemGroup>
 	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 			 Other similar extension points exist, see Microsoft.Common.targets.
