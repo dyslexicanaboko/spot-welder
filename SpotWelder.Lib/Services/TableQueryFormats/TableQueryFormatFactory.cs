@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SpotWelder.Lib.Services.TableQueryFormats
@@ -10,7 +11,11 @@ namespace SpotWelder.Lib.Services.TableQueryFormats
 
     public TableQueryFormatFactory(IEnumerable<ITableQueryFormatStrategy> strategies)
     {
-      _strategies = strategies.ToDictionary(k => k.SqlEngine, v => v);
+      var strategiesList = strategies.ToArray();
+
+      if (!strategiesList.Any()) throw new ArgumentException("No `ITableQueryFormatStrategy` strategies were loaded. 0x202409280610");
+
+      _strategies = strategiesList.ToDictionary(k => k.SqlEngine, v => v);
     }
 
     public ITableQueryFormatStrategy GetStrategy(SqlEngine sqlEngine)

@@ -26,7 +26,6 @@ namespace SpotWelder.Ui
       if (TxtClassEntityName.IsTextInvalid("Class name cannot be empty."))
         return null;
 
-      obj.ServerConnection.SqlEngine = SqlEngine.SqlServer;
       obj.ServerConnection.TableQuery = GetTableQueryFormatStrategy().ParseTableName(TxtSourceSqlText.Text);
       obj.SubjectName = TxtEntityName.Text;
       obj.EntityName = TxtClassEntityName.Text;
@@ -55,7 +54,7 @@ namespace SpotWelder.Ui
         return null;
 
       obj.ServerConnection.ConnectionString = con.ConnectionString;
-
+      obj.ServerConnection.SqlEngine = con.SqlEngine;
       obj.ServerConnection.SourceSqlType = GetSourceType();
 
       if (TxtSourceSqlText.IsTextInvalid(obj.ServerConnection.SourceSqlType + " cannot be empty."))

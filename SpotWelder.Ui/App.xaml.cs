@@ -6,6 +6,7 @@ using System.Windows;
 using SpotWelder.Lib;
 using SpotWelder.Lib.Services.Generators;
 using SpotWelder.Ui.Profile;
+using SpotWelder.Lib.Services.TableQueryFormats;
 
 namespace SpotWelder.Ui
 {
@@ -89,7 +90,7 @@ namespace SpotWelder.Ui
         .Distinct()
         .ToArray();
 
-      //This is specifically targeting classes with an interface
+      //Targeting classes with an exactly one matching interface - as in: IClassName -> ClassName
       services.Scan(scan =>
       {
         scan.FromAssemblies(asm)
@@ -100,13 +101,25 @@ namespace SpotWelder.Ui
           .WithScopedLifetime();
       });
 
-      //This is specifically targeting classes that all share the same abstract class
+      //Targeting classes that all extend the `GeneratorBase` abstract class
+      //This will load IEnumerable<GeneratorBase> into the `CodeGenerationFactory` constructor
       services.Scan(scan =>
       {
         scan.FromAssemblies(asm)
           .AddClasses(classes =>
             classes.AssignableTo<GeneratorBase>())
           .As<GeneratorBase>()
+          .WithScopedLifetime();
+      });
+
+      //Targeting classes that all implement the `ITableQueryFormatStrategy` interface
+      //This will load IEnumerable<ITableQueryFormatStrategy> into the `TableQueryFormatFactory` constructor
+      services.Scan(scan =>
+      {
+        scan.FromAssemblies(asm)
+          .AddClasses(classes =>
+            classes.AssignableTo<ITableQueryFormatStrategy>())
+          .As<ITableQueryFormatStrategy>()
           .WithScopedLifetime();
       });
     }
