@@ -15,7 +15,7 @@ namespace SpotWelder.Ui.Profile
 
     public void Upsert(UserConnectionString target)
     {
-      var inList = ConnectionStrings.Find(x => x.ConnectionString == target.ConnectionString);
+      var inList = ConnectionStrings.Find(x => x == target);
 
       if (inList == null && target.Verified)
       {

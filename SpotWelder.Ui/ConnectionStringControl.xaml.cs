@@ -6,6 +6,7 @@ using SpotWelder.Ui.Profile;
 using SpotWelder.Ui.Services;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -171,12 +172,21 @@ namespace SpotWelder.Ui
 
       var con = win.GetConnectionString();
 
-      UserConnectionStrings.Upsert(new UserConnectionString
+      var ucs = new UserConnectionString
       {
         ConnectionString = con.ConnectionString,
         SqlEngine = con.SqlEngine,
         Verified = true //Hard coding to true for now
-      });
+      };
+
+      if (con.Operation == Enumerations.Upsert)
+      {
+        UserConnectionStrings.Upsert(ucs);
+      }
+      else
+      {
+        UserConnectionStrings.Remove(ucs);
+      }
 
       CbConnectionString_Refresh();
 
@@ -185,7 +195,11 @@ namespace SpotWelder.Ui
 
     private void CbConnectionString_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      ImgLogo.Source = ImageSelectionHelper.GetConnectionStringLogo(((UserConnectionString)e.AddedItems[0]).SqlEngine);
+      var sqlEngine = e.AddedItems.Count == 0 ? 
+        null : 
+        (SqlEngine?)((UserConnectionString)e.AddedItems[0]).SqlEngine;
+
+      ImgLogo.Source = ImageSelectionHelper.GetConnectionStringLogo(sqlEngine);
     }
   }
 }

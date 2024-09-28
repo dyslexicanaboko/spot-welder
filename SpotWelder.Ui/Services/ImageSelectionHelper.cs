@@ -6,7 +6,7 @@ namespace SpotWelder.Ui.Services
 {
   internal class ImageSelectionHelper
   {
-    public static BitmapImage GetConnectionStringLogo(SqlEngine sqlEngine)
+    public static BitmapImage GetConnectionStringLogo(SqlEngine? sqlEngine)
     {
       var path = GetConnectionStringLogoPath(sqlEngine);
 
@@ -18,7 +18,7 @@ namespace SpotWelder.Ui.Services
       return bmp;
     }
 
-    public static string GetConnectionStringLogoPath(SqlEngine sqlEngine)
+    public static string GetConnectionStringLogoPath(SqlEngine? sqlEngine)
     {
       return sqlEngine switch
       {
