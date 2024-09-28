@@ -30,10 +30,15 @@ namespace SpotWelder.Ui.Profile
       }
       else if (inList != null && !target.Verified)
       {
-        ConnectionStrings.Remove(inList);
-
-        RaiseSaveEvent();
+        Remove(inList);
       }
+    }
+
+    public void Remove(UserConnectionString target)
+    {
+      ConnectionStrings.Remove(target);
+
+      RaiseSaveEvent();
     }
 
     private void RaiseSaveEvent() => Save?.Invoke(this, EventArgs.Empty);

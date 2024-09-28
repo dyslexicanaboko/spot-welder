@@ -1,6 +1,10 @@
-﻿using SpotWelder.Lib.DataAccess;
+﻿using SpotWelder.Lib;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Models;
 using SpotWelder.Ui.Profile;
+using SpotWelder.Ui.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,6 +19,7 @@ namespace SpotWelder.Ui
   public partial class ConnectionStringControl : UserControl
   {
     private IGeneralDatabaseQueries _generalRepo;
+    private IConnectionStringBuilderService _builderService;
 
     public ConnectionStringControl()
     {
@@ -33,6 +38,7 @@ namespace SpotWelder.Ui
         var obj = new UserConnectionString();
         obj.Verified = false;
         obj.ConnectionString = CbConnectionString.Text;
+        obj.SqlEngine = SqlEngine.SqlServer;
 
         return obj;
       }
@@ -45,9 +51,11 @@ namespace SpotWelder.Ui
 
     public void Dependencies(
       IProfileManager profileManager,
-      IGeneralDatabaseQueries repository)
+      IGeneralDatabaseQueries repository,
+      IConnectionStringBuilderService builderService)
     {
       _generalRepo = repository;
+      _builderService = builderService;
 
       UserConnectionStrings = profileManager.ConnectionStringManager;
 
@@ -79,7 +87,7 @@ namespace SpotWelder.Ui
         PbConnectionTest.IsIndeterminate = true;
 
         var con = CurrentConnection;
-
+        
         var result = await Task.Run(() => TestConnectionString(con));
 
         ShowResult(result);
@@ -98,6 +106,15 @@ namespace SpotWelder.Ui
         SqlEngine = userConnectionString.SqlEngine,
         ConnectionString = userConnectionString.ConnectionString
       };
+
+      if (string.IsNullOrWhiteSpace(serverConnection.ConnectionString))
+      {
+        return new ConnectionResult
+        {
+          Success = false,
+          ReturnedException = new Exception("Connection string cannot be blank, empty or whitespace.")
+        };
+      }
 
       var obj = _generalRepo.TestConnectionString(serverConnection);
 
@@ -131,14 +148,24 @@ namespace SpotWelder.Ui
       return ShowResult(obj, showMessageOnFailureOnly);
     }
 
+    //Edit can result in editing an existing connection or deleting it all together
+    //Additionally, on the edit the existing connection information must be shown
     private void BtnEdit_OnClick(object sender, RoutedEventArgs e)
     {
-      
+      LaunchConnectionStringBuilder((UserConnectionString)CbConnectionString.SelectedItem);
     }
 
     private void BtnAdd_OnClick(object sender, RoutedEventArgs e)
     {
-      var win = new ConnectionStringBuilder();
+      LaunchConnectionStringBuilder();
+    }
+
+    private void LaunchConnectionStringBuilder(UserConnectionString? existing = null)
+    {
+      var win = new ConnectionStringBuilderWindow();
+      win.Dependencies(_builderService);
+
+      if(existing != null) win.LoadConnectionString(existing);
 
       if (!win.ShowDialog().GetValueOrDefault()) return;
 
@@ -146,11 +173,19 @@ namespace SpotWelder.Ui
 
       UserConnectionStrings.Upsert(new UserConnectionString
       {
-        ConnectionString = con.Item2,
-        SqlEngine = con.Item1
+        ConnectionString = con.ConnectionString,
+        SqlEngine = con.SqlEngine,
+        Verified = true //Hard coding to true for now
       });
 
       CbConnectionString_Refresh();
+
+      CbConnectionString.SelectedIndex = 0;
+    }
+
+    private void CbConnectionString_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      ImgLogo.Source = ImageSelectionHelper.GetConnectionStringLogo(((UserConnectionString)e.AddedItems[0]).SqlEngine);
     }
   }
 }

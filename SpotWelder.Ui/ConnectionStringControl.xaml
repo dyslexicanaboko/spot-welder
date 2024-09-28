@@ -9,7 +9,19 @@
              d:DesignHeight="79.185" d:DesignWidth="612.661">
   <Grid Background="White">
     <Button Content="Test" Height="65" HorizontalAlignment="Left" Margin="567,6,0,0" Name="BtnConnectionStringTest" VerticalAlignment="Top" Width="40" Click="BtnConnectionStringTest_Click" />
-    <ComboBox Height="48" HorizontalAlignment="Left" Margin="39,6,0,0" Name="CbConnectionString" VerticalAlignment="Top" Width="522" IsEditable="True" ItemsSource="{Binding}" DisplayMemberPath="ConnectionString" SelectedValuePath="ConnectionString" KeyDown="CbConnectionString_KeyDown" />
+    <ComboBox 
+      Height="48" 
+      HorizontalAlignment="Left" 
+      Margin="88,6,0,0" 
+      Name="CbConnectionString" 
+      VerticalAlignment="Top" 
+      Width="473" 
+      IsEditable="False" 
+      ItemsSource="{Binding}" 
+      DisplayMemberPath="ConnectionString" 
+      SelectedValuePath="ConnectionString" 
+      KeyDown="CbConnectionString_KeyDown"
+      SelectionChanged="CbConnectionString_OnSelectionChanged" />
     <ProgressBar Name="PbConnectionTest" HorizontalAlignment="Left" Height="12" Margin="8,59,0,0" VerticalAlignment="Top" Width="553"/>
     <Button x:Name="BtnAdd" ToolTip="Add a new connection" 
             HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Height="24" Width="24"
@@ -21,5 +33,10 @@
             Click="BtnEdit_OnClick" >
       <Image Source="images/Edit_16x.png" />
     </Button>
+    <Image x:Name="ImgLogo" HorizontalAlignment="Left" 
+           Source="images/Sad shrugging coffee cup.jpg"
+           Height="46" 
+           Width="46"
+           Margin="37,7,0,0" VerticalAlignment="Top" />
   </Grid>
 </UserControl>

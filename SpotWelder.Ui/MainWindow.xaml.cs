@@ -1,4 +1,5 @@
 ﻿using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.TableQueryFormats;
@@ -28,7 +29,8 @@ namespace SpotWelder.Ui
       IProfileManager profileManager,
       IDtoGenerator dtoGenerator,
       IMetaViewModelService metaViewModelService,
-      ICSharpCompilerService compilerService)
+      ICSharpCompilerService compilerService,
+      IConnectionStringBuilderService builderService)
     {
       InitializeComponent();
 
@@ -38,13 +40,15 @@ namespace SpotWelder.Ui
         tableQueryFormatFactory,
         queryToClassService,
         repository,
-        profileManager);
+        profileManager,
+        builderService);
 
       CtrlQueryToMockData.Dependencies(
         tableQueryFormatFactory,
         queryToMockDataService,
         repository,
-        profileManager);
+        profileManager,
+        builderService);
 
       CtrlDtoMaker.Dependencies(
         dtoGenerator,

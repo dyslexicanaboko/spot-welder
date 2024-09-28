@@ -1,26 +1,16 @@
-﻿using SpotWelder.Lib;
+﻿using SpotWelder.Lib.Models;
 
 namespace SpotWelder.Ui.ViewModels
 {
   public class ConnectionStringViewModel
-    : ObservableObject
+    : ConnectionStringMeta
   {
-    public SqlEngine SqlEngine { get; set; } = SqlEngine.SqlServer;
-
-    public string ServerName { get; set; } = string.Empty;
-
-    public string DatabaseName { get; set; } = string.Empty;
-
-    public string Username { get; set; } = string.Empty;
-
-    public string Password { get; set; } = string.Empty;
-
-    public bool IsIntegratedSecurity { get; set; }
-
-    public bool IsEncrypted { get; set; }
-
+    public SqlEngineViewModel SqlEngine { get; set; } = new(Lib.SqlEngine.SqlServer);
+    
     public string ConnectionString { get; set; } = string.Empty;
 
     public SqlEngineViewModel[] SqlEngines { get; set; } = { };
+
+    public Enumerations Operation { get; set; }
   }
 }

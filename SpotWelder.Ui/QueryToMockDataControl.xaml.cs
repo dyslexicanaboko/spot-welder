@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Events;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Models;
@@ -48,14 +49,15 @@ namespace SpotWelder.Ui
       ITableQueryFormatFactory tableQueryFormatFactory,
       IQueryToMockDataService queryToMockDataService,
       IGeneralDatabaseQueries repository,
-      IProfileManager profileManager)
+      IProfileManager profileManager, 
+      IConnectionStringBuilderService builderService)
     {
       _tableQueryFormatFactory = tableQueryFormatFactory;
       _repoGeneral = repository;
 
       _svcQueryToMockData = queryToMockDataService;
 
-      ConnectionStringCb.Dependencies(profileManager, _repoGeneral);
+      ConnectionStringCb.Dependencies(profileManager, _repoGeneral, builderService);
     }
 
     private void TxtSqlSourceText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

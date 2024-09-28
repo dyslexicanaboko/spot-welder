@@ -6,7 +6,7 @@ namespace SpotWelder.Ui.Profile
   {
     public SqlEngine SqlEngine { get; set; }
 
-    public string ConnectionString { get; set; }
+    public string ConnectionString { get; set; } = string.Empty;
 
     public bool Verified { get; set; }
 

@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.TableQueryFormats;
@@ -15,22 +16,22 @@ using System.Windows.Input;
 
 namespace SpotWelder.Ui
 {
-    /// <summary>
-    ///   Interaction logic for QueryToClassControl.xaml
-    /// </summary>
-    public partial class QueryToClassControl : UserControl, IUsesResultWindow
+  /// <summary>
+  ///   Interaction logic for QueryToClassControl.xaml
+  /// </summary>
+  public partial class QueryToClassControl : UserControl, IUsesResultWindow
   {
     private readonly CheckBoxGroup _classCheckBoxGroup;
 
-    private readonly ParentResultsWindow _parentResultsWindow;
-
     private readonly Dictionary<GenerationElections, CheckBox> _electionToCheckBoxMap;
+
+    private readonly ParentResultsWindow _parentResultsWindow;
 
     private IGeneralDatabaseQueries _generalRepo;
 
-    private ITableQueryFormatFactory _tableQueryFormatFactory;
-
     private IQueryToClassService _svcQueryToClass;
+
+    private ITableQueryFormatFactory _tableQueryFormatFactory;
 
     // Empty constructor Required by WPF
     public QueryToClassControl()
@@ -38,7 +39,7 @@ namespace SpotWelder.Ui
       InitializeComponent();
 
       SetPathAsDefault();
-      
+
       _parentResultsWindow = new ParentResultsWindow();
 
       TxtNamespaceName.ApplyDefault();
@@ -60,6 +61,10 @@ namespace SpotWelder.Ui
       DebugSetTestParameters();
     }
 
+    private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
+
+    public void CloseResultWindows() => _parentResultsWindow.Shutdown();
+
     private void DebugSetTestParameters()
     {
       #if DEBUG
@@ -73,7 +78,7 @@ namespace SpotWelder.Ui
       TxtEntityName.Text = "Task";
       TxtClassEntityName.Text = "TaskEntity";
       TxtClassModelName.Text = "TaskModel";
-      
+
       CbRepoDapper.IsChecked = true;
 
       //Entity
@@ -108,25 +113,25 @@ namespace SpotWelder.Ui
       CbMapPatchModelToEntity.IsChecked = true;
       #endif
     }
-    
+
     private ITableQueryFormatStrategy GetTableQueryFormatStrategy()
       => _tableQueryFormatFactory.GetStrategy(ConnectionStringCb.CurrentConnection.SqlEngine);
-
-    private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
-
-    public void CloseResultWindows() => _parentResultsWindow.Shutdown();
 
     public void Dependencies(
       ITableQueryFormatFactory tableQueryFormatFactory,
       IQueryToClassService queryToClassService,
       IGeneralDatabaseQueries repository,
-      IProfileManager profileManager)
+      IProfileManager profileManager,
+      IConnectionStringBuilderService builderService)
     {
       _tableQueryFormatFactory = tableQueryFormatFactory;
       _svcQueryToClass = queryToClassService;
       _generalRepo = repository;
 
-      ConnectionStringCb.Dependencies(profileManager, _generalRepo);
+      ConnectionStringCb.Dependencies(
+        profileManager,
+        _generalRepo,
+        builderService);
     }
 
     private void TxtSqlSourceText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
