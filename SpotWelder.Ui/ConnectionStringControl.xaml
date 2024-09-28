@@ -4,9 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SpotWelder.Ui"
+             xmlns:local="clr-namespace:SpotWelder.Ui" 
+             xmlns:profile="clr-namespace:SpotWelder.Ui.Profile" d:DataContext="{d:DesignInstance Type=profile:ConnectionStringManager}"
              mc:Ignorable="d" 
              d:DesignHeight="79.185" d:DesignWidth="612.661">
+  <UserControl.Resources>
+    <BitmapImage x:Key="SqlServer" UriSource="images/SqlServer.png" />
+    <BitmapImage x:Key="Postgres" UriSource="images/Postgres.png" />
+  </UserControl.Resources>
   <Grid Background="White">
     <Button Content="Test" Height="65" HorizontalAlignment="Left" Margin="567,6,0,0" Name="BtnConnectionStringTest" VerticalAlignment="Top" Width="40" Click="BtnConnectionStringTest_Click" />
     <ComboBox 
@@ -17,11 +22,32 @@
       VerticalAlignment="Top" 
       Width="473" 
       IsEditable="False" 
-      ItemsSource="{Binding}" 
-      DisplayMemberPath="ConnectionString" 
-      SelectedValuePath="ConnectionString" 
+      ItemsSource="{Binding ConnectionStrings}" 
       KeyDown="CbConnectionString_KeyDown"
-      SelectionChanged="CbConnectionString_OnSelectionChanged" />
+      SelectionChanged="CbConnectionString_OnSelectionChanged" >
+      <ComboBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <Image Width="16" Height="16" Margin="0,0,5,0">
+              <Image.Style>
+                <Style TargetType="Image">
+                  <Setter Property="Source" Value="{StaticResource SqlServer}" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding SqlEngine}" Value="SqlServer">
+                      <Setter Property="Source" Value="{StaticResource SqlServer}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding SqlEngine}" Value="Postgres">
+                      <Setter Property="Source" Value="{StaticResource Postgres}" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Image.Style>
+            </Image>
+            <TextBlock Text="{Binding ConnectionString}" TextWrapping="Wrap" />
+          </StackPanel>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
     <ProgressBar Name="PbConnectionTest" HorizontalAlignment="Left" Height="12" Margin="8,59,0,0" VerticalAlignment="Top" Width="553"/>
     <Button x:Name="BtnAdd" ToolTip="Add a new connection" 
             HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Height="24" Width="24"

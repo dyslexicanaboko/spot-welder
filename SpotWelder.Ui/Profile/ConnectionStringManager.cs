@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SpotWelder.Ui.Profile
 {
@@ -9,13 +11,13 @@ namespace SpotWelder.Ui.Profile
 
     public int MaxConnectionStrings { get; set; }
 
-    public List<UserConnectionString> ConnectionStrings { get; set; } = new();
+    public ObservableCollection<UserConnectionString> ConnectionStrings { get; set; } = new ();
 
     public event SaveHandler? Save;
 
     public void Upsert(UserConnectionString target)
     {
-      var inList = ConnectionStrings.Find(x => x == target);
+      var inList = ConnectionStrings.SingleOrDefault(x => x == target);
 
       if (inList == null && target.Verified)
       {

@@ -6,8 +6,10 @@ using SpotWelder.Ui.Services;
 using SpotWelder.Ui.ViewModels;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace SpotWelder.Ui
 {
@@ -19,6 +21,7 @@ namespace SpotWelder.Ui
     //public readonly SqlEngine[] SqlEngines;
     private readonly ConnectionStringViewModel _viewModel = new();
     private IConnectionStringBuilderService _builderService;
+    private readonly Regex _regexNonNumeric = new ("[^0-9]+");
 
     public ConnectionStringBuilderWindow()
     {
@@ -46,24 +49,46 @@ namespace SpotWelder.Ui
 
       if (_viewModel.SqlEngine.Value == SqlEngine.SqlServer)
       {
+        ConfigureUi(Visibility.Visible, Constants.SqlServerDefaultPort);
+      }
+      else
+      {
+        ConfigureUi(Visibility.Collapsed, Constants.PostgresDefaultPort);
+      }
+
+      UpdateConnectionString();
+
+      void ConfigureUi(Visibility visibility, int defaultPort)
+      {
         LblIsEncrypted.Visibility = Visibility.Visible;
         LblIntegratedSecurity.Visibility = Visibility.Visible;
         CbIsEncrypted.Visibility = Visibility.Visible;
         CbIntegratedSecurity.Visibility = Visibility.Visible;
+        TxtPort.Text = defaultPort.ToString();
+        _viewModel.Port = defaultPort;
       }
-      else
-      {
-        LblIsEncrypted.Visibility = Visibility.Collapsed;
-        LblIntegratedSecurity.Visibility = Visibility.Collapsed;
-        CbIsEncrypted.Visibility = Visibility.Collapsed;
-        CbIntegratedSecurity.Visibility = Visibility.Collapsed;
-      }
-
-      UpdateConnectionString();
     }
 
-    private void TxtField_OnTextChanged(object sender, TextChangedEventArgs e)
+    private void TxtField_OnKeyUp(object sender, KeyEventArgs e)
     {
+      var txt = (TextBox)sender;
+
+      switch (txt.Name)
+      {
+        case "TxtServerName":
+          _viewModel.ServerName = txt.Text;
+          break;
+        case "TxtDatabaseName":
+          _viewModel.DatabaseName = txt.Text;
+          break;
+        case "TxtUsername":
+          _viewModel.Username = txt.Text;
+          break;
+        case "TxtPassword":
+          _viewModel.Password = txt.Text;
+          break;
+      }
+
       UpdateConnectionString();
     }
 
@@ -105,12 +130,37 @@ namespace SpotWelder.Ui
       _viewModel.DatabaseName = meta.DatabaseName;
       _viewModel.Username = meta.Username;
       _viewModel.Password = meta.Password;
+      _viewModel.Port = meta.Port;
       _viewModel.IsEncrypted = meta.IsEncrypted;
       _viewModel.IsIntegratedSecurity = meta.IsIntegratedSecurity;
 
       CbSqlEngine.SelectedValue = existing.SqlEngine;
 
       UpdateConnectionString();
+    }
+
+    //Performing validation on the port number
+    private void TxtPort_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+      if (_regexNonNumeric.IsMatch(e.Text))
+      {
+        UserControlExtensions.ShowWarningMessage("Only numbers are allowed in the port field.");
+
+        e.Handled = true;
+
+        return;
+      }
+
+      if (int.TryParse(TxtPort.Text + e.Text, out var port) && port > Constants.MaxPortNumber)
+      {
+        UserControlExtensions.ShowWarningMessage("Port must be between 0 and 65,535.");
+
+        e.Handled = true;
+
+        return;
+      }
+
+      e.Handled = false;
     }
   }
 }

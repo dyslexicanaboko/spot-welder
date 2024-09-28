@@ -6,7 +6,6 @@ using SpotWelder.Ui.Profile;
 using SpotWelder.Ui.Services;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +26,7 @@ namespace SpotWelder.Ui
       InitializeComponent();
     }
 
-    public ConnectionStringManager UserConnectionStrings { get; private set; }
+    public ConnectionStringManager ConnectionStringManager { get; private set; }
 
     public UserConnectionString CurrentConnection
     {
@@ -58,9 +57,9 @@ namespace SpotWelder.Ui
       _generalRepo = repository;
       _builderService = builderService;
 
-      UserConnectionStrings = profileManager.ConnectionStringManager;
+      ConnectionStringManager = profileManager.ConnectionStringManager;
 
-      CbConnectionString_Refresh();
+      DataContext = ConnectionStringManager;
     }
 
     private async void BtnConnectionStringTest_Click(object sender, RoutedEventArgs e)
@@ -73,13 +72,7 @@ namespace SpotWelder.Ui
       if (e.Key == Key.Enter)
         await TestConnectionStringNonBlocking();
     }
-
-    private void CbConnectionString_Refresh()
-    {
-      CbConnectionString.ItemsSource =
-        new ObservableCollection<UserConnectionString>(UserConnectionStrings.ConnectionStrings);
-    }
-
+    
     private async Task TestConnectionStringNonBlocking()
     {
       try
@@ -121,15 +114,13 @@ namespace SpotWelder.Ui
 
       userConnectionString.Verified = obj.Success;
 
-      UserConnectionStrings.Upsert(userConnectionString);
+      ConnectionStringManager.Upsert(userConnectionString);
 
       return obj;
     }
 
     private bool ShowResult(ConnectionResult result, bool showMessageOnFailureOnly = false)
     {
-      CbConnectionString_Refresh();
-
       var showMessage = true;
 
       if (showMessageOnFailureOnly)
@@ -153,6 +144,13 @@ namespace SpotWelder.Ui
     //Additionally, on the edit the existing connection information must be shown
     private void BtnEdit_OnClick(object sender, RoutedEventArgs e)
     {
+      if (CbConnectionString.SelectedIndex < 0)
+      {
+        UserControlExtensions.ShowWarningMessage("Please select an existing connection string to perform an edit.");
+
+        return;
+      }
+
       LaunchConnectionStringBuilder((UserConnectionString)CbConnectionString.SelectedItem);
     }
 
@@ -181,14 +179,12 @@ namespace SpotWelder.Ui
 
       if (con.Operation == Enumerations.Upsert)
       {
-        UserConnectionStrings.Upsert(ucs);
+        ConnectionStringManager.Upsert(ucs);
       }
       else
       {
-        UserConnectionStrings.Remove(ucs);
+        ConnectionStringManager.Remove(ucs);
       }
-
-      CbConnectionString_Refresh();
 
       CbConnectionString.SelectedIndex = 0;
     }
