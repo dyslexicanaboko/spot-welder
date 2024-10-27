@@ -14,5 +14,13 @@ namespace SpotWelder.Lib.DataAccess.SqlClients
 
     /// <inheritdoc />
     public override IDbDataAdapter GetDbDataAdapter(IDbCommand selectCommand) => new SqlDataAdapter((SqlCommand)selectCommand);
+
+    /// <inheritdoc />
+    public override string GetSchemaQuery(SourceSqlType sourceSqlType, string sourceSqlText)
+    {
+      var selector = sourceSqlType == SourceSqlType.TableName ? "SELECT * FROM " : string.Empty;
+
+      return $"SET FMTONLY ON; {selector}{sourceSqlText}; SET FMTONLY OFF;";
+    }
   }
 }

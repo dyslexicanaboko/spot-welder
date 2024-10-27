@@ -15,6 +15,16 @@ namespace SpotWelder.Lib.DataAccess
     private BaseSqlClient? _sqlClient;
     private ServerConnection? _serverConnection;
 
+    protected BaseSqlClient SqlClient
+    {
+      get 
+      { 
+        ValidateServerConnection();
+
+        return _sqlClient;
+      }
+    }
+
     public void ConfigureSqlClient(ServerConnection serverConnection)
     {
       _serverConnection = serverConnection;

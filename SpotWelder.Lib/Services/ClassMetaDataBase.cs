@@ -22,12 +22,12 @@ namespace SpotWelder.Lib.Services
 
     protected virtual SchemaQuery GetSchema(ServerConnection connection)
     {
-      //primaryKey = GetPrimaryKeyColumn(p.TableQuery); //This is specific to the repos
-      var selector = connection.SourceSqlType == SourceSqlType.TableName ? "SELECT * FROM " : string.Empty;
+      _queryToClassRepository.ConfigureSqlClient(connection);
 
-      var sqlQuery = $"SET FMTONLY ON; {selector}{connection.SourceSqlText}; SET FMTONLY OFF;";
-
-      var schema = _queryToClassRepository.GetSchema(connection.TableQuery, sqlQuery);
+      var schema = _queryToClassRepository.GetSchema(
+        connection.TableQuery, 
+        connection.SourceSqlType, 
+        connection.SourceSqlText);
 
       return schema;
     }

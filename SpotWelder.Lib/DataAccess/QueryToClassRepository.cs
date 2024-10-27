@@ -13,13 +13,15 @@ namespace SpotWelder.Lib.DataAccess
   public class QueryToClassRepository
     : BaseRepository, IQueryToClassRepository
   {
-    public SchemaQuery GetSchema(TableQuery tableQuery, string query)
+    public SchemaQuery GetSchema(TableQuery tableQuery, SourceSqlType sourceSqlType, string sourceSqlText)
     {
+      var query = SqlClient.GetSchemaQuery(sourceSqlType, sourceSqlText);
+
       var rs = GetFullSchemaInformation(query);
 
       var sq = new SchemaQuery();
       sq.Query = query;
-      sq.TableQuery = tableQuery;
+      sq.TableQuery = tableQuery; //TODO: Should probably clone this object to be safe?
       sq.IsSolitaryTableQuery = sq.TableQuery != null;
       sq.HasPrimaryKey = rs.GenericSchema.PrimaryKey.Any();
 
@@ -41,8 +43,9 @@ namespace SpotWelder.Lib.DataAccess
           SystemType = dc.DataType,
           SqlType = sqlServerColumn.Field<string>("DataTypeName"),
           Size = sqlServerColumn.Field<int>("ColumnSize"),
-          Precision = sqlServerColumn.Field<short>("NumericPrecision"),
-          Scale = sqlServerColumn.Field<short>("NumericScale")
+          //These two fields are int16 for SQL Server, but are int32 for Postgres. Using int32 for both.
+          Precision = sqlServerColumn.Field<int>("NumericPrecision"),
+          Scale = sqlServerColumn.Field<int>("NumericScale")
         };
 
         sq.ColumnsAll.Add(sc);
