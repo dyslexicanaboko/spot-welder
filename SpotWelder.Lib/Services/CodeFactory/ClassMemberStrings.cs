@@ -58,7 +58,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
 
       DatabaseTypeName = sc.SqlType.ToLower(); //Case is inconsistent, so making it lower on purpose
 
-      DatabaseType = TypesService.SqlTypes[DatabaseTypeName];
+      DatabaseType = TypesService.GetTypeMapper(sc.SqlEngine).GetDbType(DatabaseTypeName);
 
       Size = sc.Size;
 
@@ -130,7 +130,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
     public string DatabaseTypeName { get; }
 
     /// <summary>SQL Server database type enumeration</summary>
-    public SqlDbType DatabaseType { get; }
+    public DbType DatabaseType { get; }
 
     /// <summary>Column size for varchar, nvarchar, char, nchar etc...</summary>
     public int Size { get; }

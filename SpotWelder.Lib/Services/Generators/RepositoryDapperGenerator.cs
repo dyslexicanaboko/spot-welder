@@ -103,34 +103,28 @@ namespace SpotWelder.Lib.Services.Generators
 
 		private static string FormatDynamicParameter(ClassMemberStrings properties)
 		{
-			var t = properties.DatabaseType;
-
-			var strDbType = TypesService.MapSqlDbTypeToDbTypeLoose.TryGetValue(t, out var dbType) ?
-				dbType.ToString() :
-				$"[{t}]_MissingMapping";
-
 			var lst = new List<string>
 			{
-				$"name: \"@{properties.Property}\"", $"dbType: DbType.{strDbType}", $"value: entity.{properties.Property}"
+				$"name: \"@{properties.Property}\"", $"dbType: DbType.{properties.DatabaseType}", $"value: entity.{properties.Property}"
 			};
 
 			//TODO: Need to work through every type to see what the combinations are
-			switch (t)
+			switch (properties.DatabaseType)
 			{
-				case SqlDbType.DateTime2:
+				case DbType.DateTime2:
 					lst.Add($"scale: {properties.Scale}");
 
 					break;
 
-				case SqlDbType.Decimal:
+				case DbType.Decimal:
 					lst.Add($"precision: {properties.Precision}, scale: {properties.Scale}");
 
 					break;
 
-				case SqlDbType.VarChar:
-				case SqlDbType.NVarChar:
-				case SqlDbType.Char:
-				case SqlDbType.NChar:
+				case DbType.AnsiString:
+				case DbType.AnsiStringFixedLength:
+				case DbType.String:
+				case DbType.StringFixedLength:
 					lst.Add($"size: {properties.Size}");
 
 					break;

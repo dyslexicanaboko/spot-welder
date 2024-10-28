@@ -44,7 +44,7 @@ namespace SpotWelder.Lib.Models
       SqlEngine = sqlEngine;
 
       //This is in good faith, but it's not 100% accurate
-      SqlType = TypesService.MapSystemToSqlLoose[SystemType].ToString();
+      SqlType = TypesService.GetTypeMapper(SqlEngine).GetSqlDataTypeAsString(SystemType);
 
       IsPrimaryKey = false;
       IsIdentity = false;

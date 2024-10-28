@@ -23,11 +23,11 @@ namespace SpotWelder.Lib.Services.TypeMappings
     public override string GetSqlDataTypeAsString(Type type) => MapSystemToSqlLoose[type].ToString();
 
     /// <inheritdoc />
-    public override DbType GetDbTypeBySqlDataType(Enum sqlDataType)
+    public override DbType GetDbType(Enum sqlDataType)
       => MapSqlDbTypeToDbTypeLoose[(NpgsqlDbType)sqlDataType];
 
     /// <inheritdoc />
-    public override Enum GetSqlDataType(string sqlDataTypeName) => SqlTypes[sqlDataTypeName];
+    public override DbType GetDbType(string sqlDataTypeName) => GetDbType(SqlTypes[sqlDataTypeName]);
 
     /// <summary>
     ///   Loose mapping going from System type to Sql Server database type.

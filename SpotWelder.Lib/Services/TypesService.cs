@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpotWelder.Lib.Services.TypeMappings;
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -6,58 +7,6 @@ namespace SpotWelder.Lib.Services
 {
   public class TypesService
   {
-    /// <summary>
-    ///   Loose mapping going from System type to Sql Server database type.
-    /// </summary>
-    public static readonly Dictionary<Type, SqlDbType> MapSystemToSqlLoose = new Dictionary<Type, SqlDbType>
-    {
-      { typeof(bool), SqlDbType.Bit },
-      { typeof(byte), SqlDbType.TinyInt },
-      { typeof(short), SqlDbType.SmallInt },
-      { typeof(int), SqlDbType.Int },
-      { typeof(long), SqlDbType.BigInt },
-      { typeof(string), SqlDbType.NVarChar }, //Could be Char, NChar or VarChar
-      { typeof(char[]), SqlDbType.NVarChar }, //Could be Char, NChar or VarChar
-      { typeof(byte[]), SqlDbType.VarBinary }, //Could be Binary
-      { typeof(decimal), SqlDbType.Decimal },
-      { typeof(float), SqlDbType.Real }, //System.Single -> float -> SqlDbType.Real
-      { typeof(double), SqlDbType.Float }, //Do not confuse with System.float
-      { typeof(TimeSpan), SqlDbType.Time },
-      { typeof(DateTime), SqlDbType.DateTime2 },
-      { typeof(DateTimeOffset), SqlDbType.DateTimeOffset },
-      { typeof(Guid), SqlDbType.UniqueIdentifier }
-    };
-
-    /// <summary>
-    ///   Loose mapping going from SQL Server database type to Database type. Does not account for all types!
-    /// </summary>
-    public static readonly Dictionary<SqlDbType, DbType> MapSqlDbTypeToDbTypeLoose = new Dictionary<SqlDbType, DbType>
-    {
-      { SqlDbType.BigInt, DbType.Int64 },
-
-      //{ SqlDbType.Binary, ??? },
-      { SqlDbType.Bit, DbType.Boolean },
-      { SqlDbType.Char, DbType.AnsiStringFixedLength },
-      { SqlDbType.Date, DbType.Date },
-      { SqlDbType.DateTime, DbType.DateTime },
-      { SqlDbType.DateTime2, DbType.DateTime2 },
-      { SqlDbType.DateTimeOffset, DbType.DateTimeOffset },
-      { SqlDbType.Decimal, DbType.Decimal },
-      { SqlDbType.Float, DbType.Double },
-      { SqlDbType.Int, DbType.Int32 },
-      { SqlDbType.Money, DbType.Currency },
-      { SqlDbType.NChar, DbType.StringFixedLength },
-      { SqlDbType.NVarChar, DbType.String },
-      { SqlDbType.Real, DbType.Single },
-      { SqlDbType.SmallInt, DbType.Int16 },
-      { SqlDbType.Time, DbType.Time },
-      { SqlDbType.TinyInt, DbType.Byte },
-      { SqlDbType.UniqueIdentifier, DbType.Guid },
-      { SqlDbType.VarBinary, DbType.Binary },
-      { SqlDbType.VarChar, DbType.AnsiString },
-      { SqlDbType.Xml, DbType.Xml }
-    };
-
     //I got the base of this list from here: https://stackoverflow.com/a/1362899/603807
     //I am not using this right now because I realized later that the CodeProvider DOES provide the aliases. Going to keep it around for now.
     /// <summary>
@@ -89,12 +38,7 @@ namespace SpotWelder.Lib.Services
       { typeof(DateTimeOffset), "DateTimeOffset" },
       { typeof(Guid), "Guid" },
     };
-
-    /// <summary>
-    ///   Strong mapping of Sql Server Database type lower case names to their equivalent Enumeration.
-    /// </summary>
-    public static readonly Dictionary<string, SqlDbType> SqlTypes = Utils.GetEnumDictionary<SqlDbType>(true);
-
+    
     /// <summary>
     ///  Mapping of System types to TypeScript types. This is a loose mapping and does not account for all types.
     /// </summary>
@@ -117,5 +61,17 @@ namespace SpotWelder.Lib.Services
       { typeof(DateTimeOffset), "Date" },
       { typeof(Guid), "string" }
     };
+
+    //TODO: I don't love that this isn't being controlled by Dependency Injection
+    //I don't see a proper way to do this with DI that won't absolutely be a total waste of time for the sake of using DI
+    public static TypeMappingBase GetTypeMapper(SqlEngine sqlEngine)
+    {
+      return sqlEngine switch
+      {
+        SqlEngine.SqlServer => new SqlServerTypeMapping(),
+        SqlEngine.Postgres => new PostgresTypeMapping(),
+        _ => throw new ArgumentOutOfRangeException(nameof(sqlEngine), sqlEngine, "SQL Engine not supported. 0x202411032339")
+      };
+    }
   }
 }
