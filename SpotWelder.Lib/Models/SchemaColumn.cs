@@ -66,7 +66,8 @@ namespace SpotWelder.Lib.Models
 
     public Type SystemType { get; set; }
 
-    public string SqlType { get; set; }
+    /// <summary> String representation of the SQL engine's Data Type. </summary>
+    public string SqlType { get; set; } //This cannot be an enumeration because it depends on the SQL engine
 
     public int Size { get; set; }
 

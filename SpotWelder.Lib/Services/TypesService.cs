@@ -6,15 +6,6 @@ namespace SpotWelder.Lib.Services
 {
   public class TypesService
   {
-    //FYI:The enumerations below have a proper set of mappings going from Sql to System
-    /*  System.Data.SqlDbType
-            SQL Server specific
-            C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.Data.dll
-        
-        System.Data.DbType
-            ANSI SQL (Generic)
-            C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\5.0.0\ref\net5.0\System.Data.Common.dll */
-
     /// <summary>
     ///   Loose mapping going from System type to Sql Server database type.
     /// </summary>
