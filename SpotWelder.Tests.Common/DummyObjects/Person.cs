@@ -1,4 +1,5 @@
-﻿using SpotWelder.Lib.Models;
+﻿using SpotWelder.Lib;
+using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
 using System.Data;
 
@@ -46,14 +47,12 @@ namespace SimpleClassCreator.Tests.DummyObjects
 
     public static SchemaQuery GetPersonAsSchemaQuery()
     {
-      var sq = new SchemaQuery
-      {
-        TableQuery = new TableQuery { Schema = "dbo", Table = nameof(Person) },
-        IsSolitaryTableQuery = true,
-        HasPrimaryKey = true
-      };
+      var sq = new SchemaQuery(
+        SqlEngine.SqlServer,
+        new TableQuery { Schema = "dbo", Table = nameof(Person) },
+        "Does not matter for QA purposes");
 
-      sq.PrimaryKey = GetSchemaColumn(nameof(Person.PersonId), typeof(int));
+      sq.SetPrimaryKey(GetSchemaColumn(nameof(Person.PersonId), typeof(int)));
 
       sq.ColumnsNoPk = new List<SchemaColumn>
       {

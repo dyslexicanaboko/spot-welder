@@ -4,6 +4,9 @@ namespace SpotWelder.Lib.DataAccess.SqlClients;
 
 public abstract class BaseSqlClient
 {
+  /// <summary> The type of SQL engine this client is connected to. </summary>
+  public abstract SqlEngine SqlEngine { get; }
+
   public abstract IDbConnection GetDbConnection(string connectionString);
 
   public abstract IDbCommand GetDbCommand(string cmdText, IDbConnection connection);

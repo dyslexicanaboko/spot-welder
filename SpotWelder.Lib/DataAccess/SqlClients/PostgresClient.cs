@@ -8,6 +8,9 @@ namespace SpotWelder.Lib.DataAccess.SqlClients
   public class PostgresClient : BaseSqlClient
   {
     /// <inheritdoc />
+    public override SqlEngine SqlEngine => SqlEngine.Postgres;
+
+    /// <inheritdoc />
     public override IDbConnection GetDbConnection(string connectionString) => new NpgsqlConnection(connectionString);
 
     /// <inheritdoc />

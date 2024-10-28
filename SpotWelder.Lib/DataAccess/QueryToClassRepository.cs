@@ -19,12 +19,8 @@ namespace SpotWelder.Lib.DataAccess
 
       var rs = GetFullSchemaInformation(query);
 
-      var sq = new SchemaQuery();
-      sq.Query = query;
-      sq.TableQuery = tableQuery; //TODO: Should probably clone this object to be safe?
-      sq.IsSolitaryTableQuery = sq.TableQuery != null;
-      sq.HasPrimaryKey = rs.GenericSchema.PrimaryKey.Any();
-
+      var sq = new SchemaQuery(SqlClient.SqlEngine, tableQuery, query);
+      
       sq.ColumnsAll = new List<SchemaColumn>(rs.GenericSchema.Columns.Count);
 
       foreach (DataColumn dc in rs.GenericSchema.Columns)
@@ -36,31 +32,35 @@ namespace SpotWelder.Lib.DataAccess
 
         var sqlServerColumn = arr.Single();
 
-        var sc = new SchemaColumn
-        {
-          ColumnName = dc.ColumnName,
-          IsDbNullable = dc.AllowDBNull,
-          SystemType = dc.DataType,
-          SqlType = sqlServerColumn.Field<string>("DataTypeName"),
-          Size = sqlServerColumn.Field<int>("ColumnSize"),
+        var sc = new SchemaColumn(
+          sq.SourceSqlEngine,
+          dc.ColumnName,
+          dc.DataType,
+          sqlServerColumn.Field<string>("DataTypeName"),
+          false, //Cannot be determined from DataColumn type directly
+          dc.AutoIncrement,
+          dc.AllowDBNull,
+          sqlServerColumn.Field<int>("ColumnSize"),
+
           //These two fields are int16 for SQL Server, but are int32 for Postgres. Using int32 for both.
-          Precision = sqlServerColumn.Field<int>("NumericPrecision"),
-          Scale = sqlServerColumn.Field<int>("NumericScale")
-        };
+          sqlServerColumn.Field<int>("NumericPrecision"),
+          sqlServerColumn.Field<int>("NumericScale")
+        );
 
         sq.ColumnsAll.Add(sc);
       }
 
-      if (!sq.HasPrimaryKey) return sq;
+      //Check if any primary keys exist
+      if (!rs.GenericSchema.PrimaryKey.Any()) return sq;
 
       //TODO: This is assuming a single column is the primary key which is a bad idea, but okay for now
       var pk = rs.GenericSchema.PrimaryKey.First();
 
-      sq.PrimaryKey = sq
+      sq.SetPrimaryKey(sq
         .ColumnsAll
-        .Single(x => x.ColumnName.Equals(pk.ColumnName, StringComparison.InvariantCultureIgnoreCase));
+        .Single(x => x.ColumnName.Equals(pk.ColumnName, StringComparison.InvariantCultureIgnoreCase)));
 
-      sq.PrimaryKey.IsIdentity = pk.AutoIncrement;
+      sq.PrimaryKey!.IsIdentity = pk.AutoIncrement;
       sq.PrimaryKey.IsPrimaryKey = true;
 
       sq.ColumnsNoPk = sq

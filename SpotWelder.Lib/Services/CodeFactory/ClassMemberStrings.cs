@@ -14,11 +14,24 @@ namespace SpotWelder.Lib.Services.CodeFactory
   {
     private readonly CodeDomProvider _provider;
 
+    /// <summary>
+    /// Used in the case where the meta data is provided by the reflected properties
+    /// of a class versus a database schema. The SQL portion of the properties can
+    /// safely be ignored and are defaulted to SQL Server.
+    /// </summary>
+    /// <param name="property">Reflected property information of a class.</param>
     public ClassMemberStrings(PropertyInfo property)
-      : this(new SchemaColumn(property))
+      : this(new SchemaColumn(
+        SqlEngine.SqlServer, //Safe to ignore this and just default to SQL Server for argument's sake
+        property))
     {
     }
 
+    /// <summary>
+    /// Used in the case where the meta data is provided by a query's database schema.
+    /// </summary>
+    /// <param name="sc">Schema information</param>
+    /// <param name="type">Programming language to use for generation.</param>
     public ClassMemberStrings(SchemaColumn sc, CodeType type = CodeType.CSharp)
     {
       switch (type)

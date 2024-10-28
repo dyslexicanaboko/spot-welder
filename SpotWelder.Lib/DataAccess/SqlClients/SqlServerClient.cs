@@ -7,6 +7,9 @@ namespace SpotWelder.Lib.DataAccess.SqlClients
   public class SqlServerClient : BaseSqlClient
   {
     /// <inheritdoc />
+    public override SqlEngine SqlEngine => SqlEngine.SqlServer;
+
+    /// <inheritdoc />
     public override IDbConnection GetDbConnection(string connectionString) => new SqlConnection(connectionString);
 
     /// <inheritdoc />
