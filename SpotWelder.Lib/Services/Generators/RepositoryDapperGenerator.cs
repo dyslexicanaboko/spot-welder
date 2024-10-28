@@ -107,7 +107,7 @@ namespace SpotWelder.Lib.Services.Generators
 
 			var strDbType = TypesService.MapSqlDbTypeToDbTypeLoose.TryGetValue(t, out var dbType) ?
 				dbType.ToString() :
-				$"SqlDbType.{t}_MissingMapping";
+				$"[{t}]_MissingMapping";
 
 			var lst = new List<string>
 			{
