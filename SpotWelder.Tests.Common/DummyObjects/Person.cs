@@ -75,15 +75,12 @@ namespace SimpleClassCreator.Tests.DummyObjects
 
     private static SchemaColumn GetSchemaColumn(string columnName, Type type, bool isNullable = false)
     {
-      var c = new SchemaColumn
-      {
-        ColumnName = columnName,
-        SystemType = type,
-        IsDbNullable = isNullable,
-        SqlType = TypesService.MapSystemToSqlLoose[type].ToString()
-      };
-
-      return c;
+      return new SchemaColumn(
+        SqlEngine.SqlServer,
+        columnName,
+        type,
+        sqlType: TypesService.MapSystemToSqlLoose[type].ToString(),
+        isDbNullable: isNullable);
     }
 
     private static DataColumn GetNonNullColumn(string columnName, Type type)
