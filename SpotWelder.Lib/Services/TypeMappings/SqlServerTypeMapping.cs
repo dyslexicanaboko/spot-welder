@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace SpotWelder.Lib.Services.TypeMappings
 {
@@ -17,6 +18,10 @@ namespace SpotWelder.Lib.Services.TypeMappings
 
     /// <inheritdoc />
     public override string GetSqlDataTypeAsString(Type type) => MapSystemToSqlLoose[type].ToString();
+
+    /// <inheritdoc />
+    public override Enum GetDbTypeAsSqlDataTypeEnum(DbType type)
+      => MapDbTypeToSqlDbTypeLoose[type];
 
     /// <inheritdoc />
     public override DbType GetDbType(Enum sqlDataType)
@@ -76,6 +81,9 @@ namespace SpotWelder.Lib.Services.TypeMappings
       { SqlDbType.VarChar, DbType.AnsiString },
       { SqlDbType.Xml, DbType.Xml }
     };
+
+    private static readonly Dictionary<DbType, SqlDbType> MapDbTypeToSqlDbTypeLoose = 
+      MapSqlDbTypeToDbTypeLoose.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
     /// <summary>
     ///   Strong mapping of Sql Server Database type lower case names to their equivalent Enumeration.

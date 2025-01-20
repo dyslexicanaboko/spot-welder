@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +18,8 @@ namespace SpotWelder.Lib.Services.Generators
 
 		public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
+			var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+
 			var strTemplate = GetTemplate(TemplateName);
 
 			var template = new StringBuilder(strTemplate);
@@ -66,7 +69,7 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
 			template.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
 			template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
-			template.Replace("{{SqlParameters}}", FormatSqlParameterList(lstNoPk));
+			template.Replace("{{SqlParameters}}", FormatSqlParameterList(syntax, lstNoPk));
 			template.Replace("{{SetProperties}}", FormatSetProperties(instructions.Properties));
 
 			return GetFormattedCSharpResult($"{instructions.SubjectName}Repository.cs", template);
@@ -92,42 +95,18 @@ namespace SpotWelder.Lib.Services.Generators
 			return content;
 		}
 
-		private string FormatSqlParameterList(IList<ClassMemberStrings> properties)
+		private string FormatSqlParameterList(BaseSqlEngineSyntax syntax, IList<ClassMemberStrings> properties)
 		{
 			var content = GetTextBlock(
 				properties,
-				p => $@"{FormatSqlParameter(p)}
+				p => $@"{syntax.FormatSqlParameter(p)}
 									
 			lst.Add(p);",
 				Environment.NewLine);
 
 			return content;
 		}
-
-		private static string FormatSqlParameter(ClassMemberStrings properties)
-		{
-			var t = properties.DatabaseType;
-
-			var content =
-				$@"            p = new SqlParameter();
-			p.ParameterName = ""@{properties.Property}"";
-			p.SqlDbType = SqlDbType.{t};
-			p.Value = entity.{properties.Property};";
-
-			//TODO: Need to work through every type to see what the combinations are
-			if (t == SqlDbType.DateTime2) content += Environment.NewLine + $"            p.Scale = {properties.Scale};";
-
-			if (t == SqlDbType.Decimal)
-				content += Environment.NewLine +
-					$@"            p.Scale = {properties.Scale};
-			p.Precision = {properties.Precision};";
-
-			if (t is SqlDbType.VarChar or SqlDbType.NVarChar or SqlDbType.Char or SqlDbType.NChar)
-				content += Environment.NewLine + $"            p.Size = {properties.Size}";
-
-			return content;
-		}
-
+		
 		private string FormatSetProperties(IList<ClassMemberStrings> properties)
 		{
 			var content = GetTextBlock(

@@ -1,6 +1,7 @@
 <Query Kind="Program">
   <NuGetReference>Npgsql</NuGetReference>
   <Namespace>Npgsql</Namespace>
+  <Namespace>NpgsqlTypes</Namespace>
 </Query>
 
 const string ConnectionString = "Host=localhost;Username=postgres;Password=postgres;Database=scratchspace";
@@ -9,6 +10,34 @@ void Main()
 {
 	//GetFullSchemaInfo("public.types_table");
 	GetFullSchemaInfo("public.types_table_nullable");
+}
+
+//Looking over parameter syntax
+private void Blah()
+{
+	using (var con = new NpgsqlConnection(""))
+	{
+		con.Open();
+
+		using (var cmd = new NpgsqlCommand("", con))
+		{
+			var p = new NpgsqlParameter();
+			p.ParameterName = "";
+			p.NpgsqlDbType = NpgsqlDbType.Bit;
+			p.Value = null;
+			p.Scale = 0;
+			p.Size = 0;
+			p.Precision = 0;
+			
+			using (var dr = cmd.ExecuteReader())
+			{
+				while (dr.Read())
+				{
+					//var obj = Convert.ToInt32(dr[""]);
+				}
+			}
+		}
+	}
 }
 
 private void GetFullSchemaInfo(string target)

@@ -1,7 +1,6 @@
 ﻿using SpotWelder.Lib.Services.TypeMappings;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace SpotWelder.Lib.Services
 {

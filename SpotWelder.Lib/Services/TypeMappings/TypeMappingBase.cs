@@ -13,6 +13,14 @@ namespace SpotWelder.Lib.Services.TypeMappings
     /// <returns>DbType</returns>
     public abstract string GetSqlDataTypeAsString(Type type);
 
+    //DbType -> SqlDbType
+    /// <summary>
+    /// Convert the <see cref="DbType"/> to the SQL engine specific enumerated type.
+    /// </summary>
+    /// <param name="type">DbType enumeration</param>
+    /// <returns>SQL engine specific type</returns>
+    public abstract Enum GetDbTypeAsSqlDataTypeEnum(DbType type);
+
     //SqlDbType -> DbType
     /// <summary>
     /// Get the <see cref="DbType"/> from the SQL engine specific enumerated type.
@@ -21,7 +29,7 @@ namespace SpotWelder.Lib.Services.TypeMappings
     /// <returns>Loosely equivalent DbType</returns>
     public abstract DbType GetDbType(Enum sqlDataType);
 
-    //"SqlDbType" -> SqlDbType
+    //"SqlDbType" -> DbType
     /// <summary>
     /// Get the <see cref="DbType"/> from the SQL engine specific enumerated type as a string.
     /// </summary>

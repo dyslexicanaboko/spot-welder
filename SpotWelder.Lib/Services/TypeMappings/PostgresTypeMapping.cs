@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace SpotWelder.Lib.Services.TypeMappings
 {
@@ -22,6 +23,9 @@ namespace SpotWelder.Lib.Services.TypeMappings
     /// <inheritdoc />
     public override string GetSqlDataTypeAsString(Type type) => MapSystemToSqlLoose[type].ToString();
 
+    public override Enum GetDbTypeAsSqlDataTypeEnum(DbType type)
+      => MapDbTypeToSqlDbTypeLoose[type];
+
     /// <inheritdoc />
     public override DbType GetDbType(Enum sqlDataType)
       => MapSqlDbTypeToDbTypeLoose[(NpgsqlDbType)sqlDataType];
@@ -30,7 +34,7 @@ namespace SpotWelder.Lib.Services.TypeMappings
     public override DbType GetDbType(string sqlDataTypeName) => GetDbType(SqlTypes[sqlDataTypeName]);
 
     /// <summary>
-    ///   Loose mapping going from System type to Sql Server database type.
+    ///   Loose mapping going from System type to Npgsql database type.
     /// </summary>
     private static readonly Dictionary<Type, NpgsqlDbType> MapSystemToSqlLoose = new()
     {
@@ -52,7 +56,7 @@ namespace SpotWelder.Lib.Services.TypeMappings
     };
 
     /// <summary>
-    ///   Loose mapping going from SQL Server database type to Database type. Does not account for all types!
+    ///   Loose mapping going from Npgsql database type to Database type. Does not account for all types!
     /// </summary>
     private static readonly Dictionary<NpgsqlDbType, DbType> MapSqlDbTypeToDbTypeLoose = new()
     {
@@ -81,8 +85,11 @@ namespace SpotWelder.Lib.Services.TypeMappings
       { NpgsqlDbType.Xml, DbType.Xml }
     };
 
+    private static readonly Dictionary<DbType, NpgsqlDbType> MapDbTypeToSqlDbTypeLoose =
+      MapSqlDbTypeToDbTypeLoose.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
+
     /// <summary>
-    ///   Strong mapping of Sql Server Database type lower case names to their equivalent Enumeration.
+    ///   Strong mapping of Npgsql Database type lower case names to their equivalent Enumeration.
     /// </summary>
     private static readonly Dictionary<string, NpgsqlDbType> SqlTypes = Utils.GetEnumDictionary<NpgsqlDbType>(true);
   }
