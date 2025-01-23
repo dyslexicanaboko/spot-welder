@@ -196,9 +196,7 @@ namespace SpotWelder.Ui
 
       var tbl = strategy.ParseTableName(TxtSourceSqlText.Text);
 
-      var entity = strategy.GetClassName(tbl);
-
-      return entity;
+      return strategy.GetClassName(tbl); //Entity
     }
 
     private string GetDefaultClassName(bool includeExtension = false)

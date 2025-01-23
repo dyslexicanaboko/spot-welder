@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Humanizer;
+using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Data;
@@ -244,6 +245,34 @@ namespace SpotWelder.Lib.Services.CodeFactory
     private void SetPropertyAndField(string unqualifiedColumnName)
     {
       //Removing any whitespace
+      //Removing any underscores - which may be a problem
+      
+      //Pascal Case the property name
+      Property = unqualifiedColumnName.Pascalize();
+
+      //Camel case the parameter name
+      Parameter = unqualifiedColumnName.Camelize();
+
+      //Field denoted by prefixing with underscore
+      Field = "_" + Parameter;
+    }
+
+    private void SetColumnName(string trimmedColumnName)
+    {
+      //Qualifying the column name for SQL
+      ColumnName = trimmedColumnName.Contains(" ") ? "[" + trimmedColumnName + "]" : trimmedColumnName;
+    }
+
+    public ClassMemberStrings Clone() => new (this, _provider);
+  }
+}
+
+/*
+ //My original poor man's method of handling pascal case and camel case
+ //Handing the responsibility over to Humanizr since the complexity has increased for me
+ private void SetPropertyAndField(string unqualifiedColumnName)
+    {
+      //Removing any whitespace
       Property = unqualifiedColumnName.Replace(" ", string.Empty);
 
       var firstChar = Property.Substring(0, 1);
@@ -258,13 +287,4 @@ namespace SpotWelder.Lib.Services.CodeFactory
       //Camel case the field name
       Field = "_" + Parameter;
     }
-
-    private void SetColumnName(string trimmedColumnName)
-    {
-      //Qualifying the column name for SQL
-      ColumnName = trimmedColumnName.Contains(" ") ? "[" + trimmedColumnName + "]" : trimmedColumnName;
-    }
-
-    public ClassMemberStrings Clone() => new (this, _provider);
-  }
-}
+ */

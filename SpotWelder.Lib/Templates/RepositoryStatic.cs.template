@@ -38,7 +38,6 @@ namespace {{Namespace}}
 			return ToList(dr, ToEntity);
 		}
 
-		//Preference on whether or not insert method returns a value is up to the user and the object being inserted
 		public {{PrimaryKeyType}} Insert({{EntityName}} entity)
 		{
 			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (

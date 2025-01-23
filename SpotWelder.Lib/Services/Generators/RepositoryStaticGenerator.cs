@@ -79,7 +79,7 @@ namespace SpotWelder.Lib.Services.Generators
 		{
 			var content = GetTextBlock(
 				properties,
-				p => $"                {prefix}{p.Property}",
+				p => $"                {prefix}{p.ColumnName}",
 				"," + Environment.NewLine);
 
 			return content;
@@ -89,7 +89,7 @@ namespace SpotWelder.Lib.Services.Generators
 		{
 			var content = GetTextBlock(
 				properties,
-				p => $"                {p.Property} = @{p.Property}",
+				p => $"                {p.ColumnName} = @{p.Property}",
 				"," + Environment.NewLine);
 
 			return content;

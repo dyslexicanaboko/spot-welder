@@ -42,7 +42,6 @@ namespace {{Namespace}}
 			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
 		}
 
-		//Preference on whether or not insert method returns a value is up to the user and the object being inserted
 		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
 		{
 			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (

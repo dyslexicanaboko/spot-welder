@@ -64,9 +64,9 @@ namespace SpotWelder.Lib.Services.TypeMappings
 
       //{ NpgsqlDbType.Binary, ??? },
       { NpgsqlDbType.Boolean, DbType.Boolean },
-      { NpgsqlDbType.Char, DbType.AnsiStringFixedLength },
+      //{ NpgsqlDbType.Char, DbType.AnsiStringFixedLength },
       { NpgsqlDbType.Date, DbType.Date },
-      { NpgsqlDbType.Timestamp, DbType.DateTime },  //Guessing
+      //{ NpgsqlDbType.Timestamp, DbType.DateTime },  //Guessing
       { NpgsqlDbType.Timestamp, DbType.DateTime2 }, //Guessing
       { NpgsqlDbType.TimestampTz, DbType.DateTimeOffset },
       { NpgsqlDbType.Numeric, DbType.Decimal },
@@ -76,12 +76,12 @@ namespace SpotWelder.Lib.Services.TypeMappings
       { NpgsqlDbType.Char, DbType.StringFixedLength },
       { NpgsqlDbType.Varchar, DbType.String },
       { NpgsqlDbType.Real, DbType.Single },
-      { NpgsqlDbType.Integer, DbType.Int16 },
+      //{ NpgsqlDbType.Integer, DbType.Int16 },
       { NpgsqlDbType.Time, DbType.Time },
-      { NpgsqlDbType.Integer, DbType.Byte },
+      //{ NpgsqlDbType.Integer, DbType.Byte },
       { NpgsqlDbType.Uuid, DbType.Guid },
       //{ NpgsqlDbType.Binary, DbType.Binary },
-      { NpgsqlDbType.Varchar, DbType.AnsiString },
+      //{ NpgsqlDbType.Varchar, DbType.AnsiString },
       { NpgsqlDbType.Xml, DbType.Xml }
     };
 
@@ -91,6 +91,35 @@ namespace SpotWelder.Lib.Services.TypeMappings
     /// <summary>
     ///   Strong mapping of Npgsql Database type lower case names to their equivalent Enumeration.
     /// </summary>
-    private static readonly Dictionary<string, NpgsqlDbType> SqlTypes = Utils.GetEnumDictionary<NpgsqlDbType>(true);
+    private static readonly Dictionary<string, NpgsqlDbType> SqlTypes = InitializeSqlTypes();
+
+    private static Dictionary<string, NpgsqlDbType> InitializeSqlTypes()
+    {
+      var dict = Utils.GetEnumDictionary<NpgsqlDbType>(true);
+
+      //Adding in the other aliases for existing types
+      //https://www.postgresql.org/docs/current/datatype.html
+      dict.Add("character varying", NpgsqlDbType.Varchar);
+      dict.Add("character", NpgsqlDbType.Char);
+      dict.Add("timestamp without time zone", NpgsqlDbType.Timestamp);
+      dict.Add("timestamp with time zone", NpgsqlDbType.TimestampTz);
+      dict.Add("time without time zone", NpgsqlDbType.Time);
+      dict.Add("time with time zone", NpgsqlDbType.TimeTz);
+      dict.Add("double precision", NpgsqlDbType.Double);
+      dict.Add("int8", NpgsqlDbType.Bigint);
+      dict.Add("bit varying", NpgsqlDbType.Varbit);
+      dict.Add("bool", NpgsqlDbType.Boolean);
+      dict.Add("float8", NpgsqlDbType.Double);
+      dict.Add("int", NpgsqlDbType.Integer);
+      dict.Add("int4", NpgsqlDbType.Integer);
+      dict.Add("decimal", NpgsqlDbType.Numeric);
+      dict.Add("float4", NpgsqlDbType.Real);
+      dict.Add("int2", NpgsqlDbType.Smallint);
+      //dict.Add("serial2", NpgsqlDbType.);
+      //dict.Add("serial4", NpgsqlDbType.);
+      //dict.Add("serial8", NpgsqlDbType.);
+
+      return dict;
+    }
   }
 }

@@ -1,4 +1,5 @@
-﻿using SpotWelder.Lib.Models;
+﻿using Humanizer;
+using SpotWelder.Lib.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -14,7 +15,7 @@ namespace SpotWelder.Lib.Services.TableQueryFormats
     protected abstract string DefaultSchema { get; }
 
     public virtual string GetClassName(TableQuery tableQuery)
-      => _whiteSpace.Replace(tableQuery.TableUnqualified, string.Empty);
+      => _whiteSpace.Replace(tableQuery.TableUnqualified, string.Empty).Dehumanize();
 
     protected abstract string RemoveQualifiers(string tableNameQuery);
 
