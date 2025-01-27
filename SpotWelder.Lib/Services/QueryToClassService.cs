@@ -76,6 +76,7 @@ namespace SpotWelder.Lib.Services
         InterfaceName = $"I{p.SubjectName}",
         TableQuery = p.ServerConnection.TableQuery,
         Elections = p.Elections,
+        SqlEngine = p.ServerConnection.SqlEngine
       };
 
       foreach (var sc in schema.ColumnsAll)

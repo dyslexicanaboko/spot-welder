@@ -43,10 +43,15 @@ namespace SpotWelder.Ui
       }
     }
 
-    public void DebugSetTestParameters()
-    {
-      CbConnectionString.Text = "Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;";
-    }
+    //Keeping these connection strings here just in case they get removed from the profile.json
+    //"Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;"
+    //"Host=localhost;Database=millions_of_things;Username=postgres;Password=postgres"
+    //FYI: The index location can change
+    public void DebugSetSqlServerTestParameters()
+      => CbConnectionString.SelectedIndex = 6;
+
+    public void DebugSetPostgresTestParameters()
+      => CbConnectionString.SelectedIndex = 4;
 
     public void Dependencies(
       IProfileManager profileManager,

@@ -16,5 +16,5 @@ Examples:
 - Those are the aforementioned tags. They look like this: `{{TagName}}`
 - These tags are replaced dynamically while generating code.
 - In the future, it may be possible to provide your own, but it's low on the list of priorties.
-- 
+
 

@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +18,8 @@ namespace SpotWelder.Lib.Services.Generators
 
 		public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
+			var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+
 			instructions.ClassName = instructions.SubjectName;
 
 			var strTemplate = GetTemplate(TemplateName);
@@ -27,6 +30,11 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
 			template.Replace("{{EntityName}}", instructions.EntityName);
 			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+			template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
+			template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
+			template.Replace("{{ParameterObject}}", syntax.ParameterObject);
+			template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);
+			template.Replace("{{ParameterDbTypeEnum}}", syntax.ParameterDbTypeEnum);
 
 			GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
 
@@ -42,19 +50,18 @@ namespace SpotWelder.Lib.Services.Generators
 				template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName); //TaskId or task_id
 				template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
 
-				var scopeIdentity = string.Empty;
+				var scopeIdentity = ScopeIdentityValues.Empty();
 
 				if (pk.IsIdentity)
-
 					//If the PK is identity then the PK needs to be returned
-					scopeIdentity = @"
-			SELECT SCOPE_IDENTITY() AS PK;"; //Don't change the spacing here, it's like this on purpose
+					scopeIdentity = syntax.GetScopeIdentity(pk.ColumnName);
 				else
-
 					//If the PK is not identity, then the PK needs to explicitly be provided and inserted
 					lstInsert.Insert(0, pk);
 
-				template.Replace("{{ScopeIdentity}}", scopeIdentity);
+				template.Replace("{{InsertPkColumnName}}", scopeIdentity.PrimaryKeyColumnName);
+				template.Replace("{{InsertPkDefault}}", scopeIdentity.PrimaryKeyDefault);
+				template.Replace("{{ScopeIdentity}}", scopeIdentity.ScopeIdentity);
 				template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, instructions.IsAsynchronous));
 			}
 
@@ -71,7 +78,7 @@ namespace SpotWelder.Lib.Services.Generators
 			return GetFormattedCSharpResult($"{instructions.ClassName}Repository.cs", template);
 		}
 
-		private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)
+		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
 		{
 			var content = GetTextBlock(
 				properties,
@@ -85,7 +92,7 @@ namespace SpotWelder.Lib.Services.Generators
 		{
 			var content = GetTextBlock(
 				properties,
-				p => $"                {p.ColumnName} = @{p.Property}",
+				p => $"                {p.ColumnName} = @{p.ColumnName}",
 				"," + Environment.NewLine);
 
 			return content;
@@ -105,7 +112,7 @@ namespace SpotWelder.Lib.Services.Generators
 		{
 			var lst = new List<string>
 			{
-				$"name: \"@{properties.Property}\"", $"dbType: DbType.{properties.DatabaseType}", $"value: entity.{properties.Property}"
+				$"name: \"@{properties.ColumnName}\"", $"dbType: DbType.{properties.DatabaseType}", $"value: entity.{properties.Property}"
 			};
 
 			//TODO: Need to work through every type to see what the combinations are
@@ -146,10 +153,8 @@ namespace SpotWelder.Lib.Services.Generators
 				suf = "Async";
 			}
 
-			if (primaryKey.IsIdentity)
-				return $"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, entity);";
-
-			return
+			return primaryKey.IsIdentity ? 
+				$"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, p);" : 
 				$@"            {ak}connection.Execute{suf}(sql, p);
 
 				return entity.{primaryKey.Property};";

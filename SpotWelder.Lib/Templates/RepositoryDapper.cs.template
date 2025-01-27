@@ -1,6 +1,5 @@
-//https://www.nuget.org/packages/Dapper/
 using Dapper;
-using Microsoft.Data.SqlClient;
+{{SqlNamespaces}}
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace {{Namespace}}
 		{
 		}
 
-		public [AO]{{EntityName}}[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			const string sql = @"
 			SELECT
@@ -23,7 +22,7 @@ namespace {{Namespace}}
 			FROM {{Schema}}.{{Table}}
 			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
 			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, {{PrimaryKeyParameter}})[AWC].ToList();
 				
@@ -37,7 +36,7 @@ namespace {{Namespace}}
 	{{SelectAllList}}
 			FROM {{Schema}}.{{Table}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
 			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
 		}
@@ -45,12 +44,11 @@ namespace {{Namespace}}
 		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
 		{
 			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (
-	{{InsertColumnList}}
+{{InsertColumnList}}
 						) VALUES (
-	{{InsertValuesList}});
-	{{ScopeIdentity}}";
+{{InsertValuesList}})	{{ScopeIdentity}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
 			var p = new DynamicParameters();
 	{{DynamicParametersInsert}}
@@ -64,7 +62,7 @@ namespace {{Namespace}}
 	{{UpdateParameters}}
 						WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyProperty}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
 			var p = new DynamicParameters();
 	{{DynamicParametersUpdate}}
@@ -76,7 +74,7 @@ namespace {{Namespace}}
 		{
 			const string sql = "DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
 			[A]connection.Execute[AS](sql, {{PrimaryKeyParameter}});
 		}

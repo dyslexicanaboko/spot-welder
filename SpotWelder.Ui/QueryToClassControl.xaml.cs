@@ -58,17 +58,35 @@ namespace SpotWelder.Ui
       _electionToCheckBoxMap = GetGenerationElectionsMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
 
-      DebugSetTestParameters();
+      //DebugWholeSqlServerTest();
+      DebugMinimalPostgresTest();
     }
 
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
 
     public void CloseResultWindows() => _parentResultsWindow.Shutdown();
 
-    private void DebugSetTestParameters()
+    private void DebugMinimalPostgresTest()
     {
       #if DEBUG
-      ConnectionStringCb.DebugSetTestParameters();
+      ConnectionStringCb.DebugSetPostgresTestParameters();
+      TxtSourceSqlText.Text = "public.task";
+      TxtNamespaceName.Text = "Namespace1";
+      TxtEntityName.Text = "Task";
+      TxtClassEntityName.Text = "TaskEntity";
+
+      CbClassEntity.IsChecked = true;
+      CbClassModel.IsChecked = false; //Selected by default, so un-checking
+      CbRepoDapper.IsChecked = true;
+      CbRepoStatic.IsChecked = true;
+      CbMakeAsynchronous.IsChecked = true;
+#endif
+    }
+
+    private void DebugWholeSqlServerTest()
+    {
+      #if DEBUG
+      ConnectionStringCb.DebugSetSqlServerTestParameters();
 
       RbSourceTypeTableName.IsChecked = true;
       RbSourceTypeQuery.IsChecked = false;
@@ -326,7 +344,7 @@ namespace SpotWelder.Ui
         //Trap Exception
       }
     }
-
+    
     private async void BtnGenerate_Click(object sender, RoutedEventArgs e)
     {
       try

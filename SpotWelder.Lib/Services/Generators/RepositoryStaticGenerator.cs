@@ -3,7 +3,6 @@ using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 
@@ -33,7 +32,12 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{ClassName}}", instructions.SubjectName); //Prefix of the repository class name
 			template.Replace("{{EntityName}}", instructions.EntityName); //Class entity name
 			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-			
+			template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
+			template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
+			template.Replace("{{ParameterObject}}", syntax.ParameterObject);
+			template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);
+			template.Replace("{{ParameterDbTypeEnum}}", syntax.ParameterDbTypeEnum);
+
 			var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
 			var lstNoPk = instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
 			var lstInsert = new List<ClassMemberStrings>(lstNoPk);
@@ -45,21 +49,20 @@ namespace SpotWelder.Lib.Services.Generators
 				template.Replace("{{PrimaryKeyProperty}}", pk.Property);
 				template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName);
 				template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias);
-				template.Replace("{{PrimaryKeySqlDbType}}", pk.DatabaseType.ToString());
+				template.Replace("{{PrimaryKeySqlDbType}}", syntax.GetEngineSpecificType(pk.DatabaseType));
 
-				var scopeIdentity = string.Empty;
+				var scopeIdentity = ScopeIdentityValues.Empty();
 
 				if (pk.IsIdentity)
-
 					//If the PK is identity then the PK needs to be returned
-					scopeIdentity = @"
-			SELECT SCOPE_IDENTITY() AS PK;";
+					scopeIdentity = syntax.GetScopeIdentity(pk.ColumnName);
 				else
-
 					//If the PK is not identity, then the PK needs to explicitly be provided and inserted
 					lstInsert.Insert(0, pk);
 
-				template.Replace("{{ScopeIdentity}}", scopeIdentity);
+				template.Replace("{{InsertPkColumnName}}", scopeIdentity.PrimaryKeyColumnName);
+				template.Replace("{{InsertPkDefault}}", scopeIdentity.PrimaryKeyDefault);
+				template.Replace("{{ScopeIdentity}}", scopeIdentity.ScopeIdentity);
 				template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk));
 			}
 
@@ -72,10 +75,12 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{SqlParameters}}", FormatSqlParameterList(syntax, lstNoPk));
 			template.Replace("{{SetProperties}}", FormatSetProperties(instructions.Properties));
 
+			GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
+
 			return GetFormattedCSharpResult($"{instructions.SubjectName}Repository.cs", template);
 		}
 
-		private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)
+		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
 		{
 			var content = GetTextBlock(
 				properties,
@@ -89,7 +94,7 @@ namespace SpotWelder.Lib.Services.Generators
 		{
 			var content = GetTextBlock(
 				properties,
-				p => $"                {p.ColumnName} = @{p.Property}",
+				p => $"                {p.ColumnName} = @{p.ColumnName}",
 				"," + Environment.NewLine);
 
 			return content;
@@ -150,15 +155,14 @@ namespace SpotWelder.Lib.Services.Generators
 				var method = string.Format(primaryKey.ConversionMethodSignature, "GetScalar(dr, \"PK\")");
 
 				content = $@"
-			using (var dr = ExecuteReaderText(sql, lst.ToArray()))
-			{{
-				return {method};
-			}}";
+			using var dr = [A]ExecuteReaderText(sql, lst.ToArray());
+			
+			return {method};";
 			}
 			else
 			{
 				content = $@"
-			ExecuteNonQuery(sql, lst.ToArray());
+			[A]ExecuteNonQuery(sql, lst.ToArray());
 
 			return entity.{primaryKey.Property};";
 			}
