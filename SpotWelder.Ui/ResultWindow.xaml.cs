@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
+using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace SpotWelder.Ui
@@ -16,6 +18,21 @@ namespace SpotWelder.Ui
       Title = title;
 
       TxtResult.Text = contents;
+
+      LineNumbers.Text = GetLineNumbers(contents);
+    }
+
+    private static string GetLineNumbers(string input)
+    {
+      if (string.IsNullOrEmpty(input))
+      {
+        return "01";
+      }
+
+      // Split the string by newline characters
+      var lines = input.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+      return string.Join(Environment.NewLine, Enumerable.Range(1, lines.Length).Select(i => i.ToString("00")));
     }
 
     private void BtnCopy_Click(object sender, RoutedEventArgs e)

@@ -41,10 +41,7 @@
                    HorizontalScrollBarVisibility="Auto" 
                    VerticalContentAlignment="Stretch" 
                    VerticalScrollBarVisibility="Auto" 
-                   Background="Black" 
-                   Foreground="White" 
-                   FontFamily="Courier New" 
-                   FontSize="14" 
+                   Style="{StaticResource TextBoxCodeFont}"
                    Text="{Binding Content}" />
         </DataTemplate>
       </TabControl.ContentTemplate>
