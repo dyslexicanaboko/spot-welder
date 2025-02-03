@@ -15,7 +15,7 @@ namespace {{Namespace}}
 			SELECT
 {{SelectAllList}}
 			FROM {{Schema}}.{{Table}}
-			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyProperty}}";
+			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
 			var p = GetPrimaryKeyParameter({{PrimaryKeyParameter}});
 
@@ -23,7 +23,7 @@ namespace {{Namespace}}
 			
 			var lst = ToList(dr, ToEntity);
 
-			return !lst.Any() ? null : lst.Single();
+			return lst.Any() ? lst.Single() : null;
 		}
 
 		public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
@@ -54,20 +54,18 @@ namespace {{Namespace}}
 		{
 			const string sql = @"UPDATE {{Schema}}.{{Table}} SET 
 {{UpdateParameters}}
-					WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyProperty}}";
+					WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
 			var lst = GetParameters(entity);
 
-			var p = GetPrimaryKeyParameter(entity.{{PrimaryKeyProperty}});
-
-			lst.Add(p);
+			lst.Add(GetPrimaryKeyParameter(entity.{{PrimaryKeyProperty}}));
 
 			[A]ExecuteNonQuery(sql, lst.ToArray());
 		}
 
 		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
-			const string sql = @"DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyProperty}}";
+			const string sql = @"DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
 			var arr = new {{ParameterObject}}[] { GetPrimaryKeyParameter({{PrimaryKeyParameter}}) };
 			
@@ -77,7 +75,7 @@ namespace {{Namespace}}
 		private {{ParameterObject}} GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			var p = new {{ParameterObject}}();
-			p.ParameterName = "@{{PrimaryKeyProperty}}";
+			p.ParameterName = "@{{PrimaryKeyColumn}}";
 			p.{{ParameterDbTypeProperty}} = {{ParameterDbTypeEnum}}.{{PrimaryKeySqlDbType}};
 			p.Value = {{PrimaryKeyParameter}};
 			

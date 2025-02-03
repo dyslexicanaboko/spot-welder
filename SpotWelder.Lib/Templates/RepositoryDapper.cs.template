@@ -20,11 +20,11 @@ namespace {{Namespace}}
 			SELECT
 	{{SelectAllList}}
 			FROM {{Schema}}.{{Table}}
-			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
+			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
-			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, {{PrimaryKeyParameter}})[AWC].ToList();
+			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
 				
 			return lst.SingleOrDefault();
 		}
@@ -60,7 +60,7 @@ namespace {{Namespace}}
 		{
 			const string sql = @"UPDATE {{Schema}}.{{Table}} SET 
 	{{UpdateParameters}}
-						WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyProperty}}";
+						WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
@@ -72,11 +72,19 @@ namespace {{Namespace}}
 
 		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
-			const string sql = "DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
+			const string sql = "DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
-			[A]connection.Execute[AS](sql, {{PrimaryKeyParameter}});
+			[A]connection.Execute[AS](sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
+		}
+
+		private DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			var p = new DynamicParameters();
+			p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});
+			
+			return p;
 		}
 	}
 }

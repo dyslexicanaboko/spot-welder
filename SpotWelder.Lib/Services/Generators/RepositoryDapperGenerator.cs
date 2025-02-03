@@ -49,6 +49,7 @@ namespace SpotWelder.Lib.Services.Generators
 				template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
 				template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName); //TaskId or task_id
 				template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
+				template.Replace("{{PrimaryKeyDbType}}", pk.DatabaseType.ToString()); //DbType.Int32
 
 				var scopeIdentity = ScopeIdentityValues.Empty();
 
@@ -73,8 +74,7 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
 			template.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
 			template.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
-			template.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
-
+			
 			return GetFormattedCSharpResult($"{instructions.ClassName}Repository.cs", template);
 		}
 
