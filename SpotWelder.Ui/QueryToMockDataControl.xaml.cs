@@ -1,4 +1,6 @@
-﻿using SpotWelder.Lib;
+﻿using Microsoft.Extensions.Logging;
+using Serilog;
+using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Events;
@@ -6,6 +8,7 @@ using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.TableQueryFormats;
+using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Profile;
 using System;
@@ -32,6 +35,8 @@ namespace SpotWelder.Ui
 
     private ITableQueryFormatFactory _tableQueryFormatFactory;
 
+    private ILogger<QueryToMockDataControl> _logger;
+
     // Empty constructor Required by WPF
     public QueryToMockDataControl()
     {
@@ -45,19 +50,15 @@ namespace SpotWelder.Ui
 
     public void CloseResultWindows() => _resultWindowManager.CloseAll();
 
-    public void Dependencies(
-      ITableQueryFormatFactory tableQueryFormatFactory,
-      IQueryToMockDataService queryToMockDataService,
-      IGeneralDatabaseQueries repository,
-      IProfileManager profileManager, 
-      IConnectionStringBuilderService builderService)
+    public void Dependencies(QueryToMockDataControlDependencies dependencies)
     {
-      _tableQueryFormatFactory = tableQueryFormatFactory;
-      _repoGeneral = repository;
+      _logger = dependencies.Logger;
+      _tableQueryFormatFactory = dependencies.TableQueryFormatFactory;
+      _repoGeneral = dependencies.Repository;
 
-      _svcQueryToMockData = queryToMockDataService;
+      _svcQueryToMockData = dependencies.QueryToMockDataService;
 
-      ConnectionStringCb.Dependencies(profileManager, _repoGeneral, builderService);
+      ConnectionStringCb.Dependencies(dependencies.ConnectionStringControlDependencies);
     }
 
     private void TxtSqlSourceText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -94,6 +95,8 @@ namespace SpotWelder.Ui
       catch (Exception ex)
       {
         UserControlExtensions.ShowErrorMessage(ex);
+
+        _logger.LogError(ex, "Error previewing mocked data");
       }
     }
 
@@ -203,6 +206,8 @@ namespace SpotWelder.Ui
       catch (Exception ex)
       {
         UserControlExtensions.ShowErrorMessage(ex);
+       
+        _logger.LogError(ex, "Error generating query to mocked data");
       }
       finally
       {

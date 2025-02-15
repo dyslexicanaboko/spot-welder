@@ -30,12 +30,16 @@
                Margin="0,0,0,4" />
     <ToolBarTray Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="29" VerticalAlignment="Center">
       <ToolBar >
+        <!-- Just a reminder that the images don't show in the preview, but they will render -->
         <Button Name="BtnCopy" Click="BtnCopy_Click">
           <Image Style="{StaticResource ImageCopy}" ToolTip="Copy to clipboard" />
         </Button>
         <Button Name="BtnSave" Click="BtnSave_OnClick">
           <Image Style="{StaticResource ImageSaveAs}" ToolTip="Save as..." />
         </Button>
+        | Go to <TextBox Name="TxtGoToLine" Text="" Width="30" KeyDown="TxtGoToLine_OnKeyDown" BorderThickness="1" BorderBrush="Black" />
+        | Find
+        <TextBox Name="TxtSearchText" Text="" Width="100" KeyDown="TxtFind_OnKeyDown" BorderThickness="1" BorderBrush="Black" />
       </ToolBar>
     </ToolBarTray>
   </Grid>

@@ -3,6 +3,7 @@ using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.TableQueryFormats;
+using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Profile;
 using SpotWelder.Ui.Services;
@@ -30,31 +31,20 @@ namespace SpotWelder.Ui
       IDtoGenerator dtoGenerator,
       IMetaViewModelService metaViewModelService,
       ICSharpCompilerService compilerService,
-      IConnectionStringBuilderService builderService)
+      IConnectionStringBuilderService builderService,
+      DtoMakerControlDependencies dtoMakerControlDependencies,
+      QueryToClassControlDependencies queryToClassControlDependencies,
+      QueryToMockDataControlDependencies queryToMockDataControlDependencies)
     {
       InitializeComponent();
 
       //I am probably doing this wrong, but I don't care right now. I will have to circle back and try to do it right later.
       //The MVVM model seems like a lot of extra unnecessary work.
-      CtrlQueryToClass.Dependencies(
-        tableQueryFormatFactory,
-        queryToClassService,
-        repository,
-        profileManager,
-        builderService);
+      CtrlQueryToClass.Dependencies(queryToClassControlDependencies);
 
-      CtrlQueryToMockData.Dependencies(
-        tableQueryFormatFactory,
-        queryToMockDataService,
-        repository,
-        profileManager,
-        builderService);
+      CtrlQueryToMockData.Dependencies(queryToMockDataControlDependencies);
 
-      CtrlDtoMaker.Dependencies(
-        dtoGenerator,
-        metaViewModelService,
-        queryToClassService,
-        compilerService);
+      CtrlDtoMaker.Dependencies(dtoMakerControlDependencies);
 
       _hasResultWindows = new List<IUsesResultWindow> { CtrlQueryToMockData, CtrlDtoMaker, CtrlQueryToClass };
     }

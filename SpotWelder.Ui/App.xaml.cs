@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using SpotWelder.Lib;
+using SpotWelder.Lib.Services.Generators;
+using SpotWelder.Lib.Services.TableQueryFormats;
+using SpotWelder.Ui.Profile;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using SpotWelder.Lib;
-using SpotWelder.Lib.Services.Generators;
-using SpotWelder.Ui.Profile;
-using SpotWelder.Lib.Services.TableQueryFormats;
 
 namespace SpotWelder.Ui
 {
@@ -29,36 +31,53 @@ namespace SpotWelder.Ui
 
       ServiceProvider = serviceCollection.BuildServiceProvider();
 
+      Log.Logger = ServiceProvider.GetRequiredService<ILogger>();
+      
       try
       {
-        //var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
-        //mainWindow.Show();
+        mainWindow.Show();
 
-        var win = new ResultWindow("Test",
-          """
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
-        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
-        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-      """);
-        win.Show();
+      //  var win = new ResultWindow("Test",
+      //    """
+      //  Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      //  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      //  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+      //  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+      //  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      //    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      //  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      //  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+      //  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+      //  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      //""");
+      //  win.Show();
       }
       catch (Exception ex)
       {
         //Log the exception and exit
-        if (true) ;
+        Log.Error(ex, "Unhandled error");
+        Log.CloseAndFlush();
       }
     }
 
     private static void ConfigureServices(IServiceCollection services)
     {
+      //Top level services
+      services.AddSerilog(configureLogger =>
+      {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs", "Log.log");
+
+        configureLogger
+          .MinimumLevel.Debug()
+          .WriteTo.File(path, rollingInterval: RollingInterval.Day);
+
+#if DEBUG
+        configureLogger.WriteTo.Seq("http://localhost:5341");
+#endif
+      });
+
       //Library based services
       ConfigureLibServices(services);
 
@@ -84,6 +103,16 @@ namespace SpotWelder.Ui
             classes.NotInNamespaces(excludeNamespaces)
              .WithoutAttribute<ExcludeFromDiScanAttribute>())
           .AsMatchingInterface()
+          .WithScopedLifetime();
+      });
+
+      //This is to initialize all of the "Dependencies" objects that are used for child controls
+      services.Scan(scan =>
+      {
+        scan.FromAssemblies(asm)
+          .AddClasses(classes =>
+            classes.InNamespaces("SpotWelder.Ui.Controls"))
+          .AsSelf()
           .WithScopedLifetime();
       });
     }

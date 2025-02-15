@@ -2,6 +2,7 @@
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Models;
+using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Profile;
 using SpotWelder.Ui.Services;
 using System;
@@ -53,15 +54,12 @@ namespace SpotWelder.Ui
     public void DebugSetPostgresTestParameters()
       => CbConnectionString.SelectedIndex = 4;
 
-    public void Dependencies(
-      IProfileManager profileManager,
-      IGeneralDatabaseQueries repository,
-      IConnectionStringBuilderService builderService)
+    public void Dependencies(ConnectionStringControlDependencies dependencies)
     {
-      _generalRepo = repository;
-      _builderService = builderService;
+      _generalRepo = dependencies.Repository;
+      _builderService = dependencies.BuilderService;
 
-      ConnectionStringManager = profileManager.ConnectionStringManager;
+      ConnectionStringManager = dependencies.ProfileManager.ConnectionStringManager;
 
       DataContext = ConnectionStringManager;
     }

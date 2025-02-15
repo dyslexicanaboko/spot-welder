@@ -1,9 +1,12 @@
-﻿using SpotWelder.Lib;
+﻿using Microsoft.Extensions.Logging;
+using Serilog;
+using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.TableQueryFormats;
+using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Profile;
 using System;
@@ -32,6 +35,8 @@ namespace SpotWelder.Ui
     private IQueryToClassService _svcQueryToClass;
 
     private ITableQueryFormatFactory _tableQueryFormatFactory;
+
+    private ILogger<QueryToClassControl> _logger;
 
     // Empty constructor Required by WPF
     public QueryToClassControl()
@@ -135,21 +140,14 @@ namespace SpotWelder.Ui
     private ITableQueryFormatStrategy GetTableQueryFormatStrategy()
       => _tableQueryFormatFactory.GetStrategy(ConnectionStringCb.CurrentConnection.SqlEngine);
 
-    public void Dependencies(
-      ITableQueryFormatFactory tableQueryFormatFactory,
-      IQueryToClassService queryToClassService,
-      IGeneralDatabaseQueries repository,
-      IProfileManager profileManager,
-      IConnectionStringBuilderService builderService)
+    public void Dependencies(QueryToClassControlDependencies dependencies)
     {
-      _tableQueryFormatFactory = tableQueryFormatFactory;
-      _svcQueryToClass = queryToClassService;
-      _generalRepo = repository;
+      _logger = dependencies.Logger;
+      _tableQueryFormatFactory = dependencies.TableQueryFormatFactory;
+      _svcQueryToClass = dependencies.QueryToClassService;
+      _generalRepo = dependencies.Repository;
 
-      ConnectionStringCb.Dependencies(
-        profileManager,
-        _generalRepo,
-        builderService);
+      ConnectionStringCb.Dependencies(dependencies.ConnectionStringControlDependencies);
     }
 
     private void TxtSqlSourceText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -168,6 +166,8 @@ namespace SpotWelder.Ui
       {
         UserControlExtensions.ShowWarningMessage(
           $"The table name you provided could not be formatted.\nPlease select the Query radio button if your source is not just a table name.\n\nError: {ex.Message}");
+
+        _logger.LogError(ex, "Table name could not be formatted.");
       }
     }
 
@@ -368,6 +368,8 @@ namespace SpotWelder.Ui
       catch (Exception ex)
       {
         UserControlExtensions.ShowErrorMessage(ex);
+
+        _logger.LogError(ex, "Error during Query to class generation");
       }
       finally
       {
