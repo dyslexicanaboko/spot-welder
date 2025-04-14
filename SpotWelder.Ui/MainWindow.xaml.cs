@@ -1,12 +1,5 @@
-﻿using SpotWelder.Lib.DataAccess;
-using SpotWelder.Lib.DataAccess.SqlClients;
-using SpotWelder.Lib.Services;
-using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Lib.Services.TableQueryFormats;
-using SpotWelder.Ui.Controls;
+﻿using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
-using SpotWelder.Ui.Profile;
-using SpotWelder.Ui.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,21 +10,12 @@ namespace SpotWelder.Ui
     /// <summary>
     ///   Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+  public partial class MainWindow
     : Window
   {
     private readonly List<IUsesResultWindow> _hasResultWindows;
 
     public MainWindow(
-      ITableQueryFormatFactory tableQueryFormatFactory,
-      IQueryToClassService queryToClassService,
-      IQueryToMockDataService queryToMockDataService,
-      IGeneralDatabaseQueries repository,
-      IProfileManager profileManager,
-      IDtoGenerator dtoGenerator,
-      IMetaViewModelService metaViewModelService,
-      ICSharpCompilerService compilerService,
-      IConnectionStringBuilderService builderService,
       DtoMakerControlDependencies dtoMakerControlDependencies,
       QueryToClassControlDependencies queryToClassControlDependencies,
       QueryToMockDataControlDependencies queryToMockDataControlDependencies)

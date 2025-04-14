@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using Serilog;
 using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
-using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.TableQueryFormats;
 using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
-using SpotWelder.Ui.Profile;
 using System;
 using System.Collections.Generic;
 using System.IO;

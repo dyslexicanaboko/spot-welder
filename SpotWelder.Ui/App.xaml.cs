@@ -76,7 +76,7 @@ namespace SpotWelder.Ui
 #if DEBUG
         configureLogger.WriteTo.Seq("http://localhost:5341");
 #endif
-      });
+      }).AddLogging();
 
       //Library based services
       ConfigureLibServices(services);
