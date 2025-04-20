@@ -37,6 +37,7 @@ namespace SpotWelder.Ui.Profile
 
     public void Remove(UserConnectionString target)
     {
+      //TODO: When a connection string fails the connection test, this code is triggered and it is failing.
       ConnectionStrings.Remove(target);
 
       RaiseSaveEvent();
