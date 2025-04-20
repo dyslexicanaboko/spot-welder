@@ -38,6 +38,8 @@ namespace SpotWelder.Ui.Profile
     public void Remove(UserConnectionString target)
     {
       //TODO: When a connection string fails the connection test, this code is triggered and it is failing.
+      //Easiest way to reproduce is to just shut down the database server. So in the case of Postgres, turn off the container.
+      //And then press the "Test" button after running the application.
       ConnectionStrings.Remove(target);
 
       RaiseSaveEvent();

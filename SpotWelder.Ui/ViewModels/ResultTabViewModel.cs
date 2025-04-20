@@ -1,16 +1,30 @@
 ﻿namespace SpotWelder.Ui.ViewModels
 {
-  public class ResultTabViewModel
-    : ObservableObject
+  public class ResultTabViewModel(string header, string content) : ObservableObject
   {
-    public ResultTabViewModel(string header, string content)
+    private string _header = header;
+    private string _content = content;
+
+    public string Header
     {
-      Header = header;
-      Content = content;
+      get => _header;
+      set
+      {
+        _header = value;
+
+        OnPropertyChanged();
+      }
     }
 
-    public string Header { get; set; }
+    public string Content
+    {
+      get => _content;
+      set
+      {
+        _content = value;
 
-    public string Content { get; set; }
+        OnPropertyChanged();
+      }
+    }
   }
 }

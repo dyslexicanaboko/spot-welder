@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpotWelder.Ui" 
+        xmlns:uc="clr-namespace:SpotWelder.Ui.Controls" 
         xmlns:viewmodels="clr-namespace:SpotWelder.Ui.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:ParentResultsWindowViewModel}"
         mc:Ignorable="d"
@@ -13,7 +14,7 @@
     <Grid>
     <TabControl 
       x:Name="TcResults" 
-      ItemsSource="{Binding Tabs}">
+      ItemsSource="{Binding Tabs}" >
       <TabControl.Resources>
         <Style TargetType="TabItem">
           <Setter Property="AllowDrop" Value="True"/>
@@ -22,7 +23,7 @@
         </Style>
       </TabControl.Resources>
       <TabControl.ItemTemplate>
-        <DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:ResultTabViewModel}">
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
             <Image Source="images/Close_red_16x.png"
@@ -34,15 +35,8 @@
         </DataTemplate>
       </TabControl.ItemTemplate>
       <TabControl.ContentTemplate>
-        <DataTemplate>
-          <TextBox IsReadOnly="True" 
-                   IsReadOnlyCaretVisible="True" 
-                   HorizontalContentAlignment="Stretch" 
-                   HorizontalScrollBarVisibility="Auto" 
-                   VerticalContentAlignment="Stretch" 
-                   VerticalScrollBarVisibility="Auto" 
-                   Style="{StaticResource TextBoxCodeFont}"
-                   Text="{Binding Content}" />
+        <DataTemplate DataType="{x:Type viewmodels:ResultTabViewModel}">
+          <uc:TextResultControl Text="{Binding Content}" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </DataTemplate>
       </TabControl.ContentTemplate>
     </TabControl>
