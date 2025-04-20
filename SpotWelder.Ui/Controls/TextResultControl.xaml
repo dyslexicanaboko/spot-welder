@@ -32,7 +32,12 @@
              VerticalScrollBarVisibility="Auto" 
              Style="{StaticResource TextBoxCodeFont}"
              Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TextResultControl}}, Path=Text, NotifyOnTargetUpdated=True}"
-             TargetUpdated="TxtResult_OnTargetUpdated" />
+             TargetUpdated="TxtResult_OnTargetUpdated"
+             >
+      <TextBox.CommandBindings>
+        <CommandBinding Command="Copy" Executed="CommandBinding_OnExecuted" />
+      </TextBox.CommandBindings>
+    </TextBox>
     <ToolBarTray Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
       <ToolBar>
         Go to

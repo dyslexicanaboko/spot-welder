@@ -110,5 +110,12 @@ namespace SpotWelder.Ui.Controls
 
       LineNumbers.Text = GetLineNumbers(txt.Text);
     }
+
+    private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+      if (e.Command != ApplicationCommands.Copy) return;
+
+      Clipboard.SetText(TxtResult.Text);
+    }
   }
 }

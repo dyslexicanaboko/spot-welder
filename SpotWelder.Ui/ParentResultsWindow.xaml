@@ -11,10 +11,14 @@
         Title="Results"
         Closing="ParentResultsWindow_OnClosing"
         Height="450" Width="800">
-    <Grid>
+  <Grid>
     <TabControl 
       x:Name="TcResults" 
-      ItemsSource="{Binding Tabs}" >
+      ItemsSource="{Binding Tabs}">
+      <TabControl.CommandBindings>
+        <CommandBinding Command="Save" Executed="CommandBinding_OnExecuted" />
+        <CommandBinding Command="local:ParentResultsWindow.SaveAll" Executed="CommandBinding_OnExecuted" />
+      </TabControl.CommandBindings>
       <TabControl.Resources>
         <Style TargetType="TabItem">
           <Setter Property="AllowDrop" Value="True"/>
