@@ -1,6 +1,7 @@
-﻿using SpotWelder.Lib.Models;
+﻿using SpotWelder.Lib;
+using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
-using SpotWelder.Tests.Common;
+using SpotWelder.UnitTests.Common;
 using System;
 
 namespace SpotWelder.UnitTests
@@ -10,15 +11,16 @@ namespace SpotWelder.UnitTests
   {
     protected SchemaColumn GetSchemaColumn(Type type, bool isNullable)
     {
-      var c = new SchemaColumn
-      {
-        ColumnName = "DoesNotMatter",
-        SystemType = type,
-        IsDbNullable = isNullable,
-        SqlType = TypesService.MapSystemToSqlLoose[type].ToString()
-      };
+      var sqlEngine = SqlEngine.SqlServer;
 
-      return c;
+      return new SchemaColumn(
+
+        sqlEngine,
+        "DoesNotMatter",
+        type,
+        TypesService.GetTypeMapper(sqlEngine).GetSqlDataTypeAsString(type),
+        isDbNullable: isNullable
+      );
     }
   }
 }

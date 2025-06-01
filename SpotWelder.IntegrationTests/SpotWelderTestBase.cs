@@ -1,4 +1,4 @@
-﻿using SpotWelder.Tests.Common;
+﻿using SpotWelder.UnitTests.Common;
 
 namespace SpotWelder.IntegrationTests
 {

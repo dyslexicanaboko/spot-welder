@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using FakeItEasy;
 using NUnit.Framework;
 using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
@@ -6,8 +6,9 @@ using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.Generators;
-using SpotWelder.Tests.Common.DummyObjects;
 using SpotWelder.UnitTests;
+using SpotWelder.UnitTests.Common.DummyObjects;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -29,13 +30,13 @@ namespace SpotWelder.Tests.Lib.Services
 
       p.ServerConnection.SourceSqlType = SourceSqlType.TableName;
 
-      var repoQueryToClass = new Mock<IQueryToClassRepository>();
-      var repoGeneral = new Mock<IGeneralDatabaseQueries>();
+      var repoQueryToClass = A.Fake<IQueryToClassRepository>();
+      var repoGeneral = A.Fake<IGeneralDatabaseQueries>();
 
       var svc = new QueryToClassService(
-        repoQueryToClass.Object,
-        repoGeneral.Object,
-        new CodeGenerationFactory(new[] { new ApiControllerGenerator() }));
+        repoQueryToClass,
+        repoGeneral,
+        new CodeGenerationFactory(new List<GeneratorBase> { new ApiControllerGenerator() }));
 
       //Act
       var actual = svc.Generate(p);
@@ -73,16 +74,16 @@ namespace SpotWelder.Tests.Lib.Services
       p.ServerConnection.SourceSqlText = sq.TableQuery.Table;
       p.ServerConnection.TableQuery = sq.TableQuery;
 
-      var repoQueryToClass = new Mock<IQueryToClassRepository>();
+      var repoQueryToClass = A.Fake<IQueryToClassRepository>();
 
-      repoQueryToClass.Setup(x => x.GetSchema(p.ServerConnection.TableQuery, It.IsAny<string>()))
+      A.CallTo(() => repoQueryToClass.GetSchema(p.ServerConnection.TableQuery, p.ServerConnection.SourceSqlType, A<string>._))
         .Returns(sq); //TODO: Fix this later
 
-      var repoGeneral = new Mock<IGeneralDatabaseQueries>();
+      var repoGeneral = A.Fake<IGeneralDatabaseQueries>();
 
       var svc = new QueryToClassService(
-        repoQueryToClass.Object,
-        repoGeneral.Object,
+        repoQueryToClass,
+        repoGeneral,
         new CodeGenerationFactory(new[] { new ClassEntityGenerator() }));
 
       //Act

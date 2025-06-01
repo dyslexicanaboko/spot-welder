@@ -1,26 +1,34 @@
 ﻿using NUnit.Framework;
+using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.UnitTests;
 
 namespace SpotWelder.Tests.Lib.DataAccess
 {
-    [TestFixture]
-    public class QueryToClassRepositorySpotWelderTests
-        : SpotWelderTestBase
+  [TestFixture]
+  public class QueryToClassRepositorySpotWelderTests
+    : SpotWelderTestBase
+  {
+    [Test]
+    public void BadTest()
     {
-        [Test]
-        public void BadTest()
-        {
-            var repo = new QueryToClassRepository();
-            
-            repo.ConfigureSqlClient("Server=.;Database=ScratchSpace;Integrated Security=SSPI;");
+      var repo = new QueryToClassRepository();
 
-            var tq = new TableQuery { Schema = "dbo", Table = "NumberCollection" };
+      var con = new ServerConnection
+      {
+        SqlEngine = SqlEngine.SqlServer,
+        ConnectionString = "Server=.;Database=ScratchSpace;Integrated Security=SSPI;",
+        SourceSqlType = SourceSqlType.TableName,
+        SourceSqlText = "SET FMTONLY ON; SELECT * FROM dbo.NumberCollection; SET FMTONLY OFF;",
+        TableQuery = new TableQuery { Schema = "dbo", Table = "NumberCollection" }
+      };
 
-            var dt = repo.GetSchema(tq, "SET FMTONLY ON; SELECT * FROM dbo.NumberCollection; SET FMTONLY OFF;");
+      repo.ConfigureSqlClient(con);
 
-            Assert.Pass();
-        }
+      var dt = repo.GetSchema(con.TableQuery, con.SourceSqlType, con.SourceSqlText);
+
+      Assert.Pass();
     }
+  }
 }

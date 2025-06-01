@@ -1,10 +1,12 @@
 ﻿using SpotWelder.Lib;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlTypes;
 
-namespace SpotWelder.Tests.Common.DummyObjects
+namespace SpotWelder.UnitTests.Common.DummyObjects
 {
   public class Person
   {
