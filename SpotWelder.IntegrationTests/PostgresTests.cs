@@ -28,7 +28,10 @@ public class PostgresTests
     var svc = new QueryToClassService(
       new QueryToClassRepository(),
       new GeneralDatabaseQueries(),
-      new CodeGenerationFactory(new[] { new ApiControllerGenerator() }));
+      new CodeGenerationFactory(new GeneratorBase[] { 
+        new ClassEntityGenerator(),
+        new MapperGenerator()
+      }));
 
     //Bad test - does it blow up?
     var lst = svc.Generate(p);
