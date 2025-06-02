@@ -23,6 +23,8 @@ namespace SpotWelder.Lib.DataAccess
       
       sq.ColumnsAll = new List<SchemaColumn>(rs.GenericSchema.Columns.Count);
 
+      Func<DataRow, string, int> getInt32 = (row, columnName) => Convert.ToInt32(row[columnName]);
+
       foreach (DataColumn dc in rs.GenericSchema.Columns)
       {
         var arr = rs.SqlServerSchema.Select($"ColumnName = '{dc.ColumnName}'");
@@ -36,15 +38,15 @@ namespace SpotWelder.Lib.DataAccess
           sq.SourceSqlEngine,
           dc.ColumnName,
           dc.DataType,
-          sqlServerColumn.Field<string>("DataTypeName"),
+          sqlServerColumn.Field<string>("DataTypeName")!,
           false, //Cannot be determined from DataColumn type directly
           dc.AutoIncrement,
           dc.AllowDBNull,
           sqlServerColumn.Field<int>("ColumnSize"),
 
           //These two fields are int16 for SQL Server, but are int32 for Postgres. Using int32 for both.
-          sqlServerColumn.Field<int>("NumericPrecision"),
-          sqlServerColumn.Field<int>("NumericScale")
+          getInt32(sqlServerColumn, "NumericPrecision"),
+          getInt32(sqlServerColumn, "NumericScale")
         );
 
         sq.ColumnsAll.Add(sc);
@@ -70,5 +72,7 @@ namespace SpotWelder.Lib.DataAccess
 
       return sq;
     }
+
+
   }
 }

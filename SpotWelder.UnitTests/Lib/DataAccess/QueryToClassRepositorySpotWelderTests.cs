@@ -18,9 +18,13 @@ namespace SpotWelder.Tests.Lib.DataAccess
       var con = new ServerConnection
       {
         SqlEngine = SqlEngine.SqlServer,
-        ConnectionString = "Server=.;Database=ScratchSpace;Integrated Security=SSPI;",
-        SourceSqlType = SourceSqlType.TableName,
-        SourceSqlText = "SET FMTONLY ON; SELECT * FROM dbo.NumberCollection; SET FMTONLY OFF;",
+        ConnectionString = "Server=.;Database=ScratchSpace;Integrated Security=SSPI;Encrypt=False;",
+        SourceSqlType = SourceSqlType.Query,
+        SourceSqlText = """
+        SET FMTONLY ON; 
+        SELECT * FROM dbo.NumberCollection; 
+        SET FMTONLY OFF;
+        """,
         TableQuery = new TableQuery { Schema = "dbo", Table = "NumberCollection" }
       };
 

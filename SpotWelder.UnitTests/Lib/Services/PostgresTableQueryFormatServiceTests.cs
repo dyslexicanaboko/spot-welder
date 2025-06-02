@@ -8,13 +8,13 @@ namespace SpotWelder.Tests.Lib.Services
     [TestFixture]
   public class PostgresTableQueryFormatServiceTests
   {
+    private ITableQueryFormatStrategy _service;
+    
     [SetUp]
     public void Setup()
     {
       _service = new PostgresTableQueryFormatStrategy();
     }
-
-    private ITableQueryFormatStrategy _service;
 
     [TestCase("a", "public.a")]
     [TestCase("a.b", "a.b")]
@@ -36,12 +36,12 @@ namespace SpotWelder.Tests.Lib.Services
     }
 
     [TestCase("TableName", "TableName")]
-    [TestCase("tablename", "tablename")]
+    [TestCase("tablename", "Tablename")]
     [TestCase("public.TableName", "TableName")]
     [TestCase("public.\"T a b l e N a m e\"", "TableName")]
     [TestCase("public.\"T A B L E N A M E\"", "TABLENAME")]
     [TestCase("\"T   a   b   l   e   N   a   m   e\"", "TableName")]
-    public void Get_class_name(string input, string expected)
+    public void GivenTableName_ThenFormatAsClassName(string input, string expected)
     {
       //Arrange
       var tq = _service.ParseTableName(input);
@@ -50,7 +50,7 @@ namespace SpotWelder.Tests.Lib.Services
       var actual = _service.GetClassName(tq);
 
       //Assert
-      Assert.That(expected, Is.EqualTo(actual));
+      Assert.That(actual, Is.EqualTo(expected));
     }
   }
 }

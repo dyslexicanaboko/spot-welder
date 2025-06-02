@@ -8,7 +8,7 @@ using System.Data.SqlTypes;
 
 namespace SpotWelder.UnitTests.Common.DummyObjects
 {
-  public class Person
+  public class PersonEntity
   {
     public int PersonId { get; set; }
 
@@ -25,13 +25,13 @@ namespace SpotWelder.UnitTests.Common.DummyObjects
 
   public static class PersonUtil
   {
-    public const string PersonClass =
+    public const string PersonEntity =
       @"using System;
 
 namespace SimpleClassCreator.Tests.DummyObjects
 {
 
-    public class Person
+    public class PersonEntity
     {
         public int PersonId { get; set; }
 
@@ -52,18 +52,18 @@ namespace SimpleClassCreator.Tests.DummyObjects
     {
       var sq = new SchemaQuery(
         SqlEngine.SqlServer,
-        new TableQuery { Schema = "dbo", Table = nameof(Person) },
+        new TableQuery { Schema = "dbo", Table = nameof(DummyObjects.PersonEntity) },
         "Does not matter for QA purposes");
 
-      sq.SetPrimaryKey(GetSchemaColumn(nameof(Person.PersonId), typeof(int)));
+      sq.SetPrimaryKey(GetSchemaColumn(nameof(DummyObjects.PersonEntity.PersonId), typeof(int)));
 
       sq.ColumnsNoPk = new List<SchemaColumn>
       {
-        GetSchemaColumn(nameof(Person.Age), typeof(int), true),
-        GetSchemaColumn(nameof(Person.FirstName), typeof(string)),
-        GetSchemaColumn(nameof(Person.MiddleName), typeof(string), true),
-        GetSchemaColumn(nameof(Person.LastName), typeof(string)),
-        GetSchemaColumn(nameof(Person.BirthDate), typeof(DateTime), true)
+        GetSchemaColumn(nameof(DummyObjects.PersonEntity.Age), typeof(int), true),
+        GetSchemaColumn(nameof(DummyObjects.PersonEntity.FirstName), typeof(string)),
+        GetSchemaColumn(nameof(DummyObjects.PersonEntity.MiddleName), typeof(string), true),
+        GetSchemaColumn(nameof(DummyObjects.PersonEntity.LastName), typeof(string)),
+        GetSchemaColumn(nameof(DummyObjects.PersonEntity.BirthDate), typeof(DateTime), true)
       };
 
       //Order matters

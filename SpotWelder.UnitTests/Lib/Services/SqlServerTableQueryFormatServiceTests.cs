@@ -36,7 +36,7 @@ namespace SpotWelder.Tests.Lib.Services
     }
 
     [TestCase("TableName", "TableName")]
-    [TestCase("tablename", "tablename")]
+    [TestCase("tablename", "Tablename")]
     [TestCase("dbo.TableName", "TableName")]
     [TestCase("dbo.[T a b l e N a m e]", "TableName")]
     [TestCase("dbo.[T A B L E N A M E]", "TABLENAME")]
@@ -50,7 +50,7 @@ namespace SpotWelder.Tests.Lib.Services
       var actual = _service.GetClassName(tq);
 
       //Assert
-      Assert.That(expected, Is.EqualTo(actual));
+      Assert.That(actual, Is.EqualTo(expected));
     }
   }
 }

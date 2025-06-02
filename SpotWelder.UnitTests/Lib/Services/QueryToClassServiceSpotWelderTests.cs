@@ -57,7 +57,7 @@ namespace SpotWelder.Tests.Lib.Services
     public void Person_table_produces_person_class()
     {
       //Arrange
-      var expected = PersonUtil.PersonClass;
+      var expected = PersonUtil.PersonEntity;
 
       var sq = PersonUtil.GetPersonAsSchemaQuery();
 
@@ -65,7 +65,7 @@ namespace SpotWelder.Tests.Lib.Services
       {
         LanguageType = CodeType.CSharp,
         Namespace = "SimpleClassCreator.Tests.DummyObjects",
-        EntityName = $"{sq.TableQuery.Table}Entity",
+        EntityName = sq.TableQuery.Table,
         Elections = GenerationElections.GenerateEntity,
         SubjectName = sq.TableQuery.Table
       };
@@ -111,7 +111,7 @@ namespace SpotWelder.Tests.Lib.Services
       expected = re.Replace(expected, string.Empty);
       actual = re.Replace(actual, string.Empty);
 
-      Assert.That(expected, Is.EqualTo(actual));
+      Assert.That(actual, Is.EqualTo(expected));
     }
   }
 }
