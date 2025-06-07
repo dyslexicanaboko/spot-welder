@@ -2,14 +2,14 @@
 
 namespace {{Namespace}}
 {
-	public class {{ClassName}}V1PatchModel
+	public class {{ClassName}}V1PatchModel{{Interface}}
 	{
-		public {{ClassName}}()
+		public {{ClassName}}V1PatchModel()
 		{
 			
 		}
 
-		public {{ClassName}}({{InterfaceName}} target)
+		public {{ClassName}}V1PatchModel({{InterfaceName}} target)
 		{
 			{{ConstructorFromInterface}}
 		}

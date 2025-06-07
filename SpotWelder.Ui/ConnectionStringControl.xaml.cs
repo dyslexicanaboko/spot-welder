@@ -47,12 +47,17 @@ namespace SpotWelder.Ui
     //Keeping these connection strings here just in case they get removed from the profile.json
     //"Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;"
     //"Host=localhost;Database=millions_of_things;Username=postgres;Password=postgres"
+    //"Data Source=.;Initial Catalog=SpotWelder;Integrated Security=True;Encrypt=False"
     //FYI: The index location can change
-    public void DebugSetSqlServerTestParameters()
-      => CbConnectionString.SelectedIndex = 6;
+    
+    public void DebugSetSqlServerParityTestParameters()
+      => CbConnectionString.SelectedIndex = 0;
 
     public void DebugSetPostgresTestParameters()
-      => CbConnectionString.SelectedIndex = 4;
+      => CbConnectionString.SelectedIndex = 1;
+
+    public void DebugSetSqlServerTestParameters()
+      => CbConnectionString.SelectedIndex = 2;
 
     public void Dependencies(ConnectionStringControlDependencies dependencies)
     {
@@ -83,8 +88,9 @@ namespace SpotWelder.Ui
         PbConnectionTest.IsIndeterminate = true;
 
         var con = CurrentConnection;
-        
-        var result = await Task.Run(() => TestConnectionString(con));
+
+        //var result = await Task.Run(() => TestConnectionString(con));
+        var result = Application.Current.Dispatcher.Invoke(() => TestConnectionString(con));
 
         ShowResult(result);
       }

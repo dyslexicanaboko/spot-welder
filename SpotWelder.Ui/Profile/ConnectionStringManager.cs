@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace SpotWelder.Ui.Profile
 {
+  //Make sure to only call this class's constructs with `Application.Current.Dispatcher.Invoke(() => ...);`
   public class ConnectionStringManager
   {
     public delegate void SaveHandler(object sender, EventArgs e);
@@ -37,9 +38,16 @@ namespace SpotWelder.Ui.Profile
 
     public void Remove(UserConnectionString target)
     {
-      //TODO: When a connection string fails the connection test, this code is triggered and it is failing.
-      //Easiest way to reproduce is to just shut down the database server. So in the case of Postgres, turn off the container.
-      //And then press the "Test" button after running the application.
+      /* If you get an exception here:
+       * The exception occurs because the ConnectionStrings collection, an ObservableCollection, is being modified 
+       * (Remove) from a thread that is not the Dispatcher thread. This violates WPF's threading model, which 
+       * requires UI-bound collections to be accessed only from the Dispatcher thread.
+         
+         This is the fix:
+         Application.Current.Dispatcher.Invoke(() => ConnectionStrings.Remove(target));
+
+         If this keeps happening in the future I recommend putting in a fail safe that will tell 
+         you if you are executing on the wrong thread explicitly. */
       ConnectionStrings.Remove(target);
 
       RaiseSaveEvent();

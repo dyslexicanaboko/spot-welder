@@ -57,34 +57,65 @@ namespace SpotWelder.Lib.Services.TypeMappings
     /// </summary>
     private static readonly Dictionary<SqlDbType, DbType> MapSqlDbTypeToDbTypeLoose = new()
     {
-      { SqlDbType.BigInt, DbType.Int64 },
+      //The higher up in the dictionary, the higher the precedence for conversion from DbType to SqlDbType.
 
-      //{ SqlDbType.Binary, ??? },
+      //Boolean      
       { SqlDbType.Bit, DbType.Boolean },
+
+      //Integers
+      { SqlDbType.TinyInt, DbType.Byte },
+      { SqlDbType.SmallInt, DbType.Int16 },
+      { SqlDbType.Int, DbType.Int32 },
+      { SqlDbType.BigInt, DbType.Int64 },
+      
+      //Binary
+      { SqlDbType.Binary, DbType.Binary }, //Binary A
+      { SqlDbType.VarBinary, DbType.Binary }, //Binary B - no VarBrinary equivalent
+      
+      //Strings
       { SqlDbType.Char, DbType.AnsiStringFixedLength },
+      { SqlDbType.VarChar, DbType.AnsiString },
+      { SqlDbType.NChar, DbType.StringFixedLength },
+      { SqlDbType.NVarChar, DbType.String },
+
+      //Date and Time
       { SqlDbType.Date, DbType.Date },
       { SqlDbType.DateTime, DbType.DateTime },
       { SqlDbType.DateTime2, DbType.DateTime2 },
       { SqlDbType.DateTimeOffset, DbType.DateTimeOffset },
+      { SqlDbType.SmallDateTime , DbType.DateTime },
+      { SqlDbType.Time, DbType.Time },
+      
+      //Floating points
       { SqlDbType.Decimal, DbType.Decimal },
       { SqlDbType.Float, DbType.Double },
-      { SqlDbType.Int, DbType.Int32 },
       { SqlDbType.Money, DbType.Currency },
-      { SqlDbType.NChar, DbType.StringFixedLength },
-      { SqlDbType.NVarChar, DbType.String },
+      { SqlDbType.SmallMoney, DbType.Currency },
       { SqlDbType.Real, DbType.Single },
-      { SqlDbType.SmallInt, DbType.Int16 },
-      { SqlDbType.Time, DbType.Time },
-      { SqlDbType.TinyInt, DbType.Byte },
+      
+      //Special types
       { SqlDbType.UniqueIdentifier, DbType.Guid },
-      { SqlDbType.VarBinary, DbType.Binary },
-      { SqlDbType.VarChar, DbType.AnsiString },
+      { SqlDbType.Timestamp, DbType.Object }, // No equivalent
       { SqlDbType.Xml, DbType.Xml }
     };
+        
+    private static readonly Dictionary<DbType, SqlDbType> MapDbTypeToSqlDbTypeLoose =
+      MapDbTypeToSqlDbTypeLooseSafe();
 
-    private static readonly Dictionary<DbType, SqlDbType> MapDbTypeToSqlDbTypeLoose = 
-      MapSqlDbTypeToDbTypeLoose.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
+    private static Dictionary<DbType, SqlDbType> MapDbTypeToSqlDbTypeLooseSafe()
+    {
+      var dict = new Dictionary<DbType, SqlDbType>();
 
+      //The problem with this method is that it will not account for all types
+      //especially when there are duplicate dbType, so it's first in wins.
+      foreach (var (sqlType, dbType) in MapSqlDbTypeToDbTypeLoose)
+      {
+        dict.TryAdd(dbType, sqlType);
+      }
+
+      return dict;
+    }
+    
     /// <summary>
     ///   Strong mapping of Sql Server Database type lower case names to their equivalent Enumeration.
     /// </summary>

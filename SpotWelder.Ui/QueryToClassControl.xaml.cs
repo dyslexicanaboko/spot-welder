@@ -61,7 +61,8 @@ namespace SpotWelder.Ui
       _classCheckBoxGroup = GetCheckBoxGroup();
 
       //DebugWholeSqlServerTest();
-      DebugMinimalPostgresTest();
+      //DebugMinimalPostgresTest();
+      DebugWholeSqlServerTestForParity();
     }
 
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
@@ -132,6 +133,57 @@ namespace SpotWelder.Ui
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
       #endif
+    }
+
+    private void DebugWholeSqlServerTestForParity()
+    {
+#if DEBUG
+      ConnectionStringCb.DebugSetSqlServerParityTestParameters();
+
+      RbSourceTypeTableName.IsChecked = true;
+      RbSourceTypeQuery.IsChecked = false;
+
+      TxtSourceSqlText.Text = "[dbo].[DataTypeTest]";
+      TxtNamespaceName.Text = "Namespace1";
+      TxtEntityName.Text = "DataTypeTest";
+      TxtClassEntityName.Text = "DataTypeTestEntity";
+      TxtClassModelName.Text = "DataTypeTestModel";
+
+      //Repository
+      CbRepoStatic.IsChecked = true;
+      CbRepoDapper.IsChecked = true;
+
+      //Entity
+      CbClassEntity.IsChecked = true;
+      CbClassEntityIEquatable.IsChecked = true;
+      CbClassEntityIComparable.IsChecked = true;
+
+      //Interface
+      CbClassInterface.IsChecked = true;
+
+      //Models
+      CbClassModel.IsChecked = true;
+      CbClassCreateModel.IsChecked = true;
+      CbClassPatchModel.IsChecked = true;
+
+      //Services
+      CbClassEntityEqualityComparer.IsChecked = true;
+      CbSerializeCsv.IsChecked = true;
+      CbSerializeJson.IsChecked = true;
+
+      //Layers
+      CbMakeAsynchronous.IsChecked = true;
+      CbApiController.IsChecked = true;
+      CbService.IsChecked = true;
+
+      //Mappings
+      CbMapInterfaceToModel.IsChecked = true;
+      CbMapInterfaceToEntity.IsChecked = true;
+      CbMapEntityToModel.IsChecked = true;
+      CbMapModelToEntity.IsChecked = true;
+      CbMapCreateModelToEntity.IsChecked = true;
+      CbMapPatchModelToEntity.IsChecked = true;
+#endif
     }
 
     private ITableQueryFormatStrategy GetTableQueryFormatStrategy()

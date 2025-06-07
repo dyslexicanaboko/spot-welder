@@ -18,7 +18,7 @@ namespace SpotWelder.Lib.Services.Generators.SqlEngineStrategies
 		/// <inheritdoc />
 		public override IList<string> SqlNamespaces { get; protected set; } = new List<string>
 		{
-			"System.Data.SqlClient"
+			"Microsoft.Data.SqlClient"
 		};
 
 		/// <inheritdoc />
@@ -70,7 +70,7 @@ namespace SpotWelder.Lib.Services.Generators.SqlEngineStrategies
 			p.Precision = {properties.Precision};";
 
 			if (t is DbType.AnsiString or DbType.String or DbType.AnsiStringFixedLength or DbType.StringFixedLength)
-				content += Environment.NewLine + $"            p.Size = {properties.Size}";
+				content += Environment.NewLine + $"            p.Size = {properties.Size};";
 
 			return content;
 		}

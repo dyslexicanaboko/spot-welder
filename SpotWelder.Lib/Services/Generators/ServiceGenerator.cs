@@ -13,6 +13,8 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
+      instructions.ClassName = instructions.SubjectName;
+
       var strTemplate = GetTemplate(TemplateName);
 
       var template = new StringBuilder(strTemplate);

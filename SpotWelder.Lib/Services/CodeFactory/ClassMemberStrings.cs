@@ -231,11 +231,14 @@ namespace SpotWelder.Lib.Services.CodeFactory
     //TODO: How to handle arrays? Like blobs from the database?
     private static string GetConversionMethodSignature(Type type, string systemTypeName)
     {
-      //Guid does not have a method in the Convert class
-      if (type == typeof(Guid))
+      if (type == typeof(byte[])) return "(byte[]){0}";
 
-        //DataReader column has to be converted to string first
-        return "Guid.Parse(Convert.ToString({0}))";
+      if (type == typeof(TimeSpan)) return "(TimeSpan){0}";
+
+      if (type == typeof(DateTimeOffset)) return "(DateTimeOffset){0}";
+
+      //Guid does not have a method in the Convert class, the DataReader column has to be converted to string first
+      if (type == typeof(Guid)) return "Guid.Parse(Convert.ToString({0}))";
 
       var c = "Convert.To" + systemTypeName + "({0})";
 
