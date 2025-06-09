@@ -25,7 +25,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{Parameters}}", FormatParameters(instructions.Properties));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      return new GeneratedResult($"{instructions.SubjectName}.js", template);
+      return new GeneratedResult(Election, $"{instructions.SubjectName}.js", template);
     }
 
     private string FormatParameters(IList<ClassMemberStrings> properties)

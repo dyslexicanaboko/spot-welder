@@ -27,7 +27,7 @@ namespace SpotWelder.Lib.Services.Generators
     public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
 
     protected virtual GeneratedResult GetFormattedCSharpResult(string fileNameWithExtension, StringBuilder contents)
-      => new(fileNameWithExtension, FormatCSharp(contents.ToString()));
+      => new(Election, fileNameWithExtension, FormatCSharp(contents.ToString()));
 
     protected virtual string GetTemplate(string templateName)
     {

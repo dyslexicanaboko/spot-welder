@@ -1,0 +1,61 @@
+using System;
+
+namespace Namespace1
+{
+    public interface IDataTypeTest
+    {
+        int DataTypeTestId { get; set; }
+
+        long Int64 { get; set; }
+
+        byte[] ByteArrayBinary { get; set; }
+
+        bool Boolean { get; set; }
+
+        string StringChar { get; set; }
+
+        DateTime DateTimeDate { get; set; }
+
+        DateTime DateTimeDateTime { get; set; }
+
+        DateTime DateTimeDateTime2 { get; set; }
+
+        DateTimeOffset DateTimeOffset { get; set; }
+
+        decimal DecimalDecimal { get; set; }
+
+        double Double { get; set; }
+
+        int Int32 { get; set; }
+
+        decimal DecimalMoney { get; set; }
+
+        string StringNChar { get; set; }
+
+        decimal DecimalNumeric { get; set; }
+
+        string StringNVarchar { get; set; }
+
+        float Single { get; set; }
+
+        byte[] ByteArrayRowVersion { get; set; }
+
+        DateTime DateTimeSmallDateTime { get; set; }
+
+        short Int16 { get; set; }
+
+        decimal DecimalSmallMoney { get; set; }
+
+        TimeSpan TimeSpan { get; set; }
+
+        byte Byte { get; set; }
+
+        Guid Guid { get; set; }
+
+        byte[] ByteArrayVarBinary { get; set; }
+
+        string String { get; set; }
+
+        string Xml { get; set; }
+    }
+}

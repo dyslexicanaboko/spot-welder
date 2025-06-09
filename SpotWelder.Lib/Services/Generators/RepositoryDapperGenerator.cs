@@ -75,7 +75,9 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
 			template.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
 			
-			return GetFormattedCSharpResult($"{instructions.ClassName}Repository.cs", template);
+			var rt = instructions.Elections.HasFlag(GenerationElections.RepoStatic) ? "Static" : string.Empty;
+			
+      return GetFormattedCSharpResult($"{instructions.ClassName}{rt}Repository.cs", template);
 		}
 
 		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)

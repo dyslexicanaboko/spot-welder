@@ -1,0 +1,50 @@
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestService
+    {
+        private readonly IDataTypeTestRepository _repository;
+        private readonly IDataTypeTestValidation _validation;
+
+        public DataTypeTestService(
+            IDataTypeTestRepository repository,
+            IDataTypeTestValidation validation)
+        {
+            _repository = repository;
+            _validation = validation;
+        }
+
+        public async Task<DataTypeTestEntity?> GetDataTypeTest(int dataTypeTestId)
+        {
+            Validations.IsGreaterThanZero(dataTypeTestId, nameof(dataTypeTestId));
+
+            var dbEntity = await _repository.Using(x => x.Select(dataTypeTestId));
+
+            return dbEntity;
+        }
+
+        public async Task<DataTypeTestEntity> Add(DataTypeTestEntity? entity)
+        {
+            Validations.IsValid(_validation, entity, nameof(entity));
+
+            entity.DataTypeTestId = await _repository.Using(x => x.Insert(entity));
+
+            return entity;
+        }
+
+        public async Task Edit(DataTypeTestEntity entity)
+        {
+            Validations.IsNotNull(entity, nameof(entity));
+
+            await _repository.Using(x => x.Update(entity));
+        }
+
+        public async Task Remove(int dataTypeTestId)
+        {
+            Validations.IsGreaterThanZero(dataTypeTestId, nameof(dataTypeTestId));
+
+            await _repository.Using(x => x.Delete(dataTypeTestId));
+        }
+    }
+}
