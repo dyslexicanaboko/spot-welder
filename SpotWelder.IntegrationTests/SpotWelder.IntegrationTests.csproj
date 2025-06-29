@@ -12,6 +12,7 @@
   <ItemGroup>
     <None Remove="ModelGenerationTests\ExpectedModels\ApiController.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\ApiController.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\ApiController.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\DataTypeTestController.cs.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\DataTypeTestDapperRepository.cs.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\DataTypeTestEntityEqualityComparer.cs.sqlserver.expected" />
@@ -23,63 +24,112 @@
     <None Remove="ModelGenerationTests\ExpectedModels\DataTypeTestV1PatchModel.cs.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateCreateModel.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateCreateModel.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\GenerateCreateModel.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateEntity.async.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\GenerateEntity.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateEntityEqualityComparer.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateEntityEqualityComparer.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\GenerateEntityEqualityComparer.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateInterface.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateInterface.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\GenerateInterface.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateMapper.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateMapper.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\GenerateMapper.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateModel.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GenerateModel.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\GenerateModel.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GeneratePatchModel.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\GeneratePatchModel.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\GeneratePatchModel.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\IDataTypeTest.cs.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\RepoDapper.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\RepoStatic.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\SerializeCsv.async.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\SerializeCsv.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\SerializeJson.async.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\SerializeJson.sync.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\Service.async.sqlserver.expected" />
     <None Remove="ModelGenerationTests\ExpectedModels\Service.cs.sqlserver.expected" />
+    <None Remove="ModelGenerationTests\ExpectedModels\Service.sync.sqlserver.expected" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ModelGenerationTests\ExpectedModels\ApiController.async.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\ApiController.sync.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\GenerateCreateModel.async.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\GenerateCreateModel.sync.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\GenerateEntity.async.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\GenerateEntity.sync.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\GenerateEntityEqualityComparer.async.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\GenerateEntityEqualityComparer.sync.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\GenerateInterface.async.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\GenerateInterface.sync.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\GenerateMapper.async.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\GenerateMapper.sync.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\GenerateModel.async.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\GenerateModel.sync.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\GeneratePatchModel.async.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\GeneratePatchModel.sync.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\RepoDapper.async.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\RepoStatic.sync.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\RepoStatic.async.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\RepoDapper.sync.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\SerializeCsv.async.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\SerializeCsv.sync.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\SerializeJson.async.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\SerializeJson.sync.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ModelGenerationTests\ExpectedModels\Service.async.sqlserver.expected">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ModelGenerationTests\ExpectedModels\Service.sync.sqlserver.expected">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

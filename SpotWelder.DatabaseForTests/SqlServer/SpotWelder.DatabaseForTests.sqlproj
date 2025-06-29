@@ -63,8 +63,11 @@
   <ItemGroup>
     <Build Include="dbo\Tables\DataTypeTest.sql" />
     <Build Include="dbo\Tables\DataTypeTestNullable.sql" />
+    <Build Include="dbo\Tables\TypesTable.sql" />
+    <Build Include="dbo\Tables\TypesTableNullable.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SpotWelder.DatabaseForTests.publish.xml" />
+    <None Include="ReadMe.md" />
   </ItemGroup>
 </Project>

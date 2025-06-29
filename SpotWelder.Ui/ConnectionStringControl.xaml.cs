@@ -45,11 +45,12 @@ namespace SpotWelder.Ui
     }
 
     //Keeping these connection strings here just in case they get removed from the profile.json
-    //"Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;"
-    //"Host=localhost;Database=millions_of_things;Username=postgres;Password=postgres"
     //"Data Source=.;Initial Catalog=SpotWelder;Integrated Security=True;Encrypt=False"
+    //"Host=localhost;Database=millions_of_things;Username=postgres;Password=postgres"
+    //"Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;"
+    //"Host=localhost;Database=spot_welder;Username=postgres;Password=postgres"
     //FYI: The index location can change
-    
+
     public void DebugSetSqlServerParityTestParameters()
       => CbConnectionString.SelectedIndex = 0;
 
@@ -58,6 +59,9 @@ namespace SpotWelder.Ui
 
     public void DebugSetSqlServerTestParameters()
       => CbConnectionString.SelectedIndex = 2;
+
+    public void DebugSetPostgresParityTestParameters()
+      => CbConnectionString.SelectedIndex = 3;
 
     public void Dependencies(ConnectionStringControlDependencies dependencies)
     {

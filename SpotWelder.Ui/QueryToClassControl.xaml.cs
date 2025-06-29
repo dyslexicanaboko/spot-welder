@@ -60,131 +60,16 @@ namespace SpotWelder.Ui
       _electionToCheckBoxMap = GetGenerationElectionsMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
 
+      //These methods have been moved to a partial class
       //DebugWholeSqlServerTest();
       //DebugMinimalPostgresTest();
-      DebugWholeSqlServerTestForParity();
+      //DebugWholeSqlServerTestForParity();
+      DebugWholePostgresTestForParity();
     }
 
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
 
     public void CloseResultWindows() => _parentResultsWindow.Shutdown();
-
-    private void DebugMinimalPostgresTest()
-    {
-      #if DEBUG
-      ConnectionStringCb.DebugSetPostgresTestParameters();
-      TxtSourceSqlText.Text = "public.task";
-      TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "Task";
-      TxtClassEntityName.Text = "TaskEntity";
-
-      CbClassEntity.IsChecked = true;
-      CbClassModel.IsChecked = false; //Selected by default, so un-checking
-      CbRepoDapper.IsChecked = true;
-      CbRepoStatic.IsChecked = true;
-      CbMakeAsynchronous.IsChecked = true;
-#endif
-    }
-
-    private void DebugWholeSqlServerTest()
-    {
-      #if DEBUG
-      ConnectionStringCb.DebugSetSqlServerTestParameters();
-
-      RbSourceTypeTableName.IsChecked = true;
-      RbSourceTypeQuery.IsChecked = false;
-
-      TxtSourceSqlText.Text = "dbo.Task";
-      TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "Task";
-      TxtClassEntityName.Text = "TaskEntity";
-      TxtClassModelName.Text = "TaskModel";
-
-      CbRepoDapper.IsChecked = true;
-
-      //Entity
-      CbClassEntity.IsChecked = true;
-      CbClassEntityIEquatable.IsChecked = true;
-      CbClassEntityIComparable.IsChecked = true;
-
-      //Interface
-      CbClassInterface.IsChecked = true;
-
-      //Models
-      CbClassModel.IsChecked = true;
-      CbClassCreateModel.IsChecked = true;
-      CbClassPatchModel.IsChecked = true;
-
-      //Services
-      CbClassEntityEqualityComparer.IsChecked = true;
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
-
-      //Layers
-      CbMakeAsynchronous.IsChecked = true;
-      CbApiController.IsChecked = true;
-      CbService.IsChecked = true;
-
-      //Mappings
-      CbMapInterfaceToModel.IsChecked = true;
-      CbMapInterfaceToEntity.IsChecked = true;
-      CbMapEntityToModel.IsChecked = true;
-      CbMapModelToEntity.IsChecked = true;
-      CbMapCreateModelToEntity.IsChecked = true;
-      CbMapPatchModelToEntity.IsChecked = true;
-      #endif
-    }
-
-    private void DebugWholeSqlServerTestForParity()
-    {
-#if DEBUG
-      ConnectionStringCb.DebugSetSqlServerParityTestParameters();
-
-      RbSourceTypeTableName.IsChecked = true;
-      RbSourceTypeQuery.IsChecked = false;
-
-      TxtSourceSqlText.Text = "[dbo].[DataTypeTest]";
-      TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "DataTypeTest";
-      TxtClassEntityName.Text = "DataTypeTestEntity";
-      TxtClassModelName.Text = "DataTypeTestModel";
-
-      //Repository
-      CbRepoStatic.IsChecked = true;
-      CbRepoDapper.IsChecked = true;
-
-      //Entity
-      CbClassEntity.IsChecked = true;
-      CbClassEntityIEquatable.IsChecked = true;
-      CbClassEntityIComparable.IsChecked = true;
-
-      //Interface
-      CbClassInterface.IsChecked = true;
-
-      //Models
-      CbClassModel.IsChecked = true;
-      CbClassCreateModel.IsChecked = true;
-      CbClassPatchModel.IsChecked = true;
-
-      //Services
-      CbClassEntityEqualityComparer.IsChecked = true;
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
-
-      //Layers
-      CbMakeAsynchronous.IsChecked = true;
-      CbApiController.IsChecked = true;
-      CbService.IsChecked = true;
-
-      //Mappings
-      CbMapInterfaceToModel.IsChecked = true;
-      CbMapInterfaceToEntity.IsChecked = true;
-      CbMapEntityToModel.IsChecked = true;
-      CbMapModelToEntity.IsChecked = true;
-      CbMapCreateModelToEntity.IsChecked = true;
-      CbMapPatchModelToEntity.IsChecked = true;
-#endif
-    }
 
     private ITableQueryFormatStrategy GetTableQueryFormatStrategy()
       => _tableQueryFormatFactory.GetStrategy(ConnectionStringCb.CurrentConnection.SqlEngine);

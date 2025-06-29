@@ -1,0 +1,427 @@
+using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestRepository
+    {
+        public DataTypeTestEntity? Select(int dataTypeTestId)
+        {
+            const string sql = @"
+			SELECT
+                DataTypeTestId,
+                Int64,
+                ByteArray_Binary,
+                Boolean,
+                String_Char,
+                DateTime_Date,
+                DateTime_DateTime,
+                DateTime_DateTime2,
+                DateTimeOffset,
+                Decimal_Decimal,
+                Double,
+                Int32,
+                Decimal_Money,
+                String_NChar,
+                Decimal_Numeric,
+                String_NVarchar,
+                Single,
+                ByteArray_RowVersion,
+                DateTime_SmallDateTime,
+                Int16,
+                Decimal_SmallMoney,
+                TimeSpan,
+                Byte,
+                Guid,
+                ByteArray_VarBinary,
+                String,
+                Xml
+			FROM dbo.DataTypeTest
+			WHERE DataTypeTestId = @DataTypeTestId";
+
+            var p = GetPrimaryKeyParameter(dataTypeTestId);
+
+            using var dr = ExecuteReaderText(sql, p);
+
+            var lst = ToList(dr, ToEntity);
+
+            return lst.Any() ? lst.Single() : null;
+        }
+
+        public IEnumerable<DataTypeTestEntity> SelectAll()
+        {
+            const string sql = @"
+			SELECT
+                DataTypeTestId,
+                Int64,
+                ByteArray_Binary,
+                Boolean,
+                String_Char,
+                DateTime_Date,
+                DateTime_DateTime,
+                DateTime_DateTime2,
+                DateTimeOffset,
+                Decimal_Decimal,
+                Double,
+                Int32,
+                Decimal_Money,
+                String_NChar,
+                Decimal_Numeric,
+                String_NVarchar,
+                Single,
+                ByteArray_RowVersion,
+                DateTime_SmallDateTime,
+                Int16,
+                Decimal_SmallMoney,
+                TimeSpan,
+                Byte,
+                Guid,
+                ByteArray_VarBinary,
+                String,
+                Xml
+			FROM dbo.DataTypeTest";
+
+            using var dr = ExecuteReaderText(sql);
+
+            return ToList(dr, ToEntity);
+        }
+
+        public int Insert(DataTypeTestEntity entity)
+        {
+            const string sql = @"INSERT INTO dbo.DataTypeTest (
+                Int64,
+                ByteArray_Binary,
+                Boolean,
+                String_Char,
+                DateTime_Date,
+                DateTime_DateTime,
+                DateTime_DateTime2,
+                DateTimeOffset,
+                Decimal_Decimal,
+                Double,
+                Int32,
+                Decimal_Money,
+                String_NChar,
+                Decimal_Numeric,
+                String_NVarchar,
+                Single,
+                ByteArray_RowVersion,
+                DateTime_SmallDateTime,
+                Int16,
+                Decimal_SmallMoney,
+                TimeSpan,
+                Byte,
+                Guid,
+                ByteArray_VarBinary,
+                String,
+                Xml
+						) VALUES (
+                @Int64,
+                @ByteArray_Binary,
+                @Boolean,
+                @String_Char,
+                @DateTime_Date,
+                @DateTime_DateTime,
+                @DateTime_DateTime2,
+                @DateTimeOffset,
+                @Decimal_Decimal,
+                @Double,
+                @Int32,
+                @Decimal_Money,
+                @String_NChar,
+                @Decimal_Numeric,
+                @String_NVarchar,
+                @Single,
+                @ByteArray_RowVersion,
+                @DateTime_SmallDateTime,
+                @Int16,
+                @Decimal_SmallMoney,
+                @TimeSpan,
+                @Byte,
+                @Guid,
+                @ByteArray_VarBinary,
+                @String,
+                @Xml) 
+SELECT SCOPE_IDENTITY() AS PK;";
+
+            var lst = GetParameters(entity);
+
+
+            using var dr = ExecuteReaderText(sql, lst.ToArray());
+
+            return Convert.ToInt32(GetScalar(dr, "PK"));
+        }
+
+        public void Update(DataTypeTestEntity entity)
+        {
+            const string sql = @"UPDATE dbo.DataTypeTest SET 
+                Int64 = @Int64,
+                ByteArray_Binary = @ByteArray_Binary,
+                Boolean = @Boolean,
+                String_Char = @String_Char,
+                DateTime_Date = @DateTime_Date,
+                DateTime_DateTime = @DateTime_DateTime,
+                DateTime_DateTime2 = @DateTime_DateTime2,
+                DateTimeOffset = @DateTimeOffset,
+                Decimal_Decimal = @Decimal_Decimal,
+                Double = @Double,
+                Int32 = @Int32,
+                Decimal_Money = @Decimal_Money,
+                String_NChar = @String_NChar,
+                Decimal_Numeric = @Decimal_Numeric,
+                String_NVarchar = @String_NVarchar,
+                Single = @Single,
+                ByteArray_RowVersion = @ByteArray_RowVersion,
+                DateTime_SmallDateTime = @DateTime_SmallDateTime,
+                Int16 = @Int16,
+                Decimal_SmallMoney = @Decimal_SmallMoney,
+                TimeSpan = @TimeSpan,
+                Byte = @Byte,
+                Guid = @Guid,
+                ByteArray_VarBinary = @ByteArray_VarBinary,
+                String = @String,
+                Xml = @Xml
+					WHERE DataTypeTestId = @DataTypeTestId";
+
+            var lst = GetParameters(entity);
+
+            lst.Add(GetPrimaryKeyParameter(entity.DataTypeTestId));
+
+            ExecuteNonQuery(sql, lst.ToArray());
+        }
+
+        public void Delete(int dataTypeTestId)
+        {
+            const string sql = @"DELETE FROM dbo.DataTypeTest WHERE DataTypeTestId = @DataTypeTestId";
+
+            var arr = new SqlParameter[] { GetPrimaryKeyParameter(dataTypeTestId) };
+
+            ExecuteNonQuery(sql, arr);
+        }
+
+        private SqlParameter GetPrimaryKeyParameter(int dataTypeTestId)
+        {
+            var p = new SqlParameter();
+            p.ParameterName = "@DataTypeTestId";
+            p.SqlDbType = SqlDbType.Int;
+            p.Value = dataTypeTestId;
+
+            return p;
+        }
+
+        private List<SqlParameter> GetParameters(DataTypeTestEntity entity)
+        {
+            SqlParameter p = null;
+
+            var lst = new List<SqlParameter>();
+
+            p = new SqlParameter();
+            p.ParameterName = "@Int64";
+            p.SqlDbType = SqlDbType.BigInt;
+            p.Value = entity.Int64;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@ByteArray_Binary";
+            p.SqlDbType = SqlDbType.Binary;
+            p.Value = entity.ByteArrayBinary;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Boolean";
+            p.SqlDbType = SqlDbType.Bit;
+            p.Value = entity.Boolean;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@String_Char";
+            p.SqlDbType = SqlDbType.Char;
+            p.Value = entity.StringChar;
+            p.Size = 1;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@DateTime_Date";
+            p.SqlDbType = SqlDbType.Date;
+            p.Value = entity.DateTimeDate;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@DateTime_DateTime";
+            p.SqlDbType = SqlDbType.DateTime;
+            p.Value = entity.DateTimeDateTime;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@DateTime_DateTime2";
+            p.SqlDbType = SqlDbType.DateTime2;
+            p.Value = entity.DateTimeDateTime2;
+            p.Scale = 0;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@DateTimeOffset";
+            p.SqlDbType = SqlDbType.DateTimeOffset;
+            p.Value = entity.DateTimeOffset;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Decimal_Decimal";
+            p.SqlDbType = SqlDbType.Decimal;
+            p.Value = entity.DecimalDecimal;
+            p.Scale = 2;
+            p.Precision = 4;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Double";
+            p.SqlDbType = SqlDbType.Float;
+            p.Value = entity.Double;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Int32";
+            p.SqlDbType = SqlDbType.Int;
+            p.Value = entity.Int32;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Decimal_Money";
+            p.SqlDbType = SqlDbType.Money;
+            p.Value = entity.DecimalMoney;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@String_NChar";
+            p.SqlDbType = SqlDbType.NChar;
+            p.Value = entity.StringNChar;
+            p.Size = 1;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Decimal_Numeric";
+            p.SqlDbType = SqlDbType.Decimal;
+            p.Value = entity.DecimalNumeric;
+            p.Scale = 2;
+            p.Precision = 4;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@String_NVarchar";
+            p.SqlDbType = SqlDbType.NVarChar;
+            p.Value = entity.StringNVarchar;
+            p.Size = 10;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Single";
+            p.SqlDbType = SqlDbType.Real;
+            p.Value = entity.Single;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@ByteArray_RowVersion";
+            p.SqlDbType = SqlDbType.Timestamp;
+            p.Value = entity.ByteArrayRowVersion == null ? DBNull.Value : entity.ByteArrayRowVersion;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@DateTime_SmallDateTime";
+            p.SqlDbType = SqlDbType.DateTime;
+            p.Value = entity.DateTimeSmallDateTime;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Int16";
+            p.SqlDbType = SqlDbType.SmallInt;
+            p.Value = entity.Int16;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Decimal_SmallMoney";
+            p.SqlDbType = SqlDbType.Money;
+            p.Value = entity.DecimalSmallMoney;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@TimeSpan";
+            p.SqlDbType = SqlDbType.Time;
+            p.Value = entity.TimeSpan;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Byte";
+            p.SqlDbType = SqlDbType.TinyInt;
+            p.Value = entity.Byte;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Guid";
+            p.SqlDbType = SqlDbType.UniqueIdentifier;
+            p.Value = entity.Guid;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@ByteArray_VarBinary";
+            p.SqlDbType = SqlDbType.Binary;
+            p.Value = entity.ByteArrayVarBinary;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@String";
+            p.SqlDbType = SqlDbType.VarChar;
+            p.Value = entity.String;
+            p.Size = 10;
+
+            lst.Add(p);
+            p = new SqlParameter();
+            p.ParameterName = "@Xml";
+            p.SqlDbType = SqlDbType.Xml;
+            p.Value = entity.Xml;
+
+            lst.Add(p);
+
+            return lst;
+        }
+
+        private DataTypeTestEntity ToEntity(IDataReader reader)
+        {
+            var r = reader;
+
+            var e = new DataTypeTestEntity();
+            e.DataTypeTestId = Convert.ToInt32(r["DataTypeTestId"]);
+            e.Int64 = Convert.ToInt64(r["Int64"]);
+            e.ByteArrayBinary = (byte[])r["ByteArray_Binary"];
+            e.Boolean = Convert.ToBoolean(r["Boolean"]);
+            e.StringChar = Convert.ToString(r["String_Char"]);
+            e.DateTimeDate = Convert.ToDateTime(r["DateTime_Date"]);
+            e.DateTimeDateTime = Convert.ToDateTime(r["DateTime_DateTime"]);
+            e.DateTimeDateTime2 = Convert.ToDateTime(r["DateTime_DateTime2"]);
+            e.DateTimeOffset = (DateTimeOffset)r["DateTimeOffset"];
+            e.DecimalDecimal = Convert.ToDecimal(r["Decimal_Decimal"]);
+            e.Double = Convert.ToDouble(r["Double"]);
+            e.Int32 = Convert.ToInt32(r["Int32"]);
+            e.DecimalMoney = Convert.ToDecimal(r["Decimal_Money"]);
+            e.StringNChar = Convert.ToString(r["String_NChar"]);
+            e.DecimalNumeric = Convert.ToDecimal(r["Decimal_Numeric"]);
+            e.StringNVarchar = Convert.ToString(r["String_NVarchar"]);
+            e.Single = Convert.ToSingle(r["Single"]);
+            e.ByteArrayRowVersion = r["ByteArray_RowVersion"] == DBNull.Value ? null : (byte[])(byte[])r["ByteArray_RowVersion"];
+            e.DateTimeSmallDateTime = Convert.ToDateTime(r["DateTime_SmallDateTime"]);
+            e.Int16 = Convert.ToInt16(r["Int16"]);
+            e.DecimalSmallMoney = Convert.ToDecimal(r["Decimal_SmallMoney"]);
+            e.TimeSpan = (TimeSpan)r["TimeSpan"];
+            e.Byte = Convert.ToByte(r["Byte"]);
+            e.Guid = Guid.Parse(Convert.ToString(r["Guid"]));
+            e.ByteArrayVarBinary = (byte[])r["ByteArray_VarBinary"];
+            e.String = Convert.ToString(r["String"]);
+            e.Xml = Convert.ToString(r["Xml"]);
+
+            return e;
+        }
+    }
+}

@@ -77,7 +77,7 @@ namespace SpotWelder.Lib.Services.Generators
 
 			GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
 
-      var rt = instructions.Elections.HasFlag(GenerationElections.RepoDapper) ? "Dapper" : string.Empty;
+      var rt = instructions.Elections.HasFlag(GenerationElections.RepoDapper) ? "Static" : string.Empty;
 
       return GetFormattedCSharpResult($"{instructions.SubjectName}{rt}Repository.cs", template);
 		}

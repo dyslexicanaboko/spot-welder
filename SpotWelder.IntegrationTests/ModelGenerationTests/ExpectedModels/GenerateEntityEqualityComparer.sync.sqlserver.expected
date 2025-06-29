@@ -1,0 +1,82 @@
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestEntityEqualityComparer
+        : EqualityComparer<DataTypeTestEntity>
+    {
+        public override bool Equals(DataTypeTestEntity? left, DataTypeTestEntity? right)
+        {
+            if (left == null && right == null) return true;
+
+            if (left == null ^ right == null) return false;
+
+            if (ReferenceEquals(left, right)) return true;
+
+            if (left!.GetType() != right!.GetType()) return false;
+
+            return
+        left.DataTypeTestId == right.DataTypeTestId &&
+        left.Int64 == right.Int64 &&
+        left.ByteArrayBinary == right.ByteArrayBinary &&
+        left.Boolean == right.Boolean &&
+        left.StringChar == right.StringChar &&
+        left.DateTimeDate == right.DateTimeDate &&
+        left.DateTimeDateTime == right.DateTimeDateTime &&
+        left.DateTimeDateTime2 == right.DateTimeDateTime2 &&
+        left.DateTimeOffset == right.DateTimeOffset &&
+        left.DecimalDecimal == right.DecimalDecimal &&
+        left.Double == right.Double &&
+        left.Int32 == right.Int32 &&
+        left.DecimalMoney == right.DecimalMoney &&
+        left.StringNChar == right.StringNChar &&
+        left.DecimalNumeric == right.DecimalNumeric &&
+        left.StringNVarchar == right.StringNVarchar &&
+        left.Single == right.Single &&
+        left.ByteArrayRowVersion == right.ByteArrayRowVersion &&
+        left.DateTimeSmallDateTime == right.DateTimeSmallDateTime &&
+        left.Int16 == right.Int16 &&
+        left.DecimalSmallMoney == right.DecimalSmallMoney &&
+        left.TimeSpan == right.TimeSpan &&
+        left.Byte == right.Byte &&
+        left.Guid == right.Guid &&
+        left.ByteArrayVarBinary == right.ByteArrayVarBinary &&
+        left.String == right.String &&
+        left.Xml == right.Xml;
+        }
+
+        public override int GetHashCode(DataTypeTestEntity? obj)
+        {
+            if (obj == null) return -1;
+
+            return
+                    obj.DataTypeTestId.GetHashCode() +
+        obj.Int64.GetHashCode() +
+        obj.ByteArrayBinary.GetHashCode() +
+        obj.Boolean.GetHashCode() +
+        obj.StringChar.GetHashCode() +
+        obj.DateTimeDate.GetHashCode() +
+        obj.DateTimeDateTime.GetHashCode() +
+        obj.DateTimeDateTime2.GetHashCode() +
+        obj.DateTimeOffset.GetHashCode() +
+        obj.DecimalDecimal.GetHashCode() +
+        obj.Double.GetHashCode() +
+        obj.Int32.GetHashCode() +
+        obj.DecimalMoney.GetHashCode() +
+        obj.StringNChar.GetHashCode() +
+        obj.DecimalNumeric.GetHashCode() +
+        obj.StringNVarchar.GetHashCode() +
+        obj.Single.GetHashCode() +
+        obj.ByteArrayRowVersion.GetHashCode() +
+        obj.DateTimeSmallDateTime.GetHashCode() +
+        obj.Int16.GetHashCode() +
+        obj.DecimalSmallMoney.GetHashCode() +
+        obj.TimeSpan.GetHashCode() +
+        obj.Byte.GetHashCode() +
+        obj.Guid.GetHashCode() +
+        obj.ByteArrayVarBinary.GetHashCode() +
+        obj.String.GetHashCode() +
+        obj.Xml.GetHashCode();
+        }
+    }
+}

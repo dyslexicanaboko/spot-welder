@@ -61,10 +61,7 @@ namespace SpotWelder.Lib.Services.TypeMappings
     private static readonly Dictionary<NpgsqlDbType, DbType> MapSqlDbTypeToDbTypeLoose = new()
     {
       { NpgsqlDbType.Bigint, DbType.Int64 },
-
-      //{ NpgsqlDbType.Binary, ??? },
       { NpgsqlDbType.Boolean, DbType.Boolean },
-      //{ NpgsqlDbType.Char, DbType.AnsiStringFixedLength },
       { NpgsqlDbType.Date, DbType.Date },
       //{ NpgsqlDbType.Timestamp, DbType.DateTime },  //Guessing
       { NpgsqlDbType.Timestamp, DbType.DateTime2 }, //Guessing
@@ -76,14 +73,12 @@ namespace SpotWelder.Lib.Services.TypeMappings
       { NpgsqlDbType.Char, DbType.StringFixedLength },
       { NpgsqlDbType.Varchar, DbType.String },
       { NpgsqlDbType.Real, DbType.Single },
-      //{ NpgsqlDbType.Integer, DbType.Int16 },
       { NpgsqlDbType.Time, DbType.Time },
-      //{ NpgsqlDbType.Integer, DbType.Byte },
       { NpgsqlDbType.Uuid, DbType.Guid },
-      //{ NpgsqlDbType.Binary, DbType.Binary },
-      //{ NpgsqlDbType.Varchar, DbType.AnsiString },
-      { NpgsqlDbType.Xml, DbType.Xml }
-    };
+      { NpgsqlDbType.Xml, DbType.Xml },
+      { NpgsqlDbType.Smallint, DbType.Int16 },
+      { NpgsqlDbType.Bytea, DbType.Binary }
+  };
 
     private static readonly Dictionary<DbType, NpgsqlDbType> MapDbTypeToSqlDbTypeLoose =
       MapSqlDbTypeToDbTypeLoose.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
