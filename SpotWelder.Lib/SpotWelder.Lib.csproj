@@ -11,6 +11,7 @@
 	  <None Remove="Templates\EntityIComparable.cs.template" />
 	  <None Remove="Templates\EntityIEquatable.cs.template" />
 	  <None Remove="Templates\EntitySimple.cs.template" />
+	  <None Remove="Templates\en_US.dic" />
 	  <None Remove="Templates\Interface.cs.template" />
 	  <None Remove="Templates\MapCreateModelToEntity.cs.template" />
 	  <None Remove="Templates\MapEntityToModel.cs.template" />
@@ -34,6 +35,9 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\ClassConstructor.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\en_US.dic">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\MapPatchModelToEntity.cs.template">

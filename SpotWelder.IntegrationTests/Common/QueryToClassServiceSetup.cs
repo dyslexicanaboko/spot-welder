@@ -77,9 +77,9 @@ namespace SpotWelder.IntegrationTests.Common
           break;
         case SqlEngine.Postgres:
           svcNameFormat = new PostgresTableQueryFormatStrategy();
-          connectionString = "Host=localhost;Username=postgres;Password=postgres;Database=spotwelder";
-          fullTableName = "public.data-type-test";
-          sqlQuery = "SELECT * FROM public.data-type-test";
+          connectionString = "Host=localhost;Username=postgres;Password=postgres;Database=spot_welder";
+          fullTableName = "public.data_type_test";
+          sqlQuery = "SELECT * FROM public.data_type_test";
           break;
         default:
           throw new NotImplementedException($"SQL engine {sqlEngine} is not supported yet. 0x202506012228");
@@ -110,9 +110,11 @@ namespace SpotWelder.IntegrationTests.Common
       //Example output directory:
       //C:\Dev\GitHub\spot-welder\SpotWelder.IntegrationTests\bin\Debug\net8.0\ModelGenerationTests\ExpectedModels\{EnumerationName}.cs.sqlServer.expected
       var strAsync = isAsync ? "async" : "sync";
+      var strSqlEngine = (election.HasFlag(GenerationElections.RepoDapper) || election.HasFlag(GenerationElections.RepoStatic)) ?
+        $".{sqlEngine.ToString().ToLower()}" : string.Empty;
 
       var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ModelGenerationTests", "ExpectedModels",
-        $"{election}.{strAsync}.{sqlEngine.ToString().ToLower()}.expected");
+        $"{election}.{strAsync}{strSqlEngine}.expected");
 
       if (!File.Exists(path)) throw new FileNotFoundException($"Make sure expected result files are in the output path.", path);
 

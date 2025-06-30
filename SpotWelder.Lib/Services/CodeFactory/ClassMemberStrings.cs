@@ -1,19 +1,25 @@
 ﻿using Humanizer;
-using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Data;
-using System.Reflection;
 using Microsoft.CSharp;
 //using Microsoft.JScript;
 using Microsoft.VisualBasic;
 using SpotWelder.Lib.Models;
+using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace SpotWelder.Lib.Services.CodeFactory
 {
   public class ClassMemberStrings
   {
     private readonly CodeDomProvider _provider;
+    private static HashSet<string> _englishDictionary;
+    private static readonly Regex _reDelimiters = new Regex("[-_\\s]+");
 
     /// <summary>
     /// Used in the case where the meta data is provided by the reflected properties
@@ -57,6 +63,8 @@ namespace SpotWelder.Lib.Services.CodeFactory
           break;
       }
 
+      InitializeEnglishDictionary();
+
       DatabaseTypeName = sc.SqlType.ToLower(); //Case is inconsistent, so making it lower on purpose
 
       DatabaseType = TypesService.GetTypeMapper(sc.SqlEngine).GetDbType(DatabaseTypeName);
@@ -97,6 +105,17 @@ namespace SpotWelder.Lib.Services.CodeFactory
       TypeScriptType = GetTypeScriptType(sc.SystemType);
     }
 
+    private static void InitializeEnglishDictionary()
+    {
+      if (_englishDictionary != null) return;
+
+      var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", "en_US.dic");
+
+      _englishDictionary = File.ReadAllLines(path)
+        .Select(x => x.Split('/').First())
+        .ToHashSet(StringComparer.OrdinalIgnoreCase);
+    }
+
     //For cloning only, bypasses all of the logic and is a straight copy
     private ClassMemberStrings(ClassMemberStrings source, CodeDomProvider provider)
     {
@@ -126,6 +145,9 @@ namespace SpotWelder.Lib.Services.CodeFactory
 
     /// <summary>Qualified SQL Column name</summary>
     public string ColumnName { get; private set; }
+
+    /// <summary>SQL column name split into individual words separated by a single space</summary>
+    public string ColumnNameDelimited { get; set; }
 
     /// <summary>SQL Server database type name in lower case</summary>
     public string DatabaseTypeName { get; }
@@ -213,7 +235,6 @@ namespace SpotWelder.Lib.Services.CodeFactory
       return str;
     }
 
-    
     private static string GetTypeScriptType(Type target)
     {
       //Example of nullable property in TypeScript
@@ -247,14 +268,20 @@ namespace SpotWelder.Lib.Services.CodeFactory
 
     private void SetPropertyAndField(string unqualifiedColumnName)
     {
+      //In the case where a column name is not delimited in any way, it needs to be delimited
+      //so that it can be humanized properly. Example: bytearray_binary, needs to be ByteArrayBinary,
+      //but without intervention was being evaluated as BytearrayBinary.
+      //ColumnNameDelimited = DelimitString(_englishDictionary, unqualifiedColumnName);
+      ColumnNameDelimited = unqualifiedColumnName;
+
       //Removing any whitespace
-      //Removing any underscores - which may be a problem
-      
+      //Removing any underscores
+
       //Pascal Case the property name
-      Property = unqualifiedColumnName.Pascalize();
+      Property = ColumnNameDelimited.Pascalize();
 
       //Camel case the parameter name
-      Parameter = unqualifiedColumnName.Camelize();
+      Parameter = ColumnNameDelimited.Camelize();
 
       //Field denoted by prefixing with underscore
       Field = "_" + Parameter;
@@ -264,6 +291,50 @@ namespace SpotWelder.Lib.Services.CodeFactory
     {
       //Qualifying the column name for SQL
       ColumnName = trimmedColumnName.Contains(" ") ? "[" + trimmedColumnName + "]" : trimmedColumnName;
+    }
+
+    //2025-06-29 This is my attempt at delimiting the string, but there are other methods that exist named:
+    //StringSegmentation and SegmentWithTrie - if my approach fails, then I will look into those
+    //The problem with doing this is it is far too subjective.
+    public static string DelimitString(HashSet<string> words, string target)
+    {
+      var lst = new List<string>();
+
+      //Removing any delimiters such as hyphens, underscores, and whitespace
+      target = _reDelimiters.Replace(target, string.Empty);
+
+      var f = MostProbableSegment(words, target);
+      var trim = 0;
+
+      while (!string.IsNullOrEmpty(f))
+      {
+        lst.Add(f);
+
+        trim += f.Length;
+
+        var next = target.Substring(trim, target.Length - trim);
+
+        f = MostProbableSegment(words, next);
+      }
+
+      return string.Join(' ', lst);
+    }
+
+    //This makes the assumption that the longest fragment is the most probable
+    public static string? MostProbableSegment(HashSet<string> words, string target)
+    {
+      var lst = new List<string>();
+      
+      for (var l = 1; l <= target.Length; l++)
+      {
+        var sub = target.Substring(0, l);
+
+        if (!words.Contains(sub)) continue;
+
+        lst.Add(sub);
+      }
+
+      return lst.LastOrDefault();
     }
 
     public ClassMemberStrings Clone() => new (this, _provider);
