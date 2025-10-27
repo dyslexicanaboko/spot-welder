@@ -1,0 +1,393 @@
+using Npgsql;
+using NpgsqlTypes;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestRepository
+    {
+        public async Task<DataTypeTestEntity?> Select(int dataTypeTestId)
+        {
+            const string sql = @"
+			SELECT
+                data_type_test_id,
+                int64,
+                bytearray_binary,
+                boolean,
+                string_char,
+                datetime_date,
+                datetime_datetime,
+                datetime_datetime2,
+                datetimeoffset,
+                decimal_decimal,
+                double,
+                int32,
+                decimal_money,
+                string_nchar,
+                decimal_numeric,
+                string_nvarchar,
+                single,
+                datetime_smalldatetime,
+                int16,
+                timespan,
+                guid,
+                bytearray_varbinary,
+                string,
+                xml
+			FROM public.data_type_test
+			WHERE data_type_test_id = @data_type_test_id";
+
+            var p = GetPrimaryKeyParameter(dataTypeTestId);
+
+            using var dr = await ExecuteReaderText(sql, p);
+
+            var lst = ToList(dr, ToEntity);
+
+            return lst.Any() ? lst.Single() : null;
+        }
+
+        public async Task<IEnumerable<DataTypeTestEntity>> SelectAll()
+        {
+            const string sql = @"
+			SELECT
+                data_type_test_id,
+                int64,
+                bytearray_binary,
+                boolean,
+                string_char,
+                datetime_date,
+                datetime_datetime,
+                datetime_datetime2,
+                datetimeoffset,
+                decimal_decimal,
+                double,
+                int32,
+                decimal_money,
+                string_nchar,
+                decimal_numeric,
+                string_nvarchar,
+                single,
+                datetime_smalldatetime,
+                int16,
+                timespan,
+                guid,
+                bytearray_varbinary,
+                string,
+                xml
+			FROM public.data_type_test";
+
+            using var dr = await ExecuteReaderText(sql);
+
+            return ToList(dr, ToEntity);
+        }
+
+        public async Task<int> Insert(DataTypeTestEntity entity)
+        {
+            const string sql = @"INSERT INTO public.data_type_test (
+                int64,
+                bytearray_binary,
+                boolean,
+                string_char,
+                datetime_date,
+                datetime_datetime,
+                datetime_datetime2,
+                datetimeoffset,
+                decimal_decimal,
+                double,
+                int32,
+                decimal_money,
+                string_nchar,
+                decimal_numeric,
+                string_nvarchar,
+                single,
+                datetime_smalldatetime,
+                int16,
+                timespan,
+                guid,
+                bytearray_varbinary,
+                string,
+                xml
+						) VALUES (
+                @int64,
+                @bytearray_binary,
+                @boolean,
+                @string_char,
+                @datetime_date,
+                @datetime_datetime,
+                @datetime_datetime2,
+                @datetimeoffset,
+                @decimal_decimal,
+                @double,
+                @int32,
+                @decimal_money,
+                @string_nchar,
+                @decimal_numeric,
+                @string_nvarchar,
+                @single,
+                @datetime_smalldatetime,
+                @int16,
+                @timespan,
+                @guid,
+                @bytearray_varbinary,
+                @string,
+                @xml) RETURNING data_type_test_id AS PK;";
+
+            var lst = GetParameters(entity);
+
+
+            using var dr = await ExecuteReaderText(sql, lst.ToArray());
+
+            return Convert.ToInt32(GetScalar(dr, "PK"));
+        }
+
+        public async Task Update(DataTypeTestEntity entity)
+        {
+            const string sql = @"UPDATE public.data_type_test SET 
+                int64 = @int64,
+                bytearray_binary = @bytearray_binary,
+                boolean = @boolean,
+                string_char = @string_char,
+                datetime_date = @datetime_date,
+                datetime_datetime = @datetime_datetime,
+                datetime_datetime2 = @datetime_datetime2,
+                datetimeoffset = @datetimeoffset,
+                decimal_decimal = @decimal_decimal,
+                double = @double,
+                int32 = @int32,
+                decimal_money = @decimal_money,
+                string_nchar = @string_nchar,
+                decimal_numeric = @decimal_numeric,
+                string_nvarchar = @string_nvarchar,
+                single = @single,
+                datetime_smalldatetime = @datetime_smalldatetime,
+                int16 = @int16,
+                timespan = @timespan,
+                guid = @guid,
+                bytearray_varbinary = @bytearray_varbinary,
+                string = @string,
+                xml = @xml
+					WHERE data_type_test_id = @data_type_test_id";
+
+            var lst = GetParameters(entity);
+
+            lst.Add(GetPrimaryKeyParameter(entity.DataTypeTestId));
+
+            await ExecuteNonQuery(sql, lst.ToArray());
+        }
+
+        public async Task Delete(int dataTypeTestId)
+        {
+            const string sql = @"DELETE FROM public.data_type_test WHERE data_type_test_id = @data_type_test_id";
+
+            var arr = new NpgsqlParameter[] { GetPrimaryKeyParameter(dataTypeTestId) };
+
+            await ExecuteNonQuery(sql, arr);
+        }
+
+        private NpgsqlParameter GetPrimaryKeyParameter(int dataTypeTestId)
+        {
+            var p = new NpgsqlParameter();
+            p.ParameterName = "@data_type_test_id";
+            p.NpgsqlDbType = NpgsqlDbType.Integer;
+            p.Value = dataTypeTestId;
+
+            return p;
+        }
+
+        private List<NpgsqlParameter> GetParameters(DataTypeTestEntity entity)
+        {
+            NpgsqlParameter p = null;
+
+            var lst = new List<NpgsqlParameter>();
+
+            p = new NpgsqlParameter();
+            p.ParameterName = "@int64";
+            p.NpgsqlDbType = NpgsqlDbType.Bigint;
+            p.Value = entity.Int64;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@bytearray_binary";
+            p.NpgsqlDbType = NpgsqlDbType.Bytea;
+            p.Value = entity.BytearrayBinary;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@boolean";
+            p.NpgsqlDbType = NpgsqlDbType.Boolean;
+            p.Value = entity.Boolean;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@string_char";
+            p.NpgsqlDbType = NpgsqlDbType.Char;
+            p.Value = entity.StringChar;
+            p.Size = 1;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@datetime_date";
+            p.NpgsqlDbType = NpgsqlDbType.Date;
+            p.Value = entity.DatetimeDate;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@datetime_datetime";
+            p.NpgsqlDbType = NpgsqlDbType.Timestamp;
+            p.Value = entity.DatetimeDatetime;
+            p.Scale = 0;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@datetime_datetime2";
+            p.NpgsqlDbType = NpgsqlDbType.Timestamp;
+            p.Value = entity.DatetimeDatetime2;
+            p.Scale = 0;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@datetimeoffset";
+            p.NpgsqlDbType = NpgsqlDbType.TimestampTz;
+            p.Value = entity.Datetimeoffset;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@decimal_decimal";
+            p.NpgsqlDbType = NpgsqlDbType.Numeric;
+            p.Value = entity.DecimalDecimal;
+            p.Scale = 2;
+            p.Precision = 4;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@double";
+            p.NpgsqlDbType = NpgsqlDbType.Double;
+            p.Value = entity.Double;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@int32";
+            p.NpgsqlDbType = NpgsqlDbType.Integer;
+            p.Value = entity.Int32;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@decimal_money";
+            p.NpgsqlDbType = NpgsqlDbType.Money;
+            p.Value = entity.DecimalMoney;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@string_nchar";
+            p.NpgsqlDbType = NpgsqlDbType.Char;
+            p.Value = entity.StringNchar;
+            p.Size = 1;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@decimal_numeric";
+            p.NpgsqlDbType = NpgsqlDbType.Numeric;
+            p.Value = entity.DecimalNumeric;
+            p.Scale = 2;
+            p.Precision = 4;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@string_nvarchar";
+            p.NpgsqlDbType = NpgsqlDbType.Varchar;
+            p.Value = entity.StringNvarchar;
+            p.Size = 10;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@single";
+            p.NpgsqlDbType = NpgsqlDbType.Real;
+            p.Value = entity.Single;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@datetime_smalldatetime";
+            p.NpgsqlDbType = NpgsqlDbType.Timestamp;
+            p.Value = entity.DatetimeSmalldatetime;
+            p.Scale = 0;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@int16";
+            p.NpgsqlDbType = NpgsqlDbType.Smallint;
+            p.Value = entity.Int16;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@timespan";
+            p.NpgsqlDbType = NpgsqlDbType.Time;
+            p.Value = entity.Timespan;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@guid";
+            p.NpgsqlDbType = NpgsqlDbType.Uuid;
+            p.Value = entity.Guid;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@bytearray_varbinary";
+            p.NpgsqlDbType = NpgsqlDbType.Bytea;
+            p.Value = entity.BytearrayVarbinary;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@string";
+            p.NpgsqlDbType = NpgsqlDbType.Varchar;
+            p.Value = entity.String;
+            p.Size = 10;
+
+            lst.Add(p);
+            p = new NpgsqlParameter();
+            p.ParameterName = "@xml";
+            p.NpgsqlDbType = NpgsqlDbType.Xml;
+            p.Value = entity.Xml;
+
+            lst.Add(p);
+
+            return lst;
+        }
+
+        private DataTypeTestEntity ToEntity(IDataReader reader)
+        {
+            var r = reader;
+
+            var e = new DataTypeTestEntity();
+            e.DataTypeTestId = Convert.ToInt32(r["data_type_test_id"]);
+            e.Int64 = Convert.ToInt64(r["int64"]);
+            e.BytearrayBinary = (byte[])r["bytearray_binary"];
+            e.Boolean = Convert.ToBoolean(r["boolean"]);
+            e.StringChar = Convert.ToString(r["string_char"]);
+            e.DatetimeDate = Convert.ToDateTime(r["datetime_date"]);
+            e.DatetimeDatetime = Convert.ToDateTime(r["datetime_datetime"]);
+            e.DatetimeDatetime2 = Convert.ToDateTime(r["datetime_datetime2"]);
+            e.Datetimeoffset = Convert.ToDateTime(r["datetimeoffset"]);
+            e.DecimalDecimal = Convert.ToDecimal(r["decimal_decimal"]);
+            e.Double = Convert.ToDouble(r["double"]);
+            e.Int32 = Convert.ToInt32(r["int32"]);
+            e.DecimalMoney = Convert.ToDecimal(r["decimal_money"]);
+            e.StringNchar = Convert.ToString(r["string_nchar"]);
+            e.DecimalNumeric = Convert.ToDecimal(r["decimal_numeric"]);
+            e.StringNvarchar = Convert.ToString(r["string_nvarchar"]);
+            e.Single = Convert.ToSingle(r["single"]);
+            e.DatetimeSmalldatetime = Convert.ToDateTime(r["datetime_smalldatetime"]);
+            e.Int16 = Convert.ToInt16(r["int16"]);
+            e.Timespan = (TimeSpan)r["timespan"];
+            e.Guid = Guid.Parse(Convert.ToString(r["guid"]));
+            e.BytearrayVarbinary = (byte[])r["bytearray_varbinary"];
+            e.String = Convert.ToString(r["string"]);
+            e.Xml = Convert.ToString(r["xml"]);
+
+            return e;
+        }
+    }
+}

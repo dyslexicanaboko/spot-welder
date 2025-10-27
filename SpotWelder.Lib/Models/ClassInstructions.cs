@@ -5,6 +5,8 @@ namespace SpotWelder.Lib.Models
 {
   public class ClassInstructions
   {
+    public SqlEngine SqlEngine { get; set; }
+
     /// <summary>
     /// Table query for the class being generated. This may not be in use depending
     /// on the pathing being used.
@@ -92,6 +94,7 @@ namespace SpotWelder.Lib.Models
         IsAsynchronous = IsAsynchronous,
         Languages = Languages,
         Elections = Elections,
+        SqlEngine = SqlEngine,
         TableQuery = TableQuery.Clone()
       };
 

@@ -1,13 +1,13 @@
-﻿using System.Data;
-using SpotWelder.Lib.Models;
+﻿using SpotWelder.Lib.Models;
+using System.Data;
 
 namespace SpotWelder.Lib.DataAccess
 {
-    public interface IGeneralDatabaseQueries
-        : IBaseRepository
-    {
-        ConnectionResult TestConnectionString(string connectionString);
+  public interface IGeneralDatabaseQueries
+    : IBaseRepository
+  {
+    ConnectionResult TestConnectionString(ServerConnection serverConnection);
 
-        DataTable GetRowData(string sql);
-    }
+    DataTable GetRowData(string sql);
+  }
 }

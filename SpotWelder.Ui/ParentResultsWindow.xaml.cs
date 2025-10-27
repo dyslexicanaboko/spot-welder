@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Clipboard = System.Windows.Clipboard;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace SpotWelder.Ui
@@ -21,6 +22,15 @@ namespace SpotWelder.Ui
   public partial class ParentResultsWindow : Window
   {
     private readonly ParentResultsWindowViewModel _viewModel = new ();
+
+    public static readonly RoutedUICommand SaveAll = new RoutedUICommand(
+      "Save All", // Display text
+      "SaveAll",  // Command name
+      typeof(ParentResultsWindow),
+      new InputGestureCollection
+      {
+        new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift) // Ctrl+Shift+S
+      });
 
     private static bool _applicationIsShuttingDown = false;
 
@@ -39,28 +49,7 @@ namespace SpotWelder.Ui
         title, 
         contents));
     }
-
-    private void BtnCopy_Click(object sender, RoutedEventArgs e)
-    {
-      Clipboard.SetText(SelectedTab.Content);
-    }
-
-    private void BtnSave_OnClick(object sender, RoutedEventArgs e)
-    {
-      var dlg = new SaveFileDialog();
-      dlg.FileName = SelectedTab.Header; // Default file name
-      dlg.DefaultExt = ".cs"; // Default file extension
-
-      //dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
-
-      // Show save file dialog box
-      var result = dlg.ShowDialog();
-
-      if (result != System.Windows.Forms.DialogResult.OK) return;
-
-      File.WriteAllText(dlg.FileName, SelectedTab.Content);
-    }
-
+    
     //When the user tries to close the window, we want to hide it instead.
     //However, when the application is exiting (shutting down), it needs to close.
     private void ParentResultsWindow_OnClosing(object? sender, CancelEventArgs e)
@@ -128,7 +117,29 @@ namespace SpotWelder.Ui
       _viewModel.Tabs.Remove(SelectedTab);
     }
 
-    private void BtnSaveAll_OnClick(object sender, RoutedEventArgs e)
+    private void BtnCopy_Click(object sender, RoutedEventArgs e)
+      => Clipboard.SetText(SelectedTab.Content);
+
+    private void SaveOneFile()
+    {
+      var dlg = new SaveFileDialog();
+      dlg.FileName = SelectedTab.Header; // Default file name
+      dlg.DefaultExt = ".cs"; // Default file extension
+
+      //dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
+
+      // Show save file dialog box
+      var result = dlg.ShowDialog();
+
+      if (result != System.Windows.Forms.DialogResult.OK) return;
+
+      File.WriteAllText(dlg.FileName, SelectedTab.Content);
+    }
+
+    private void BtnSave_OnClick(object sender, RoutedEventArgs e)
+      => SaveOneFile();
+
+    private void SaveAllFilesToFolder()
     {
       using var dlg = new FolderBrowserDialog();
 
@@ -149,9 +160,24 @@ namespace SpotWelder.Ui
       HlSaveLocation.SetHyperLink(dlg.SelectedPath, dlg.SelectedPath);
     }
 
+    private void BtnSaveAll_OnClick(object sender, RoutedEventArgs e)
+      => SaveAllFilesToFolder();
+
     private void HlSaveLocation_OnClick(object sender, RoutedEventArgs e)
     {
       ((Hyperlink)e.OriginalSource).NavigateUri.OpenUri();
+    }
+
+    private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+      if (e.Command == ApplicationCommands.Save)
+      {
+        SaveOneFile();
+      }
+      else if (e.Command == SaveAll)
+      {
+        SaveAllFilesToFolder();
+      }
     }
   }
 }

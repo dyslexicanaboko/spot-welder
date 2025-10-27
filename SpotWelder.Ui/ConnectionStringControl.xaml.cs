@@ -1,7 +1,11 @@
-﻿using SpotWelder.Lib.DataAccess;
+﻿using SpotWelder.Lib;
+using SpotWelder.Lib.DataAccess;
+using SpotWelder.Lib.DataAccess.SqlClients;
 using SpotWelder.Lib.Models;
+using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Profile;
-using System.Collections.ObjectModel;
+using SpotWelder.Ui.Services;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,13 +19,14 @@ namespace SpotWelder.Ui
   public partial class ConnectionStringControl : UserControl
   {
     private IGeneralDatabaseQueries _generalRepo;
+    private IConnectionStringBuilderService _builderService;
 
     public ConnectionStringControl()
     {
       InitializeComponent();
     }
 
-    public ConnectionStringManager UserConnectionStrings { get; private set; }
+    public ConnectionStringManager ConnectionStringManager { get; private set; }
 
     public UserConnectionString CurrentConnection
     {
@@ -33,25 +38,39 @@ namespace SpotWelder.Ui
         var obj = new UserConnectionString();
         obj.Verified = false;
         obj.ConnectionString = CbConnectionString.Text;
+        obj.SqlEngine = SqlEngine.SqlServer;
 
         return obj;
       }
     }
 
-    public void DebugSetTestParameters()
+    //Keeping these connection strings here just in case they get removed from the profile.json
+    //"Data Source=.;Initial Catalog=SpotWelder;Integrated Security=True;Encrypt=False"
+    //"Host=localhost;Database=millions_of_things;Username=postgres;Password=postgres"
+    //"Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;"
+    //"Host=localhost;Database=spot_welder;Username=postgres;Password=postgres"
+    //FYI: The index location can change
+
+    public void DebugSetSqlServerParityTestParameters()
+      => CbConnectionString.SelectedIndex = 0;
+
+    public void DebugSetPostgresTestParameters()
+      => CbConnectionString.SelectedIndex = 1;
+
+    public void DebugSetSqlServerTestParameters()
+      => CbConnectionString.SelectedIndex = 2;
+
+    public void DebugSetPostgresParityTestParameters()
+      => CbConnectionString.SelectedIndex = 3;
+
+    public void Dependencies(ConnectionStringControlDependencies dependencies)
     {
-      CbConnectionString.Text = "Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;";
-    }
+      _generalRepo = dependencies.Repository;
+      _builderService = dependencies.BuilderService;
 
-    public void Dependencies(
-      IProfileManager profileManager,
-      IGeneralDatabaseQueries repository)
-    {
-      _generalRepo = repository;
+      ConnectionStringManager = dependencies.ProfileManager.ConnectionStringManager;
 
-      UserConnectionStrings = profileManager.ConnectionStringManager;
-
-      CbConnectionString_Refresh();
+      DataContext = ConnectionStringManager;
     }
 
     private async void BtnConnectionStringTest_Click(object sender, RoutedEventArgs e)
@@ -64,13 +83,7 @@ namespace SpotWelder.Ui
       if (e.Key == Key.Enter)
         await TestConnectionStringNonBlocking();
     }
-
-    private void CbConnectionString_Refresh()
-    {
-      CbConnectionString.ItemsSource =
-        new ObservableCollection<UserConnectionString>(UserConnectionStrings.ConnectionStrings);
-    }
-
+    
     private async Task TestConnectionStringNonBlocking()
     {
       try
@@ -80,7 +93,8 @@ namespace SpotWelder.Ui
 
         var con = CurrentConnection;
 
-        var result = await Task.Run(() => TestConnectionString(con));
+        //var result = await Task.Run(() => TestConnectionString(con));
+        var result = Application.Current.Dispatcher.Invoke(() => TestConnectionString(con));
 
         ShowResult(result);
       }
@@ -93,19 +107,32 @@ namespace SpotWelder.Ui
 
     private ConnectionResult TestConnectionString(UserConnectionString userConnectionString)
     {
-      var obj = _generalRepo.TestConnectionString(userConnectionString.ConnectionString);
+      var serverConnection = new ServerConnection
+      {
+        SqlEngine = userConnectionString.SqlEngine,
+        ConnectionString = userConnectionString.ConnectionString
+      };
+
+      if (string.IsNullOrWhiteSpace(serverConnection.ConnectionString))
+      {
+        return new ConnectionResult
+        {
+          Success = false,
+          ReturnedException = new Exception("Connection string cannot be blank, empty or whitespace.")
+        };
+      }
+
+      var obj = _generalRepo.TestConnectionString(serverConnection);
 
       userConnectionString.Verified = obj.Success;
 
-      UserConnectionStrings.Update(userConnectionString);
+      ConnectionStringManager.Upsert(userConnectionString);
 
       return obj;
     }
 
     private bool ShowResult(ConnectionResult result, bool showMessageOnFailureOnly = false)
     {
-      CbConnectionString_Refresh();
-
       var showMessage = true;
 
       if (showMessageOnFailureOnly)
@@ -123,6 +150,64 @@ namespace SpotWelder.Ui
       var obj = TestConnectionString(CurrentConnection);
 
       return ShowResult(obj, showMessageOnFailureOnly);
+    }
+
+    //Edit can result in editing an existing connection or deleting it all together
+    //Additionally, on the edit the existing connection information must be shown
+    private void BtnEdit_OnClick(object sender, RoutedEventArgs e)
+    {
+      if (CbConnectionString.SelectedIndex < 0)
+      {
+        UserControlExtensions.ShowWarningMessage("Please select an existing connection string to perform an edit.");
+
+        return;
+      }
+
+      LaunchConnectionStringBuilder((UserConnectionString)CbConnectionString.SelectedItem);
+    }
+
+    private void BtnAdd_OnClick(object sender, RoutedEventArgs e)
+    {
+      LaunchConnectionStringBuilder();
+    }
+
+    private void LaunchConnectionStringBuilder(UserConnectionString? existing = null)
+    {
+      var win = new ConnectionStringBuilderWindow();
+      win.Dependencies(_builderService);
+
+      if(existing != null) win.LoadConnectionString(existing);
+
+      if (!win.ShowDialog().GetValueOrDefault()) return;
+
+      var con = win.GetConnectionString();
+
+      var ucs = new UserConnectionString
+      {
+        ConnectionString = con.ConnectionString,
+        SqlEngine = con.SqlEngine,
+        Verified = true //Hard coding to true for now
+      };
+
+      if (con.Operation == Enumerations.Upsert)
+      {
+        ConnectionStringManager.Upsert(ucs);
+      }
+      else
+      {
+        ConnectionStringManager.Remove(ucs);
+      }
+
+      CbConnectionString.SelectedIndex = 0;
+    }
+
+    private void CbConnectionString_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      var sqlEngine = e.AddedItems.Count == 0 ? 
+        null : 
+        (SqlEngine?)((UserConnectionString)e.AddedItems[0]).SqlEngine;
+
+      ImgLogo.Source = ImageSelectionHelper.GetConnectionStringLogo(sqlEngine);
     }
   }
 }

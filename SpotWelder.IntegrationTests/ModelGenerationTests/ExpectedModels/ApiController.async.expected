@@ -1,0 +1,90 @@
+using System;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Namespace1
+{
+    [Route("api/v1/datatypetest")]
+    [ApiController]
+    public class DataTypeTestController
+        : AppBaseController
+    {
+        private readonly IDataTypeTestMapper _mapper;
+
+        private readonly IDataTypeTestService _service;
+
+        public DataTypeTestController(
+            IDataTypeTestService service,
+            IDataTypeTestMapper mapper)
+        {
+            _service = service;
+
+            _mapper = mapper;
+        }
+
+        // GET api/datatypetest/5
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IDataTypeTest))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+        public async Task<ActionResult<IDataTypeTest>> Get(int id)
+        {
+            var entity = await _service.GetDataTypeTest(id);
+
+            if (entity == null) throw Lib.Exceptions.NotFound.DataTypeTest(id);
+
+            return Ok(_mapper.ToModel(entity));
+        }
+
+        // POST api/datatypetest
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(IDataTypeTest))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorModel))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorModel))]
+        public async Task<ActionResult<DataTypeTestEntity>> Post([FromBody] DataTypeTestV1CreateModel model)
+        {
+            var entity = _mapper.ToEntity(model);
+
+            Validations.IsNotNull(entity, nameof(model));
+
+            var result = await _service.Add(entity);
+
+            var m = _mapper.ToModel(result);
+
+            return CreatedAtAction(nameof(Get), new { id = m!.DataTypeTestId }, m);
+        }
+
+        // PATCH api/datatypetest/5
+        [HttpPatch("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorModel))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorModel))]
+        public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<DataTypeTestV1PatchModel> patchDoc)
+        {
+            var db = await _service.GetDataTypeTest(id);
+
+            var model = _mapper.ToPatchModel(db);
+
+            if (model == null) throw Lib.Exceptions.NotFound.DataTypeTest(id);
+
+            patchDoc.ApplyTo(model);
+
+            var entity = _mapper.ToEntity(model);
+
+            await _service.Edit(entity);
+
+            return NoContent();
+        }
+
+        // DELETE api/datatypetest/5
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await _service.Remove(id);
+
+            return NoContent();
+        }
+    }
+}

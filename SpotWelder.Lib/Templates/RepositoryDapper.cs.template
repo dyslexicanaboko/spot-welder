@@ -1,6 +1,5 @@
-//https://www.nuget.org/packages/Dapper/
 using Dapper;
-using Microsoft.Data.SqlClient;
+{{SqlNamespaces}}
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,17 +14,17 @@ namespace {{Namespace}}
 		{
 		}
 
-		public [AO]{{EntityName}}[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			const string sql = @"
 			SELECT
 	{{SelectAllList}}
 			FROM {{Schema}}.{{Table}}
-			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
+			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
-			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, {{PrimaryKeyParameter}})[AWC].ToList();
+			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
 				
 			return lst.SingleOrDefault();
 		}
@@ -37,21 +36,19 @@ namespace {{Namespace}}
 	{{SelectAllList}}
 			FROM {{Schema}}.{{Table}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
 			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
 		}
 
-		//Preference on whether or not insert method returns a value is up to the user and the object being inserted
 		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
 		{
 			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (
-	{{InsertColumnList}}
+{{InsertColumnList}}
 						) VALUES (
-	{{InsertValuesList}});
-	{{ScopeIdentity}}";
+{{InsertValuesList}})	{{ScopeIdentity}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
 			var p = new DynamicParameters();
 	{{DynamicParametersInsert}}
@@ -63,9 +60,9 @@ namespace {{Namespace}}
 		{
 			const string sql = @"UPDATE {{Schema}}.{{Table}} SET 
 	{{UpdateParameters}}
-						WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyProperty}}";
+						WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
 			var p = new DynamicParameters();
 	{{DynamicParametersUpdate}}
@@ -75,11 +72,19 @@ namespace {{Namespace}}
 
 		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
-			const string sql = "DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyParameter}}";
+			const string sql = "DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
 
-			[A]using var connection = new SqlConnection(ConnectionString);
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
-			[A]connection.Execute[AS](sql, {{PrimaryKeyParameter}});
+			[A]connection.Execute[AS](sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
+		}
+
+		private DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			var p = new DynamicParameters();
+			p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});
+			
+			return p;
 		}
 	}
 }

@@ -3,9 +3,19 @@ using System.Windows.Input;
 
 namespace SpotWelder.Ui.ViewModels
 {
-  public class ParentResultsWindowViewModel
+  public class ParentResultsWindowViewModel : ObservableObject
   {
-    public ObservableCollection<ResultTabViewModel> Tabs { get; set; } = new();
+    private ObservableCollection<ResultTabViewModel> _tabs = [];
+    public ObservableCollection<ResultTabViewModel> Tabs 
+    { 
+      get => _tabs;
+      set
+      {
+        _tabs = value;
+        
+        OnPropertyChanged();
+      }
+    }
 
     public ICommand CloseTabCommand { get; }
 

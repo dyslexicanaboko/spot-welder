@@ -4,6 +4,7 @@ using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Models.Meta;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Services;
 using SpotWelder.Ui.ViewModels;
@@ -69,16 +70,12 @@ namespace SpotWelder.Ui
 
     public void CloseResultWindows() => _resultWindowManager.CloseAll();
 
-    internal void Dependencies(
-      IDtoGenerator generator,
-      IMetaViewModelService viewModelService,
-      IQueryToClassService queryToClassService,
-      ICSharpCompilerService compilerService)
+    internal void Dependencies(DtoMakerControlDependencies dependencies)
     {
-      _generator = generator;
-      _viewModelService = viewModelService;
-      _queryToClassService = queryToClassService;
-      _compilerService = compilerService;
+      _generator = dependencies.DtoGenerator;
+      _viewModelService = dependencies.MetaViewModelService;
+      _queryToClassService = dependencies.QueryToClassService;
+      _compilerService = dependencies.CompilerService;
     }
 
     private void BtnAssemblyOpenDialog_Click(object sender, RoutedEventArgs e)

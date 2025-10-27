@@ -1,0 +1,269 @@
+using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestRepository
+    {
+        public DataTypeTestRepository(IAppConfiguration configuration)
+            : base(configuration)
+        {
+        }
+
+        public async Task<DataTypeTestEntity?> Select(int dataTypeTestId)
+        {
+            const string sql = @"
+			SELECT
+	                DataTypeTestId,
+                Int64,
+                ByteArray_Binary,
+                Boolean,
+                String_Char,
+                DateTime_Date,
+                DateTime_DateTime,
+                DateTime_DateTime2,
+                DateTimeOffset,
+                Decimal_Decimal,
+                Double,
+                Int32,
+                Decimal_Money,
+                String_NChar,
+                Decimal_Numeric,
+                String_NVarchar,
+                Single,
+                ByteArray_RowVersion,
+                DateTime_SmallDateTime,
+                Int16,
+                Decimal_SmallMoney,
+                TimeSpan,
+                Byte,
+                Guid,
+                ByteArray_VarBinary,
+                String,
+                Xml
+			FROM dbo.DataTypeTest
+			WHERE DataTypeTestId = @DataTypeTestId";
+
+            await using var connection = new SqlConnection(ConnectionString);
+
+            var lst = (await connection.QueryAsync<DataTypeTestEntity>(sql, GetPrimaryKeyParameter(dataTypeTestId))).ToList();
+
+            return lst.SingleOrDefault();
+        }
+
+        public async Task<IEnumerable<DataTypeTestEntity>> SelectAll()
+        {
+            const string sql = @"
+			SELECT
+	                DataTypeTestId,
+                Int64,
+                ByteArray_Binary,
+                Boolean,
+                String_Char,
+                DateTime_Date,
+                DateTime_DateTime,
+                DateTime_DateTime2,
+                DateTimeOffset,
+                Decimal_Decimal,
+                Double,
+                Int32,
+                Decimal_Money,
+                String_NChar,
+                Decimal_Numeric,
+                String_NVarchar,
+                Single,
+                ByteArray_RowVersion,
+                DateTime_SmallDateTime,
+                Int16,
+                Decimal_SmallMoney,
+                TimeSpan,
+                Byte,
+                Guid,
+                ByteArray_VarBinary,
+                String,
+                Xml
+			FROM dbo.DataTypeTest";
+
+            await using var connection = new SqlConnection(ConnectionString);
+
+            return (await connection.QueryAsync<DataTypeTestEntity>(sql)).ToList();
+        }
+
+        public async Task<int> Insert(DataTypeTestEntity entity)
+        {
+            const string sql = @"INSERT INTO dbo.DataTypeTest (
+                Int64,
+                ByteArray_Binary,
+                Boolean,
+                String_Char,
+                DateTime_Date,
+                DateTime_DateTime,
+                DateTime_DateTime2,
+                DateTimeOffset,
+                Decimal_Decimal,
+                Double,
+                Int32,
+                Decimal_Money,
+                String_NChar,
+                Decimal_Numeric,
+                String_NVarchar,
+                Single,
+                ByteArray_RowVersion,
+                DateTime_SmallDateTime,
+                Int16,
+                Decimal_SmallMoney,
+                TimeSpan,
+                Byte,
+                Guid,
+                ByteArray_VarBinary,
+                String,
+                Xml
+						) VALUES (
+                @Int64,
+                @ByteArray_Binary,
+                @Boolean,
+                @String_Char,
+                @DateTime_Date,
+                @DateTime_DateTime,
+                @DateTime_DateTime2,
+                @DateTimeOffset,
+                @Decimal_Decimal,
+                @Double,
+                @Int32,
+                @Decimal_Money,
+                @String_NChar,
+                @Decimal_Numeric,
+                @String_NVarchar,
+                @Single,
+                @ByteArray_RowVersion,
+                @DateTime_SmallDateTime,
+                @Int16,
+                @Decimal_SmallMoney,
+                @TimeSpan,
+                @Byte,
+                @Guid,
+                @ByteArray_VarBinary,
+                @String,
+                @Xml)	
+SELECT SCOPE_IDENTITY() AS PK;";
+
+            await using var connection = new SqlConnection(ConnectionString);
+
+            var p = new DynamicParameters();
+            p.Add(name: "@Int64", dbType: DbType.Int64, value: entity.Int64);
+            p.Add(name: "@ByteArray_Binary", dbType: DbType.Binary, value: entity.ByteArrayBinary);
+            p.Add(name: "@Boolean", dbType: DbType.Boolean, value: entity.Boolean);
+            p.Add(name: "@String_Char", dbType: DbType.AnsiStringFixedLength, value: entity.StringChar, size: 1);
+            p.Add(name: "@DateTime_Date", dbType: DbType.Date, value: entity.DateTimeDate);
+            p.Add(name: "@DateTime_DateTime", dbType: DbType.DateTime, value: entity.DateTimeDateTime);
+            p.Add(name: "@DateTime_DateTime2", dbType: DbType.DateTime2, value: entity.DateTimeDateTime2, scale: 0);
+            p.Add(name: "@DateTimeOffset", dbType: DbType.DateTimeOffset, value: entity.DateTimeOffset);
+            p.Add(name: "@Decimal_Decimal", dbType: DbType.Decimal, value: entity.DecimalDecimal, precision: 4, scale: 2);
+            p.Add(name: "@Double", dbType: DbType.Double, value: entity.Double);
+            p.Add(name: "@Int32", dbType: DbType.Int32, value: entity.Int32);
+            p.Add(name: "@Decimal_Money", dbType: DbType.Currency, value: entity.DecimalMoney);
+            p.Add(name: "@String_NChar", dbType: DbType.StringFixedLength, value: entity.StringNChar, size: 1);
+            p.Add(name: "@Decimal_Numeric", dbType: DbType.Decimal, value: entity.DecimalNumeric, precision: 4, scale: 2);
+            p.Add(name: "@String_NVarchar", dbType: DbType.String, value: entity.StringNVarchar, size: 10);
+            p.Add(name: "@Single", dbType: DbType.Single, value: entity.Single);
+            p.Add(name: "@ByteArray_RowVersion", dbType: DbType.Object, value: entity.ByteArrayRowVersion);
+            p.Add(name: "@DateTime_SmallDateTime", dbType: DbType.DateTime, value: entity.DateTimeSmallDateTime);
+            p.Add(name: "@Int16", dbType: DbType.Int16, value: entity.Int16);
+            p.Add(name: "@Decimal_SmallMoney", dbType: DbType.Currency, value: entity.DecimalSmallMoney);
+            p.Add(name: "@TimeSpan", dbType: DbType.Time, value: entity.TimeSpan);
+            p.Add(name: "@Byte", dbType: DbType.Byte, value: entity.Byte);
+            p.Add(name: "@Guid", dbType: DbType.Guid, value: entity.Guid);
+            p.Add(name: "@ByteArray_VarBinary", dbType: DbType.Binary, value: entity.ByteArrayVarBinary);
+            p.Add(name: "@String", dbType: DbType.AnsiString, value: entity.String, size: 10);
+            p.Add(name: "@Xml", dbType: DbType.Xml, value: entity.Xml);
+
+            return await connection.ExecuteScalarAsync<int>(sql, p);
+        }
+
+        public async Task Update(DataTypeTestEntity entity)
+        {
+            const string sql = @"UPDATE dbo.DataTypeTest SET 
+	                Int64 = @Int64,
+                ByteArray_Binary = @ByteArray_Binary,
+                Boolean = @Boolean,
+                String_Char = @String_Char,
+                DateTime_Date = @DateTime_Date,
+                DateTime_DateTime = @DateTime_DateTime,
+                DateTime_DateTime2 = @DateTime_DateTime2,
+                DateTimeOffset = @DateTimeOffset,
+                Decimal_Decimal = @Decimal_Decimal,
+                Double = @Double,
+                Int32 = @Int32,
+                Decimal_Money = @Decimal_Money,
+                String_NChar = @String_NChar,
+                Decimal_Numeric = @Decimal_Numeric,
+                String_NVarchar = @String_NVarchar,
+                Single = @Single,
+                ByteArray_RowVersion = @ByteArray_RowVersion,
+                DateTime_SmallDateTime = @DateTime_SmallDateTime,
+                Int16 = @Int16,
+                Decimal_SmallMoney = @Decimal_SmallMoney,
+                TimeSpan = @TimeSpan,
+                Byte = @Byte,
+                Guid = @Guid,
+                ByteArray_VarBinary = @ByteArray_VarBinary,
+                String = @String,
+                Xml = @Xml
+						WHERE DataTypeTestId = @DataTypeTestId";
+
+            await using var connection = new SqlConnection(ConnectionString);
+
+            var p = new DynamicParameters();
+            p.Add(name: "@DataTypeTestId", dbType: DbType.Int32, value: entity.DataTypeTestId);
+            p.Add(name: "@Int64", dbType: DbType.Int64, value: entity.Int64);
+            p.Add(name: "@ByteArray_Binary", dbType: DbType.Binary, value: entity.ByteArrayBinary);
+            p.Add(name: "@Boolean", dbType: DbType.Boolean, value: entity.Boolean);
+            p.Add(name: "@String_Char", dbType: DbType.AnsiStringFixedLength, value: entity.StringChar, size: 1);
+            p.Add(name: "@DateTime_Date", dbType: DbType.Date, value: entity.DateTimeDate);
+            p.Add(name: "@DateTime_DateTime", dbType: DbType.DateTime, value: entity.DateTimeDateTime);
+            p.Add(name: "@DateTime_DateTime2", dbType: DbType.DateTime2, value: entity.DateTimeDateTime2, scale: 0);
+            p.Add(name: "@DateTimeOffset", dbType: DbType.DateTimeOffset, value: entity.DateTimeOffset);
+            p.Add(name: "@Decimal_Decimal", dbType: DbType.Decimal, value: entity.DecimalDecimal, precision: 4, scale: 2);
+            p.Add(name: "@Double", dbType: DbType.Double, value: entity.Double);
+            p.Add(name: "@Int32", dbType: DbType.Int32, value: entity.Int32);
+            p.Add(name: "@Decimal_Money", dbType: DbType.Currency, value: entity.DecimalMoney);
+            p.Add(name: "@String_NChar", dbType: DbType.StringFixedLength, value: entity.StringNChar, size: 1);
+            p.Add(name: "@Decimal_Numeric", dbType: DbType.Decimal, value: entity.DecimalNumeric, precision: 4, scale: 2);
+            p.Add(name: "@String_NVarchar", dbType: DbType.String, value: entity.StringNVarchar, size: 10);
+            p.Add(name: "@Single", dbType: DbType.Single, value: entity.Single);
+            p.Add(name: "@ByteArray_RowVersion", dbType: DbType.Object, value: entity.ByteArrayRowVersion);
+            p.Add(name: "@DateTime_SmallDateTime", dbType: DbType.DateTime, value: entity.DateTimeSmallDateTime);
+            p.Add(name: "@Int16", dbType: DbType.Int16, value: entity.Int16);
+            p.Add(name: "@Decimal_SmallMoney", dbType: DbType.Currency, value: entity.DecimalSmallMoney);
+            p.Add(name: "@TimeSpan", dbType: DbType.Time, value: entity.TimeSpan);
+            p.Add(name: "@Byte", dbType: DbType.Byte, value: entity.Byte);
+            p.Add(name: "@Guid", dbType: DbType.Guid, value: entity.Guid);
+            p.Add(name: "@ByteArray_VarBinary", dbType: DbType.Binary, value: entity.ByteArrayVarBinary);
+            p.Add(name: "@String", dbType: DbType.AnsiString, value: entity.String, size: 10);
+            p.Add(name: "@Xml", dbType: DbType.Xml, value: entity.Xml);
+
+            await connection.ExecuteAsync(sql, p);
+        }
+
+        public async Task Delete(int dataTypeTestId)
+        {
+            const string sql = "DELETE FROM dbo.DataTypeTest WHERE DataTypeTestId = @DataTypeTestId";
+
+            await using var connection = new SqlConnection(ConnectionString);
+
+            await connection.ExecuteAsync(sql, GetPrimaryKeyParameter(dataTypeTestId));
+        }
+
+        private DynamicParameters GetPrimaryKeyParameter(int dataTypeTestId)
+        {
+            var p = new DynamicParameters();
+            p.Add(name: "@DataTypeTestId", dbType: DbType.Int32, value: dataTypeTestId);
+
+            return p;
+        }
+    }
+}

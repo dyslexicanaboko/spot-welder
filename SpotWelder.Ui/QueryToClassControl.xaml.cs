@@ -1,9 +1,11 @@
-﻿using SpotWelder.Lib;
+﻿using Microsoft.Extensions.Logging;
+using SpotWelder.Lib;
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Services;
+using SpotWelder.Lib.Services.TableQueryFormats;
+using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
-using SpotWelder.Ui.Profile;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,15 +23,17 @@ namespace SpotWelder.Ui
   {
     private readonly CheckBoxGroup _classCheckBoxGroup;
 
-    private readonly ParentResultsWindow _parentResultsWindow;
-
     private readonly Dictionary<GenerationElections, CheckBox> _electionToCheckBoxMap;
+
+    private readonly ParentResultsWindow _parentResultsWindow;
 
     private IGeneralDatabaseQueries _generalRepo;
 
-    private INameFormatService _svcNameFormat;
-
     private IQueryToClassService _svcQueryToClass;
+
+    private ITableQueryFormatFactory _tableQueryFormatFactory;
+
+    private ILogger<QueryToClassControl> _logger;
 
     // Empty constructor Required by WPF
     public QueryToClassControl()
@@ -37,7 +41,7 @@ namespace SpotWelder.Ui
       InitializeComponent();
 
       SetPathAsDefault();
-      
+
       _parentResultsWindow = new ParentResultsWindow();
 
       TxtNamespaceName.ApplyDefault();
@@ -56,73 +60,28 @@ namespace SpotWelder.Ui
       _electionToCheckBoxMap = GetGenerationElectionsMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
 
-      DebugSetTestParameters();
+      //These methods have been moved to a partial class
+      //DebugWholeSqlServerTest();
+      //DebugMinimalPostgresTest();
+      //DebugWholeSqlServerTestForParity();
+      //DebugWholePostgresTestForParity();
     }
 
-    private void DebugSetTestParameters()
-    {
-      #if DEBUG
-      ConnectionStringCb.DebugSetTestParameters();
-
-      RbSourceTypeTableName.IsChecked = true;
-      RbSourceTypeQuery.IsChecked = false;
-
-      TxtSourceSqlText.Text = "dbo.Task";
-      TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "Task";
-      TxtClassEntityName.Text = "TaskEntity";
-      TxtClassModelName.Text = "TaskModel";
-      
-      CbRepoDapper.IsChecked = true;
-
-      //Entity
-      CbClassEntity.IsChecked = true;
-      CbClassEntityIEquatable.IsChecked = true;
-      CbClassEntityIComparable.IsChecked = true;
-
-      //Interface
-      CbClassInterface.IsChecked = true;
-
-      //Models
-      CbClassModel.IsChecked = true;
-      CbClassCreateModel.IsChecked = true;
-      CbClassPatchModel.IsChecked = true;
-
-      //Services
-      CbClassEntityEqualityComparer.IsChecked = true;
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
-
-      //Layers
-      CbMakeAsynchronous.IsChecked = true;
-      CbApiController.IsChecked = true;
-      CbService.IsChecked = true;
-
-      //Mappings
-      CbMapInterfaceToModel.IsChecked = true;
-      CbMapInterfaceToEntity.IsChecked = true;
-      CbMapEntityToModel.IsChecked = true;
-      CbMapModelToEntity.IsChecked = true;
-      CbMapCreateModelToEntity.IsChecked = true;
-      CbMapPatchModelToEntity.IsChecked = true;
-      #endif
-    }
-    
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
 
     public void CloseResultWindows() => _parentResultsWindow.Shutdown();
 
-    public void Dependencies(
-      INameFormatService nameFormatService,
-      IQueryToClassService queryToClassService,
-      IGeneralDatabaseQueries repository,
-      IProfileManager profileManager)
-    {
-      _svcNameFormat = nameFormatService;
-      _svcQueryToClass = queryToClassService;
-      _generalRepo = repository;
+    private ITableQueryFormatStrategy GetTableQueryFormatStrategy()
+      => _tableQueryFormatFactory.GetStrategy(ConnectionStringCb.CurrentConnection.SqlEngine);
 
-      ConnectionStringCb.Dependencies(profileManager, _generalRepo);
+    public void Dependencies(QueryToClassControlDependencies dependencies)
+    {
+      _logger = dependencies.Logger;
+      _tableQueryFormatFactory = dependencies.TableQueryFormatFactory;
+      _svcQueryToClass = dependencies.QueryToClassService;
+      _generalRepo = dependencies.Repository;
+
+      ConnectionStringCb.Dependencies(dependencies.ConnectionStringControlDependencies);
     }
 
     private void TxtSqlSourceText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -141,6 +100,8 @@ namespace SpotWelder.Ui
       {
         UserControlExtensions.ShowWarningMessage(
           $"The table name you provided could not be formatted.\nPlease select the Query radio button if your source is not just a table name.\n\nError: {ex.Message}");
+
+        _logger.LogError(ex, "Table name could not be formatted.");
       }
     }
 
@@ -151,7 +112,7 @@ namespace SpotWelder.Ui
       if (string.IsNullOrWhiteSpace(strName))
         return;
 
-      target.Text = _svcNameFormat.FormatTableQuery(strName);
+      target.Text = GetTableQueryFormatStrategy().FormatTableQuery(strName);
     }
 
     private void BtnClassEntityNameDefault_Click(object sender, RoutedEventArgs e)
@@ -183,11 +144,11 @@ namespace SpotWelder.Ui
 
     private string GetDefaultEntityName()
     {
-      var tbl = _svcNameFormat.ParseTableName(TxtSourceSqlText.Text);
+      var strategy = GetTableQueryFormatStrategy();
 
-      var entity = _svcNameFormat.GetClassName(tbl);
+      var tbl = strategy.ParseTableName(TxtSourceSqlText.Text);
 
-      return entity;
+      return strategy.GetClassName(tbl); //Entity
     }
 
     private string GetDefaultClassName(bool includeExtension = false)
@@ -317,7 +278,7 @@ namespace SpotWelder.Ui
         //Trap Exception
       }
     }
-
+    
     private async void BtnGenerate_Click(object sender, RoutedEventArgs e)
     {
       try
@@ -341,6 +302,8 @@ namespace SpotWelder.Ui
       catch (Exception ex)
       {
         UserControlExtensions.ShowErrorMessage(ex);
+
+        _logger.LogError(ex, "Error during Query to class generation");
       }
       finally
       {

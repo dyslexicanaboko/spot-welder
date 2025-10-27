@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using SpotWelder.Lib;
+using SpotWelder.Lib.Services.Generators;
+using SpotWelder.Lib.Services.TableQueryFormats;
+using SpotWelder.Ui.Profile;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using SpotWelder.Lib;
-using SpotWelder.Lib.Services.Generators;
-using SpotWelder.Ui.Profile;
 
 namespace SpotWelder.Ui
 {
@@ -28,21 +31,53 @@ namespace SpotWelder.Ui
 
       ServiceProvider = serviceCollection.BuildServiceProvider();
 
+      Log.Logger = ServiceProvider.GetRequiredService<ILogger>();
+      
       try
       {
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
         mainWindow.Show();
+
+      //  var win = new ResultWindow("Test",
+      //    """
+      //  Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      //  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      //  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+      //  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+      //  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      //    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      //  Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      //  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+      //  nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
+      //  reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      //""");
+      //  win.Show();
       }
       catch (Exception ex)
       {
         //Log the exception and exit
-        if (true) ;
+        Log.Error(ex, "Unhandled error");
+        Log.CloseAndFlush();
       }
     }
 
     private static void ConfigureServices(IServiceCollection services)
     {
+      //Top level services
+      services.AddSerilog(configureLogger =>
+      {
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs", "Log.log");
+
+        configureLogger
+          .MinimumLevel.Debug()
+          .WriteTo.File(path, rollingInterval: RollingInterval.Day);
+
+#if DEBUG
+        configureLogger.WriteTo.Seq("http://localhost:5341");
+#endif
+      }).AddLogging();
+
       //Library based services
       ConfigureLibServices(services);
 
@@ -70,6 +105,16 @@ namespace SpotWelder.Ui
           .AsMatchingInterface()
           .WithScopedLifetime();
       });
+
+      //This is to initialize all of the "Dependencies" objects that are used for child controls
+      services.Scan(scan =>
+      {
+        scan.FromAssemblies(asm)
+          .AddClasses(classes =>
+            classes.InNamespaces("SpotWelder.Ui.Controls"))
+          .AsSelf()
+          .WithScopedLifetime();
+      });
     }
 
     private static void ConfigureLibServices(IServiceCollection services)
@@ -89,7 +134,7 @@ namespace SpotWelder.Ui
         .Distinct()
         .ToArray();
 
-      //This is specifically targeting classes with an interface
+      //Targeting classes with an exactly one matching interface - as in: IClassName -> ClassName
       services.Scan(scan =>
       {
         scan.FromAssemblies(asm)
@@ -100,13 +145,25 @@ namespace SpotWelder.Ui
           .WithScopedLifetime();
       });
 
-      //This is specifically targeting classes that all share the same abstract class
+      //Targeting classes that all extend the `GeneratorBase` abstract class
+      //This will load IEnumerable<GeneratorBase> into the `CodeGenerationFactory` constructor
       services.Scan(scan =>
       {
         scan.FromAssemblies(asm)
           .AddClasses(classes =>
             classes.AssignableTo<GeneratorBase>())
           .As<GeneratorBase>()
+          .WithScopedLifetime();
+      });
+
+      //Targeting classes that all implement the `ITableQueryFormatStrategy` interface
+      //This will load IEnumerable<ITableQueryFormatStrategy> into the `TableQueryFormatFactory` constructor
+      services.Scan(scan =>
+      {
+        scan.FromAssemblies(asm)
+          .AddClasses(classes =>
+            classes.AssignableTo<ITableQueryFormatStrategy>())
+          .As<ITableQueryFormatStrategy>()
           .WithScopedLifetime();
       });
     }

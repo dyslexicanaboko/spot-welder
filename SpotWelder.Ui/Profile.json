@@ -3,10 +3,58 @@
     "MaxConnectionStrings": 10,
     "ConnectionStrings": [
       {
+        "SqlEngine": 0,
+        "ConnectionString": "Data Source=.;Initial Catalog=SpotWelder;Integrated Security=True;Encrypt=False",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 1,
+        "ConnectionString": "Host=localhost;Database=millions_of_things;Username=postgres;Password=postgres",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 0,
+        "ConnectionString": "Data Source=.;Initial Catalog=ScratchSpace;Integrated Security=SSPI;",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 1,
+        "ConnectionString": "Host=localhost;Database=spot_welder;Username=postgres;Password=postgres",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 0,
+        "ConnectionString": "Data Source=whatever;Initial Catalog=;Integrated Security=False;User ID=;Password=;Encrypt=False",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 0,
+        "ConnectionString": "Data Source=test;Initial Catalog=;Integrated Security=False;User ID=;Password=;Encrypt=False",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 0,
+        "ConnectionString": "Data Source=test;Initial Catalog=test;Integrated Security=False;User ID=test;Password=test;Encrypt=False",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 1,
+        "ConnectionString": "Host=12345;Database=qwertty;Username=userguy;Password=secretpassword;Port=6553",
+        "Verified": true
+      },
+
+      {
+        "SqlEngine": 1,
+        "ConnectionString": "Host=asdfasd;Database=asdfasdfasdf;Username=qwerqwer;Password=",
+        "Verified": true
+      },
+      {
+        "SqlEngine": 0,
         "ConnectionString": "Data Source=.;Initial Catalog=YourDatabase;Integrated Security=SSPI;",
         "Verified": false
       },
       {
+        "SqlEngine": 0,
         "ConnectionString": "Data Source=.;Initial Catalog=YourOtherDatabase;Integrated Security=SSPI;",
         "Verified": false
       }

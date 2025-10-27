@@ -39,7 +39,7 @@ namespace SpotWelder.Lib.Services.Generators
       //Constructors
       template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
       template.Replace("{{ConstructorFromModel}}", FormatConstructorBody(instructions.Properties, "model"));
-
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
       
       //IEquatable
       template.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
@@ -138,11 +138,11 @@ namespace SpotWelder.Lib.Services.Generators
 
               break;
             case GenerationElections.GenerateCreateModel:
-              lst.Add(ConstructorTemplate("{{ClassName}}V1CreateModel", "model", "{{ConstructorFromModel}}"));
+              lst.Add(ConstructorTemplate("{{SubjectName}}V1CreateModel", "model", "{{ConstructorFromModel}}"));
 
               break;
             case GenerationElections.GeneratePatchModel:
-              lst.Add(ConstructorTemplate("{{ClassName}}V1PatchModel", "model", "{{ConstructorFromModel}}"));
+              lst.Add(ConstructorTemplate("{{SubjectName}}V1PatchModel", "model", "{{ConstructorFromModel}}"));
 
               break;
           }

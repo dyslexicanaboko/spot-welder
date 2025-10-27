@@ -1,0 +1,31 @@
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestMapper
+        : BaseMapper
+    {
+        public DataTypeTestModel? ToModel(DataTypeTestEntity? entity)
+    => entity == null ? null : new DataTypeTestModel(entity);
+
+        public DataTypeTestEntity? ToEntity(DataTypeTestModel? model)
+                    => model == null ? null : new DataTypeTestEntity(model);
+
+        public DataTypeTestEntity? ToEntity(IDataTypeTest? target)
+            => target == null ? null : new DataTypeTestEntity(target);
+
+        public DataTypeTestModel? ToModel(IDataTypeTest? target)
+          => target == null ? null : new DataTypeTestModel(target);
+
+        public DataTypeTestEntity? ToEntity(DataTypeTestV1CreateModel? model)
+            => model == null ? null : new DataTypeTestEntity(model);
+
+        public DataTypeTestV1PatchModel? ToPatchModel(DataTypeTestEntity? entity)
+            => entity == null ? null : new DataTypeTestV1PatchModel(entity);
+
+        public DataTypeTestEntity ToEntity(DataTypeTestV1PatchModel model)
+            => new(model);
+
+
+    }
+}

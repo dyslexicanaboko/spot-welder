@@ -1,20 +1,18 @@
-﻿using System.Data;
-using SpotWelder.Lib.Models;
+﻿using SpotWelder.Lib.Models;
+using System.Data;
 
 namespace SpotWelder.Lib.DataAccess
 {
-    public class GeneralDatabaseQueries
-        : BaseRepository, IGeneralDatabaseQueries
+  public class GeneralDatabaseQueries
+    : BaseRepository, IGeneralDatabaseQueries
+  {
+    public ConnectionResult TestConnectionString(ServerConnection serverConnection)
     {
-        public ConnectionResult TestConnectionString(string connectionString)
-        {
-            ChangeConnectionString(connectionString);
+      ConfigureSqlClient(serverConnection);
 
-            var result = TestConnectionString();
-
-            return result;
-        }
-
-        public DataTable GetRowData(string sql) => ExecuteDataTable(sql);
+      return TestConnectionString();
     }
+
+    public DataTable GetRowData(string sql) => ExecuteDataTable(sql);
+  }
 }

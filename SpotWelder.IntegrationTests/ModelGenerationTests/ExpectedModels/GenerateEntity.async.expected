@@ -1,0 +1,290 @@
+using System;
+
+namespace Namespace1
+{
+
+    public class DataTypeTestEntity : IDataTypeTest, IEquatable<DataTypeTestEntity>, IComparable
+    {
+        public DataTypeTestEntity()
+        {
+
+        }
+
+        public DataTypeTestEntity(IDataTypeTest target)
+        {
+            DataTypeTestId = target.DataTypeTestId;
+            Int64 = target.Int64;
+            ByteArrayBinary = target.ByteArrayBinary;
+            Boolean = target.Boolean;
+            StringChar = target.StringChar;
+            DateTimeDate = target.DateTimeDate;
+            DateTimeDateTime = target.DateTimeDateTime;
+            DateTimeDateTime2 = target.DateTimeDateTime2;
+            DateTimeOffset = target.DateTimeOffset;
+            DecimalDecimal = target.DecimalDecimal;
+            Double = target.Double;
+            Int32 = target.Int32;
+            DecimalMoney = target.DecimalMoney;
+            StringNChar = target.StringNChar;
+            DecimalNumeric = target.DecimalNumeric;
+            StringNVarchar = target.StringNVarchar;
+            Single = target.Single;
+            ByteArrayRowVersion = target.ByteArrayRowVersion;
+            DateTimeSmallDateTime = target.DateTimeSmallDateTime;
+            Int16 = target.Int16;
+            DecimalSmallMoney = target.DecimalSmallMoney;
+            TimeSpan = target.TimeSpan;
+            Byte = target.Byte;
+            Guid = target.Guid;
+            ByteArrayVarBinary = target.ByteArrayVarBinary;
+            String = target.String;
+            Xml = target.Xml;
+        }
+
+        public DataTypeTestEntity(DataTypeTestModel model)
+        {
+            DataTypeTestId = model.DataTypeTestId;
+            Int64 = model.Int64;
+            ByteArrayBinary = model.ByteArrayBinary;
+            Boolean = model.Boolean;
+            StringChar = model.StringChar;
+            DateTimeDate = model.DateTimeDate;
+            DateTimeDateTime = model.DateTimeDateTime;
+            DateTimeDateTime2 = model.DateTimeDateTime2;
+            DateTimeOffset = model.DateTimeOffset;
+            DecimalDecimal = model.DecimalDecimal;
+            Double = model.Double;
+            Int32 = model.Int32;
+            DecimalMoney = model.DecimalMoney;
+            StringNChar = model.StringNChar;
+            DecimalNumeric = model.DecimalNumeric;
+            StringNVarchar = model.StringNVarchar;
+            Single = model.Single;
+            ByteArrayRowVersion = model.ByteArrayRowVersion;
+            DateTimeSmallDateTime = model.DateTimeSmallDateTime;
+            Int16 = model.Int16;
+            DecimalSmallMoney = model.DecimalSmallMoney;
+            TimeSpan = model.TimeSpan;
+            Byte = model.Byte;
+            Guid = model.Guid;
+            ByteArrayVarBinary = model.ByteArrayVarBinary;
+            String = model.String;
+            Xml = model.Xml;
+        }
+
+        public DataTypeTestEntity(DataTypeTestV1CreateModel model)
+        {
+            DataTypeTestId = model.DataTypeTestId;
+            Int64 = model.Int64;
+            ByteArrayBinary = model.ByteArrayBinary;
+            Boolean = model.Boolean;
+            StringChar = model.StringChar;
+            DateTimeDate = model.DateTimeDate;
+            DateTimeDateTime = model.DateTimeDateTime;
+            DateTimeDateTime2 = model.DateTimeDateTime2;
+            DateTimeOffset = model.DateTimeOffset;
+            DecimalDecimal = model.DecimalDecimal;
+            Double = model.Double;
+            Int32 = model.Int32;
+            DecimalMoney = model.DecimalMoney;
+            StringNChar = model.StringNChar;
+            DecimalNumeric = model.DecimalNumeric;
+            StringNVarchar = model.StringNVarchar;
+            Single = model.Single;
+            ByteArrayRowVersion = model.ByteArrayRowVersion;
+            DateTimeSmallDateTime = model.DateTimeSmallDateTime;
+            Int16 = model.Int16;
+            DecimalSmallMoney = model.DecimalSmallMoney;
+            TimeSpan = model.TimeSpan;
+            Byte = model.Byte;
+            Guid = model.Guid;
+            ByteArrayVarBinary = model.ByteArrayVarBinary;
+            String = model.String;
+            Xml = model.Xml;
+        }
+
+        public DataTypeTestEntity(DataTypeTestV1PatchModel model)
+        {
+            DataTypeTestId = model.DataTypeTestId;
+            Int64 = model.Int64;
+            ByteArrayBinary = model.ByteArrayBinary;
+            Boolean = model.Boolean;
+            StringChar = model.StringChar;
+            DateTimeDate = model.DateTimeDate;
+            DateTimeDateTime = model.DateTimeDateTime;
+            DateTimeDateTime2 = model.DateTimeDateTime2;
+            DateTimeOffset = model.DateTimeOffset;
+            DecimalDecimal = model.DecimalDecimal;
+            Double = model.Double;
+            Int32 = model.Int32;
+            DecimalMoney = model.DecimalMoney;
+            StringNChar = model.StringNChar;
+            DecimalNumeric = model.DecimalNumeric;
+            StringNVarchar = model.StringNVarchar;
+            Single = model.Single;
+            ByteArrayRowVersion = model.ByteArrayRowVersion;
+            DateTimeSmallDateTime = model.DateTimeSmallDateTime;
+            Int16 = model.Int16;
+            DecimalSmallMoney = model.DecimalSmallMoney;
+            TimeSpan = model.TimeSpan;
+            Byte = model.Byte;
+            Guid = model.Guid;
+            ByteArrayVarBinary = model.ByteArrayVarBinary;
+            String = model.String;
+            Xml = model.Xml;
+        }
+
+        public int DataTypeTestId { get; set; }
+
+        public long Int64 { get; set; }
+
+        public byte[] ByteArrayBinary { get; set; }
+
+        public bool Boolean { get; set; }
+
+        public string StringChar { get; set; }
+
+        public DateTime DateTimeDate { get; set; }
+
+        public DateTime DateTimeDateTime { get; set; }
+
+        public DateTime DateTimeDateTime2 { get; set; }
+
+        public DateTimeOffset DateTimeOffset { get; set; }
+
+        public decimal DecimalDecimal { get; set; }
+
+        public double Double { get; set; }
+
+        public int Int32 { get; set; }
+
+        public decimal DecimalMoney { get; set; }
+
+        public string StringNChar { get; set; }
+
+        public decimal DecimalNumeric { get; set; }
+
+        public string StringNVarchar { get; set; }
+
+        public float Single { get; set; }
+
+        public byte[] ByteArrayRowVersion { get; set; }
+
+        public DateTime DateTimeSmallDateTime { get; set; }
+
+        public short Int16 { get; set; }
+
+        public decimal DecimalSmallMoney { get; set; }
+
+        public TimeSpan TimeSpan { get; set; }
+
+        public byte Byte { get; set; }
+
+        public Guid Guid { get; set; }
+
+        public byte[] ByteArrayVarBinary { get; set; }
+
+        public string String { get; set; }
+
+        public string Xml { get; set; }
+
+        public override bool Equals(object? obj) => this.Equals(obj as DataTypeTestEntity);
+
+        public bool Equals(DataTypeTestEntity? other)
+        {
+            if (other is null) return false;
+
+            if (object.ReferenceEquals(this, other)) return true;
+
+            if (this.GetType() != other.GetType()) return false;
+
+            return
+                    DataTypeTestId == other.DataTypeTestId &&
+                    Int64 == other.Int64 &&
+                    ByteArrayBinary == other.ByteArrayBinary &&
+                    Boolean == other.Boolean &&
+                    StringChar == other.StringChar &&
+                    DateTimeDate == other.DateTimeDate &&
+                    DateTimeDateTime == other.DateTimeDateTime &&
+                    DateTimeDateTime2 == other.DateTimeDateTime2 &&
+                    DateTimeOffset == other.DateTimeOffset &&
+                    DecimalDecimal == other.DecimalDecimal &&
+                    Double == other.Double &&
+                    Int32 == other.Int32 &&
+                    DecimalMoney == other.DecimalMoney &&
+                    StringNChar == other.StringNChar &&
+                    DecimalNumeric == other.DecimalNumeric &&
+                    StringNVarchar == other.StringNVarchar &&
+                    Single == other.Single &&
+                    ByteArrayRowVersion == other.ByteArrayRowVersion &&
+                    DateTimeSmallDateTime == other.DateTimeSmallDateTime &&
+                    Int16 == other.Int16 &&
+                    DecimalSmallMoney == other.DecimalSmallMoney &&
+                    TimeSpan == other.TimeSpan &&
+                    Byte == other.Byte &&
+                    Guid == other.Guid &&
+                    ByteArrayVarBinary == other.ByteArrayVarBinary &&
+                    String == other.String &&
+                    Xml == other.Xml;
+        }
+
+        public override int GetHashCode() =>
+                    DataTypeTestId.GetHashCode() +
+                    Int64.GetHashCode() +
+                    ByteArrayBinary.GetHashCode() +
+                    Boolean.GetHashCode() +
+                    StringChar.GetHashCode() +
+                    DateTimeDate.GetHashCode() +
+                    DateTimeDateTime.GetHashCode() +
+                    DateTimeDateTime2.GetHashCode() +
+                    DateTimeOffset.GetHashCode() +
+                    DecimalDecimal.GetHashCode() +
+                    Double.GetHashCode() +
+                    Int32.GetHashCode() +
+                    DecimalMoney.GetHashCode() +
+                    StringNChar.GetHashCode() +
+                    DecimalNumeric.GetHashCode() +
+                    StringNVarchar.GetHashCode() +
+                    Single.GetHashCode() +
+                    ByteArrayRowVersion.GetHashCode() +
+                    DateTimeSmallDateTime.GetHashCode() +
+                    Int16.GetHashCode() +
+                    DecimalSmallMoney.GetHashCode() +
+                    TimeSpan.GetHashCode() +
+                    Byte.GetHashCode() +
+                    Guid.GetHashCode() +
+                    ByteArrayVarBinary.GetHashCode() +
+                    String.GetHashCode() +
+                    Xml.GetHashCode();
+
+        public static bool operator ==(DataTypeTestEntity? lhs, DataTypeTestEntity? rhs)
+        {
+            if (lhs is not null) return lhs.Equals(rhs);
+
+            return rhs is null;
+        }
+
+        public static bool operator !=(DataTypeTestEntity? lhs, DataTypeTestEntity? rhs) => !(lhs == rhs);
+
+        public int CompareTo(object obj)
+        {
+            //This is starter code - it is meant to be changed appropriately
+            var n = (DataTypeTestEntity)obj;
+
+            if (DataTypeTestId == n.DataTypeTestId)
+            {
+                return 0;
+            }
+
+            if (DataTypeTestId > n.DataTypeTestId)
+            {
+                return 1;
+            }
+
+            //if (DataTypeTestId < n.DataTypeTestId)
+            return -1;
+        }
+
+
+    }
+}

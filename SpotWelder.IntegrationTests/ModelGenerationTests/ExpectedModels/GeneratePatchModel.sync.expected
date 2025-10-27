@@ -1,0 +1,97 @@
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestV1PatchModel : IDataTypeTest
+    {
+        public DataTypeTestV1PatchModel()
+        {
+
+        }
+
+        public DataTypeTestV1PatchModel(IDataTypeTest target)
+        {
+            DataTypeTestId = target.DataTypeTestId;
+            Int64 = target.Int64;
+            ByteArrayBinary = target.ByteArrayBinary;
+            Boolean = target.Boolean;
+            StringChar = target.StringChar;
+            DateTimeDate = target.DateTimeDate;
+            DateTimeDateTime = target.DateTimeDateTime;
+            DateTimeDateTime2 = target.DateTimeDateTime2;
+            DateTimeOffset = target.DateTimeOffset;
+            DecimalDecimal = target.DecimalDecimal;
+            Double = target.Double;
+            Int32 = target.Int32;
+            DecimalMoney = target.DecimalMoney;
+            StringNChar = target.StringNChar;
+            DecimalNumeric = target.DecimalNumeric;
+            StringNVarchar = target.StringNVarchar;
+            Single = target.Single;
+            ByteArrayRowVersion = target.ByteArrayRowVersion;
+            DateTimeSmallDateTime = target.DateTimeSmallDateTime;
+            Int16 = target.Int16;
+            DecimalSmallMoney = target.DecimalSmallMoney;
+            TimeSpan = target.TimeSpan;
+            Byte = target.Byte;
+            Guid = target.Guid;
+            ByteArrayVarBinary = target.ByteArrayVarBinary;
+            String = target.String;
+            Xml = target.Xml;
+        }
+
+        public int DataTypeTestId { get; set; }
+
+        public long Int64 { get; set; }
+
+        public byte[] ByteArrayBinary { get; set; }
+
+        public bool Boolean { get; set; }
+
+        public string StringChar { get; set; }
+
+        public DateTime DateTimeDate { get; set; }
+
+        public DateTime DateTimeDateTime { get; set; }
+
+        public DateTime DateTimeDateTime2 { get; set; }
+
+        public DateTimeOffset DateTimeOffset { get; set; }
+
+        public decimal DecimalDecimal { get; set; }
+
+        public double Double { get; set; }
+
+        public int Int32 { get; set; }
+
+        public decimal DecimalMoney { get; set; }
+
+        public string StringNChar { get; set; }
+
+        public decimal DecimalNumeric { get; set; }
+
+        public string StringNVarchar { get; set; }
+
+        public float Single { get; set; }
+
+        public byte[] ByteArrayRowVersion { get; set; }
+
+        public DateTime DateTimeSmallDateTime { get; set; }
+
+        public short Int16 { get; set; }
+
+        public decimal DecimalSmallMoney { get; set; }
+
+        public TimeSpan TimeSpan { get; set; }
+
+        public byte Byte { get; set; }
+
+        public Guid Guid { get; set; }
+
+        public byte[] ByteArrayVarBinary { get; set; }
+
+        public string String { get; set; }
+
+        public string Xml { get; set; }
+    }
+}

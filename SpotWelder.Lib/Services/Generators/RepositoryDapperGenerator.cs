@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +18,8 @@ namespace SpotWelder.Lib.Services.Generators
 
 		public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
+			var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+
 			instructions.ClassName = instructions.SubjectName;
 
 			var strTemplate = GetTemplate(TemplateName);
@@ -27,6 +30,11 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
 			template.Replace("{{EntityName}}", instructions.EntityName);
 			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+			template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
+			template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
+			template.Replace("{{ParameterObject}}", syntax.ParameterObject);
+			template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);
+			template.Replace("{{ParameterDbTypeEnum}}", syntax.ParameterDbTypeEnum);
 
 			GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
 
@@ -41,20 +49,20 @@ namespace SpotWelder.Lib.Services.Generators
 				template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
 				template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName); //TaskId or task_id
 				template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
+				template.Replace("{{PrimaryKeyDbType}}", pk.DatabaseType.ToString()); //DbType.Int32
 
-				var scopeIdentity = string.Empty;
+				var scopeIdentity = ScopeIdentityValues.Empty();
 
 				if (pk.IsIdentity)
-
 					//If the PK is identity then the PK needs to be returned
-					scopeIdentity = @"
-			SELECT SCOPE_IDENTITY() AS PK;"; //Don't change the spacing here, it's like this on purpose
+					scopeIdentity = syntax.GetScopeIdentity(pk.ColumnName);
 				else
-
 					//If the PK is not identity, then the PK needs to explicitly be provided and inserted
 					lstInsert.Insert(0, pk);
 
-				template.Replace("{{ScopeIdentity}}", scopeIdentity);
+				template.Replace("{{InsertPkColumnName}}", scopeIdentity.PrimaryKeyColumnName);
+				template.Replace("{{InsertPkDefault}}", scopeIdentity.PrimaryKeyDefault);
+				template.Replace("{{ScopeIdentity}}", scopeIdentity.ScopeIdentity);
 				template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, instructions.IsAsynchronous));
 			}
 
@@ -66,16 +74,17 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
 			template.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
 			template.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
-			template.Replace("{{DynamicParametersDelete}}", FormatDynamicParameterList(new List<ClassMemberStrings> { pk }));
-
-			return GetFormattedCSharpResult($"{instructions.ClassName}Repository.cs", template);
+			
+			var rt = instructions.Elections.HasFlag(GenerationElections.RepoStatic) ? "Dapper" : string.Empty;
+			
+      return GetFormattedCSharpResult($"{instructions.ClassName}{rt}Repository.cs", template);
 		}
 
-		private string FormatSelectList(IList<ClassMemberStrings> properties, string prefix = null)
+		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
 		{
 			var content = GetTextBlock(
 				properties,
-				p => $"                {prefix}{p.Property}",
+				p => $"                {prefix}{p.ColumnName}",
 				"," + Environment.NewLine);
 
 			return content;
@@ -85,7 +94,7 @@ namespace SpotWelder.Lib.Services.Generators
 		{
 			var content = GetTextBlock(
 				properties,
-				p => $"                {p.Property} = @{p.Property}",
+				p => $"                {p.ColumnName} = @{p.ColumnName}",
 				"," + Environment.NewLine);
 
 			return content;
@@ -103,34 +112,28 @@ namespace SpotWelder.Lib.Services.Generators
 
 		private static string FormatDynamicParameter(ClassMemberStrings properties)
 		{
-			var t = properties.DatabaseType;
-
-			var strDbType = TypesService.MapSqlDbTypeToDbTypeLoose.TryGetValue(t, out var dbType) ?
-				dbType.ToString() :
-				$"SqlDbType.{t}_MissingMapping";
-
 			var lst = new List<string>
 			{
-				$"name: \"@{properties.Property}\"", $"dbType: DbType.{strDbType}", $"value: entity.{properties.Property}"
+				$"name: \"@{properties.ColumnName}\"", $"dbType: DbType.{properties.DatabaseType}", $"value: entity.{properties.Property}"
 			};
 
 			//TODO: Need to work through every type to see what the combinations are
-			switch (t)
+			switch (properties.DatabaseType)
 			{
-				case SqlDbType.DateTime2:
+				case DbType.DateTime2:
 					lst.Add($"scale: {properties.Scale}");
 
 					break;
 
-				case SqlDbType.Decimal:
+				case DbType.Decimal:
 					lst.Add($"precision: {properties.Precision}, scale: {properties.Scale}");
 
 					break;
 
-				case SqlDbType.VarChar:
-				case SqlDbType.NVarChar:
-				case SqlDbType.Char:
-				case SqlDbType.NChar:
+				case DbType.AnsiString:
+				case DbType.AnsiStringFixedLength:
+				case DbType.String:
+				case DbType.StringFixedLength:
 					lst.Add($"size: {properties.Size}");
 
 					break;
@@ -152,10 +155,8 @@ namespace SpotWelder.Lib.Services.Generators
 				suf = "Async";
 			}
 
-			if (primaryKey.IsIdentity)
-				return $"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, entity);";
-
-			return
+			return primaryKey.IsIdentity ? 
+				$"            return {ak}connection.ExecuteScalar{suf}<{primaryKey.SystemTypeAlias}>(sql, p);" : 
 				$@"            {ak}connection.Execute{suf}(sql, p);
 
 				return entity.{primaryKey.Property};";

@@ -2,10 +2,15 @@
 
 namespace SpotWelder.Lib.Models
 {
-    public class SchemaRaw
+  public class SchemaRaw
+  {
+    public DataTable GenericSchema { get; set; }
+    public DataTable SqlServerSchema { get; set; }
+
+    public SchemaRaw(DataTable genericSchema, DataTable sqlServerSchema)
     {
-        public DataTable GenericSchema { get; set; }
-        
-        public DataTable SqlServerSchema { get; set; }
+      GenericSchema = genericSchema;
+      SqlServerSchema = sqlServerSchema;
     }
+  }
 }

@@ -1,24 +1,44 @@
-﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Data;
-using System.Reflection;
+﻿using Humanizer;
 using Microsoft.CSharp;
 //using Microsoft.JScript;
 using Microsoft.VisualBasic;
 using SpotWelder.Lib.Models;
+using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace SpotWelder.Lib.Services.CodeFactory
 {
   public class ClassMemberStrings
   {
     private readonly CodeDomProvider _provider;
+    private static HashSet<string> _englishDictionary;
+    private static readonly Regex _reDelimiters = new Regex("[-_\\s]+");
 
+    /// <summary>
+    /// Used in the case where the meta data is provided by the reflected properties
+    /// of a class versus a database schema. The SQL portion of the properties can
+    /// safely be ignored and are defaulted to SQL Server.
+    /// </summary>
+    /// <param name="property">Reflected property information of a class.</param>
     public ClassMemberStrings(PropertyInfo property)
-      : this(new SchemaColumn(property))
+      : this(new SchemaColumn(
+        SqlEngine.SqlServer, //Safe to ignore this and just default to SQL Server for argument's sake
+        property))
     {
     }
 
+    /// <summary>
+    /// Used in the case where the meta data is provided by a query's database schema.
+    /// </summary>
+    /// <param name="sc">Schema information</param>
+    /// <param name="type">Programming language to use for generation.</param>
     public ClassMemberStrings(SchemaColumn sc, CodeType type = CodeType.CSharp)
     {
       switch (type)
@@ -43,9 +63,11 @@ namespace SpotWelder.Lib.Services.CodeFactory
           break;
       }
 
+      InitializeEnglishDictionary();
+
       DatabaseTypeName = sc.SqlType.ToLower(); //Case is inconsistent, so making it lower on purpose
 
-      DatabaseType = TypesService.SqlTypes[DatabaseTypeName];
+      DatabaseType = TypesService.GetTypeMapper(sc.SqlEngine).GetDbType(DatabaseTypeName);
 
       Size = sc.Size;
 
@@ -83,6 +105,17 @@ namespace SpotWelder.Lib.Services.CodeFactory
       TypeScriptType = GetTypeScriptType(sc.SystemType);
     }
 
+    private static void InitializeEnglishDictionary()
+    {
+      if (_englishDictionary != null) return;
+
+      var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", "en_US.dic");
+
+      _englishDictionary = File.ReadAllLines(path)
+        .Select(x => x.Split('/').First())
+        .ToHashSet(StringComparer.OrdinalIgnoreCase);
+    }
+
     //For cloning only, bypasses all of the logic and is a straight copy
     private ClassMemberStrings(ClassMemberStrings source, CodeDomProvider provider)
     {
@@ -113,11 +146,14 @@ namespace SpotWelder.Lib.Services.CodeFactory
     /// <summary>Qualified SQL Column name</summary>
     public string ColumnName { get; private set; }
 
+    /// <summary>SQL column name split into individual words separated by a single space</summary>
+    public string ColumnNameDelimited { get; set; }
+
     /// <summary>SQL Server database type name in lower case</summary>
     public string DatabaseTypeName { get; }
 
     /// <summary>SQL Server database type enumeration</summary>
-    public SqlDbType DatabaseType { get; }
+    public DbType DatabaseType { get; }
 
     /// <summary>Column size for varchar, nvarchar, char, nchar etc...</summary>
     public int Size { get; }
@@ -199,7 +235,6 @@ namespace SpotWelder.Lib.Services.CodeFactory
       return str;
     }
 
-    
     private static string GetTypeScriptType(Type target)
     {
       //Example of nullable property in TypeScript
@@ -217,11 +252,14 @@ namespace SpotWelder.Lib.Services.CodeFactory
     //TODO: How to handle arrays? Like blobs from the database?
     private static string GetConversionMethodSignature(Type type, string systemTypeName)
     {
-      //Guid does not have a method in the Convert class
-      if (type == typeof(Guid))
+      if (type == typeof(byte[])) return "(byte[]){0}";
 
-        //DataReader column has to be converted to string first
-        return "Guid.Parse(Convert.ToString({0}))";
+      if (type == typeof(TimeSpan)) return "(TimeSpan){0}";
+
+      if (type == typeof(DateTimeOffset)) return "(DateTimeOffset){0}";
+
+      //Guid does not have a method in the Convert class, the DataReader column has to be converted to string first
+      if (type == typeof(Guid)) return "Guid.Parse(Convert.ToString({0}))";
 
       var c = "Convert.To" + systemTypeName + "({0})";
 
@@ -229,6 +267,84 @@ namespace SpotWelder.Lib.Services.CodeFactory
     }
 
     private void SetPropertyAndField(string unqualifiedColumnName)
+    {
+      //In the case where a column name is not delimited in any way, it needs to be delimited
+      //so that it can be humanized properly. Example: bytearray_binary, needs to be ByteArrayBinary,
+      //but without intervention was being evaluated as BytearrayBinary.
+      //ColumnNameDelimited = DelimitString(_englishDictionary, unqualifiedColumnName);
+      ColumnNameDelimited = unqualifiedColumnName;
+
+      //Removing any whitespace
+      //Removing any underscores
+
+      //Pascal Case the property name
+      Property = ColumnNameDelimited.Pascalize();
+
+      //Camel case the parameter name
+      Parameter = ColumnNameDelimited.Camelize();
+
+      //Field denoted by prefixing with underscore
+      Field = "_" + Parameter;
+    }
+
+    private void SetColumnName(string trimmedColumnName)
+    {
+      //Qualifying the column name for SQL
+      ColumnName = trimmedColumnName.Contains(" ") ? "[" + trimmedColumnName + "]" : trimmedColumnName;
+    }
+
+    //2025-06-29 This is my attempt at delimiting the string, but there are other methods that exist named:
+    //StringSegmentation and SegmentWithTrie - if my approach fails, then I will look into those
+    //The problem with doing this is it is far too subjective.
+    public static string DelimitString(HashSet<string> words, string target)
+    {
+      var lst = new List<string>();
+
+      //Removing any delimiters such as hyphens, underscores, and whitespace
+      target = _reDelimiters.Replace(target, string.Empty);
+
+      var f = MostProbableSegment(words, target);
+      var trim = 0;
+
+      while (!string.IsNullOrEmpty(f))
+      {
+        lst.Add(f);
+
+        trim += f.Length;
+
+        var next = target.Substring(trim, target.Length - trim);
+
+        f = MostProbableSegment(words, next);
+      }
+
+      return string.Join(' ', lst);
+    }
+
+    //This makes the assumption that the longest fragment is the most probable
+    public static string? MostProbableSegment(HashSet<string> words, string target)
+    {
+      var lst = new List<string>();
+      
+      for (var l = 1; l <= target.Length; l++)
+      {
+        var sub = target.Substring(0, l);
+
+        if (!words.Contains(sub)) continue;
+
+        lst.Add(sub);
+      }
+
+      return lst.LastOrDefault();
+    }
+
+    public ClassMemberStrings Clone() => new (this, _provider);
+  }
+}
+
+/*
+ //My original poor man's method of handling pascal case and camel case
+ //Handing the responsibility over to Humanizr since the complexity has increased for me
+ private void SetPropertyAndField(string unqualifiedColumnName)
     {
       //Removing any whitespace
       Property = unqualifiedColumnName.Replace(" ", string.Empty);
@@ -245,13 +361,4 @@ namespace SpotWelder.Lib.Services.CodeFactory
       //Camel case the field name
       Field = "_" + Parameter;
     }
-
-    private void SetColumnName(string trimmedColumnName)
-    {
-      //Qualifying the column name for SQL
-      ColumnName = trimmedColumnName.Contains(" ") ? "[" + trimmedColumnName + "]" : trimmedColumnName;
-    }
-
-    public ClassMemberStrings Clone() => new ClassMemberStrings(this, _provider);
-  }
-}
+ */

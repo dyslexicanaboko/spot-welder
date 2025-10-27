@@ -9,7 +9,7 @@ namespace SpotWelder.Ui.Profile
   {
     public delegate void SaveHandler(object sender, EventArgs e);
 
-    public ConnectionStringManager ConnectionStringManager { get; set; }
+    public ConnectionStringManager ConnectionStringManager { get; set; } = new();
 
     private event SaveHandler? Save;
 

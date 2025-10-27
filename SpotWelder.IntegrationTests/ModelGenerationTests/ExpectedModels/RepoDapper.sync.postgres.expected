@@ -1,0 +1,248 @@
+using Dapper;
+using Npgsql;
+using NpgsqlTypes;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System;
+
+namespace Namespace1
+{
+    public class DataTypeTestRepository
+    {
+        public DataTypeTestRepository(IAppConfiguration configuration)
+            : base(configuration)
+        {
+        }
+
+        public DataTypeTestEntity? Select(int dataTypeTestId)
+        {
+            const string sql = @"
+			SELECT
+	                data_type_test_id,
+                int64,
+                bytearray_binary,
+                boolean,
+                string_char,
+                datetime_date,
+                datetime_datetime,
+                datetime_datetime2,
+                datetimeoffset,
+                decimal_decimal,
+                double,
+                int32,
+                decimal_money,
+                string_nchar,
+                decimal_numeric,
+                string_nvarchar,
+                single,
+                datetime_smalldatetime,
+                int16,
+                timespan,
+                guid,
+                bytearray_varbinary,
+                string,
+                xml
+			FROM public.data_type_test
+			WHERE data_type_test_id = @data_type_test_id";
+
+            using var connection = new NpgsqlConnection(ConnectionString);
+
+            var lst = connection.Query<DataTypeTestEntity>(sql, GetPrimaryKeyParameter(dataTypeTestId)).ToList();
+
+            return lst.SingleOrDefault();
+        }
+
+        public IEnumerable<DataTypeTestEntity> SelectAll()
+        {
+            const string sql = @"
+			SELECT
+	                data_type_test_id,
+                int64,
+                bytearray_binary,
+                boolean,
+                string_char,
+                datetime_date,
+                datetime_datetime,
+                datetime_datetime2,
+                datetimeoffset,
+                decimal_decimal,
+                double,
+                int32,
+                decimal_money,
+                string_nchar,
+                decimal_numeric,
+                string_nvarchar,
+                single,
+                datetime_smalldatetime,
+                int16,
+                timespan,
+                guid,
+                bytearray_varbinary,
+                string,
+                xml
+			FROM public.data_type_test";
+
+            using var connection = new NpgsqlConnection(ConnectionString);
+
+            return connection.Query<DataTypeTestEntity>(sql).ToList();
+        }
+
+        public int Insert(DataTypeTestEntity entity)
+        {
+            const string sql = @"INSERT INTO public.data_type_test (
+                int64,
+                bytearray_binary,
+                boolean,
+                string_char,
+                datetime_date,
+                datetime_datetime,
+                datetime_datetime2,
+                datetimeoffset,
+                decimal_decimal,
+                double,
+                int32,
+                decimal_money,
+                string_nchar,
+                decimal_numeric,
+                string_nvarchar,
+                single,
+                datetime_smalldatetime,
+                int16,
+                timespan,
+                guid,
+                bytearray_varbinary,
+                string,
+                xml
+						) VALUES (
+                @int64,
+                @bytearray_binary,
+                @boolean,
+                @string_char,
+                @datetime_date,
+                @datetime_datetime,
+                @datetime_datetime2,
+                @datetimeoffset,
+                @decimal_decimal,
+                @double,
+                @int32,
+                @decimal_money,
+                @string_nchar,
+                @decimal_numeric,
+                @string_nvarchar,
+                @single,
+                @datetime_smalldatetime,
+                @int16,
+                @timespan,
+                @guid,
+                @bytearray_varbinary,
+                @string,
+                @xml)	RETURNING data_type_test_id AS PK;";
+
+            using var connection = new NpgsqlConnection(ConnectionString);
+
+            var p = new DynamicParameters();
+            p.Add(name: "@int64", dbType: DbType.Int64, value: entity.Int64);
+            p.Add(name: "@bytearray_binary", dbType: DbType.Binary, value: entity.BytearrayBinary);
+            p.Add(name: "@boolean", dbType: DbType.Boolean, value: entity.Boolean);
+            p.Add(name: "@string_char", dbType: DbType.StringFixedLength, value: entity.StringChar, size: 1);
+            p.Add(name: "@datetime_date", dbType: DbType.Date, value: entity.DatetimeDate);
+            p.Add(name: "@datetime_datetime", dbType: DbType.DateTime2, value: entity.DatetimeDatetime, scale: 0);
+            p.Add(name: "@datetime_datetime2", dbType: DbType.DateTime2, value: entity.DatetimeDatetime2, scale: 0);
+            p.Add(name: "@datetimeoffset", dbType: DbType.DateTimeOffset, value: entity.Datetimeoffset);
+            p.Add(name: "@decimal_decimal", dbType: DbType.Decimal, value: entity.DecimalDecimal, precision: 4, scale: 2);
+            p.Add(name: "@double", dbType: DbType.Double, value: entity.Double);
+            p.Add(name: "@int32", dbType: DbType.Int32, value: entity.Int32);
+            p.Add(name: "@decimal_money", dbType: DbType.Currency, value: entity.DecimalMoney);
+            p.Add(name: "@string_nchar", dbType: DbType.StringFixedLength, value: entity.StringNchar, size: 1);
+            p.Add(name: "@decimal_numeric", dbType: DbType.Decimal, value: entity.DecimalNumeric, precision: 4, scale: 2);
+            p.Add(name: "@string_nvarchar", dbType: DbType.String, value: entity.StringNvarchar, size: 10);
+            p.Add(name: "@single", dbType: DbType.Single, value: entity.Single);
+            p.Add(name: "@datetime_smalldatetime", dbType: DbType.DateTime2, value: entity.DatetimeSmalldatetime, scale: 0);
+            p.Add(name: "@int16", dbType: DbType.Int16, value: entity.Int16);
+            p.Add(name: "@timespan", dbType: DbType.Time, value: entity.Timespan);
+            p.Add(name: "@guid", dbType: DbType.Guid, value: entity.Guid);
+            p.Add(name: "@bytearray_varbinary", dbType: DbType.Binary, value: entity.BytearrayVarbinary);
+            p.Add(name: "@string", dbType: DbType.String, value: entity.String, size: 10);
+            p.Add(name: "@xml", dbType: DbType.Xml, value: entity.Xml);
+
+            return connection.ExecuteScalar<int>(sql, p);
+        }
+
+        public void Update(DataTypeTestEntity entity)
+        {
+            const string sql = @"UPDATE public.data_type_test SET 
+	                int64 = @int64,
+                bytearray_binary = @bytearray_binary,
+                boolean = @boolean,
+                string_char = @string_char,
+                datetime_date = @datetime_date,
+                datetime_datetime = @datetime_datetime,
+                datetime_datetime2 = @datetime_datetime2,
+                datetimeoffset = @datetimeoffset,
+                decimal_decimal = @decimal_decimal,
+                double = @double,
+                int32 = @int32,
+                decimal_money = @decimal_money,
+                string_nchar = @string_nchar,
+                decimal_numeric = @decimal_numeric,
+                string_nvarchar = @string_nvarchar,
+                single = @single,
+                datetime_smalldatetime = @datetime_smalldatetime,
+                int16 = @int16,
+                timespan = @timespan,
+                guid = @guid,
+                bytearray_varbinary = @bytearray_varbinary,
+                string = @string,
+                xml = @xml
+						WHERE data_type_test_id = @data_type_test_id";
+
+            using var connection = new NpgsqlConnection(ConnectionString);
+
+            var p = new DynamicParameters();
+            p.Add(name: "@data_type_test_id", dbType: DbType.Int32, value: entity.DataTypeTestId);
+            p.Add(name: "@int64", dbType: DbType.Int64, value: entity.Int64);
+            p.Add(name: "@bytearray_binary", dbType: DbType.Binary, value: entity.BytearrayBinary);
+            p.Add(name: "@boolean", dbType: DbType.Boolean, value: entity.Boolean);
+            p.Add(name: "@string_char", dbType: DbType.StringFixedLength, value: entity.StringChar, size: 1);
+            p.Add(name: "@datetime_date", dbType: DbType.Date, value: entity.DatetimeDate);
+            p.Add(name: "@datetime_datetime", dbType: DbType.DateTime2, value: entity.DatetimeDatetime, scale: 0);
+            p.Add(name: "@datetime_datetime2", dbType: DbType.DateTime2, value: entity.DatetimeDatetime2, scale: 0);
+            p.Add(name: "@datetimeoffset", dbType: DbType.DateTimeOffset, value: entity.Datetimeoffset);
+            p.Add(name: "@decimal_decimal", dbType: DbType.Decimal, value: entity.DecimalDecimal, precision: 4, scale: 2);
+            p.Add(name: "@double", dbType: DbType.Double, value: entity.Double);
+            p.Add(name: "@int32", dbType: DbType.Int32, value: entity.Int32);
+            p.Add(name: "@decimal_money", dbType: DbType.Currency, value: entity.DecimalMoney);
+            p.Add(name: "@string_nchar", dbType: DbType.StringFixedLength, value: entity.StringNchar, size: 1);
+            p.Add(name: "@decimal_numeric", dbType: DbType.Decimal, value: entity.DecimalNumeric, precision: 4, scale: 2);
+            p.Add(name: "@string_nvarchar", dbType: DbType.String, value: entity.StringNvarchar, size: 10);
+            p.Add(name: "@single", dbType: DbType.Single, value: entity.Single);
+            p.Add(name: "@datetime_smalldatetime", dbType: DbType.DateTime2, value: entity.DatetimeSmalldatetime, scale: 0);
+            p.Add(name: "@int16", dbType: DbType.Int16, value: entity.Int16);
+            p.Add(name: "@timespan", dbType: DbType.Time, value: entity.Timespan);
+            p.Add(name: "@guid", dbType: DbType.Guid, value: entity.Guid);
+            p.Add(name: "@bytearray_varbinary", dbType: DbType.Binary, value: entity.BytearrayVarbinary);
+            p.Add(name: "@string", dbType: DbType.String, value: entity.String, size: 10);
+            p.Add(name: "@xml", dbType: DbType.Xml, value: entity.Xml);
+
+            connection.Execute(sql, p);
+        }
+
+        public void Delete(int dataTypeTestId)
+        {
+            const string sql = "DELETE FROM public.data_type_test WHERE data_type_test_id = @data_type_test_id";
+
+            using var connection = new NpgsqlConnection(ConnectionString);
+
+            connection.Execute(sql, GetPrimaryKeyParameter(dataTypeTestId));
+        }
+
+        private DynamicParameters GetPrimaryKeyParameter(int dataTypeTestId)
+        {
+            var p = new DynamicParameters();
+            p.Add(name: "@data_type_test_id", dbType: DbType.Int32, value: dataTypeTestId);
+
+            return p;
+        }
+    }
+}

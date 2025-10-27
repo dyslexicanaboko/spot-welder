@@ -22,7 +22,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{ClassName}}", instructions.EntityName);
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      return new GeneratedResult($"{instructions.SubjectName}.ts", template);
+      return new GeneratedResult(Election, $"{instructions.SubjectName}.ts", template);
     }
 
     protected override string FormatProperties(IList<ClassMemberStrings> properties)

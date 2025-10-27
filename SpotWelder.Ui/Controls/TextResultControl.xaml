@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="SpotWelder.Ui.Controls.TextResultControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpotWelder.Ui.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" MinWidth="18"/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" MinHeight="100" />
+      <RowDefinition Height="50" />
+    </Grid.RowDefinitions>
+    <TextBlock x:Name="LineNumbers"
+               Grid.Row="0"
+               Grid.Column="0"
+               Style="{StaticResource TextBlockCodeFont}"
+               Background="SlateGray"
+               Text="01" VerticalAlignment="Top"/>
+    <TextBox Name="TxtResult"
+             Grid.Row="0"
+             Grid.Column="1"
+             IsReadOnly="True" 
+             IsReadOnlyCaretVisible="True" 
+             HorizontalContentAlignment="Stretch" 
+             HorizontalScrollBarVisibility="Auto" 
+             VerticalContentAlignment="Stretch" 
+             VerticalScrollBarVisibility="Auto" 
+             Style="{StaticResource TextBoxCodeFont}"
+             Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TextResultControl}}, Path=Text, NotifyOnTargetUpdated=True}"
+             TargetUpdated="TxtResult_OnTargetUpdated"
+             >
+      <TextBox.CommandBindings>
+        <CommandBinding Command="Copy" Executed="CommandBinding_OnExecuted" />
+      </TextBox.CommandBindings>
+    </TextBox>
+    <ToolBarTray Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" >
+      <ToolBar>
+        Go to
+        <TextBox Name="TxtGoToLine" Text="" Width="30" KeyDown="TxtGoToLine_OnKeyDown" BorderThickness="1" BorderBrush="Black" />
+        | Find
+        <TextBox Name="TxtSearchText" Text="" Width="100" KeyDown="TxtFind_OnKeyDown" BorderThickness="1" BorderBrush="Black" />
+      </ToolBar>
+    </ToolBarTray>
+  </Grid>
+</UserControl>

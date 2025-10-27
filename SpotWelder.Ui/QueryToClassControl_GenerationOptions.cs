@@ -26,7 +26,7 @@ namespace SpotWelder.Ui
       if (TxtClassEntityName.IsTextInvalid("Class name cannot be empty."))
         return null;
 
-      obj.TableQuery = _svcNameFormat.ParseTableName(TxtSourceSqlText.Text);
+      obj.ServerConnection.TableQuery = GetTableQueryFormatStrategy().ParseTableName(TxtSourceSqlText.Text);
       obj.SubjectName = TxtEntityName.Text;
       obj.EntityName = TxtClassEntityName.Text;
       obj.ModelName = TxtClassModelName.Text;
@@ -53,14 +53,14 @@ namespace SpotWelder.Ui
       if (!con.Verified && !ConnectionStringCb.TestConnectionString(true))
         return null;
 
-      obj.ConnectionString = con.ConnectionString;
+      obj.ServerConnection.ConnectionString = con.ConnectionString;
+      obj.ServerConnection.SqlEngine = con.SqlEngine;
+      obj.ServerConnection.SourceSqlType = GetSourceType();
 
-      obj.SourceSqlType = GetSourceType();
-
-      if (TxtSourceSqlText.IsTextInvalid(obj.SourceSqlType + " cannot be empty."))
+      if (TxtSourceSqlText.IsTextInvalid(obj.ServerConnection.SourceSqlType + " cannot be empty."))
         return null;
 
-      obj.SourceSqlText = TxtSourceSqlText.Text;
+      obj.ServerConnection.SourceSqlText = TxtSourceSqlText.Text;
       obj.SaveAsFile = CbSaveFileOnGeneration.IsChecked();
 
       if (obj.SaveAsFile)

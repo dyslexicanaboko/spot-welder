@@ -21,7 +21,10 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{Namespace}}", instructions.Namespace);
 			template.Replace("{{ClassName}}", instructions.ClassName); //Subject is the prefix
 			template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+      template.Replace("{{Interface}}",
+        instructions.Elections.HasFlag(GenerationElections.GenerateInterface) ?
+        FormatInterface(instructions.InterfaceName) : string.Empty);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
 			//Constructors
 			template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
