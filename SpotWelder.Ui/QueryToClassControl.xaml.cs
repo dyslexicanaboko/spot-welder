@@ -64,7 +64,7 @@ namespace SpotWelder.Ui
       //DebugWholeSqlServerTest();
       //DebugMinimalPostgresTest();
       //DebugWholeSqlServerTestForParity();
-      DebugWholePostgresTestForParity();
+      //DebugWholePostgresTestForParity();
     }
 
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;

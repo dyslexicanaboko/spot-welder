@@ -68,6 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SpotWelder.DatabaseForTests.publish.xml" />
-    <None Include="ReadMe.md" />
+    <None Include="Postgres.md" />
   </ItemGroup>
 </Project>
