@@ -23,13 +23,16 @@ namespace SpotWelder.Lib.Services.Generators
 		{
 			{ GenerationElections.MapEntityToModel, "MapEntityToModel.cs.template" },
 			{ GenerationElections.MapModelToEntity, "MapModelToEntity.cs.template" },
-			{ GenerationElections.MapInterfaceToEntity, "MapInterfaceToEntity.cs.template" },
-			{ GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
+			//FYI: Commenting out these two mapping options for now as they are just confusing things.
+			//I might eliminate these entirely later. They have not been useful in practice.
+      //{ GenerationElections.MapInterfaceToEntity, "MapInterfaceToEntity.cs.template" },
+			//{ GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
 			{ GenerationElections.MapCreateModelToEntity, "MapCreateModelToEntity.cs.template" },
-			{ GenerationElections.MapPatchModelToEntity, "MapPatchModelToEntity.cs.template" }
+			{ GenerationElections.MapPatchModelToEntity, "MapPatchModelToEntity.cs.template" },
+			{ GenerationElections.MapEntityToCreatedModel, "MapEntityToCreatedModel.cs.template" }
 		};
 
-	public override GeneratedResult FillTemplate(ClassInstructions instructions)
+  public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
 			instructions.ClassName = instructions.SubjectName;
 

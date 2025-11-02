@@ -102,6 +102,7 @@ namespace SpotWelder.Ui
         { GenerationElections.MapInterfaceToModel, CbMapInterfaceToModel },
         { GenerationElections.MapCreateModelToEntity, CbMapCreateModelToEntity },
         { GenerationElections.MapPatchModelToEntity, CbMapPatchModelToEntity },
+        { GenerationElections.MapEntityToCreatedModel, CbMapEntityToCreatedModel },
         { GenerationElections.SerializeCsv, CbSerializeCsv },
         { GenerationElections.SerializeJson, CbSerializeJson },
         { GenerationElections.RepoStatic, CbRepoStatic },
@@ -111,6 +112,7 @@ namespace SpotWelder.Ui
         { GenerationElections.ApiController, CbApiController },
         { GenerationElections.GenerateCreateModel, CbClassCreateModel },
         { GenerationElections.GeneratePatchModel, CbClassPatchModel },
+        { GenerationElections.GenerateCreatedModel, CbClassCreatedModel },
         { GenerationElections.MakeAsynchronous, CbMakeAsynchronous },
       };
 
@@ -127,6 +129,7 @@ namespace SpotWelder.Ui
       return cbg;
     }
 
+    //TODO: This will also be part of the generated documentation in Mark Down.
     private void BtnDynamicStatements_OnClick(object sender, RoutedEventArgs e)
     {
       //TODO: This is good for now, but might want to create a simple HTML page for this and display it as part of a web browser component

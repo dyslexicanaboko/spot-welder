@@ -40,7 +40,7 @@ namespace SpotWelder.Ui
       TxtNamespaceName.Text = "Namespace1";
       TxtEntityName.Text = "Task";
       TxtClassEntityName.Text = "TaskEntity";
-      TxtClassModelName.Text = "TaskModel";
+      TxtClassModelName.Text = "TaskV1Model";
 
       CbRepoDapper.IsChecked = true;
 
@@ -55,6 +55,7 @@ namespace SpotWelder.Ui
       //Models
       CbClassModel.IsChecked = true;
       CbClassCreateModel.IsChecked = true;
+      CbClassCreatedModel.IsChecked = true;
       CbClassPatchModel.IsChecked = true;
 
       //Services
@@ -68,12 +69,13 @@ namespace SpotWelder.Ui
       CbService.IsChecked = true;
 
       //Mappings
-      CbMapInterfaceToModel.IsChecked = true;
-      CbMapInterfaceToEntity.IsChecked = true;
+      CbMapInterfaceToModel.IsChecked = false;
+      CbMapInterfaceToEntity.IsChecked = false;
       CbMapEntityToModel.IsChecked = true;
       CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
+      CbMapEntityToCreatedModel.IsChecked = true;
 #endif
     }
 

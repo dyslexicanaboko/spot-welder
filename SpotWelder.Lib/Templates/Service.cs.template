@@ -15,7 +15,7 @@ namespace {{Namespace}}
 			_validation = validation;
 		}
 
-		public [AO]{{EntityName}}?[AC] Get{{ClassName}}({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
 

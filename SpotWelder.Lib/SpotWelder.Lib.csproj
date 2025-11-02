@@ -40,6 +40,9 @@
 		<Content Include="Templates\en_US.dic">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Templates\MapEntityToCreatedModel.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\MapPatchModelToEntity.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
@@ -56,6 +59,9 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\MapModelToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\ModelCreated.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\Service.cs.template">

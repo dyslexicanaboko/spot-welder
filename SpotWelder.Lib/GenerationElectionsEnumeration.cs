@@ -95,4 +95,11 @@ public enum GenerationElections
   /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
   [Child(GenerateMapper)]
   MapPatchModelToEntity = 1 << 26,
+
+  /// <summary> Generate a REST API Created model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
+  GenerateCreatedModel = 1 << 27,
+
+  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
+  [Child(GenerateMapper)]
+  MapEntityToCreatedModel = 1 << 28,
 }

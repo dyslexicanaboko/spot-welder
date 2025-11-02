@@ -11,11 +11,12 @@ namespace {{Namespace}}
 	{
 		public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
-			const string sql = @"
-			SELECT
-{{SelectAllList}}
-			FROM {{Schema}}.{{Table}}
-			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
+			const string sql = """
+				SELECT
+				{{SelectAllList}}
+				FROM {{Schema}}.{{Table}}
+				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+				""";
 
 			var p = GetPrimaryKeyParameter({{PrimaryKeyParameter}});
 
@@ -28,10 +29,11 @@ namespace {{Namespace}}
 
 		public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
 		{
-			const string sql = @"
-			SELECT
-{{SelectAllList}}
-			FROM {{Schema}}.{{Table}}";
+			const string sql = """
+				SELECT
+				{{SelectAllList}}
+				FROM {{Schema}}.{{Table}}
+				""";
 
 			using var dr = [A]ExecuteReaderText(sql);
 			
@@ -40,10 +42,12 @@ namespace {{Namespace}}
 
 		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
 		{
-			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (
-{{InsertColumnList}}
-						) VALUES (
-{{InsertValuesList}}) {{ScopeIdentity}}";
+			const string sql = """
+				INSERT INTO {{Schema}}.{{Table}} (
+				{{InsertColumnList}}
+				) VALUES (
+				{{InsertValuesList}}) {{ScopeIdentity}}
+				""";
 
 			var lst = GetParameters(entity);
 
@@ -52,9 +56,11 @@ namespace {{Namespace}}
 
 		public [void] Update({{EntityName}} entity)
 		{
-			const string sql = @"UPDATE {{Schema}}.{{Table}} SET 
-{{UpdateParameters}}
-					WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
+			const string sql = """
+				UPDATE {{Schema}}.{{Table}} SET 
+				{{UpdateParameters}}
+				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+				""";
 
 			var lst = GetParameters(entity);
 
@@ -65,7 +71,10 @@ namespace {{Namespace}}
 
 		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
-			const string sql = @"DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
+			const string sql = """
+				DELETE FROM {{Schema}}.{{Table}} 
+				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+				""";
 
 			var arr = new {{ParameterObject}}[] { GetPrimaryKeyParameter({{PrimaryKeyParameter}}) };
 			

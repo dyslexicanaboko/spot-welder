@@ -16,11 +16,12 @@ namespace {{Namespace}}
 
 		public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
-			const string sql = @"
-			SELECT
-	{{SelectAllList}}
-			FROM {{Schema}}.{{Table}}
-			WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
+			const string sql = """
+				SELECT
+				{{SelectAllList}}
+				FROM {{Schema}}.{{Table}}
+				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+				""";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
@@ -31,22 +32,25 @@ namespace {{Namespace}}
 
 		public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
 		{
-			const string sql = @"
-			SELECT
-	{{SelectAllList}}
-			FROM {{Schema}}.{{Table}}";
+			const string sql = """
+				SELECT
+				{{SelectAllList}}
+				FROM {{Schema}}.{{Table}}
+				""";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
-			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
+			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC];
 		}
 
 		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
 		{
-			const string sql = @"INSERT INTO {{Schema}}.{{Table}} (
-{{InsertColumnList}}
-						) VALUES (
-{{InsertValuesList}})	{{ScopeIdentity}}";
+			const string sql = """
+				INSERT INTO {{Schema}}.{{Table}} (
+				{{InsertColumnList}}
+				) VALUES (
+				{{InsertValuesList}})	{{ScopeIdentity}}
+				""";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
@@ -58,9 +62,11 @@ namespace {{Namespace}}
 
 		public [void] Update({{EntityName}} entity)
 		{
-			const string sql = @"UPDATE {{Schema}}.{{Table}} SET 
-	{{UpdateParameters}}
-						WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
+			const string sql = """
+				UPDATE {{Schema}}.{{Table}} SET
+				{{UpdateParameters}}
+				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+				""";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
@@ -72,7 +78,10 @@ namespace {{Namespace}}
 
 		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
-			const string sql = "DELETE FROM {{Schema}}.{{Table}} WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}";
+			const string sql = """
+				DELETE FROM {{Schema}}.{{Table}}
+				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+				""";
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 
