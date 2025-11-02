@@ -23,7 +23,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{ApiRoute}}", instructions.ApiRoute);
       template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{ClassName}}", instructions.ClassName);
-      template.Replace("{{ModelName}}", instructions.EntityName);
+      template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
@@ -38,7 +38,7 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
 
-      return GetFormattedCSharpResult($"{instructions.ClassName}Controller.cs", template);
+      return GetFormattedCSharpResult($"{instructions.ClassName}V1Controller.cs", template);
     }
   }
 }

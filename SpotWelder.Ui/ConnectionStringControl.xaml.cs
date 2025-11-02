@@ -58,7 +58,7 @@ namespace SpotWelder.Ui
       => CbConnectionString.SelectedIndex = 1;
 
     public void DebugSetSqlServerTestParameters()
-      => CbConnectionString.SelectedIndex = 2;
+      => CbConnectionString.SelectedIndex = 0;
 
     public void DebugSetPostgresParityTestParameters()
       => CbConnectionString.SelectedIndex = 3;

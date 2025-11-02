@@ -1,0 +1,19 @@
+﻿{{Namespaces}}
+
+namespace {{Namespace}}
+{
+	public class {{ClassName}}V1CreatedModel
+	{
+		public {{ClassName}}V1CreatedModel()
+		{
+			
+		}
+
+		public {{ClassName}}V1CreatedModel({{EntityName}} target)
+		{
+			{{ConstructorFromEntity}}
+		}
+
+{{Properties}}
+	}
+}

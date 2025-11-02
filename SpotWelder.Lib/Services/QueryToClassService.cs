@@ -1,4 +1,5 @@
-﻿using SpotWelder.Lib.DataAccess;
+﻿using Humanizer;
+using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
 using System;
@@ -71,7 +72,7 @@ namespace SpotWelder.Lib.Services
         SubjectName = p.SubjectName, 
         EntityName = p.EntityName,
         ModelName = p.ModelName,
-        ApiRoute = p.SubjectName.ToLower(), //TODO: Use a humanizer that makes this plural and camel case https://github.com/Humanizr/Humanizer
+        ApiRoute = p.SubjectName.ToLower().Pluralize(),
         IsAsynchronous = p.Elections.HasFlag(GenerationElections.MakeAsynchronous),
         InterfaceName = $"I{p.SubjectName}",
         TableQuery = p.ServerConnection.TableQuery,
