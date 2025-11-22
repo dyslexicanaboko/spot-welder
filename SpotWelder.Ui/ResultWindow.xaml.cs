@@ -8,7 +8,10 @@ using System.Windows.Input;
 namespace SpotWelder.Ui
 {
   /// <summary>
-  ///   Interaction logic for ResultWindow.xaml
+  /// NOTE: This is the standalone window where I was working out the concept.
+  /// Don't develop against this version.
+  /// 
+  /// The live version is over in ParentResultsWindow > TextResultControl
   /// </summary>
   public partial class ResultWindow : Window
   {
