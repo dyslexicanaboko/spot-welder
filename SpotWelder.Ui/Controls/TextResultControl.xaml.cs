@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,7 +38,7 @@ namespace SpotWelder.Ui.Controls
       }
 
       // Split the string by newline characters
-      var lines = input.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+      var lines = input.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
 
       return string.Join(Environment.NewLine, Enumerable.Range(1, lines.Length).Select(i => i.ToString("00")));
     }
@@ -74,6 +73,8 @@ namespace SpotWelder.Ui.Controls
 
       try
       {
+        //This currently only handles the first result and that's it.
+        //TODO: Consider implementing all matches and being able to use F3 to move between them
         var charIndex = TxtResult.Text.IndexOf(TxtSearchText.Text, StringComparison.OrdinalIgnoreCase);
 
         HighlightLineIndex(
@@ -113,9 +114,11 @@ namespace SpotWelder.Ui.Controls
 
     private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
     {
+      //Ignore when handling a full copy
       if (e.Command != ApplicationCommands.Copy) return;
 
-      Clipboard.SetText(TxtResult.Text);
+      //This is for when the user highlights a section and copies it with Ctrl + C.
+      Clipboard.SetText(TxtResult.SelectedText);
     }
   }
 }
