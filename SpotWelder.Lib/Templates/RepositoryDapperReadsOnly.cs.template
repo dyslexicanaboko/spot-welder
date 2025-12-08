@@ -1,0 +1,50 @@
+using Dapper;
+{{SqlNamespaces}}
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+{{Namespaces}}
+
+namespace {{Namespace}}
+{
+	public class {{ClassName}}Repository
+	{
+		public {{ClassName}}Repository(IAppConfiguration configuration)
+			: base(configuration)
+		{
+		}
+
+		public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			const string sql = """
+				{{SourceQuery}}
+				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+				""";
+
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
+			
+			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
+				
+			return lst.SingleOrDefault();
+		}
+
+		public [AO]List<{{EntityName}}>[AC] SelectAll()
+		{
+			const string sql = """
+				{{SourceQuery}}
+				""";
+
+			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
+			
+			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
+		}
+
+		private DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		{
+			var p = new DynamicParameters();
+			p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});
+			
+			return p;
+		}
+	}
+}

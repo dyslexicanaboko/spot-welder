@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.Entities
 {
 	{{ClassAttributes}}
 	public class {{ClassName}}{{Interfaces}}

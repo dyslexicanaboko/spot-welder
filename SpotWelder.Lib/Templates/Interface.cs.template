@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.Entities
 {
     public interface {{ClassName}}
     {

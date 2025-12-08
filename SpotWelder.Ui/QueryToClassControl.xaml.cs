@@ -61,7 +61,8 @@ namespace SpotWelder.Ui
       _classCheckBoxGroup = GetCheckBoxGroup();
 
       //These methods have been moved to a partial class
-      DebugWholeSqlServerTest();
+      DebugCompoundQuerySqlServerTest();
+      //DebugWholeSqlServerTest();
       //DebugMinimalPostgresTest();
       //DebugWholeSqlServerTestForParity();
       //DebugWholePostgresTestForParity();

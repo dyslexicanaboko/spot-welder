@@ -35,12 +35,12 @@ namespace SpotWelder.Ui
       
       try
       {
-        //var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
 
-        //mainWindow.Show();
+        mainWindow.Show();
 
         //Debug_ResultWindow();
-        Debug_ParentResultWindow();
+        //Debug_ParentResultWindow();
       }
       catch (Exception ex)
       {

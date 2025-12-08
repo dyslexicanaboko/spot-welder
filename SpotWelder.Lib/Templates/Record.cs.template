@@ -1,0 +1,7 @@
+﻿namespace {{Namespace}}
+{
+	public record {{ClassName}}
+	{
+		{{Properties}}
+	}
+}

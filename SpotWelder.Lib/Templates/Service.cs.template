@@ -1,13 +1,14 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.Business
 {
-	public class {{ClassName}}Service
+	public class {{ClassName}}Manager
 	{
 		private readonly I{{ClassName}}Repository _repository;
+		private readonly I{{ClassName}}Mapper _mapper;
 		private readonly I{{ClassName}}Validation _validation;
 
-		public {{ClassName}}Service(
+		public {{ClassName}}Manager(
 			I{{ClassName}}Repository repository,
 			I{{ClassName}}Validation validation)
 		{
@@ -19,16 +20,14 @@ namespace {{Namespace}}
 		{
 			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
 
-			var dbEntity = [A]_repository.Using(x => x.Select({{PrimaryKeyParameter}}));
-
-			return dbEntity;
+			return _mapper.ToEntity([A]_repository.Using(x => x.Select({{PrimaryKeyParameter}})));
 		}
 
 		public [AO]{{EntityName}}[AC] Add({{EntityName}}? entity)
 		{
 			Validations.IsValid(_validation, entity, nameof(entity));
 
-			entity.{{PrimaryKeyProperty}} = [A]_repository.Using(x => x.Insert(entity));
+			entity.{{PrimaryKeyProperty}} = [A]_repository.Using(x => x.Insert(_mapper.ToRecord(entity)));
 			
 			return entity;
 		}
@@ -37,7 +36,7 @@ namespace {{Namespace}}
 		{
 			Validations.IsNotNull(entity, nameof(entity));
 
-			[A]_repository.Using(x => x.Update(entity));
+			[A]_repository.Using(x => x.Update(_mapper.ToRecord(entity)));
 		}
 
 		public [void] Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})

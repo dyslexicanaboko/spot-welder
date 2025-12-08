@@ -16,6 +16,9 @@ namespace SpotWelder.Lib.Services.Generators
 
 		protected override string TemplateName => "RepositoryDapper.cs.template";
 
+		//TODO: This cannot stay here, this is a temporary until I know where to take this
+    private readonly string[] _excludedColumns = [ "UserId", "CreatedOn", "UpdatedOn", "User_Id", "Created_On", "Updated_On"];
+
 		public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
 			var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);

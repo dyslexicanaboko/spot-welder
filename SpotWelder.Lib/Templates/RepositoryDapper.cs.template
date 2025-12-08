@@ -25,12 +25,10 @@ namespace {{Namespace}}
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
-			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
-				
-			return lst.SingleOrDefault();
+			return [AWO]connection.Query[AS]<{{EntityName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].SingleOrDefault();
 		}
 
-		public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
+		public [AO]List<{{EntityName}}>[AC] SelectAll()
 		{
 			const string sql = """
 				SELECT
@@ -40,7 +38,7 @@ namespace {{Namespace}}
 
 			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
 			
-			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC];
+			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
 		}
 
 		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
