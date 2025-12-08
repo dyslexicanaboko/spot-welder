@@ -29,8 +29,10 @@ namespace SpotWelder.Lib.Services.Generators
 			//{ GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
 			{ GenerationElections.MapCreateModelToEntity, "MapCreateModelToEntity.cs.template" },
 			{ GenerationElections.MapPatchModelToEntity, "MapPatchModelToEntity.cs.template" },
-			{ GenerationElections.MapEntityToCreatedModel, "MapEntityToCreatedModel.cs.template" }
-		};
+			{ GenerationElections.MapEntityToCreatedModel, "MapEntityToCreatedModel.cs.template" },
+			{ GenerationElections.MapRecordToEntity, "MapRecordToEntity.cs.template" },
+			{ GenerationElections.MapEntityToRecord, "MapEntityToRecord.cs.template" }
+  };
 
   public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
@@ -44,11 +46,13 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{Namespace}}", instructions.Namespace);
 			template.Replace("{{ClassName}}", instructions.ClassName);
 			template.Replace("{{EntityName}}", instructions.EntityName);
+			template.Replace("{{RecordName}}", instructions.RecordName);
 			template.Replace("{{ModelName}}", instructions.ModelName);
 			template.Replace("{{InterfaceName}}", instructions.InterfaceName);
 			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-			
-			return GetFormattedCSharpResult($"{instructions.ClassName}Mapper.cs", template);
+			template.Replace("{{ObjectInitializer}}", FormatObjectInitializerBody(instructions.Properties, "entity"));
+
+      return GetFormattedCSharpResult($"{instructions.ClassName}Mapper.cs", template);
 		}
 
 		private string BuildBodyTemplate(GenerationElections elections)

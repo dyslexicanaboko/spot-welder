@@ -8,10 +8,25 @@ namespace SpotWelder.Lib.Models
     public SqlEngine SqlEngine { get; set; }
 
     /// <summary>
+    /// The original, unmodified, query provided by the user.
+    /// Use to determine if the generators will produce readonly pipelines or full CRUD.
+    /// When a <see cref="Lib.SourceSqlType.Query"/> is provided then CUD cannot be reliably produced.
+    /// When a <see cref="Lib.SourceSqlType.TableName"/> is provided then all CRUD can be produced so long as there is a primary key.
+    /// </summary>
+    public SourceSqlType SourceSqlType { get; set; }
+
+    /// <summary>
     /// Table query for the class being generated. This may not be in use depending
     /// on the pathing being used.
     /// </summary>
     public TableQuery TableQuery { get; set; }
+
+    /// <summary>
+    /// The original query provided by the user. This is used when a solitary table isn't the target.
+    /// When the user provides a compound query, such as an inner join between two tables, this is
+    /// where that query is stored.
+    /// </summary>
+    public string SourceQuery { get; set; }
 
     /// <summary>
     /// Name of the class being generated. This is a property that is dedicated to being
@@ -30,6 +45,10 @@ namespace SpotWelder.Lib.Models
     /// <summary> Name of the subject with the `Entity` suffix.</summary>
     /// <example> Subject named: `Task`, the entity would be `TaskEntity`.</example>
     public string EntityName { get; set; }
+
+    /// <summary> Name of the subject with the `Record` suffix.</summary>
+    /// <example> Subject named: `Task`, the record would be `TaskRecord`.</example>
+    public string RecordName { get; set; }
 
     /// <summary> Name of the subject with the `Model` suffix.</summary>
     /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>

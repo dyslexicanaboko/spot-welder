@@ -96,11 +96,36 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
+    /// <summary>
+    /// Formatting properties for a class.
+    /// </summary>
+    /// <param name="properties">Input properties</param>
+    /// <returns>Formatted properties as one text block</returns>
     protected virtual string FormatProperties(IList<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,
-        p => $"        public {p.SystemTypeAlias} {p.Property} {{ get; set; }}",
+        p => $"public {p.SystemTypeAlias} {p.Property} {{ get; set; }}",
+        Environment.NewLine + Environment.NewLine);
+
+      return content;
+    }
+
+    /// <summary>
+    /// Formatting properties for a record class.
+    /// </summary>
+    /// <param name="properties">Input properties</param>
+    /// <returns>Formatted properties as one text block</returns>
+    protected virtual string FormatPropertiesForRecord(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p =>
+        {
+          var kwRequired = p.IsNullable ? " required" : string.Empty;
+
+          return $"public{kwRequired} {p.SystemTypeAlias} {p.Property} {{ get; init; }}";
+        },
         Environment.NewLine + Environment.NewLine);
 
       return content;
@@ -122,7 +147,19 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var content = GetTextBlock(
         properties,
-        p => $"			{p.Property} = {from}.{p.Property};",
+        p => $"{p.Property} = {from}.{p.Property};",
+        Environment.NewLine);
+
+      return content;
+    }
+
+    protected string FormatObjectInitializerBody(
+      IList<ClassMemberStrings> properties,
+      string from)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"{p.Property} = {from}.{p.Property},",
         Environment.NewLine);
 
       return content;

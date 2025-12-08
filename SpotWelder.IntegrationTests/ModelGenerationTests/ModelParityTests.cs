@@ -33,7 +33,7 @@ public class ModelParityTests
   [TestCase(GenerationElections.SerializeJson)]
   [TestCase(GenerationElections.RepoStatic)]
   [TestCase(GenerationElections.RepoDapper)]
-  [TestCase(GenerationElections.Service)]
+  [TestCase(GenerationElections.Manager)]
   [TestCase(GenerationElections.ApiController)]
   [TestCase(GenerationElections.GenerateMapper)]
   public void ModelParity_SqlServer_Asynchronous(GenerationElections election)
@@ -49,7 +49,7 @@ public class ModelParityTests
   [TestCase(GenerationElections.SerializeJson)]
   [TestCase(GenerationElections.RepoStatic)]
   [TestCase(GenerationElections.RepoDapper)]
-  [TestCase(GenerationElections.Service)]
+  [TestCase(GenerationElections.Manager)]
   [TestCase(GenerationElections.ApiController)]
   [TestCase(GenerationElections.GenerateMapper)]
   public void ModelParity_SqlServer_Synchronous(GenerationElections election)

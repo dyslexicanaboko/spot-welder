@@ -25,7 +25,6 @@
 	  <None Remove="Templates\ModelPatch.cs.template" />
 	  <None Remove="Templates\RepositoryDapper.cs.template" />
 	  <None Remove="Templates\RepositoryStatic.cs.template" />
-	  <None Remove="Templates\Service.cs.template" />
 	  <None Remove="Templates\ServiceSerializationCsv.cs.template" />
 	  <None Remove="Templates\ServiceSerializationJson.cs.template" />
 	</ItemGroup>
@@ -35,6 +34,12 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\ClassConstructor.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapEntityToRecord.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapRecordToEntity.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\Record.cs.template">
@@ -70,7 +75,7 @@
 		<Content Include="Templates\RepositoryDapperReadsOnly.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="Templates\Service.cs.template">
+		<Content Include="Templates\Manager.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\ModelPatch.cs.template">
@@ -126,6 +131,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Properties\" />
+	  <Folder Include="Templates\Immutables\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Humanizer.Core" Version="2.14.1" />

@@ -5,38 +5,39 @@ using System.Data;
 using System.Linq;
 {{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.DataAccess
 {
 	public class {{ClassName}}Repository
+		: BaseRepository, I{{ClassName}}Repository
 	{
 		public {{ClassName}}Repository(IAppConfiguration configuration)
 			: base(configuration)
 		{
 		}
 
-		public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		public [AO]{{RecordName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			const string sql = """
 				{{SourceQuery}}
 				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
 				""";
 
-			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
+			var connection = await GetConnection();
 			
-			var lst = [AWO]connection.Query[AS]<{{EntityName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
+			var lst = [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
 				
 			return lst.SingleOrDefault();
 		}
 
-		public [AO]List<{{EntityName}}>[AC] SelectAll()
+		public [AO]List<{{RecordName}}>[AC] SelectAll()
 		{
 			const string sql = """
 				{{SourceQuery}}
 				""";
 
-			[A]using var connection = new {{ConnectionObject}}(ConnectionString);
+			var connection = await GetConnection();
 			
-			return [AWO]connection.Query[AS]<{{EntityName}}>(sql)[AWC].ToList();
+			return [AWO]connection.Query[AS]<{{RecordName}}>(sql)[AWC].ToList();
 		}
 
 		private DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})

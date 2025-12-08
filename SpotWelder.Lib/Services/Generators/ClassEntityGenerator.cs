@@ -133,6 +133,10 @@ namespace SpotWelder.Lib.Services.Generators
               lst.Add(ConstructorTemplate("{{InterfaceName}}", "target", "{{ConstructorFromInterface}}"));
 
               break;
+            case GenerationElections.GenerateRecord:
+              lst.Add(ConstructorTemplate("{{RecordName}}", "record", "{{ConstructorFromRecord}}"));
+
+              break;
             case GenerationElections.GenerateModel:
               lst.Add(ConstructorTemplate("{{ModelName}}", "model", "{{ConstructorFromModel}}"));
 

@@ -77,7 +77,7 @@ public enum GenerationElections
   [Ignore]
   RepoEfFluentApi = 1 << 19,
 
-  Service = 1 << 20,
+  Manager = 1 << 20,
 
   ApiController = 1 << 21,
 
@@ -102,4 +102,15 @@ public enum GenerationElections
   /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
   [Child(GenerateMapper)]
   MapEntityToCreatedModel = 1 << 28,
+
+  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
+  [Child(GenerateMapper)]
+  MapRecordToEntity = 1 << 29,
+
+  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
+  [Child(GenerateMapper)]
+  MapEntityToRecord = 1 << 30,
+
+  /// <summary> Generate a record for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
+  GenerateRecord = 1 << 31
 }

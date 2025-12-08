@@ -3,6 +3,7 @@
 namespace {{Namespace}}.Business
 {
 	public class {{ClassName}}Manager
+		: BaseManager, I{{ClassName}}Manager
 	{
 		private readonly I{{ClassName}}Repository _repository;
 		private readonly I{{ClassName}}Mapper _mapper;
@@ -10,9 +11,11 @@ namespace {{Namespace}}.Business
 
 		public {{ClassName}}Manager(
 			I{{ClassName}}Repository repository,
+			I{{ClassName}}Mapper mapper,
 			I{{ClassName}}Validation validation)
 		{
 			_repository = repository;
+			_mapper = mapper;
 			_validation = validation;
 		}
 

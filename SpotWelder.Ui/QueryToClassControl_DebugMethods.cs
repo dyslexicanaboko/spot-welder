@@ -66,7 +66,7 @@ namespace SpotWelder.Ui
       //Layers
       CbMakeAsynchronous.IsChecked = true;
       CbApiController.IsChecked = true;
-      CbService.IsChecked = true;
+      CbManager.IsChecked = true;
 
       //Mappings
       CbMapInterfaceToModel.IsChecked = false;
@@ -118,7 +118,7 @@ namespace SpotWelder.Ui
       //Layers
       CbMakeAsynchronous.IsChecked = false;
       CbApiController.IsChecked = true;
-      CbService.IsChecked = true;
+      CbManager.IsChecked = true;
 
       //Mappings
       CbMapInterfaceToModel.IsChecked = true;
@@ -169,7 +169,7 @@ namespace SpotWelder.Ui
       //Layers
       CbMakeAsynchronous.IsChecked = false;
       CbApiController.IsChecked = true;
-      CbService.IsChecked = true;
+      CbManager.IsChecked = true;
 
       //Mappings
       CbMapInterfaceToModel.IsChecked = true;
@@ -235,7 +235,7 @@ namespace SpotWelder.Ui
       //Layers
       CbMakeAsynchronous.IsChecked = true;
       CbApiController.IsChecked = true;
-      CbService.IsChecked = true;
+      CbManager.IsChecked = true;
 
       //Mappings
       CbMapInterfaceToModel.IsChecked = false;

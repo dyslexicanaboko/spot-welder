@@ -69,13 +69,16 @@ namespace SpotWelder.Lib.Services
       var ins = new ClassInstructions
       {
         Namespace = p.Namespace, 
-        SubjectName = p.SubjectName, 
+        SubjectName = p.SubjectName,
         EntityName = p.EntityName,
+        RecordName = $"{p.SubjectName}Record",
         ModelName = p.ModelName,
         ApiRoute = p.SubjectName.ToLower().Pluralize(),
         IsAsynchronous = p.Elections.HasFlag(GenerationElections.MakeAsynchronous),
         InterfaceName = $"I{p.SubjectName}",
+        SourceSqlType = p.ServerConnection.SourceSqlType,
         TableQuery = p.ServerConnection.TableQuery,
+        SourceQuery = p.ServerConnection.SourceSqlText,
         Elections = p.Elections,
         SqlEngine = p.ServerConnection.SqlEngine
       };

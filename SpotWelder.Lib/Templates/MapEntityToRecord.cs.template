@@ -1,0 +1,5 @@
+﻿public {{RecordName}}? ToRecord({{EntityName}}? entity)
+	=> new()
+	{
+		{{ObjectInitializer}}
+	};

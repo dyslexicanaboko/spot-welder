@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.Mappers
 {
 	public class {{ClassName}}Mapper
 		: BaseMapper

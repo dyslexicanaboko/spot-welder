@@ -4,12 +4,12 @@ using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-  public class ServiceGenerator
+  public class ManagerGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.Service;
+    public override GenerationElections Election => GenerationElections.Manager;
 
-    protected override string TemplateName => "Service.cs.template";
+    protected override string TemplateName => "Manager.cs.template";
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {

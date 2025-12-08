@@ -1,0 +1,2 @@
+﻿public {{EntityName}}? ToEntity({{RecordName}}? record)
+  => record == null ? null : new {{EntityName}}(record);
