@@ -28,28 +28,5 @@ namespace {{Namespace}}.Business
 
 		public [AO]List<{{EntityName}}?>[AC] GetAll()
 		  =>_mapper.ToEntity([A]_repository.Using(x => x.SelectAll()));
-
-		public [AO]{{EntityName}}[AC] Add({{EntityName}}? entity)
-		{
-			Validations.IsValid(_validation, entity, nameof(entity));
-
-			entity.{{PrimaryKeyProperty}} = [A]_repository.Using(x => x.Insert(_mapper.ToRecord(entity)));
-			
-			return entity;
-		}
-
-		public [void] Edit({{EntityName}} entity)
-		{
-			Validations.IsNotNull(entity, nameof(entity));
-
-			[A]_repository.Using(x => x.Update(_mapper.ToRecord(entity)));
-		}
-
-		public [void] Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
-
-			[A]_repository.Using(x => x.Delete({{PrimaryKeyParameter}}));
-		}
 	}
 }

@@ -60,12 +60,19 @@ namespace SpotWelder.Ui
       _electionToCheckBoxMap = GetGenerationElectionsMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
 
+      Loaded += QueryToClassControl_Loaded;
+    }
+
+    private void QueryToClassControl_Loaded(object sender, RoutedEventArgs e)
+    {
       //These methods have been moved to a partial class
       DebugCompoundQuerySqlServerTest();
       //DebugWholeSqlServerTest();
       //DebugMinimalPostgresTest();
       //DebugWholeSqlServerTestForParity();
       //DebugWholePostgresTestForParity();
+
+      Loaded -= QueryToClassControl_Loaded;
     }
 
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
@@ -288,9 +295,22 @@ namespace SpotWelder.Ui
 
         if (obj == null) return;
 
+        if (!obj.HasElections)
+        {
+          UserControlExtensions.ShowWarningMessage("No elections were made. Make elections to continue.");
+
+          return;
+        }
+
         PbGenerator.IsIndeterminate = true;
 
         var results = await Task.Run(() => _svcQueryToClass.Generate(obj));
+
+        #if DEBUG
+        //You cannot do multiple assignments on the same row. Do one per row. `e.Elections |= election`
+        if (results == null) UserControlExtensions.ShowWarningMessage(
+          $"Results was null. Elections equals {(int)obj.Elections}. Did you modify the flags of the GenerationElections enum?");
+        #endif
 
         foreach (var g in results) _parentResultsWindow.AddTab(g.Filename, g.Contents);
 

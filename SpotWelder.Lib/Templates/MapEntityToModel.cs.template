@@ -1,2 +1,2 @@
 ﻿public {{ModelName}}? ToModel({{EntityName}}? entity)
-	=> entity == null ? null : new {{ModelName}}(entity);
+  => entity == null ? null : new {{ModelName}}(entity);

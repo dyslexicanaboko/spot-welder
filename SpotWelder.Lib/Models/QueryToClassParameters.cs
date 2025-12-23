@@ -60,6 +60,8 @@
     /// <summary> The user's elections. In other words, what should be generated. </summary>
     public GenerationElections Elections { get; set; } = GenerationElections.None;
 
-    public bool HasElections => Elections > 0;
+    /// <summary> Check if any elections were made. </summary>
+    //If this is zero, then no elections were made. Therefore, if it's not zero, positive or negative, it has elections.
+    public bool HasElections => Elections != GenerationElections.None;
   }
 }

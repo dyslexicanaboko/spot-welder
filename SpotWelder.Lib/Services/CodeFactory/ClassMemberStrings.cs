@@ -81,9 +81,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
 
       IsDbNullable = sc.IsDbNullable;
 
-      IsImplicitlyNullable =
-        sc.SystemType == typeof(string) ||
-        sc.SystemType.BaseType == typeof(Array);
+      IsImplicitlyNullable = sc.SystemType.BaseType == typeof(Array);
 
       //Remove unnecessary extra padding if it shows up
       var trimmedColumnName = sc.ColumnName.Trim();
@@ -180,11 +178,11 @@ namespace SpotWelder.Lib.Services.CodeFactory
     /// <remarks>This is a synonym for <see cref="IsDbNullable"/></remarks>
     public bool IsNullable => IsDbNullable;
 
-    //TODO: This is for older version of C#, now things such as `string?` are permitted
+    //TODO: Not sure if this is relevant anymore. Things like string? are the norm now.
     /// <summary>
     /// Some code types are nullable without having to qualify it with a question mark
     /// in front of the type. In other words don't add a question mark to types that
-    /// are already nullable such as strings.
+    /// are already nullable.
     /// </summary>
     public bool IsImplicitlyNullable { get; }
 

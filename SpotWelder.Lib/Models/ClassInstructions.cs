@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SpotWelder.Lib.Models
 {
+  //NOTE: When adding new properties, be sure to add them to the Clone method below too.
   public class ClassInstructions
   {
     public SqlEngine SqlEngine { get; set; }
@@ -105,6 +106,7 @@ namespace SpotWelder.Lib.Models
       var c = new ClassInstructions
       {
         SubjectName = SubjectName,
+        RecordName = RecordName,
         EntityName = EntityName,
         ModelName = ModelName,
         Namespace = Namespace,
@@ -114,11 +116,12 @@ namespace SpotWelder.Lib.Models
         Languages = Languages,
         Elections = Elections,
         SqlEngine = SqlEngine,
-        TableQuery = TableQuery.Clone()
+        SourceQuery = SourceQuery,
+        SourceSqlType = SourceSqlType,
+        TableQuery = TableQuery.Clone(),
+        ClassAttributes = new List<string>(ClassAttributes),
+        Namespaces = new List<string>(Namespaces)
       };
-
-      c.ClassAttributes = new List<string>(ClassAttributes);
-      c.Namespaces = new List<string>(Namespaces);
 
       foreach (var p in Properties) c.Properties.Add(p.Clone());
 

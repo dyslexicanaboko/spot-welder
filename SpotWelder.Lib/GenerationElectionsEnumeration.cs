@@ -7,8 +7,12 @@ using Ignore = SpotWelder.Lib.Services.Generators.Elections.GenerationElectionIg
 namespace SpotWelder.Lib;
 
 //Not every election is tied directly to a generator.
+/// <summary>
+/// Currently supporting 32 elections. May be expanded in the future.
+/// The value zero indicates that nothing was elected.
+/// </summary>
 [Flags]
-public enum GenerationElections
+public enum GenerationElections : long //Updated to long, to support 64 elections in the future
 {
   [Ignore]
   None = 0,
@@ -111,6 +115,7 @@ public enum GenerationElections
   [Child(GenerateMapper)]
   MapEntityToRecord = 1 << 30,
 
+  //
   /// <summary> Generate a record for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
   GenerateRecord = 1 << 31
 }

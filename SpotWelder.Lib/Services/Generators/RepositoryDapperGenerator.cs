@@ -21,11 +21,11 @@ namespace SpotWelder.Lib.Services.Generators
 
 		public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
+      var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+      
       var templateName = TemplateName;
 
-      var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
-
-			/* When a query is provided, it's very likely it cannot handle CUD creation.
+      /* When a query is provided, it's very likely it cannot handle CUD creation.
 			 * Therefore, this readonly template will be used. A key difference is that
 			 * the body of the queries must be overwritten by the provided query. This
 			 * will not work perfectly, but it's a start. */

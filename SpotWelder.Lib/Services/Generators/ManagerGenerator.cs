@@ -15,9 +15,14 @@ namespace SpotWelder.Lib.Services.Generators
     {
       instructions.ClassName = instructions.SubjectName;
 
-      var strTemplate = GetTemplate(TemplateName);
+      var templateName = TemplateName;
 
-      var template = new StringBuilder(strTemplate);
+      /* When a query is provided, it's very likely it cannot handle CUD creation.
+       * Therefore, this readonly template will be used. */
+      if (instructions.SourceSqlType == SourceSqlType.Query)
+        templateName = "ManagerReadsOnly.cs.template";
+
+      var template = new StringBuilder(GetTemplate(templateName));
 
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
@@ -35,7 +40,7 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
       
-      return GetFormattedCSharpResult($"{instructions.ClassName}Service.cs", template);
+      return GetFormattedCSharpResult($"{instructions.ClassName}Manager.cs", template);
     }
   }
 }

@@ -56,7 +56,7 @@
         <CheckBox x:Name="CbClassCreatedModel" Content="Created" HorizontalAlignment="Left" Margin="167,213,0,0" VerticalAlignment="Top" Height="15" Width="60"/>
         <Label Content="Layers" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="320,142,0,0" FontWeight="Bold" FontSize="14" Width="56" />
         <CheckBox x:Name="CbApiController" Content="API Controller" HorizontalAlignment="Left" Margin="346,189,0,0" VerticalAlignment="Top" Height="15" Width="100"/>
-        <CheckBox x:Name="CbManager" Content="Manager" HorizontalAlignment="Left" Margin="346,209,0,0" VerticalAlignment="Top" Height="15" Width="57"/>
+        <CheckBox x:Name="CbManager" Content="Manager" HorizontalAlignment="Left" Margin="346,209,0,0" VerticalAlignment="Top" Height="15" Width="75"/>
         <CheckBox x:Name="CbMakeAsynchronous" Content="Asynchronous" HorizontalAlignment="Left" Margin="346,169,0,0" VerticalAlignment="Top" Height="15" Width="100"/>
       </Grid>
     </GroupBox>
