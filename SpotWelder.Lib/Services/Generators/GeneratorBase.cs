@@ -14,9 +14,9 @@ namespace SpotWelder.Lib.Services.Generators
 {
   public abstract class GeneratorBase
   {
-    protected readonly Regex _reBlankLines = new(@"^\s+$[\r\n]*", RegexOptions.Multiline);
+    protected readonly Regex ReBlankLines = new(@"^\s+$[\r\n]*", RegexOptions.Multiline);
 
-    protected readonly Regex _reBlankSpace = new(@"^\s+$^[\r\n]", RegexOptions.Multiline);
+    protected readonly Regex ReBlankSpace = new(@"^\s+$^[\r\n]", RegexOptions.Multiline);
 
     private readonly string _templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
 
@@ -32,6 +32,8 @@ namespace SpotWelder.Lib.Services.Generators
     protected virtual string GetTemplate(string templateName)
     {
       var file = Path.Combine(_templatesPath, templateName);
+
+      if(!File.Exists(file)) throw new FileNotFoundException("Template file not found. Check the spelling and try again. Ex: ReadOnly vs. ReadsOnly", file);
 
       var str = File.ReadAllText(file);
 
@@ -60,14 +62,14 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected virtual string RemoveBlankLines(string content)
     {
-      var replacement = _reBlankLines.Replace(content, string.Empty);
+      var replacement = ReBlankLines.Replace(content, string.Empty);
 
       return replacement;
     }
 
     protected virtual string RemoveExcessBlankSpace(string content)
     {
-      var replacement = _reBlankSpace.Replace(content, string.Empty);
+      var replacement = ReBlankSpace.Replace(content, string.Empty);
 
       return replacement;
     }
@@ -215,7 +217,7 @@ namespace SpotWelder.Lib.Services.Generators
       return sb.ToString();
     }
 
-    protected string FormatCSharp(string code)
+    protected static string FormatCSharp(string code)
     {
       // Parse the code into a SyntaxTree
       var syntaxTree = CSharpSyntaxTree.ParseText(code);

@@ -28,9 +28,19 @@ namespace {{Namespace}}.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
 		public async Task<ActionResult<{{ModelName}}>> Get({{PrimaryKeyType}} id)
 		{
-			var entity = [AMO]_manager.Get{{SubjectName}}(id)[AMC];
+			var entity = [AMO]_manager.Get(id)[AMC];
 
 			if (entity == null) throw Lib.Exceptions.NotFound.{{SubjectName}}(id);
+
+			return Ok(_mapper.ToModel(entity));
+		}
+
+		// GET api/v1/{{ApiRoute}}
+		[HttpGet()]
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
+		public async Task<ActionResult<{{ModelName}}>> GetAll()
+		{
+			var entity = [AMO]_manager.GetAll(id)[AMC];
 
 			return Ok(_mapper.ToModel(entity));
 		}

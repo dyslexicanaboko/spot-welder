@@ -17,7 +17,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var templateName = TemplateName;
 
-      /* When a query is provided, it's very likely it cannot handle CUD creation.
+      /* When a query is provided, it's very likely it cannot handle CUD.
        * Therefore, this readonly template will be used. */
       if (instructions.SourceSqlType == SourceSqlType.Query)
         templateName = "ManagerReadsOnly.cs.template";

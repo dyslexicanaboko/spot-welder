@@ -30,6 +30,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
+		<Content Include="Templates\ApiControllerReadsOnly.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\ApiController.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

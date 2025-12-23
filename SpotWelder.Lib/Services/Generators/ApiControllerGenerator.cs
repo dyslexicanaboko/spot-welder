@@ -15,9 +15,14 @@ namespace SpotWelder.Lib.Services.Generators
     {
       instructions.ClassName = instructions.SubjectName;
 
-      var strTemplate = GetTemplate(TemplateName);
+      var templateName = TemplateName;
 
-      var template = new StringBuilder(strTemplate);
+      /* When a query is provided, it's very likely it cannot handle CUD.
+       * Therefore, this readonly template will be used. */
+      if (instructions.SourceSqlType == SourceSqlType.Query)
+        templateName = "ApiControllerReadsOnly.cs.template";
+
+      var template = new StringBuilder(GetTemplate(templateName));
 
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ApiRoute}}", instructions.ApiRoute);
