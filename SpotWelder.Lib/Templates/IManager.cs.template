@@ -1,0 +1,9 @@
+﻿{{Namespaces}}
+
+namespace {{Namespace}}.Business
+{
+	public interface I{{ClassName}}Manager
+	{
+		{{Contracts}}
+	}
+}

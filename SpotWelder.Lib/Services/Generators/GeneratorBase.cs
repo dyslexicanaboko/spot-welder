@@ -7,6 +7,7 @@ using SpotWelder.Lib.Services.Generators.Elections;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -17,6 +18,10 @@ namespace SpotWelder.Lib.Services.Generators
     protected readonly Regex ReBlankLines = new(@"^\s+$[\r\n]*", RegexOptions.Multiline);
 
     protected readonly Regex ReBlankSpace = new(@"^\s+$^[\r\n]", RegexOptions.Multiline);
+
+    protected readonly Regex ReContracts = new (@"^public .+ .+\(.*\)$");
+
+    protected readonly Regex RePublic = new("^public ");
 
     private readonly string _templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
 
@@ -233,6 +238,17 @@ namespace SpotWelder.Lib.Services.Generators
 
       // Output the formatted code
       return formattedCode;
+    }
+
+    protected string ExtractContracts(string contents)
+    {
+      var lines = contents
+        .Split([Environment.NewLine], StringSplitOptions.None)
+        .Select(x => x.Trim())
+        .Where(x => ReContracts.IsMatch(x))
+        .Select(x => RePublic.Replace(x,string.Empty) + ";");
+
+      return string.Join(Environment.NewLine + Environment.NewLine, lines);
     }
   }
 }

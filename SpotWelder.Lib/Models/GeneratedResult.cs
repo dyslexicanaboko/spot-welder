@@ -2,7 +2,7 @@
 
 namespace SpotWelder.Lib.Models
 {
-  public class GeneratedResult
+  public class GeneratedResult(GenerationElections election, string fileName, string contents)
   {
     public GeneratedResult(GenerationElections election, string fileName, StringBuilder contents)
       : this(election, fileName, contents.ToString())
@@ -10,17 +10,24 @@ namespace SpotWelder.Lib.Models
       
     }
 
-    public GeneratedResult(GenerationElections election, string fileName, string contents)
-    {
-      Election = election;
-      Filename = fileName;
-      Contents = contents;
-    }
+    /// <summary>
+    /// Currently used for unit and integration testing.
+    /// </summary>
+    public GenerationElections Election { get; set; } = election;
 
-    public GenerationElections Election { get; set; } = GenerationElections.None;
+    /// <summary>
+    /// Filename only, no path.
+    /// </summary>
+    public string Filename { get; set; } = fileName;
 
-    public string Filename { get; set; }
+    /// <summary>
+    /// File contents.
+    /// </summary>
+    public string Contents { get; set; } = contents;
 
-    public string Contents { get; set; } = string.Empty;
+    /// <summary>
+    /// Populated when the generated subject has an optional interface to use for dependency injection.
+    /// </summary>
+    public GeneratedResult? CorrespondingInterface { get; set; }
   }
 }

@@ -22,6 +22,25 @@ namespace SpotWelder.Lib.Services.Generators
       if (instructions.SourceSqlType == SourceSqlType.Query)
         templateName = "ManagerReadsOnly.cs.template";
 
+      var result = GenerateClass(
+        instructions,
+        templateName,
+        $"{instructions.ClassName}Manager.cs");
+
+      result.CorrespondingInterface = GenerateInterface(
+        instructions,
+        result.Contents,
+        "IManager.cs.template",
+        $"I{instructions.ClassName}Manager.cs");
+
+      return result;
+    }
+
+    private GeneratedResult GenerateClass(
+      ClassInstructions instructions,
+      string templateName,
+      string fileName)
+    {
       var template = new StringBuilder(GetTemplate(templateName));
 
       template.Replace("{{Namespace}}", instructions.Namespace);
@@ -39,8 +58,23 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
-      
-      return GetFormattedCSharpResult($"{instructions.ClassName}Manager.cs", template);
+
+      return GetFormattedCSharpResult(fileName, template);
+    }
+
+    private GeneratedResult GenerateInterface(
+      ClassInstructions instructions,
+      string classContents,
+      string templateName,
+      string fileName)
+    {
+      var template = new StringBuilder(GetTemplate(templateName));
+
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{Contracts}}", ExtractContracts(classContents));
+
+      return GetFormattedCSharpResult(fileName, template);
     }
   }
 }
