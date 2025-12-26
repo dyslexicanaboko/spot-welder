@@ -19,9 +19,11 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected readonly Regex ReBlankSpace = new(@"^\s+$^[\r\n]", RegexOptions.Multiline);
 
+    /// <summary>Matching the beginning of a contract. Excludes constructors on purpose.</summary>
     protected readonly Regex ReContracts = new (@"^public .+ .+\(.*\)$");
 
-    protected readonly Regex RePublic = new("^public ");
+    /// <summary>Matching the beginning of a contract to remove these keywords.</summary>
+    protected readonly Regex RePublic = new("^public (async )?");
 
     private readonly string _templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
 
@@ -240,6 +242,37 @@ namespace SpotWelder.Lib.Services.Generators
       return formattedCode;
     }
 
+    /// <summary>
+    /// Generates an interface file from a class by extracting its public method contracts.
+    /// </summary>
+    /// <param name="instructions">The same instructions used to by the main generation.</param>
+    /// <param name="classResult">The generated class result from which public method contracts will be extracted.</param>
+    /// <param name="templateName">The name of the template file to use for generating the interface.</param>
+    /// <returns>A <see cref="GeneratedResult"/> containing the formatted interface code.</returns>
+    protected virtual GeneratedResult GenerateInterface(
+      ClassInstructions instructions,
+      GeneratedResult classResult,
+      string templateName)
+    {
+      var template = new StringBuilder(GetTemplate(templateName));
+
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{Contracts}}", ExtractContracts(classResult.Contents));
+
+      return GetFormattedCSharpResult($"I{classResult.Filename}", template);
+    }
+
+    /// <summary>
+    /// Attempt one to generically and lazily extract contracts from the class contents.
+    /// I am doing my best to put low effort into this because I don't want to write
+    /// more code than I have to. The formula never changes. The bias used here is
+    /// to identify public methods, remove the `public` keyword, and finally add
+    /// a semicolon at the end.
+    /// </summary>
+    /// <param name="contents">Generated class contents where contracts will be extracted from using RegEx.</param>
+    /// <returns>Extracted contracts as a string block.</returns>
     protected string ExtractContracts(string contents)
     {
       var lines = contents

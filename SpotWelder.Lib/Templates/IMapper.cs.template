@@ -1,0 +1,9 @@
+﻿{{Namespaces}}
+
+namespace {{Namespace}}.Mappers
+{
+	public class I{{ClassName}}Mapper
+	{
+		{{Contracts}}
+	}
+}

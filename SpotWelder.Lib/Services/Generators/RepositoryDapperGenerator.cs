@@ -93,8 +93,15 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
 
       var rt = instructions.Elections.HasFlag(GenerationElections.RepoStatic) ? "Dapper" : string.Empty;
-			
-      return GetFormattedCSharpResult($"{instructions.ClassName}{rt}Repository.cs", template);
+
+      var result = GetFormattedCSharpResult($"{instructions.ClassName}{rt}Repository.cs", template);
+
+      result.CorrespondingInterface = GenerateInterface(
+        instructions,
+        result,
+        "IRepositoryDapper.cs.template");
+
+      return result;
 		}
 
 		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)

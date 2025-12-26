@@ -29,9 +29,8 @@ namespace SpotWelder.Lib.Services.Generators
 
       result.CorrespondingInterface = GenerateInterface(
         instructions,
-        result.Contents,
-        "IManager.cs.template",
-        $"I{instructions.ClassName}Manager.cs");
+        result,
+        "IManager.cs.template");
 
       return result;
     }
@@ -58,21 +57,6 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
-
-      return GetFormattedCSharpResult(fileName, template);
-    }
-
-    private GeneratedResult GenerateInterface(
-      ClassInstructions instructions,
-      string classContents,
-      string templateName,
-      string fileName)
-    {
-      var template = new StringBuilder(GetTemplate(templateName));
-
-      template.Replace("{{Namespace}}", instructions.Namespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
-      template.Replace("{{Contracts}}", ExtractContracts(classContents));
 
       return GetFormattedCSharpResult(fileName, template);
     }

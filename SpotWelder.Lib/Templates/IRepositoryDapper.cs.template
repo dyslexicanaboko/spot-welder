@@ -1,0 +1,10 @@
+using System.Collections.Generic;
+{{Namespaces}}
+
+namespace {{Namespace}}.DataAccess
+{
+	public class I{{ClassName}}Repository
+	{
+		{{Contracts}}
+	}
+}

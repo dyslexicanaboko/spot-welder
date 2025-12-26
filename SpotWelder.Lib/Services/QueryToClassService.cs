@@ -100,7 +100,7 @@ namespace SpotWelder.Lib.Services
     ///   The main internal method that orchestrates the code generation for the provided parameters
     /// </summary>
     /// <returns>The generated class code as a StringBuilder</returns>
-    private IList<GeneratedResult> GenerateClasses(ClassInstructions baseInstructions)
+    private List<GeneratedResult> GenerateClasses(ClassInstructions baseInstructions)
     {
       //Get all elections that can be generated directly, leave out the ones that cannot.
       //Look at the enumeration directly for more information.
@@ -118,8 +118,13 @@ namespace SpotWelder.Lib.Services
         if(result == null) continue;
 
         lst.Add(result);
+
+        //Corresponding interfaces exist for some elections only
+        if (result.CorrespondingInterface == null) continue;
+
+        lst.Add(result.CorrespondingInterface);
       }
-      
+
       lst.TrimExcess();
 
       return lst;

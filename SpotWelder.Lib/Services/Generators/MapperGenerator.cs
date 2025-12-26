@@ -5,95 +5,99 @@ using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-	public class MapperGenerator
-		: GeneratorBase
-	{
-		/// <summary>
-		/// In this particular case the mapper accounts for these elections in one shot:
-		///   GenerationElections.CloneModelToEntity
-		///   GenerationElections.CloneEntityToModel
-		///   GenerationElections.CloneInterfaceToEntity
-		///   GenerationElections.CloneInterfaceToModel
-		/// </summary>
-		public override GenerationElections Election => GenerationElections.GenerateMapper;
-		
-		protected override string TemplateName => "Mapper.cs.template";
+  public class MapperGenerator
+    : GeneratorBase
+  {
+    private static readonly Dictionary<GenerationElections, string> ChildTemplates = new()
+    {
+      { GenerationElections.MapEntityToModel, "MapEntityToModel.cs.template" },
+      { GenerationElections.MapModelToEntity, "MapModelToEntity.cs.template" },
 
-		private static readonly Dictionary<GenerationElections, string> ChildTemplates = new()
-		{
-			{ GenerationElections.MapEntityToModel, "MapEntityToModel.cs.template" },
-			{ GenerationElections.MapModelToEntity, "MapModelToEntity.cs.template" },
-			//FYI: Commenting out these two mapping options for now as they are just confusing things.
-			//I might eliminate these entirely later. They have not been useful in practice.
+      //FYI: Commenting out these two mapping options for now as they are just confusing things.
+      //I might eliminate these entirely later. They have not been useful in practice.
       //{ GenerationElections.MapInterfaceToEntity, "MapInterfaceToEntity.cs.template" },
-			//{ GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
-			{ GenerationElections.MapCreateModelToEntity, "MapCreateModelToEntity.cs.template" },
-			{ GenerationElections.MapPatchModelToEntity, "MapPatchModelToEntity.cs.template" },
-			{ GenerationElections.MapEntityToCreatedModel, "MapEntityToCreatedModel.cs.template" },
-			{ GenerationElections.MapRecordToEntity, "MapRecordToEntity.cs.template" },
-			{ GenerationElections.MapEntityToRecord, "MapEntityToRecord.cs.template" }
-  };
+      //{ GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
+      { GenerationElections.MapCreateModelToEntity, "MapCreateModelToEntity.cs.template" },
+      { GenerationElections.MapPatchModelToEntity, "MapPatchModelToEntity.cs.template" },
+      { GenerationElections.MapEntityToCreatedModel, "MapEntityToCreatedModel.cs.template" },
+      { GenerationElections.MapRecordToEntity, "MapRecordToEntity.cs.template" },
+      { GenerationElections.MapEntityToRecord, "MapEntityToRecord.cs.template" }
+    };
 
-  public override GeneratedResult FillTemplate(ClassInstructions instructions)
-		{
-			instructions.ClassName = instructions.SubjectName;
+    /// <summary>
+    ///   In this particular case the mapper accounts for these elections in one shot:
+    ///   GenerationElections.CloneModelToEntity
+    ///   GenerationElections.CloneEntityToModel
+    ///   GenerationElections.CloneInterfaceToEntity
+    ///   GenerationElections.CloneInterfaceToModel
+    /// </summary>
+    public override GenerationElections Election => GenerationElections.GenerateMapper;
 
-			var strTemplate = GetTemplate(TemplateName);
+    protected override string TemplateName => "Mapper.cs.template";
 
-			var template = new StringBuilder(strTemplate);
-			
-			template.Replace("{{Body}}", BuildBodyTemplate(instructions.Elections));
-			template.Replace("{{Namespace}}", instructions.Namespace);
-			template.Replace("{{ClassName}}", instructions.ClassName);
-			template.Replace("{{EntityName}}", instructions.EntityName);
-			template.Replace("{{RecordName}}", instructions.RecordName);
-			template.Replace("{{ModelName}}", instructions.ModelName);
-			template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-			template.Replace("{{ObjectInitializer}}", FormatObjectInitializerBody(instructions.Properties, "entity"));
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
+    {
+      instructions.ClassName = instructions.SubjectName;
 
-      return GetFormattedCSharpResult($"{instructions.ClassName}Mapper.cs", template);
-		}
+      var template = new StringBuilder(GetTemplate(TemplateName));
 
-		private string BuildBodyTemplate(GenerationElections elections)
-		{
-			var childElections = GetChildElections(elections, Election);
+      template.Replace("{{Body}}", BuildBodyTemplate(instructions.Elections));
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.ClassName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
+      template.Replace("{{RecordName}}", instructions.RecordName);
+      template.Replace("{{ModelName}}", instructions.ModelName);
+      template.Replace("{{InterfaceName}}", instructions.InterfaceName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+      template.Replace("{{ObjectInitializer}}", FormatObjectInitializerBody(instructions.Properties, "entity"));
 
-			var sb = new StringBuilder();
+      var result = GetFormattedCSharpResult($"{instructions.ClassName}Mapper.cs", template);
 
-			foreach (var child in childElections)
-			{
-				sb
-					.AppendLine(GetTemplate(ChildTemplates[child]))
-					.AppendLine();
-			}
+      result.CorrespondingInterface = GenerateInterface(
+        instructions,
+        result,
+        "IMapper.cs.template");
 
-			return sb.ToString();
-		}
+      return result;
+    }
 
-		//FYI: 07/20/2024 This is a literal clone method, which I don't want to get rid of yet, but I won't be using right now.
-		//There is a place for this, I am just not sure where yet. This is more of a DTO Maker thing,
-		//but I could see needing this for scaffolding potentially too.
-		private string FormatCloneBody(
-			GenerationElections flag,
-			ClassInstructions instructions,
-			string from,
-			string to)
-		{
-			if (!instructions.Elections.HasFlag(flag))
-			{
-				var exception = GetNotImplementedException(
-					$"Cloning option \"{flag}\" was excluded from generation. Delete this method.");
+    private string BuildBodyTemplate(GenerationElections elections)
+    {
+      var childElections = GetChildElections(elections, Election);
 
-				return exception;
-			}
+      var sb = new StringBuilder();
 
-			var content = GetTextBlock(
-				instructions.Properties,
-				p => $"			{to}.{p.Property} = {from}.{p.Property};",
-				Environment.NewLine);
+      foreach (var child in childElections)
+        sb
+          .AppendLine(GetTemplate(ChildTemplates[child]))
+          .AppendLine();
 
-			return content;
-		}
-	}
+      return sb.ToString();
+    }
+
+    //FYI: 07/20/2024 This is a literal clone method, which I don't want to get rid of yet, but I won't be using right now.
+    //There is a place for this, I am just not sure where yet. This is more of a DTO Maker thing,
+    //but I could see needing this for scaffolding potentially too.
+    private string FormatCloneBody(
+      GenerationElections flag,
+      ClassInstructions instructions,
+      string from,
+      string to)
+    {
+      if (!instructions.Elections.HasFlag(flag))
+      {
+        var exception = GetNotImplementedException(
+          $"Cloning option \"{flag}\" was excluded from generation. Delete this method.");
+
+        return exception;
+      }
+
+      var content = GetTextBlock(
+        instructions.Properties,
+        p => $"			{to}.{p.Property} = {from}.{p.Property};",
+        Environment.NewLine);
+
+      return content;
+    }
+  }
 }
