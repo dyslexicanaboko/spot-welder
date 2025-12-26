@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}.Mappers
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public class I{{ClassName}}Mapper
 	{

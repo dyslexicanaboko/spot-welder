@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}.Models.Client
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public class {{ClassName}}V1CreateModel{{Interface}}
 	{

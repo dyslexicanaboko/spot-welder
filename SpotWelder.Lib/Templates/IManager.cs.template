@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}.Business
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public interface I{{ClassName}}Manager
 	{

@@ -10,7 +10,8 @@ using System.Text;
 namespace SpotWelder.Lib.Services.Generators
 {
   /// <summary>
-  /// This is a one off generator that's not part of the normal generation process.
+  /// This is a one-off generator that's not part of the normal generation process.
+  /// Used for generating simple entities for the purposes of mock data generation.
   /// </summary>
   public class ClassEntitySimpleGenerator
     : GeneratorBase

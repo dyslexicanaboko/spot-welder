@@ -74,7 +74,7 @@ namespace SpotWelder.Ui
     {
       var win = new ParentResultsWindow();
 
-      win.AddTab("Test", LoremIpsum);
+      win.AddTab("Test", LoremIpsum, string.Empty);
 
       win.Show();
     }

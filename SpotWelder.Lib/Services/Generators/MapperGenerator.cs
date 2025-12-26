@@ -35,6 +35,8 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "Mapper.cs.template";
 
+    protected override string ContainingNamespace => "Mappers";
+
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
@@ -42,6 +44,7 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(GetTemplate(TemplateName));
 
       template.Replace("{{Body}}", BuildBodyTemplate(instructions.Elections));
+      SetContainingNamespace(template);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);

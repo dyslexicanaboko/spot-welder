@@ -11,6 +11,8 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "Manager.cs.template";
 
+    protected override string ContainingNamespace => "Business";
+
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
@@ -22,26 +24,9 @@ namespace SpotWelder.Lib.Services.Generators
       if (instructions.SourceSqlType == SourceSqlType.Query)
         templateName = "ManagerReadsOnly.cs.template";
 
-      var result = GenerateClass(
-        instructions,
-        templateName,
-        $"{instructions.ClassName}Manager.cs");
-
-      result.CorrespondingInterface = GenerateInterface(
-        instructions,
-        result,
-        "IManager.cs.template");
-
-      return result;
-    }
-
-    private GeneratedResult GenerateClass(
-      ClassInstructions instructions,
-      string templateName,
-      string fileName)
-    {
       var template = new StringBuilder(GetTemplate(templateName));
 
+      SetContainingNamespace(template);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
@@ -58,7 +43,14 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
 
-      return GetFormattedCSharpResult(fileName, template);
+      var result = GetFormattedCSharpResult($"{instructions.ClassName}Manager.cs", template);
+
+      result.CorrespondingInterface = GenerateInterface(
+        instructions,
+        result,
+        "IManager.cs.template");
+
+      return result;
     }
   }
 }

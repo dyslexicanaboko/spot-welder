@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}.Models
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public class {{ClassName}}{{Interface}}
 	{

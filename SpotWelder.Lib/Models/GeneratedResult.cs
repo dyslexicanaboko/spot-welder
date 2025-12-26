@@ -2,10 +2,10 @@
 
 namespace SpotWelder.Lib.Models
 {
-  public class GeneratedResult(GenerationElections election, string fileName, string contents)
+  public class GeneratedResult(GenerationElections election, string fileName, string contents, string containingNamespace = "")
   {
-    public GeneratedResult(GenerationElections election, string fileName, StringBuilder contents)
-      : this(election, fileName, contents.ToString())
+    public GeneratedResult(GenerationElections election, string fileName, StringBuilder contents, string containingNamespace = "")
+      : this(election, fileName, contents.ToString(), containingNamespace)
     {
       
     }
@@ -15,6 +15,9 @@ namespace SpotWelder.Lib.Models
     /// </summary>
     public GenerationElections Election { get; set; } = election;
 
+    /// <summary>Optional namespace for this file. Can be used as the name for its containing folder.</summary>
+    public string ContainingNamespace { get; set; } = containingNamespace;
+    
     /// <summary>
     /// Filename only, no path.
     /// </summary>

@@ -2,6 +2,7 @@
 using SpotWelder.Ui.ViewModels;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -10,7 +11,6 @@ using System.Windows.Input;
 using Clipboard = System.Windows.Clipboard;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace SpotWelder.Ui
@@ -23,7 +23,7 @@ namespace SpotWelder.Ui
   {
     private readonly ParentResultsWindowViewModel _viewModel = new ();
 
-    public static readonly RoutedUICommand SaveAll = new RoutedUICommand(
+    public static readonly RoutedUICommand SaveAll = new (
       "Save All", // Display text
       "SaveAll",  // Command name
       typeof(ParentResultsWindow),
@@ -32,7 +32,7 @@ namespace SpotWelder.Ui
         new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift) // Ctrl+Shift+S
       });
 
-    private static bool _applicationIsShuttingDown = false;
+    private static bool _applicationIsShuttingDown;
 
     private ResultTabViewModel SelectedTab => (ResultTabViewModel)TcResults.SelectedItem;
 
@@ -43,12 +43,11 @@ namespace SpotWelder.Ui
       DataContext = _viewModel;
     }
 
-    public void AddTab(string title, string contents)
-    {
-      _viewModel.Tabs.Add(new ResultTabViewModel(
+    public void AddTab(string title, string contents, string containingFolder)
+      => _viewModel.Tabs.Add(new ResultTabViewModel(
         title, 
-        contents));
-    }
+        contents,
+        containingFolder));
     
     //When the user tries to close the window, we want to hide it instead.
     //However, when the application is exiting (shutting down), it needs to close.
@@ -118,7 +117,7 @@ namespace SpotWelder.Ui
     }
 
     private void BtnCopy_Click(object sender, RoutedEventArgs e)
-      => Clipboard.SetText(SelectedTab.Content);
+      => Clipboard.SetText(SelectedTab.Contents);
 
     private void SaveOneFile()
     {
@@ -133,7 +132,7 @@ namespace SpotWelder.Ui
 
       if (result != System.Windows.Forms.DialogResult.OK) return;
 
-      File.WriteAllText(dlg.FileName, SelectedTab.Content);
+      File.WriteAllText(dlg.FileName, SelectedTab.Contents);
     }
 
     private void BtnSave_OnClick(object sender, RoutedEventArgs e)
@@ -152,9 +151,17 @@ namespace SpotWelder.Ui
 
       foreach (var tab in _viewModel.Tabs)
       {
-        var filePath = Path.Combine(dlg.SelectedPath, tab.Header);
+        var paths = tab.ContainingFolder.Split('.').ToList();
 
-        File.WriteAllText(filePath, tab.Content);
+        paths.Insert(0, dlg.SelectedPath);
+        paths.Add(tab.Header);
+
+        var fullFilePath = Path.Combine(paths.ToArray());
+
+        //Ensure the lineage of directories exists. They will be created if they don't exist only.
+        Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
+
+        File.WriteAllText(fullFilePath, tab.Contents);
       }
 
       HlSaveLocation.SetHyperLink(dlg.SelectedPath, dlg.SelectedPath);

@@ -1,5 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
@@ -31,10 +31,18 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected abstract string TemplateName { get; }
 
+    /// <summary>
+    /// The namespace where the generated content will reside.
+    /// Can be used to name folders too.
+    /// </summary>
+    protected virtual string ContainingNamespace { get; } = string.Empty;
+
     public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
 
-    protected virtual GeneratedResult GetFormattedCSharpResult(string fileNameWithExtension, StringBuilder contents)
-      => new(Election, fileNameWithExtension, FormatCSharp(contents.ToString()));
+    protected virtual GeneratedResult GetFormattedCSharpResult(
+      string fileNameWithExtension, 
+      StringBuilder contents)
+      => new(Election, fileNameWithExtension, FormatCSharp(contents.ToString()), ContainingNamespace);
 
     protected virtual string GetTemplate(string templateName)
     {
@@ -242,6 +250,9 @@ namespace SpotWelder.Lib.Services.Generators
       return formattedCode;
     }
 
+    protected StringBuilder SetContainingNamespace(StringBuilder sb)
+      => sb.Replace("{{ContainingNamespace}}", ContainingNamespace);
+
     /// <summary>
     /// Generates an interface file from a class by extracting its public method contracts.
     /// </summary>
@@ -256,11 +267,13 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var template = new StringBuilder(GetTemplate(templateName));
 
+      SetContainingNamespace(template);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{Contracts}}", ExtractContracts(classResult.Contents));
 
+      //Reminder: The containing namespace is set at the generator level.
       return GetFormattedCSharpResult($"I{classResult.Filename}", template);
     }
 

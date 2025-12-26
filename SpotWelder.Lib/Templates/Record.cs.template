@@ -1,4 +1,4 @@
-﻿namespace {{Namespace}}.Records
+﻿namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public record {{ClassName}}
 	{

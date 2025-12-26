@@ -14,6 +14,9 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "Entity.cs.template";
 
+    /// <inheritdoc />
+    protected override string ContainingNamespace => "Entities";
+
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.EntityName;
@@ -28,6 +31,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{InterfaceMethods}}", FillInterfaceMethods(instructions.Elections));
 
       //Full template replacements
+      SetContainingNamespace(template);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);

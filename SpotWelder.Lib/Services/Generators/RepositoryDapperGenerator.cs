@@ -16,7 +16,9 @@ namespace SpotWelder.Lib.Services.Generators
 
 		protected override string TemplateName => "RepositoryDapper.cs.template";
 
-		//TODO: This cannot stay here, this is a temporary until I know where to take this
+    protected override string ContainingNamespace => "DataAccess";
+
+    //TODO: This cannot stay here, this is a temporary until I know where to take this
     private readonly string[] _excludedColumns = [ "UserId", "CreatedOn", "UpdatedOn", "User_Id", "Created_On", "Updated_On"];
 
 		public override GeneratedResult FillTemplate(ClassInstructions instructions)
@@ -38,6 +40,7 @@ namespace SpotWelder.Lib.Services.Generators
 
 			var template = new StringBuilder(strTemplate);
 
+      SetContainingNamespace(template);
 			template.Replace("{{Namespace}}", instructions.Namespace);
 			template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
 			template.Replace("{{RecordName}}", instructions.RecordName);
@@ -94,7 +97,9 @@ namespace SpotWelder.Lib.Services.Generators
 
       var rt = instructions.Elections.HasFlag(GenerationElections.RepoStatic) ? "Dapper" : string.Empty;
 
-      var result = GetFormattedCSharpResult($"{instructions.ClassName}{rt}Repository.cs", template);
+      var result = GetFormattedCSharpResult(
+        $"{instructions.ClassName}{rt}Repository.cs", 
+        template);
 
       result.CorrespondingInterface = GenerateInterface(
         instructions,

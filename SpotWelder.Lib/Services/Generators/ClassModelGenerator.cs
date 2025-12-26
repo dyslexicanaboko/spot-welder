@@ -12,6 +12,9 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "Model.cs.template";
 
+    /// <inheritdoc />
+    protected override string ContainingNamespace => "Models";
+
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.ModelName;
@@ -24,6 +27,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{Constructors}}", FillConstructors(instructions.Elections));
 
       //Full template replacements
+      SetContainingNamespace(template);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);

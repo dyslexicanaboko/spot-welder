@@ -1,6 +1,6 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}.Business
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public class {{ClassName}}Manager
 		: BaseManager, I{{ClassName}}Manager

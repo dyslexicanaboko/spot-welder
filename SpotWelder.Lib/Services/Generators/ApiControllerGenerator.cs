@@ -11,6 +11,9 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "ApiController.cs.template";
 
+    /// <inheritdoc />
+    protected override string ContainingNamespace => "Controllers";
+
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
@@ -24,6 +27,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(GetTemplate(templateName));
 
+      SetContainingNamespace(template);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ApiRoute}}", instructions.ApiRoute);
       template.Replace("{{SubjectName}}", instructions.SubjectName);

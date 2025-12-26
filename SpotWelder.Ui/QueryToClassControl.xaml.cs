@@ -312,7 +312,7 @@ namespace SpotWelder.Ui
           $"Results was null. Elections equals {(int)obj.Elections}. Did you modify the flags of the GenerationElections enum?");
         #endif
 
-        foreach (var g in results) _parentResultsWindow.AddTab(g.Filename, g.Contents);
+        foreach (var g in results) _parentResultsWindow.AddTab(g.Filename, g.Contents, g.ContainingNamespace);
 
         _parentResultsWindow.Show();
       }

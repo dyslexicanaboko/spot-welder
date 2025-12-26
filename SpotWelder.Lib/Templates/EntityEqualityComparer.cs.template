@@ -1,6 +1,6 @@
 {{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public class {{ClassName}}EqualityComparer
 		: EqualityComparer<{{EntityName}}>
