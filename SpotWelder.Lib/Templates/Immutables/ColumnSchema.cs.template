@@ -1,0 +1,21 @@
+﻿using System.Data;
+
+namespace {{Namespace}}.DataAccess.Utility;
+
+public class ColumnSchema(
+  string property,
+  string name,
+  DbType dbType,
+  int? size = null,
+  byte? scale = null)
+{
+  public string Property { get; set; } = property;
+
+  public string Name { get; set; } = name;
+
+  public DbType DbType { get; set; } = dbType;
+
+  public int? Size { get; set; } = size;
+
+  public byte? Scale { get; set; } = scale;
+}

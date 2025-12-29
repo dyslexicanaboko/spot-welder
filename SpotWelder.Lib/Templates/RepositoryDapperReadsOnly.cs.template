@@ -22,7 +22,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
 				""";
 
-			var connection = await GetConnection();
+			[A]using var connection = await GetConnection();
 			
 			var lst = [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
 				
@@ -35,12 +35,12 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 				{{SourceQuery}}
 				""";
 
-			var connection = await GetConnection();
+			[A]using var connection = await GetConnection();
 			
 			return [AWO]connection.Query[AS]<{{RecordName}}>(sql)[AWC].ToList();
 		}
 
-		private DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		private static DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			var p = new DynamicParameters();
 			p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});

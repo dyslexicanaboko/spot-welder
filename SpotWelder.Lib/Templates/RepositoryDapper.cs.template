@@ -24,7 +24,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
 				""";
 
-			var connection = await GetConnection();
+			[A]using var connection = await GetConnection();
 			
 			return [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].SingleOrDefault();
 		}
@@ -51,7 +51,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 				{{InsertValuesList}})	{{ScopeIdentity}}
 				""";
 
-			var connection = await GetConnection();
+			[A]using var connection = await GetConnection();
 
 			var p = new DynamicParameters();
 	{{DynamicParametersInsert}}
@@ -67,7 +67,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
 				""";
 
-			var connection = await GetConnection();
+			[A]using var connection = await GetConnection();
 
 			var p = new DynamicParameters();
 	{{DynamicParametersUpdate}}
@@ -82,12 +82,12 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
 				""";
 
-			var connection = await GetConnection();
+			[A]using var connection = await GetConnection();
 
 			[A]connection.Execute[AS](sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
 		}
 
-		private DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+		private static DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			var p = new DynamicParameters();
 			p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});

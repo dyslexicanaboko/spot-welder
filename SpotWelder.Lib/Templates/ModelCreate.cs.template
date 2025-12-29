@@ -4,16 +4,6 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 {
 	public class {{ClassName}}V1CreateModel{{Interface}}
 	{
-		public {{ClassName}}V1CreateModel()
-		{
-			
-		}
-
-		public {{ClassName}}V1CreateModel({{InterfaceName}} target)
-		{
-			{{ConstructorFromInterface}}
-		}
-
 {{Properties}}
 	}
 }

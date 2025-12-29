@@ -49,7 +49,7 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var arr = new[]
       {
-        GenerationElections.GenerateInterface,
+        //GenerationElections.GenerateInterface, //TODO: Not supporting this anymore
         GenerationElections.GenerateEntity,
       };
 
@@ -61,6 +61,7 @@ namespace SpotWelder.Lib.Services.Generators
         {
           switch (e)
           {
+            //TODO: Not supporting this anymore
             case GenerationElections.GenerateInterface:
               lst.Add(ConstructorTemplate("{{InterfaceName}}", "target", "{{ConstructorFromInterface}}"));
 
