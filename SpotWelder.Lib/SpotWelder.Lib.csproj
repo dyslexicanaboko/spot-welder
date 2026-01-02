@@ -48,6 +48,9 @@
 		<Content Include="Templates\Immutables\BaseMapper.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Templates\Immutables\DateTimeManager.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\Immutables\IRepository.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
@@ -57,7 +60,7 @@
 		<Content Include="Templates\Immutables\UpdateInstruction.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="Templates\Immutables\BaseService.cs.template">
+		<Content Include="Templates\Immutables\BaseManager.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\ManagerReadsOnly.cs.template">

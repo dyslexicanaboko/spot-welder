@@ -1,0 +1,16 @@
+﻿namespace {{Namespace}}.Managers;
+
+public interface IDateTimeManager
+{
+  DateTime Now { get; }
+
+  DateTime UtcNow { get; }
+}
+
+public class DateTimeManager
+  : IDateTimeManager
+{
+  public DateTime Now => DateTime.Now;
+
+  public DateTime UtcNow => DateTime.UtcNow;
+}

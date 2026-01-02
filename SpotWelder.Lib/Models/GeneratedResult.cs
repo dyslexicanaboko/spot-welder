@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace SpotWelder.Lib.Models
 {
@@ -32,5 +33,11 @@ namespace SpotWelder.Lib.Models
     /// Populated when the generated subject has an optional interface to use for dependency injection.
     /// </summary>
     public GeneratedResult? CorrespondingInterface { get; set; }
+
+    //TODO: This is gross, I don't know that I will keep this the way it is.
+    /// <summary>
+    /// Populated when there is a heap of results to return.
+    /// </summary>
+    public List<GeneratedResult>? Heap { get; set; }
   }
 }

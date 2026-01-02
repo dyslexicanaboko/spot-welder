@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace {{Namespace}}.Managers;
 
-public abstract class BaseService
+public abstract class BaseManager
 {
   protected static List<UpdateInstruction> GetDifferences<TEntity, TPatchModel>(
     TEntity db, 

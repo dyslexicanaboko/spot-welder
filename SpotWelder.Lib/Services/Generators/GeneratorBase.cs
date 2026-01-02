@@ -25,7 +25,7 @@ namespace SpotWelder.Lib.Services.Generators
     /// <summary>Matching the beginning of a contract to remove these keywords.</summary>
     protected readonly Regex RePublic = new("^public (async )?");
 
-    private readonly string _templatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
+    protected readonly string TemplatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
 
     public abstract GenerationElections Election { get; }
 
@@ -35,7 +35,7 @@ namespace SpotWelder.Lib.Services.Generators
     /// The namespace where the generated content will reside.
     /// Can be used to name folders too.
     /// </summary>
-    protected virtual string ContainingNamespace { get; } = string.Empty;
+    protected virtual string ContainingNamespace => string.Empty;
 
     public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
 
@@ -46,7 +46,7 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected virtual string GetTemplate(string templateName)
     {
-      var file = Path.Combine(_templatesPath, templateName);
+      var file = Path.Combine(TemplatesPath, templateName);
 
       if(!File.Exists(file)) throw new FileNotFoundException("Template file not found. Check the spelling and try again. Ex: ReadOnly vs. ReadsOnly", file);
 
@@ -271,14 +271,14 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
-      template.Replace("{{Contracts}}", ExtractContracts(classResult.Contents));
+      template.Replace("{{Contracts}}", ExtractCSharpClassContracts(classResult.Contents));
 
       //Reminder: The containing namespace is set at the generator level.
       return GetFormattedCSharpResult($"I{classResult.Filename}", template);
     }
 
     /// <summary>
-    /// Attempt one to generically and lazily extract contracts from the class contents.
+    /// Attempt one to generically and lazily extract contracts from provided C# class contents.
     /// I am doing my best to put low effort into this because I don't want to write
     /// more code than I have to. The formula never changes. The bias used here is
     /// to identify public methods, remove the `public` keyword, and finally add
@@ -286,7 +286,7 @@ namespace SpotWelder.Lib.Services.Generators
     /// </summary>
     /// <param name="contents">Generated class contents where contracts will be extracted from using RegEx.</param>
     /// <returns>Extracted contracts as a string block.</returns>
-    protected string ExtractContracts(string contents)
+    protected string ExtractCSharpClassContracts(string contents)
     {
       var lines = contents
         .Split([Environment.NewLine], StringSplitOptions.None)
