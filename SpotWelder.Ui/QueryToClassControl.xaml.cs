@@ -306,13 +306,23 @@ namespace SpotWelder.Ui
 
         var results = await Task.Run(() => _svcQueryToClass.Generate(obj));
 
-        #if DEBUG
-        //You cannot do multiple assignments on the same row. Do one per row. `e.Elections |= election`
-        if (results == null) UserControlExtensions.ShowWarningMessage(
-          $"Results was null. Elections equals {(int)obj.Elections}. Did you modify the flags of the GenerationElections enum?");
-        #endif
+        if (results == null)
+        {
+          #if DEBUG
+          //You cannot do multiple assignments on the same row. Do one per row. `e.Elections |= election`
+          UserControlExtensions.ShowWarningMessage(
+            $"Results was null. Elections equals {(int)obj.Elections}. Did you modify the flags of the GenerationElections enum?");
+          #endif
 
-        foreach (var g in results) _parentResultsWindow.AddTab(g.Filename, g.Contents, g.ContainingNamespace);
+          UserControlExtensions.ShowWarningMessage(
+            "No results were returned. This is not the expected behavior (bug?).");
+
+          return;
+        }
+        
+        //NOTE: The results are aggregated into a single file list in the generator
+        foreach (var r in results) 
+          _parentResultsWindow.AddTab(r.Filename, r.Contents, r.ContainingNamespace);
 
         _parentResultsWindow.Show();
       }
@@ -362,7 +372,6 @@ namespace SpotWelder.Ui
       CbClassEntityEqualityComparer.IsEnabled = isChecked;
       CbClassEntityIEquatable.IsEnabled = isChecked;
       CbClassEntityIComparable.IsEnabled = isChecked;
-      CbMapInterfaceToEntity.IsEnabled = isChecked;
 
       CbClassModelAndEntity_ToggleJointDependents(isChecked, CbClassModel.IsChecked());
     }
@@ -372,8 +381,6 @@ namespace SpotWelder.Ui
       if (CbMapEntityToModel == null) return; //On Startup controls are still null
 
       var isChecked = CbClassModel.IsChecked();
-
-      CbMapInterfaceToModel.IsEnabled = isChecked;
 
       CbClassModelAndEntity_ToggleJointDependents(CbClassEntity.IsChecked(), isChecked);
     }

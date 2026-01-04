@@ -107,8 +107,6 @@ namespace SpotWelder.Ui
         { GenerationElections.GenerateModel, CbClassModel },
         { GenerationElections.MapEntityToModel, CbMapEntityToModel },
         { GenerationElections.MapModelToEntity, CbMapModelToEntity },
-        { GenerationElections.MapInterfaceToEntity, CbMapInterfaceToEntity },
-        { GenerationElections.MapInterfaceToModel, CbMapInterfaceToModel },
         { GenerationElections.MapCreateModelToEntity, CbMapCreateModelToEntity },
         { GenerationElections.MapPatchModelToEntity, CbMapPatchModelToEntity },
         { GenerationElections.MapEntityToCreatedModel, CbMapEntityToCreatedModel },
@@ -116,13 +114,13 @@ namespace SpotWelder.Ui
         { GenerationElections.SerializeJson, CbSerializeJson },
         { GenerationElections.RepoStatic, CbRepoStatic },
         { GenerationElections.RepoDapper, CbRepoDapper },
-        { GenerationElections.RepoEfFluentApi, CbRepoEfFluentApi },
         { GenerationElections.Manager, CbManager },
         { GenerationElections.ApiController, CbApiController },
         { GenerationElections.GenerateCreateModel, CbClassCreateModel },
         { GenerationElections.GeneratePatchModel, CbClassPatchModel },
         { GenerationElections.GenerateCreatedModel, CbClassCreatedModel },
         { GenerationElections.MakeAsynchronous, CbMakeAsynchronous },
+        { GenerationElections.GenerateImmutables, CbImmutables },
       };
 
       return dict;
@@ -141,14 +139,15 @@ namespace SpotWelder.Ui
     //TODO: This will also be part of the generated documentation in Mark Down.
     private void BtnDynamicStatements_OnClick(object sender, RoutedEventArgs e)
     {
-      //TODO: This is good for now, but might want to create a simple HTML page for this and display it as part of a web browser component
-      var content =
-        @"There is no point in providing dynamic generation or bulk copy options because the code is 
-so generic it will not likely change for most objects. Therefore I have a separate repository 
-for boiler plate starter code where I am maintaining this kind of code.
+      const string content = 
+        """
+        There is no point in providing dynamic generation or bulk copy options because the code is 
+        so generic it will not likely change for most objects. Therefore I have a separate repository 
+        for boiler plate starter code where I am maintaining this kind of code.
 
-You can find it here: 
-https://github.com/dyslexicanaboko/code-snippets/tree/develop/Visual%20C%23/BasicDataLayers";
+        You can find it here: 
+        https://github.com/dyslexicanaboko/code-snippets/tree/develop/Visual%20C%23/BasicDataLayers
+        """;
 
       _parentResultsWindow.AddTab("Basic data layers", content, string.Empty);
       _parentResultsWindow.Show();

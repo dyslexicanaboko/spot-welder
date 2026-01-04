@@ -56,10 +56,12 @@ public enum GenerationElections : long
   [Child(GenerateMapper)]
   MapModelToEntity = 1L << 10,
 
+  //TODO: Am I keeping this? Currently disconnected and unused.
   /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
   [Child(GenerateMapper)]
   MapInterfaceToEntity = 1L << 11,
 
+  //TODO: Am I keeping this? Currently disconnected and unused.
   /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
   [Child(GenerateMapper)]
   MapInterfaceToModel = 1L << 12,
@@ -70,14 +72,17 @@ public enum GenerationElections : long
 
   RepoStatic = 1L << 15,
 
+  //TODO: Support for this ended
   [Ignore]
   RepoDynamic = 1L << 16,
 
+  //TODO: Support for this ended
   [Ignore]
   RepoBulkCopy = 1L << 17,
 
   RepoDapper = 1L << 18,
 
+  //TODO: Support for this ended
   [Ignore]
   RepoEfFluentApi = 1L << 19,
 

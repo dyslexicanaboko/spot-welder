@@ -22,7 +22,7 @@ namespace SpotWelder.Lib.Services
       _factory = factory;
     }
 
-    public IList<GeneratedResult>? Generate(QueryToClassParameters parameters)
+    public List<GeneratedResult>? Generate(QueryToClassParameters parameters)
     {
       if (!parameters.HasElections) return null;
 
@@ -37,7 +37,7 @@ namespace SpotWelder.Lib.Services
       //    WriteClassToFile(p, content);
     }
 
-    public IList<GeneratedResult> Generate(DtoInstructions instructions)
+    public List<GeneratedResult> Generate(DtoInstructions instructions)
     {
       var ci = new ClassInstructions
       {
@@ -117,12 +117,16 @@ namespace SpotWelder.Lib.Services
 
         if(result == null) continue;
 
-        lst.Add(result);
+        //The immutables case calls for this check
+        if(!string.IsNullOrWhiteSpace(result.Filename)) lst.Add(result);
 
         //Corresponding interfaces exist for some elections only
-        if (result.CorrespondingInterface == null) continue;
+        if (result.CorrespondingInterface != null) lst.Add(result.CorrespondingInterface);
 
-        lst.Add(result.CorrespondingInterface);
+        if (result.Heap == null || result.Heap.Count == 0) continue;
+
+        //A heap of generated results exists for some elections only
+        lst.AddRange(result.Heap);
       }
 
       lst.TrimExcess();

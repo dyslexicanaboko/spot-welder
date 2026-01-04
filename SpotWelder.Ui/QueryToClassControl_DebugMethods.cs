@@ -69,8 +69,6 @@ namespace SpotWelder.Ui
       CbManager.IsChecked = true;
 
       //Mappings
-      CbMapInterfaceToModel.IsChecked = false;
-      CbMapInterfaceToEntity.IsChecked = false;
       CbMapEntityToModel.IsChecked = true;
       CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
@@ -121,8 +119,6 @@ namespace SpotWelder.Ui
       CbManager.IsChecked = true;
 
       //Mappings
-      CbMapInterfaceToModel.IsChecked = true;
-      CbMapInterfaceToEntity.IsChecked = true;
       CbMapEntityToModel.IsChecked = true;
       CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
@@ -172,8 +168,6 @@ namespace SpotWelder.Ui
       CbManager.IsChecked = true;
 
       //Mappings
-      CbMapInterfaceToModel.IsChecked = true;
-      CbMapInterfaceToEntity.IsChecked = true;
       CbMapEntityToModel.IsChecked = true;
       CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
@@ -238,8 +232,6 @@ namespace SpotWelder.Ui
       CbManager.IsChecked = true;
 
       //Mappings
-      CbMapInterfaceToModel.IsChecked = false;
-      CbMapInterfaceToEntity.IsChecked = false;
       CbMapEntityToModel.IsChecked = true;
       CbMapModelToEntity.IsChecked = false;
       CbMapCreateModelToEntity.IsChecked = false;
