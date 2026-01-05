@@ -1,4 +1,7 @@
 ﻿{{Namespaces}}
+using {{Namespace}}.DataAccess;
+using {{Namespace}}.Entities;
+using {{Namespace}}.Mappers;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
@@ -23,7 +26,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 		{
 			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
 
-			return _mapper.ToEntity([A]_repository.Using(x => x.Select({{PrimaryKeyParameter}})));
+			return _mapper.ToEntity([A]_repository.Select({{PrimaryKeyParameter}}));
 		}
 
 		public [AO]List<{{EntityName}}?>[AC] GetAll()
@@ -33,7 +36,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 		{
 			Validations.IsValid(_validation, entity, nameof(entity));
 
-			entity.{{PrimaryKeyProperty}} = [A]_repository.Using(x => x.Insert(_mapper.ToRecord(entity)));
+			entity.{{PrimaryKeyProperty}} = [A]_repository.Insert(_mapper.ToRecord(entity));
 			
 			return entity;
 		}
@@ -42,14 +45,14 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 		{
 			Validations.IsNotNull(entity, nameof(entity));
 
-			[A]_repository.Using(x => x.Update(_mapper.ToRecord(entity)));
+			[A]_repository.Update(_mapper.ToRecord(entity));
 		}
 
 		public [void] Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})
 		{
 			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
 
-			[A]_repository.Using(x => x.Delete({{PrimaryKeyParameter}}));
+			[A]_repository.Delete({{PrimaryKeyParameter}});
 		}
 	}
 }

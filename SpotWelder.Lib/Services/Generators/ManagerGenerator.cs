@@ -11,7 +11,7 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "Manager.cs.template";
 
-    protected override string ContainingNamespace => "Business";
+    protected override string ContainingNamespace => "Managers";
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {

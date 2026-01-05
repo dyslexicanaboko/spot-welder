@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using {{Namespace}}.Records;
 {{Namespaces}}
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class I{{ClassName}}Repository
+	public interface I{{ClassName}}Repository
 	{
 		{{Contracts}}
 	}

@@ -1,4 +1,7 @@
 ﻿{{Namespaces}}
+using {{Namespace}}.Managers;
+using {{Namespace}}.Mappers;
+using {{Namespace}}.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +10,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 	[Route("api/v1/{{ApiRoute}}")]
 	[ApiController]
 	public class {{ClassName}}Controller
-		: AppBaseController
+		: ApiBaseController
 	{
 		private readonly I{{SubjectName}}Mapper _mapper;
 
@@ -30,7 +33,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 		{
 			var entity = [AMO]_manager.Get(id)[AMC];
 
-			if (entity == null) throw Lib.Exceptions.NotFound.{{SubjectName}}(id);
+			if (entity == null) throw new Exception($"{{SubjectName}}:{id} not found.");
 
 			return Ok(_mapper.ToModel(entity));
 		}
@@ -40,7 +43,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
 		public async Task<ActionResult<{{ModelName}}>> GetAll()
 		{
-			var entity = [AMO]_manager.GetAll(id)[AMC];
+			var entity = [AMO]_manager.GetAll()[AMC];
 
 			return Ok(_mapper.ToModel(entity));
 		}

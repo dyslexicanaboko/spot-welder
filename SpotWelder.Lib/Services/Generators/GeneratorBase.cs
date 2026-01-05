@@ -98,6 +98,10 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected virtual string FormatNamespaces(IList<string> namespaces)
     {
+      //Purposely not going to sort the namespaces just in case a specific order was wanted
+      //Will remove the redundant namespaces though
+      namespaces = namespaces.Distinct().ToList();
+
       var content = GetTextBlock(namespaces, ns => $"using {ns};");
 
       return content;

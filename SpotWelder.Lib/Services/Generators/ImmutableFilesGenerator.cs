@@ -1,6 +1,8 @@
 ﻿using SpotWelder.Lib.Models;
+using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -42,6 +44,9 @@ namespace SpotWelder.Lib.Services.Generators
        * I am going to be only be concerned with SQL Server and asynchronous themed C# for now.
        * I will have to come back to finesse the code later to make it more generic and extensible. */
 
+      //Only for the base repository template at the moment.
+      var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+
       //All templates in the Immutables folder.
       var templates = GetTemplates();
 
@@ -52,8 +57,15 @@ namespace SpotWelder.Lib.Services.Generators
       foreach (var fi in templates)
       {
         //Replace just the Namespace for each template
-        var template = File.ReadAllText(fi.FullName)
+        var template = new StringBuilder(File.ReadAllText(fi.FullName))
           .Replace("{{Namespace}}", instructions.Namespace);
+
+        if (fi.Name == "BaseRepository.cs.template")
+        {
+          template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
+          template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
+          template.Replace("{{ParameterObject}}", syntax.ParameterObject);
+        }
 
         //Strip the .template extension for the output file. Filename will be named after the template file.
         var fileName = fi.Name.Replace(".template", string.Empty);
@@ -66,7 +78,7 @@ namespace SpotWelder.Lib.Services.Generators
         result.Heap.Add(new GeneratedResult(
           Election,
           fileName,
-          FormatCSharp(template),
+          FormatCSharp(template.ToString()),
           containingNamespace));
       }
 

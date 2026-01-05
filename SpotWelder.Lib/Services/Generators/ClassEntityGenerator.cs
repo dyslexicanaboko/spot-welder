@@ -27,22 +27,24 @@ namespace SpotWelder.Lib.Services.Generators
 
       //Child templates
       template.Replace("{{Interfaces}}", FillInterfaceImplementations(instructions.Elections));
-      template.Replace("{{Constructors}}", FillConstructors(instructions.Elections));
+      template.Replace("{{Constructors}}", FillConstructors(instructions.Namespaces, instructions.Elections));
       template.Replace("{{InterfaceMethods}}", FillInterfaceMethods(instructions.Elections));
 
       //Full template replacements
       SetContainingNamespace(template);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{ModelName}}", instructions.ModelName);
+      template.Replace("{{RecordName}}", instructions.RecordName);
       template.Replace("{{ClassAttributes}}", FormatClassAttributes(instructions.ClassAttributes));
-      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
       //Constructors
       template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
       template.Replace("{{ConstructorFromModel}}", FormatConstructorBody(instructions.Properties, "model"));
+      template.Replace("{{ConstructorFromRecord}}", FormatConstructorBody(instructions.Properties, "record"));
       template.Replace("{{SubjectName}}", instructions.SubjectName);
       
       //IEquatable
@@ -115,14 +117,15 @@ namespace SpotWelder.Lib.Services.Generators
       return sb.ToString();
     }
 
-    private string FillConstructors(GenerationElections elections)
+    private string FillConstructors(IList<string> namespaces, GenerationElections elections)
     {
       var arr = new[]
       {
         GenerationElections.GenerateInterface,
         GenerationElections.GenerateModel,
         GenerationElections.GenerateCreateModel,
-        GenerationElections.GeneratePatchModel
+        GenerationElections.GeneratePatchModel,
+        GenerationElections.GenerateRecord
       };
 
       var lst = new List<string>(arr.Length);
@@ -138,18 +141,22 @@ namespace SpotWelder.Lib.Services.Generators
 
               break;
             case GenerationElections.GenerateRecord:
+              namespaces.Add("{{Namespace}}.Records");
               lst.Add(ConstructorTemplate("{{RecordName}}", "record", "{{ConstructorFromRecord}}"));
 
               break;
             case GenerationElections.GenerateModel:
+              namespaces.Add("{{Namespace}}.Models");
               lst.Add(ConstructorTemplate("{{ModelName}}", "model", "{{ConstructorFromModel}}"));
 
               break;
             case GenerationElections.GenerateCreateModel:
+              namespaces.Add("{{Namespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1CreateModel", "model", "{{ConstructorFromModel}}"));
 
               break;
             case GenerationElections.GeneratePatchModel:
+              namespaces.Add("{{Namespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1PatchModel", "model", "{{ConstructorFromModel}}"));
 
               break;

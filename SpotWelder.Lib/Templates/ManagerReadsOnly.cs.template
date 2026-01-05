@@ -1,4 +1,7 @@
 ﻿{{Namespaces}}
+using {{Namespace}}.DataAccess;
+using {{Namespace}}.Entities;
+using {{Namespace}}.Mappers;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
@@ -7,26 +10,19 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 	{
 		private readonly I{{ClassName}}Repository _repository;
 		private readonly I{{ClassName}}Mapper _mapper;
-		private readonly I{{ClassName}}Validation _validation;
 
 		public {{ClassName}}Manager(
 			I{{ClassName}}Repository repository,
-			I{{ClassName}}Mapper mapper,
-			I{{ClassName}}Validation validation)
+			I{{ClassName}}Mapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;
-			_validation = validation;
 		}
 
 		public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
-
-			return _mapper.ToEntity([A]_repository.Using(x => x.Select({{PrimaryKeyParameter}})));
-		}
+			=> _mapper.ToEntity([A]_repository.Select({{PrimaryKeyParameter}}));
 
 		public [AO]List<{{EntityName}}?>[AC] GetAll()
-		  =>_mapper.ToEntity([A]_repository.Using(x => x.SelectAll()));
+		  =>_mapper.ToEntity([A]_repository.SelectAll());
 	}
 }

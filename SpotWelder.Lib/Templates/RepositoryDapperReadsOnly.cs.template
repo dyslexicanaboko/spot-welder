@@ -1,5 +1,6 @@
 using Dapper;
 {{SqlNamespaces}}
+using {{Namespace}}.Records;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -24,9 +25,8 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 
 			[A]using var connection = await GetConnection();
 			
-			var lst = [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].ToList();
-				
-			return lst.SingleOrDefault();
+			return [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC]
+				.SingleOrDefault();
 		}
 
 		public [AO]List<{{RecordName}}>[AC] SelectAll()

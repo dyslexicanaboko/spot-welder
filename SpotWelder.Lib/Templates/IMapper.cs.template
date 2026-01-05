@@ -2,7 +2,7 @@
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class I{{ClassName}}Mapper
+	public interface I{{ClassName}}Mapper
 	{
 		{{Contracts}}
 	}

@@ -1,6 +1,7 @@
 ﻿using SpotWelder.Lib.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
@@ -8,20 +9,20 @@ namespace SpotWelder.Lib.Services.Generators
   public class MapperGenerator
     : GeneratorBase
   {
-    private static readonly Dictionary<GenerationElections, string> ChildTemplates = new()
+    private static readonly Dictionary<GenerationElections, TemplateInfo> ChildTemplates = new()
     {
-      { GenerationElections.MapEntityToModel, "MapEntityToModel.cs.template" },
-      { GenerationElections.MapModelToEntity, "MapModelToEntity.cs.template" },
+      { GenerationElections.MapEntityToModel, new TemplateInfo("MapEntityToModel.cs.template", ["Entities", "Models"]) },
+      { GenerationElections.MapModelToEntity, new TemplateInfo("MapModelToEntity.cs.template", ["Entities", "Models"]) },
 
       //FYI: Commenting out these two mapping options for now as they are just confusing things.
       //I might eliminate these entirely later. They have not been useful in practice.
       //{ GenerationElections.MapInterfaceToEntity, "MapInterfaceToEntity.cs.template" },
       //{ GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
-      { GenerationElections.MapCreateModelToEntity, "MapCreateModelToEntity.cs.template" },
-      { GenerationElections.MapPatchModelToEntity, "MapPatchModelToEntity.cs.template" },
-      { GenerationElections.MapEntityToCreatedModel, "MapEntityToCreatedModel.cs.template" },
-      { GenerationElections.MapRecordToEntity, "MapRecordToEntity.cs.template" },
-      { GenerationElections.MapEntityToRecord, "MapEntityToRecord.cs.template" }
+      { GenerationElections.MapCreateModelToEntity, new TemplateInfo("MapCreateModelToEntity.cs.template", ["Entities", "Models.Client"]) },
+      { GenerationElections.MapPatchModelToEntity, new TemplateInfo("MapPatchModelToEntity.cs.template", ["Entities", "Models.Client"]) },
+      { GenerationElections.MapEntityToCreatedModel, new TemplateInfo("MapEntityToCreatedModel.cs.template", ["Entities", "Models.Client"]) },
+      { GenerationElections.MapRecordToEntity, new TemplateInfo("MapRecordToEntity.cs.template", ["Entities", "Records"]) },
+      { GenerationElections.MapEntityToRecord, new TemplateInfo("MapEntityToRecord.cs.template", ["Entities", "Records"]) }
     };
 
     /// <summary>
@@ -43,15 +44,15 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(GetTemplate(TemplateName));
 
-      template.Replace("{{Body}}", BuildBodyTemplate(instructions.Elections));
+      template.Replace("{{Body}}", BuildBodyTemplate(instructions.Namespaces, instructions.Elections));
       SetContainingNamespace(template);
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{RecordName}}", instructions.RecordName);
       template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
       template.Replace("{{ObjectInitializer}}", FormatObjectInitializerBody(instructions.Properties, "entity"));
 
       var result = GetFormattedCSharpResult($"{instructions.ClassName}Mapper.cs", template);
@@ -64,17 +65,32 @@ namespace SpotWelder.Lib.Services.Generators
       return result;
     }
 
-    private string BuildBodyTemplate(GenerationElections elections)
+    private string BuildBodyTemplate(IList<string> namespaces, GenerationElections elections)
     {
       var childElections = GetChildElections(elections, Election);
 
       var sb = new StringBuilder();
+      var hs = new HashSet<string>();
 
       foreach (var child in childElections)
-        sb
-          .AppendLine(GetTemplate(ChildTemplates[child]))
-          .AppendLine();
+      {
+        var templateInfo = ChildTemplates[child];
 
+        var arr = templateInfo.Namespaces.Select(x => $"{{{{Namespace}}}}.{x}").ToArray();
+
+        //HashSet will prevent duplicates.
+        foreach (var ns in arr)
+          hs.Add(ns);
+
+        sb
+          .AppendLine(GetTemplate(templateInfo.TemplateName))
+          .AppendLine();
+      }
+
+      //Add to main list of namespaces
+      foreach (var ns in hs)
+        namespaces.Add(ns);
+      
       return sb.ToString();
     }
 
@@ -101,6 +117,13 @@ namespace SpotWelder.Lib.Services.Generators
         Environment.NewLine);
 
       return content;
+    }
+
+    private class TemplateInfo(string templateName, string[] namespaces)
+    {
+      public string TemplateName { get; set; } = templateName;
+
+      public string[] Namespaces { get; set; } = namespaces;
     }
   }
 }

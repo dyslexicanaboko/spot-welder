@@ -1,4 +1,5 @@
 ﻿{{Namespaces}}
+using {{Namespace}}.Entities;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
