@@ -8,92 +8,92 @@ using System.Linq;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}Repository
-		: BaseRepository, I{{ClassName}}Repository
-	{
-		public {{ClassName}}Repository(IAppConfiguration configuration)
-			: base(configuration)
-		{
-		}
+  public class {{ClassName}}Repository
+    : BaseRepository, I{{ClassName}}Repository
+  {
+    public {{ClassName}}Repository(IAppConfiguration configuration)
+      : base(configuration)
+    {
+    }
 
-		public [AO]{{RecordName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			const string sql = """
-				SELECT
-				{{SelectAllList}}
-				FROM {{Schema}}.{{Table}}
-				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
-				""";
+    public [AO]{{RecordName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      const string sql = """
+        SELECT
+{{SelectAllList}}
+        FROM {{Schema}}.{{Table}}
+        WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+        """;
 
-			[A]using var connection = await GetConnection();
-			
-			return [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].SingleOrDefault();
-		}
+      [A]using var connection = await GetConnection();
+      
+      return [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].SingleOrDefault();
+    }
 
-		public [AO]List<{{RecordName}}>[AC] SelectAll()
-		{
-			const string sql = """
-				SELECT
-				{{SelectAllList}}
-				FROM {{Schema}}.{{Table}}
-				""";
+    public [AO]List<{{RecordName}}>[AC] SelectAll()
+    {
+      const string sql = """
+        SELECT
+{{SelectAllList}}
+        FROM {{Schema}}.{{Table}}
+        """;
 
-			var connection = await GetConnection();
-			
-			return [AWO]connection.Query[AS]<{{RecordName}}>(sql)[AWC].ToList();
-		}
+      var connection = await GetConnection();
+      
+      return [AWO]connection.Query[AS]<{{RecordName}}>(sql)[AWC].ToList();
+    }
 
-		public [AO]{{PrimaryKeyType}}[AC] Insert({{RecordName}} entity)
-		{
-			const string sql = """
-				INSERT INTO {{Schema}}.{{Table}} (
-				{{InsertColumnList}}
-				) VALUES (
-				{{InsertValuesList}})	{{ScopeIdentity}}
-				""";
+    public [AO]{{PrimaryKeyType}}[AC] Insert({{RecordName}} entity)
+    {
+      const string sql = """
+        INSERT INTO {{Schema}}.{{Table}} (
+{{InsertColumnList}}
+        ) VALUES (
+{{InsertValuesList}})	{{ScopeIdentity}}
+        """;
 
-			[A]using var connection = await GetConnection();
+      [A]using var connection = await GetConnection();
 
-			var p = new DynamicParameters();
-	{{DynamicParametersInsert}}
-				
-	{{PrimaryKeyInsertExecution}}
-		}
+      var p = new DynamicParameters();
+  {{DynamicParametersInsert}}
+        
+  {{PrimaryKeyInsertExecution}}
+    }
 
-		public [void] Update({{RecordName}} entity)
-		{
-			const string sql = """
-				UPDATE {{Schema}}.{{Table}} SET
-				{{UpdateParameters}}
-				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
-				""";
+    public [void] Update({{RecordName}} entity)
+    {
+      const string sql = """
+        UPDATE {{Schema}}.{{Table}} SET
+{{UpdateParameters}}
+        WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+        """;
 
-			[A]using var connection = await GetConnection();
+      [A]using var connection = await GetConnection();
 
-			var p = new DynamicParameters();
-	{{DynamicParametersUpdate}}
+      var p = new DynamicParameters();
+  {{DynamicParametersUpdate}}
 
-			[A]connection.Execute[AS](sql, p);
-		}
+      [A]connection.Execute[AS](sql, p);
+    }
 
-		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			const string sql = """
-				DELETE FROM {{Schema}}.{{Table}}
-				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
-				""";
+    public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      const string sql = """
+        DELETE FROM {{Schema}}.{{Table}}
+        WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+        """;
 
-			[A]using var connection = await GetConnection();
+      [A]using var connection = await GetConnection();
 
-			[A]connection.Execute[AS](sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
-		}
+      [A]connection.Execute[AS](sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
+    }
 
-		private static DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			var p = new DynamicParameters();
-			p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});
-			
-			return p;
-		}
-	}
+    private static DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      var p = new DynamicParameters();
+      p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});
+      
+      return p;
+    }
+  }
 }

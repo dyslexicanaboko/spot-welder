@@ -17,4 +17,7 @@ Examples:
 - These tags are replaced dynamically while generating code.
 - In the future, it may be possible to provide your own, but it's low on the list of priorties.
 
+## Formatting
 
+- Use 2 spaces for indentation.
+- No tabs.

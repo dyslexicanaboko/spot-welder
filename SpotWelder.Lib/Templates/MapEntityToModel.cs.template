@@ -1,2 +1,5 @@
 ﻿public {{ModelName}}? ToModel({{EntityName}}? entity)
   => entity == null ? null : new {{ModelName}}(entity);
+
+public List<{{ModelName}}?> ToModel(List<{{EntityName}}>? entities)
+  => ToList(entities, ToModel);

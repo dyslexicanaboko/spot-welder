@@ -243,9 +243,16 @@ namespace SpotWelder.Lib.Services.Generators
 
       // Create a workspace
       var workspace = new AdhocWorkspace();
-      
+
+      //TODO: Make this user configurable
+      //Set formatting options for 2-space indentation
+      var options = workspace.Options
+        .WithChangedOption(FormattingOptions.UseTabs, LanguageNames.CSharp, false)
+        .WithChangedOption(FormattingOptions.TabSize, LanguageNames.CSharp, 2)
+        .WithChangedOption(FormattingOptions.IndentationSize, LanguageNames.CSharp, 2);
+
       // Format the syntax tree
-      var formattedRoot = Formatter.Format(syntaxTree.GetRoot(), workspace, workspace.Options);
+      var formattedRoot = Formatter.Format(syntaxTree.GetRoot(), workspace, options);
 
       // Convert the formatted syntax tree back to a string
       var formattedCode = formattedRoot.ToFullString();

@@ -87,7 +87,7 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{Schema}}", instructions.TableQuery.Schema);
 			template.Replace("{{Table}}", instructions.TableQuery.Table);
 			//{{SourceQuery}} - used when a query is provided
-      template.Replace("{{SourceQuery}}", instructions.SourceQuery);
+      template.Replace("{{SourceQuery}}", FormatAsRawString(instructions.SourceQuery, 10));
 			template.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
 			template.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
 			template.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
@@ -109,7 +109,13 @@ namespace SpotWelder.Lib.Services.Generators
       return result;
 		}
 
-		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
+		private static string FormatAsRawString(string content, int spacesIndented)
+			=> string.Join(Environment.NewLine, content
+        .Split([ Environment.NewLine ], StringSplitOptions.None)
+        .Select(x => x.Trim())
+        .Select(x => x.PadLeft(x.Length + spacesIndented, ' ')));
+
+    private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
 		{
 			var content = GetTextBlock(
 				properties,

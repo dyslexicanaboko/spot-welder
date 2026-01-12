@@ -90,6 +90,11 @@ namespace SpotWelder.Ui
       _generalRepo = dependencies.Repository;
 
       ConnectionStringCb.Dependencies(dependencies.ConnectionStringControlDependencies);
+
+      _parentResultsWindow.ErrorOccurred += (_, childArgs) =>
+      {
+        _logger.LogError(childArgs.Exception, nameof(_parentResultsWindow) + " " + childArgs.Message);
+      };
     }
 
     private void TxtSqlSourceText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

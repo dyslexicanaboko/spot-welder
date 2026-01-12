@@ -1,8 +1,11 @@
 ﻿using SpotWelder.Ui.Helpers;
+using SpotWelder.Ui.Models;
 using SpotWelder.Ui.ViewModels;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -36,12 +39,26 @@ namespace SpotWelder.Ui
 
     private ResultTabViewModel SelectedTab => (ResultTabViewModel)TcResults.SelectedItem;
 
+    /// <summary>
+    /// Conduit for reporting errors to a parent window.
+    /// This helps avoid passing the parent's logger to the child window.
+    /// </summary>
+    public event EventHandler<ChildErrorEventArgs>? ErrorOccurred;
+
     public ParentResultsWindow()
     {
       InitializeComponent();
 
       DataContext = _viewModel;
     }
+
+    /// <summary>
+    /// Report the error up to the parent window so it can be handled.
+    /// </summary>
+    /// <param name="exception">Error that has occurred.</param>
+    /// <param name="message">Additional information is any.</param>
+    protected virtual void ReportError(Exception exception, string message = "")
+      => ErrorOccurred?.Invoke(this, new ChildErrorEventArgs(exception, message));
 
     public void AddTab(string title, string contents, string containingFolder)
       => _viewModel.Tabs.Add(new ResultTabViewModel(
@@ -117,7 +134,24 @@ namespace SpotWelder.Ui
     }
 
     private void BtnCopy_Click(object sender, RoutedEventArgs e)
-      => Clipboard.SetText(SelectedTab.Contents);
+    {
+      try
+      {
+        Clipboard.SetDataObject(SelectedTab.Contents);
+      }
+      catch (COMException cex)
+      {
+        UserControlExtensions.ShowWarningMessage($"Clipboard appears to be unavailable. Please try again in a moment.\r\nError: {cex.Message}");
+
+        ReportError(cex, "Clipboard is unavailable.");
+      }
+      catch (Exception ex)
+      {
+        ex.ShowAsErrorMessage();
+       
+        ReportError(ex, "Unexpected error.");
+      }
+    }
 
     private void SaveOneFile()
     {
