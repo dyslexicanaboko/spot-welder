@@ -307,5 +307,18 @@ namespace SpotWelder.Lib.Services.Generators
 
       return string.Join(Environment.NewLine + Environment.NewLine, lines);
     }
+
+    /// <summary>
+    /// Formats the specified string so that each line is trimmed and indented by a given number of spaces.
+    /// Does not include the opening and closing triple quotes.
+    /// </summary>
+    /// <param name="content">The multi-line string to format. Each line will be trimmed and indented.</param>
+    /// <param name="spacesIndented">The number of spaces to add to the beginning of each trimmed line. Must be zero or greater.</param>
+    /// <returns>A new string consisting of the trimmed and indented lines, joined by line breaks.</returns>
+    protected static string FormatAsRawString(string content, int spacesIndented)
+      => string.Join(Environment.NewLine, content
+        .Split([Environment.NewLine], StringSplitOptions.None)
+        .Select(x => x.Trim())
+        .Select(x => x.PadLeft(x.Length + spacesIndented, ' ')));
   }
 }

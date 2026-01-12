@@ -109,12 +109,6 @@ namespace SpotWelder.Lib.Services.Generators
       return result;
 		}
 
-		private static string FormatAsRawString(string content, int spacesIndented)
-			=> string.Join(Environment.NewLine, content
-        .Split([ Environment.NewLine ], StringSplitOptions.None)
-        .Select(x => x.Trim())
-        .Select(x => x.PadLeft(x.Length + spacesIndented, ' ')));
-
     private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
 		{
 			var content = GetTextBlock(
@@ -174,7 +168,7 @@ namespace SpotWelder.Lib.Services.Generators
 					break;
 			}
 
-			var content = $"				p.Add({string.Join(", ", lst)});";
+			var content = $"        p.Add({string.Join(", ", lst)});";
 
 			return content;
 		}
