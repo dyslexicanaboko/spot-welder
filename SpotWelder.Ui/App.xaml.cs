@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace SpotWelder.Ui
@@ -19,7 +20,49 @@ namespace SpotWelder.Ui
   {
     private static readonly ProfileSaver ProfileSaver = new ();
 
-    public IServiceProvider ServiceProvider { get; private set; }
+    [DllImport("kernel32.dll")]
+    private static extern bool AttachConsole(int dwProcessId);
+
+    [DllImport("kernel32.dll")]
+    private static extern bool AllocConsole();
+
+    [DllImport("kernel32.dll")]
+    private static extern bool FreeConsole();
+
+    private const int AttachParentProcess = -1;
+
+    [STAThread]
+    public static void Main(string[] args)
+    {
+      // Check if running in CLI mode (arguments provided)
+      if (args.Length > 0)
+      {
+        // Attach to the parent console or allocate a new one
+        if (!AttachConsole(AttachParentProcess))
+        {
+          AllocConsole();
+        }
+
+        RunCliMode(args);
+
+        FreeConsole();
+
+        return;
+      }
+
+      // Run GUI mode
+      var app = new App();
+      app.InitializeComponent();
+      app.Run();
+    }
+
+    private static void RunCliMode(string[] args)
+    {
+      //TODO: Take input file and produce generations in one shot
+      // Have to figure out file schema for input. JSON more than likely.
+      Console.WriteLine("It worked");
+      Console.ReadLine();
+    }
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -29,13 +72,13 @@ namespace SpotWelder.Ui
 
       ConfigureServices(serviceCollection);
 
-      ServiceProvider = serviceCollection.BuildServiceProvider();
+      var serviceProvider = serviceCollection.BuildServiceProvider();
 
-      Log.Logger = ServiceProvider.GetRequiredService<ILogger>();
+      Log.Logger = serviceProvider.GetRequiredService<ILogger>();
       
       try
       {
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+        var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
 
         mainWindow.Show();
 
