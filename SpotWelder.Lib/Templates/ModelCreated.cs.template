@@ -3,18 +3,18 @@ using {{Namespace}}.Entities;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}V1CreatedModel
-	{
-		public {{ClassName}}V1CreatedModel()
-		{
-			
-		}
+  public class {{ClassName}}V1CreatedModel
+  {
+    public {{ClassName}}V1CreatedModel()
+    {
+      
+    }
 
-		public {{ClassName}}V1CreatedModel({{EntityName}} target)
-		{
-			{{ConstructorFromEntity}}
-		}
+    public {{ClassName}}V1CreatedModel({{EntityName}} target)
+    {
+      {{ConstructorFromEntity}}
+    }
 
 {{Properties}}
-	}
+  }
 }

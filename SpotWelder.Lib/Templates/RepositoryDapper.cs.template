@@ -49,7 +49,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
         INSERT INTO {{Schema}}.{{Table}} (
 {{InsertColumnList}}
         ) VALUES (
-{{InsertValuesList}})	{{ScopeIdentity}}
+{{InsertValuesList}})  {{ScopeIdentity}}
         """;
 
       [A]using var connection = await GetConnection();

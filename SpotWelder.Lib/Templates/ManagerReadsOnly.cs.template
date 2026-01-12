@@ -5,24 +5,24 @@ using {{Namespace}}.Mappers;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}Manager
-		: BaseManager, I{{ClassName}}Manager
-	{
-		private readonly I{{ClassName}}Repository _repository;
-		private readonly I{{ClassName}}Mapper _mapper;
+  public class {{ClassName}}Manager
+    : BaseManager, I{{ClassName}}Manager
+  {
+    private readonly I{{ClassName}}Repository _repository;
+    private readonly I{{ClassName}}Mapper _mapper;
 
-		public {{ClassName}}Manager(
-			I{{ClassName}}Repository repository,
-			I{{ClassName}}Mapper mapper)
-		{
-			_repository = repository;
-			_mapper = mapper;
-		}
+    public {{ClassName}}Manager(
+      I{{ClassName}}Repository repository,
+      I{{ClassName}}Mapper mapper)
+    {
+      _repository = repository;
+      _mapper = mapper;
+    }
 
-		public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-			=> _mapper.ToEntity([A]_repository.Select({{PrimaryKeyParameter}}));
+    public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+      => _mapper.ToEntity([A]_repository.Select({{PrimaryKeyParameter}}));
 
-		public [AO]List<{{EntityName}}?>[AC] GetAll()
-		  =>_mapper.ToEntity([A]_repository.SelectAll());
-	}
+    public [AO]List<{{EntityName}}?>[AC] GetAll()
+      =>_mapper.ToEntity([A]_repository.SelectAll());
+  }
 }

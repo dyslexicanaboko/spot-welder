@@ -2,8 +2,8 @@
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}V1PatchModel{{Interface}}
-	{
+  public class {{ClassName}}V1PatchModel{{Interface}}
+  {
 {{Properties}}
-	}
+  }
 }

@@ -3,8 +3,8 @@ using {{Namespace}}.Entities;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public interface I{{ClassName}}Manager
-	{
-		{{Contracts}}
-	}
+  public interface I{{ClassName}}Manager
+  {
+    {{Contracts}}
+  }
 }

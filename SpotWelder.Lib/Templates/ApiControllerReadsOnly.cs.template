@@ -6,45 +6,45 @@ using {{Namespace}}.Models;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	[Route("api/v1/{{ApiRoute}}")]
-	[ApiController]
-	public class {{ClassName}}Controller
-		: ApiBaseController
-	{
-		private readonly I{{SubjectName}}Mapper _mapper;
+  [Route("api/v1/{{ApiRoute}}")]
+  [ApiController]
+  public class {{ClassName}}Controller
+    : ApiBaseController
+  {
+    private readonly I{{SubjectName}}Mapper _mapper;
 
-		private readonly I{{SubjectName}}Manager _manager;
+    private readonly I{{SubjectName}}Manager _manager;
 
-		public {{SubjectName}}Controller(
-			I{{SubjectName}}Manager manager,
-			I{{SubjectName}}Mapper mapper)
-		{
-			_manager = manager;
+    public {{SubjectName}}Controller(
+      I{{SubjectName}}Manager manager,
+      I{{SubjectName}}Mapper mapper)
+    {
+      _manager = manager;
 
-			_mapper = mapper;
-		}
+      _mapper = mapper;
+    }
 
-		// GET api/v1/{{ApiRoute}}/5
-		[HttpGet("{id:{{PrimaryKeyType}}}")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<ActionResult<{{ModelName}}>> Get({{PrimaryKeyType}} id)
-		{
-			var entity = [AMO]_manager.Get(id)[AMC];
+    // GET api/v1/{{ApiRoute}}/5
+    [HttpGet("{id:{{PrimaryKeyType}}}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<{{ModelName}}>> Get({{PrimaryKeyType}} id)
+    {
+      var entity = [AMO]_manager.Get(id)[AMC];
 
-			if (entity == null) throw new Exception($"{{SubjectName}}:{id} not found.");
+      if (entity == null) throw new Exception($"{{SubjectName}}:{id} not found.");
 
-			return Ok(_mapper.ToModel(entity));
-		}
-		
-		// GET api/v1/{{ApiRoute}}
-		[HttpGet()]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
-		public async Task<ActionResult<{{ModelName}}>> GetAll()
-		{
-			var entity = [AMO]_manager.GetAll()[AMC];
+      return Ok(_mapper.ToModel(entity));
+    }
+    
+    // GET api/v1/{{ApiRoute}}
+    [HttpGet()]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
+    public async Task<ActionResult<{{ModelName}}>> GetAll()
+    {
+      var entity = [AMO]_manager.GetAll()[AMC];
 
-			return Ok(_mapper.ToModel(entity));
-		}
-	}
+      return Ok(_mapper.ToModel(entity));
+    }
+  }
 }

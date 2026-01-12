@@ -2,8 +2,8 @@
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}V1CreateModel{{Interface}}
-	{
+  public class {{ClassName}}V1CreateModel{{Interface}}
+  {
 {{Properties}}
-	}
+  }
 }

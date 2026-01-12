@@ -5,8 +5,8 @@ namespace {{Namespace}}
 {
     public partial class SerializationService
     {
-		public string ToJson(IEnumerable<{{ClassName}}> input) => JsonConvert.SerializeObject(input);
+    public string ToJson(IEnumerable<{{ClassName}}> input) => JsonConvert.SerializeObject(input);
 
-		public IEnumerable<{{ClassName}}> FromJson(string json) => JsonConvert.DeserializeObject<IEnumerable<{{ClassName}}>>(json);
+    public IEnumerable<{{ClassName}}> FromJson(string json) => JsonConvert.DeserializeObject<IEnumerable<{{ClassName}}>>(json);
     }
 }

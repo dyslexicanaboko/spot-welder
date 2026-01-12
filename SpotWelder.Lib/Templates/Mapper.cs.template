@@ -2,9 +2,9 @@
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}Mapper
-		: BaseMapper
-	{
-		{{Body}}
-	}
+  public class {{ClassName}}Mapper
+    : BaseMapper
+  {
+    {{Body}}
+  }
 }

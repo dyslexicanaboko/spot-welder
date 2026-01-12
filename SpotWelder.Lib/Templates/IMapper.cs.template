@@ -2,8 +2,8 @@
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public interface I{{ClassName}}Mapper
-	{
-		{{Contracts}}
-	}
+  public interface I{{ClassName}}Mapper
+  {
+    {{Contracts}}
+  }
 }

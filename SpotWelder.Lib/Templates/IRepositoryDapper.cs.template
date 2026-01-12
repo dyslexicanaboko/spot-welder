@@ -4,8 +4,8 @@ using {{Namespace}}.Records;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public interface I{{ClassName}}Repository
-	{
-		{{Contracts}}
-	}
+  public interface I{{ClassName}}Repository
+  {
+    {{Contracts}}
+  }
 }
