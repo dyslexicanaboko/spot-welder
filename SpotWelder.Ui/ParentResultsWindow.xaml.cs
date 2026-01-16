@@ -48,6 +48,8 @@ namespace SpotWelder.Ui
     public ParentResultsWindow()
     {
       InitializeComponent();
+      
+      this.ConfigureChildWindowPosition();
 
       DataContext = _viewModel;
     }

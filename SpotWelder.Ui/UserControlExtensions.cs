@@ -105,5 +105,42 @@ namespace SpotWelder.Ui
       //file is not locked
       return false;
     }
+
+    //TODO: Until there is a better way to manage window positioning, this will do.
+    // I am sure there is a more appropriate way to do this in WPF.
+    /// <summary>
+    /// Configures the window to be centered on the main application window.
+    /// </summary>
+    /// <param name="window">The window to configure.</param>
+    public static void ConfigureChildWindowPosition(this Window window)
+    {
+      window.Owner = Application.Current.MainWindow;
+      window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+    }
+
+    /// <summary>
+    /// Positions the specified window at the center of the monitor that currently contains the mouse pointer.
+    /// I was tired of not having the window on my active monitor. I doubt this is the right way to do this, but
+    /// it works for now. I did the same thing to the child windows using <see cref="ConfigureChildWindowPosition"/>.
+    /// </summary>
+    /// <remarks>This method sets the window's startup location to manual and moves it so that it is centered
+    /// within the working area of the monitor where the mouse pointer is currently located. This is useful for ensuring
+    /// dialogs or windows appear on the user's active screen in multi-monitor setups.</remarks>
+    /// <param name="window">The window to position on the active monitor. Cannot be null.</param>
+    public static void PositionMainWindowOnActiveMonitor(this Window window)
+    {
+      // Get the current mouse position
+      var mousePosition = System.Windows.Forms.Control.MousePosition;
+
+      // Get the screen where the mouse is located
+      var screen = System.Windows.Forms.Screen.FromPoint(mousePosition);
+
+      // Set window position to manual so we can control it
+      window.WindowStartupLocation = WindowStartupLocation.Manual;
+
+      // Calculate center position on the screen with the mouse
+      window.Left = screen.WorkingArea.Left + (screen.WorkingArea.Width - window.Width) / 2;
+      window.Top = screen.WorkingArea.Top + (screen.WorkingArea.Height - window.Height) / 2;
+    }
   }
 }
