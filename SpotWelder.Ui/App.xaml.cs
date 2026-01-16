@@ -80,7 +80,7 @@ namespace SpotWelder.Ui
       {
         var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
 
-        mainWindow.PositionMainWindowOnActiveMonitor();
+        mainWindow.PositionWindowOnActiveMonitor();
 
         mainWindow.Show();
 

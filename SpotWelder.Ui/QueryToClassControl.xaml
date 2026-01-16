@@ -40,8 +40,8 @@
         <Label Content="Repository" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="458,3,0,0" FontWeight="Bold" FontSize="14" Width="81" />
         <CheckBox x:Name="CbRepoStatic" Content="Static statements" HorizontalAlignment="Left" Margin="485,31,0,0" VerticalAlignment="Top" Height="15" Width="110"/>
         <CheckBox x:Name="CbRepoDapper" Content="Dapper" HorizontalAlignment="Left" Margin="485,48,0,0" VerticalAlignment="Top" Height="15" Width="59"/>
-        <Label Content="Entity" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" FontWeight="Bold" FontSize="14" Width="86" Margin="0,1,0,0" />
-        <local:TextBoxWithDefaultControl x:Name="TxtEntityName" Margin="34,29,402,0" DefaultText="Entity1" VerticalAlignment="Top" Width="Auto"/>
+        <Label Content="Subject" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" FontWeight="Bold" FontSize="14" Width="86" Margin="0,1,0,0" />
+        <local:TextBoxWithDefaultControl x:Name="TxtSubjectName" Margin="34,29,402,0" DefaultText="Subject1" VerticalAlignment="Top" Width="Auto"/>
         <Button x:Name="BtnDynamicStatements" HorizontalAlignment="Left" Margin="485,104,0,0" VerticalAlignment="Top" Width="145" Height="37" Click="BtnDynamicStatements_OnClick">
           <TextBlock Text="Need dynamic statements and bulk copy?" TextWrapping="Wrap" />
         </Button>

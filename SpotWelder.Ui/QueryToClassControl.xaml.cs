@@ -46,8 +46,8 @@ namespace SpotWelder.Ui
 
       TxtNamespaceName.ApplyDefault();
 
-      TxtEntityName.DefaultButton_UnregisterDefaultEvent();
-      TxtEntityName.DefaultButton.Click += BtnEntityNameDefault_Click;
+      TxtSubjectName.DefaultButton_UnregisterDefaultEvent();
+      TxtSubjectName.DefaultButton.Click += BtnSubjectNameDefault_Click;
 
       TxtClassEntityName.TextBox.TextChanged += TxtClassEntityName_TextChanged;
       TxtClassEntityName.TextBox.MouseDown += TxtClassEntityName_MouseDown;
@@ -105,7 +105,7 @@ namespace SpotWelder.Ui
       {
         FormatTableName(TxtSourceSqlText);
 
-        TxtEntityName.Text = GetDefaultEntityName();
+        TxtSubjectName.Text = GetDefaultEntityName();
 
         TxtClassEntityName.Text = GetDefaultClassName();
       }
@@ -143,15 +143,15 @@ namespace SpotWelder.Ui
       }
     }
 
-    private void BtnEntityNameDefault_Click(object sender, RoutedEventArgs e)
+    private void BtnSubjectNameDefault_Click(object sender, RoutedEventArgs e)
     {
       try
       {
-        TxtEntityName.Text = GetDefaultEntityName();
+        TxtSubjectName.Text = GetDefaultEntityName();
       }
       catch
       {
-        TxtEntityName.Text = "Entity1";
+        TxtSubjectName.Text = "Entity1";
       }
     }
 
@@ -329,7 +329,9 @@ namespace SpotWelder.Ui
         foreach (var r in results) 
           _parentResultsWindow.AddTab(r.Filename, r.Contents, r.ContainingNamespace);
 
-        _parentResultsWindow.Show();
+        //Cannot use Show() here directly because of how this window is being invoked.
+        //In order to show this window where the parent window is, it has to be shown first.
+        _parentResultsWindow.ShowOnActiveWindow();
       }
       catch (NonUniqueColumnException nucEx)
       {

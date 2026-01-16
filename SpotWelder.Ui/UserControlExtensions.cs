@@ -112,8 +112,10 @@ namespace SpotWelder.Ui
     /// Configures the window to be centered on the main application window.
     /// </summary>
     /// <param name="window">The window to configure.</param>
-    public static void ConfigureChildWindowPosition(this Window window)
+    public static void PositionChildWindowOnActiveMonitor(this Window window)
     {
+      if (!window.IsVisible) throw new ApplicationException("This method cannot be called unless the window is visible.");
+
       window.Owner = Application.Current.MainWindow;
       window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }
@@ -121,13 +123,13 @@ namespace SpotWelder.Ui
     /// <summary>
     /// Positions the specified window at the center of the monitor that currently contains the mouse pointer.
     /// I was tired of not having the window on my active monitor. I doubt this is the right way to do this, but
-    /// it works for now. I did the same thing to the child windows using <see cref="ConfigureChildWindowPosition"/>.
+    /// it works for now. I did the same thing to the child windows using <see cref="PositionChildWindowOnActiveMonitor"/>.
     /// </summary>
     /// <remarks>This method sets the window's startup location to manual and moves it so that it is centered
     /// within the working area of the monitor where the mouse pointer is currently located. This is useful for ensuring
     /// dialogs or windows appear on the user's active screen in multi-monitor setups.</remarks>
     /// <param name="window">The window to position on the active monitor. Cannot be null.</param>
-    public static void PositionMainWindowOnActiveMonitor(this Window window)
+    public static void PositionWindowOnActiveMonitor(this Window window)
     {
       // Get the current mouse position
       var mousePosition = System.Windows.Forms.Control.MousePosition;

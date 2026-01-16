@@ -27,7 +27,7 @@ namespace SpotWelder.Ui
         return null;
 
       obj.ServerConnection.TableQuery = GetTableQueryFormatStrategy().ParseTableName(TxtSourceSqlText.Text);
-      obj.SubjectName = TxtEntityName.Text;
+      obj.SubjectName = TxtSubjectName.Text;
       obj.EntityName = TxtClassEntityName.Text;
       obj.ModelName = TxtClassModelName.Text;
       obj.Elections = _electionToCheckBoxMap.GetChosenGenerationElections();

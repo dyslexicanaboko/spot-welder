@@ -17,7 +17,7 @@ namespace SpotWelder.Ui
       ConnectionStringCb.DebugSetPostgresTestParameters();
       TxtSourceSqlText.Text = "public.task";
       TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "Task";
+      TxtSubjectName.Text = "Task";
       TxtClassEntityName.Text = "TaskEntity";
 
       CbClassEntity.IsChecked = true;
@@ -38,7 +38,7 @@ namespace SpotWelder.Ui
 
       TxtSourceSqlText.Text = "dbo.Task";
       TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "Task";
+      TxtSubjectName.Text = "Task";
       TxtClassEntityName.Text = "TaskEntity";
       TxtClassModelName.Text = "TaskV1Model";
 
@@ -87,7 +87,7 @@ namespace SpotWelder.Ui
 
       TxtSourceSqlText.Text = "[dbo].[DataTypeTest]";
       TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "DataTypeTest";
+      TxtSubjectName.Text = "DataTypeTest";
       TxtClassEntityName.Text = "DataTypeTestEntity";
       TxtClassModelName.Text = "DataTypeTestModel";
 
@@ -136,7 +136,7 @@ namespace SpotWelder.Ui
 
       TxtSourceSqlText.Text = "public.data_type_test";
       TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "DataTypeTest";
+      TxtSubjectName.Text = "DataTypeTest";
       TxtClassEntityName.Text = "DataTypeTestEntity";
       TxtClassModelName.Text = "DataTypeTestModel";
 
@@ -201,7 +201,7 @@ namespace SpotWelder.Ui
                               		ON s.StockId = q.StockId
                               """;
       TxtNamespaceName.Text = "Namespace1";
-      TxtEntityName.Text = "StockQuote";
+      TxtSubjectName.Text = "StockQuote";
       TxtClassEntityName.Text = "StockQuoteEntity";
       TxtClassModelName.Text = "StockQuoteV1Model";
 

@@ -49,8 +49,6 @@ namespace SpotWelder.Ui
     {
       InitializeComponent();
       
-      this.ConfigureChildWindowPosition();
-
       DataContext = _viewModel;
     }
 
@@ -67,7 +65,16 @@ namespace SpotWelder.Ui
         title, 
         contents,
         containingFolder));
-    
+
+    public void ShowOnActiveWindow()
+    {
+      this.PositionWindowOnActiveMonitor();
+      
+      Show();
+     
+      //this.ConfigureChildWindowPosition(); //Doesn't work in this situation
+    }
+
     //When the user tries to close the window, we want to hide it instead.
     //However, when the application is exiting (shutting down), it needs to close.
     private void ParentResultsWindow_OnClosing(object? sender, CancelEventArgs e)

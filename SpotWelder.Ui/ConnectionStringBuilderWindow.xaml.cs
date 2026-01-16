@@ -27,7 +27,7 @@ namespace SpotWelder.Ui
     {
       InitializeComponent();
       
-      this.ConfigureChildWindowPosition();
+      this.PositionChildWindowOnActiveMonitor();
 
       _viewModel.SqlEngines = Enum.GetValues<SqlEngine>()
         .Select(x => new SqlEngineViewModel(x))
