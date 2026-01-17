@@ -86,6 +86,8 @@ namespace SpotWelder.Ui
 
         if (p == null) return;
 
+        _svcQueryToMockData.RowProcessed += MockData_RowProcessed;
+
         TbEntityResult.Text = _svcQueryToMockData.GetEntity(p);
 
         TbMockDataResults.Text = _svcQueryToMockData.GetMockData(p, 5).Contents;
@@ -97,6 +99,10 @@ namespace SpotWelder.Ui
         UserControlExtensions.ShowErrorMessage(ex);
 
         _logger.LogError(ex, "Error previewing mocked data");
+      }
+      finally
+      {
+        _svcQueryToMockData.RowProcessed -= MockData_RowProcessed;
       }
     }
 

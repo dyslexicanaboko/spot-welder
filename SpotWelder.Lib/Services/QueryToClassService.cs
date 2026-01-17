@@ -62,7 +62,9 @@ namespace SpotWelder.Lib.Services
         Namespace = "Namespace1",
         Languages = instructions.Languages,
         Properties = instructions.Properties,
-        IsPartial = instructions.Elections.HasFlag(GenerationElections.GenerateEntityIEquatable)
+        IsPartial = instructions.Elections.HasFlag(GenerationElections.GenerateEntityIEquatable),
+        Elections = instructions.Elections,
+        TableQuery = new TableQuery() //Won't be used, but will be cloned, avoid null ref
       };
       
       return GenerateClasses(ci);

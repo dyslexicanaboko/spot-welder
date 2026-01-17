@@ -79,7 +79,7 @@ namespace SpotWelder.Lib.Services.Generators
       return GetFormattedCSharpResult($"{instructions.ClassName}.cs", sbFinal);
     }
 
-    private static string GetValueString(ClassMemberStrings property, object value)
+    private static string? GetValueString(ClassMemberStrings property, object value)
     {
       if (value == DBNull.Value) return "null";
 
@@ -101,6 +101,6 @@ namespace SpotWelder.Lib.Services.Generators
       return strValue;
     }
 
-    private void RaiseRowProcessedEvent(RowProcessedEventArgs e) => RowProcessed?.Invoke(this, e);
+    private void RaiseRowProcessedEvent(RowProcessedEventArgs e) => RowProcessed.Invoke(this, e);
   }
 }

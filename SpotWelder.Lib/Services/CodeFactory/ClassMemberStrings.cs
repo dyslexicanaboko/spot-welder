@@ -18,8 +18,8 @@ namespace SpotWelder.Lib.Services.CodeFactory
   public class ClassMemberStrings
   {
     private readonly CodeDomProvider _provider;
-    private static HashSet<string> _englishDictionary;
-    private static readonly Regex _reDelimiters = new Regex("[-_\\s]+");
+    private static HashSet<string>? _englishDictionary;
+    private static readonly Regex ReDelimiters = new ("[-_\\s]+");
 
     /// <summary>
     /// Used in the case where the meta data is provided by the reflected properties
@@ -225,7 +225,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
 
       if (!str.StartsWith("System.")) return str;
 
-      //This is a side-effect, but for now I will let it pass
+      //TODO: This is a side effect, but for now I will let it pass
       InSystemNamespace = true;
 
       str = str.Replace("System.", string.Empty);
@@ -299,7 +299,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
       var lst = new List<string>();
 
       //Removing any delimiters such as hyphens, underscores, and whitespace
-      target = _reDelimiters.Replace(target, string.Empty);
+      target = ReDelimiters.Replace(target, string.Empty);
 
       var f = MostProbableSegment(words, target);
       var trim = 0;

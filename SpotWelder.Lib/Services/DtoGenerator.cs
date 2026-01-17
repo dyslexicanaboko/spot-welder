@@ -15,7 +15,7 @@ namespace SpotWelder.Lib.Services
         private string _assemblyPath;
 
         private string _fileName;
-        
+
         public Assembly AssemblyReference { get; private set; }
 
         public bool IsLoaded => AssemblyReference != null;
