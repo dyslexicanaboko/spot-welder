@@ -26,15 +26,29 @@ namespace SpotWelder.Lib.Services
     {
       if (!parameters.HasElections) return null;
 
+      //If you are using a repository, then you are automatically using the Record to Entity mapper.
+      if (parameters.Elections.HasAnyFlag(
+            GenerationElections.RepoDapper,
+            GenerationElections.RepoStatic))
+      {
+        parameters.Elections |= GenerationElections.GenerateRecord;
+        parameters.Elections |= GenerationElections.MapRecordToEntity;
+      }
+
+      //If any mapping is selected, then also generate the mapper class
+      if (parameters.Elections.HasAnyFlag(
+            GenerationElections.MapModelToEntity,
+            GenerationElections.MapEntityToModel,
+            GenerationElections.MapCreateModelToEntity,
+            GenerationElections.MapPatchModelToEntity,
+            GenerationElections.MapRecordToEntity))
+        parameters.Elections |= GenerationElections.GenerateMapper;
+
       _queryToClassRepository.ConfigureSqlClient(parameters.ServerConnection);
 
       var baseInstructions = GetBaseInstructions(parameters);
 
       return GenerateClasses(baseInstructions);
-
-      //Writing to files will be handled again later
-      //if (p.SaveAsFile)
-      //    WriteClassToFile(p, content);
     }
 
     public List<GeneratedResult> Generate(DtoInstructions instructions)
@@ -82,6 +96,9 @@ namespace SpotWelder.Lib.Services
         Elections = p.Elections,
         SqlEngine = p.ServerConnection.SqlEngine
       };
+
+      //TODO: defaulting the language to CSharp, not sure what I am going to do with this at the moment
+      if(p.LanguageType == CodeType.None) p.LanguageType = CodeType.CSharp;
 
       foreach (var sc in schema.ColumnsAll)
       {

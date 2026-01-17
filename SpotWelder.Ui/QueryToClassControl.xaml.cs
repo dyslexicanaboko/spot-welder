@@ -296,11 +296,11 @@ namespace SpotWelder.Ui
     {
       try
       {
-        var obj = GetParameters();
+        var parameters = GetParameters();
 
-        if (obj == null) return;
+        if (parameters == null) return;
 
-        if (!obj.HasElections)
+        if (!parameters.HasElections)
         {
           UserControlExtensions.ShowWarningMessage("No elections were made. Make elections to continue.");
 
@@ -309,14 +309,14 @@ namespace SpotWelder.Ui
 
         PbGenerator.IsIndeterminate = true;
 
-        var results = await Task.Run(() => _svcQueryToClass.Generate(obj));
+        var results = await Task.Run(() => _svcQueryToClass.Generate(parameters));
 
         if (results == null)
         {
           #if DEBUG
           //You cannot do multiple assignments on the same row. Do one per row. `e.Elections |= election`
           UserControlExtensions.ShowWarningMessage(
-            $"Results was null. Elections equals {(int)obj.Elections}. Did you modify the flags of the GenerationElections enum?");
+            $"Results was null. Elections equals {(int)parameters.Elections}. Did you modify the flags of the GenerationElections enum?");
           #endif
 
           UserControlExtensions.ShowWarningMessage(

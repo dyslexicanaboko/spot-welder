@@ -317,7 +317,7 @@ namespace SpotWelder.Lib.Services.Generators
     /// <returns>A new string consisting of the trimmed and indented lines, joined by line breaks.</returns>
     protected static string FormatAsRawString(string content, int spacesIndented)
       => string.Join(Environment.NewLine, content
-        .Split([Environment.NewLine], StringSplitOptions.None)
+        .Split([Environment.NewLine], StringSplitOptions.None | StringSplitOptions.RemoveEmptyEntries)
         .Select(x => x.Trim())
         .Select(x => x.PadLeft(x.Length + spacesIndented, ' ')));
   }

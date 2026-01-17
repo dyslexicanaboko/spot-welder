@@ -32,23 +32,8 @@ namespace SpotWelder.Ui
       obj.ModelName = TxtClassModelName.Text;
       obj.Elections = _electionToCheckBoxMap.GetChosenGenerationElections();
 
-      //TODO: I am not sure if it makes sense to leave this logic here. Should be in the Library.
-      //If you are using a repository, then you are automatically using the Record to Entity mapper.
-      if (obj.Elections.HasAnyFlag(
-            GenerationElections.RepoDapper,
-            GenerationElections.RepoStatic))
-      {
-        obj.Elections |= GenerationElections.GenerateRecord;
-        obj.Elections |= GenerationElections.MapRecordToEntity;
-      }
-
-      if (obj.Elections.HasAnyFlag(
-            GenerationElections.MapModelToEntity, 
-            GenerationElections.MapEntityToModel, 
-            GenerationElections.MapCreateModelToEntity,
-            GenerationElections.MapPatchModelToEntity,
-            GenerationElections.MapRecordToEntity))
-        obj.Elections |= GenerationElections.GenerateMapper;
+      //Election modifications has been moved to the service class
+      //Go look at the Generate() method.
       
       return obj;
     }
