@@ -51,6 +51,12 @@
 		<Content Include="Templates\Immutables\DateTimeManager.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Templates\Immutables\BaseApiController.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\IAppConfiguration.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\Immutables\IRepository.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

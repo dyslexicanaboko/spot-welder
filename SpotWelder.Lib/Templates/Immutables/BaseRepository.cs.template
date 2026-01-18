@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using {{Namespace}}.DataAccess.Utility;
-using {{Namespace}}.Managers;
 using {{Namespace}}.Managers.Utility;
 {{SqlNamespaces}}
 using System.Data;

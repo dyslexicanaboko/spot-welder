@@ -25,7 +25,7 @@ namespace SpotWelder.Lib.Services.Generators
     private const string ImmutablesFolderName = "Immutables";
 
     //TODO: Since I had to explicitly log the mappings here, then just do the find/replace in the loop below
-    //I don't want the containing namespaces to be in two places
+    // I don't want the containing namespaces to be in two places
     private readonly Dictionary<string, string> _containingNamespaces = new()
     {
       ["BaseRepository.cs.template"] = "DataAccess",
@@ -34,7 +34,8 @@ namespace SpotWelder.Lib.Services.Generators
       ["IRepository.cs.template"] = "DataAccess",
       ["ColumnSchema.cs.template"] = "DataAccess.Utility",
       ["UpdateInstruction.cs.template"] = "Managers.Utility",
-      ["BaseManager.cs.template"] = "Managers"
+      ["BaseManager.cs.template"] = "Managers",
+      ["BaseApiController"] = "Controllers"
     };
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)

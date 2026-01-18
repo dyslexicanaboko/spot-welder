@@ -10,7 +10,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
   [Route("api/v1/{{ApiRoute}}")]
   [ApiController]
   public class {{ClassName}}Controller
-    : ApiBaseController
+    : BaseApiController
   {
     private readonly I{{SubjectName}}Mapper _mapper;
 
@@ -39,7 +39,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
     }
 
     // GET api/v1/{{ApiRoute}}
-    [HttpGet()]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
     public async Task<ActionResult<{{ModelName}}>> GetAll()
     {
