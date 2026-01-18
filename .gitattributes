@@ -9,3 +9,4 @@
 # 1. Add and commit the changes as normal.
 # 2. Then run `git add --renormalize .` and commit one more time. (don't forget the period).
 # 3. Finally push to remote.
+ 
