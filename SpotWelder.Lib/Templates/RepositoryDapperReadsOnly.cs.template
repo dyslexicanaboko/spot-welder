@@ -1,5 +1,4 @@
 using Dapper;
-{{SqlNamespaces}}
 using {{Namespace}}.Records;
 using System.Collections.Generic;
 using System.Data;

@@ -1,0 +1,6 @@
+# Preserve CRLF line endings in template files
+Templates/*.cs.template text eol=crlf
+
+# If you have other template extensions in the Templates folder, add them here:
+# Templates/*.template text eol=crlf
+# Templates/*.txt.template text eol=crlf
