@@ -143,7 +143,7 @@ namespace SpotWelder.Lib.Services.Generators
         properties,
         p =>
         {
-          var kwRequired = p.IsNullable ? " required" : string.Empty;
+          var kwRequired = p.IsNullable ? string.Empty : " required";
 
           return $"public{kwRequired} {p.SystemTypeAlias} {p.Property} {{ get; init; }}";
         },
@@ -152,12 +152,9 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    protected string GetNotImplementedException(string exceptionMessage = null)
+    protected static string GetNotImplementedException(string? exceptionMessage = null)
     {
-      if (exceptionMessage == null)
-        exceptionMessage = string.Empty;
-      else
-        exceptionMessage = $"\"{exceptionMessage}\"";
+      exceptionMessage = exceptionMessage == null ? string.Empty : $"\"{exceptionMessage}\"";
 
       return $"throw new NotImplementedException({exceptionMessage});";
     }
@@ -187,7 +184,7 @@ namespace SpotWelder.Lib.Services.Generators
     }
 
     //TODO: Need to use DI for this
-    protected AsynchronicityFormatStrategyBase GetAsynchronicityFormatStrategy(bool isAsynchronous)
+    protected static AsynchronicityFormatStrategyBase GetAsynchronicityFormatStrategy(bool isAsynchronous)
     {
       AsynchronicityFormatStrategyBase strategy = isAsynchronous ? new AsyncFormatStrategy() : new SyncFormatStrategy();
 

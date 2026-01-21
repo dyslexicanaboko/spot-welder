@@ -1,4 +1,5 @@
-﻿using SpotWelder.Ui.Helpers;
+﻿using SpotWelder.Lib;
+using SpotWelder.Ui.Helpers;
 using SpotWelder.Ui.Models;
 using SpotWelder.Ui.ViewModels;
 using System;
@@ -175,7 +176,7 @@ namespace SpotWelder.Ui
 
       if (result != System.Windows.Forms.DialogResult.OK) return;
 
-      File.WriteAllText(dlg.FileName, SelectedTab.Contents);
+      Utils.WriteFile(dlg.FileName, SelectedTab.Contents);
     }
 
     private void BtnSave_OnClick(object sender, RoutedEventArgs e)
@@ -204,7 +205,7 @@ namespace SpotWelder.Ui
         //Ensure the lineage of directories exists. They will be created if they don't exist only.
         Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
 
-        File.WriteAllText(fullFilePath, tab.Contents);
+        Utils.WriteFile(fullFilePath, tab.Contents);
       }
 
       HlSaveLocation.SetHyperLink(dlg.SelectedPath, dlg.SelectedPath);

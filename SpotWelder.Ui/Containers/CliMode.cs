@@ -139,7 +139,7 @@ namespace SpotWelder.Ui.Containers
 
         Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
 
-        File.WriteAllText(fullFilePath, file.Contents);
+        Utils.WriteFile(fullFilePath, file.Contents);
       }
     }
 
