@@ -46,8 +46,8 @@ namespace SpotWelder.Ui
 
       TxtNamespaceName.ApplyDefault();
 
-      TxtEntityName.DefaultButton_UnregisterDefaultEvent();
-      TxtEntityName.DefaultButton.Click += BtnEntityNameDefault_Click;
+      TxtSubjectName.DefaultButton_UnregisterDefaultEvent();
+      TxtSubjectName.DefaultButton.Click += BtnSubjectNameDefault_Click;
 
       TxtClassEntityName.TextBox.TextChanged += TxtClassEntityName_TextChanged;
       TxtClassEntityName.TextBox.MouseDown += TxtClassEntityName_MouseDown;
@@ -60,11 +60,19 @@ namespace SpotWelder.Ui
       _electionToCheckBoxMap = GetGenerationElectionsMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
 
+      Loaded += QueryToClassControl_Loaded;
+    }
+
+    private void QueryToClassControl_Loaded(object sender, RoutedEventArgs e)
+    {
       //These methods have been moved to a partial class
-      DebugWholeSqlServerTest();
+      DebugCompoundQuerySqlServerTest();
+      //DebugWholeSqlServerTest();
       //DebugMinimalPostgresTest();
       //DebugWholeSqlServerTestForParity();
       //DebugWholePostgresTestForParity();
+
+      Loaded -= QueryToClassControl_Loaded;
     }
 
     private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
@@ -82,6 +90,11 @@ namespace SpotWelder.Ui
       _generalRepo = dependencies.Repository;
 
       ConnectionStringCb.Dependencies(dependencies.ConnectionStringControlDependencies);
+
+      _parentResultsWindow.ErrorOccurred += (_, childArgs) =>
+      {
+        _logger.LogError(childArgs.Exception, nameof(_parentResultsWindow) + " " + childArgs.Message);
+      };
     }
 
     private void TxtSqlSourceText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -92,7 +105,7 @@ namespace SpotWelder.Ui
       {
         FormatTableName(TxtSourceSqlText);
 
-        TxtEntityName.Text = GetDefaultEntityName();
+        TxtSubjectName.Text = GetDefaultEntityName();
 
         TxtClassEntityName.Text = GetDefaultClassName();
       }
@@ -130,15 +143,15 @@ namespace SpotWelder.Ui
       }
     }
 
-    private void BtnEntityNameDefault_Click(object sender, RoutedEventArgs e)
+    private void BtnSubjectNameDefault_Click(object sender, RoutedEventArgs e)
     {
       try
       {
-        TxtEntityName.Text = GetDefaultEntityName();
+        TxtSubjectName.Text = GetDefaultEntityName();
       }
       catch
       {
-        TxtEntityName.Text = "Entity1";
+        TxtSubjectName.Text = "Entity1";
       }
     }
 
@@ -283,17 +296,42 @@ namespace SpotWelder.Ui
     {
       try
       {
-        var obj = GetParameters();
+        var parameters = GetParameters();
 
-        if (obj == null) return;
+        if (parameters == null) return;
+
+        if (!parameters.HasElections)
+        {
+          UserControlExtensions.ShowWarningMessage("No elections were made. Make elections to continue.");
+
+          return;
+        }
 
         PbGenerator.IsIndeterminate = true;
 
-        var results = await Task.Run(() => _svcQueryToClass.Generate(obj));
+        var results = await Task.Run(() => _svcQueryToClass.Generate(parameters));
 
-        foreach (var g in results) _parentResultsWindow.AddTab(g.Filename, g.Contents);
+        if (results == null)
+        {
+          #if DEBUG
+          //You cannot do multiple assignments on the same row. Do one per row. `e.Elections |= election`
+          UserControlExtensions.ShowWarningMessage(
+            $"Results was null. Elections equals {(int)parameters.Elections}. Did you modify the flags of the GenerationElections enum?");
+          #endif
 
-        _parentResultsWindow.Show();
+          UserControlExtensions.ShowWarningMessage(
+            "No results were returned. This is not the expected behavior (bug?).");
+
+          return;
+        }
+        
+        //NOTE: The results are aggregated into a single file list in the generator
+        foreach (var r in results) 
+          _parentResultsWindow.AddTab(r.Filename, r.Contents, r.ContainingNamespace);
+
+        //Cannot use Show() here directly because of how this window is being invoked.
+        //In order to show this window where the parent window is, it has to be shown first.
+        _parentResultsWindow.ShowOnActiveWindow();
       }
       catch (NonUniqueColumnException nucEx)
       {
@@ -341,7 +379,6 @@ namespace SpotWelder.Ui
       CbClassEntityEqualityComparer.IsEnabled = isChecked;
       CbClassEntityIEquatable.IsEnabled = isChecked;
       CbClassEntityIComparable.IsEnabled = isChecked;
-      CbMapInterfaceToEntity.IsEnabled = isChecked;
 
       CbClassModelAndEntity_ToggleJointDependents(isChecked, CbClassModel.IsChecked());
     }
@@ -351,8 +388,6 @@ namespace SpotWelder.Ui
       if (CbMapEntityToModel == null) return; //On Startup controls are still null
 
       var isChecked = CbClassModel.IsChecked();
-
-      CbMapInterfaceToModel.IsEnabled = isChecked;
 
       CbClassModelAndEntity_ToggleJointDependents(CbClassEntity.IsChecked(), isChecked);
     }

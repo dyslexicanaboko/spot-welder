@@ -15,7 +15,11 @@ namespace SpotWelder.Lib.Services.Generators
 
 		protected override string TemplateName => "RepositoryStatic.cs.template";
 
-		public override GeneratedResult FillTemplate(ClassInstructions instructions)
+    protected override string ContainingNamespace => "DataAccess";
+
+    //TODO: Modify to handle reads-only version
+    //TODO: Modify to produce interface
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
 			var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
 
@@ -28,6 +32,7 @@ namespace SpotWelder.Lib.Services.Generators
 			 * EntityName: Refers to the existing source Entity Class assumed to have been generated already "Table1Entity.cs"
 			 * ModelName: Refers to the existing Model Class that compliments the Entity Class "Table1Model.cs" */
 
+      SetContainingNamespace(template);
 			template.Replace("{{Namespace}}", instructions.Namespace);
 			template.Replace("{{ClassName}}", instructions.SubjectName); //Prefix of the repository class name
 			template.Replace("{{EntityName}}", instructions.EntityName); //Class entity name

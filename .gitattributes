@@ -1,0 +1,12 @@
+# Preserve CRLF line endings in template files
+*.cs.template text eol=crlf
+
+# If you have other template extensions in the Templates folder, add them here:
+# Templates/*.template text eol=crlf
+# Templates/*.txt.template text eol=crlf
+#
+# After making changes to this file, you must do the following:
+# 1. Add and commit the changes as normal.
+# 2. Then run `git add --renormalize .` and commit one more time. (don't forget the period).
+# 3. Finally push to remote.
+ 

@@ -13,6 +13,9 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "EntityEqualityComparer.cs.template";
 
+    /// <inheritdoc />
+    protected override string ContainingNamespace => "Entities";
+
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.EntityName;
@@ -21,6 +24,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(strTemplate);
 
+      SetContainingNamespace(template);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);

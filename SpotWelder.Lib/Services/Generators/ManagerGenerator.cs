@@ -4,21 +4,29 @@ using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-  public class ServiceGenerator
+  public class ManagerGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.Service;
+    public override GenerationElections Election => GenerationElections.Manager;
 
-    protected override string TemplateName => "Service.cs.template";
+    protected override string TemplateName => "Manager.cs.template";
+
+    protected override string ContainingNamespace => "Managers";
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
 
-      var strTemplate = GetTemplate(TemplateName);
+      var templateName = TemplateName;
 
-      var template = new StringBuilder(strTemplate);
+      /* When a query is provided, it's very likely it cannot handle CUD.
+       * Therefore, this readonly template will be used. */
+      if (instructions.SourceSqlType == SourceSqlType.Query)
+        templateName = "ManagerReadsOnly.cs.template";
 
+      var template = new StringBuilder(GetTemplate(templateName));
+
+      SetContainingNamespace(template);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
@@ -34,8 +42,15 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyProperty}}", pk.Property); //TaskId
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
-      
-      return GetFormattedCSharpResult($"{instructions.ClassName}Service.cs", template);
+
+      var result = GetFormattedCSharpResult($"{instructions.ClassName}Manager.cs", template);
+
+      result.CorrespondingInterface = GenerateInterface(
+        instructions,
+        result,
+        "IManager.cs.template");
+
+      return result;
     }
   }
 }

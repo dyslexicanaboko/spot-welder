@@ -1,0 +1,10 @@
+﻿{{Namespaces}}
+using {{Namespace}}.Entities;
+
+namespace {{Namespace}}.{{ContainingNamespace}}
+{
+  public interface I{{ClassName}}Manager
+  {
+    {{Contracts}}
+  }
+}

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
+  //TODO: Not sure if I am going to keep this anymore. Has not been practical.
   public class ClassInterfaceGenerator
     : GeneratorBase
   {

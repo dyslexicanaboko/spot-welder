@@ -1,0 +1,9 @@
+﻿namespace {{Namespace}};
+
+/// <summary>
+/// This interface exists to ultimately be replaced. It's a stand in for the need of a connection string.
+/// </summary>
+public interface IAppConfiguration
+{
+    string GetConnectionString();
+}

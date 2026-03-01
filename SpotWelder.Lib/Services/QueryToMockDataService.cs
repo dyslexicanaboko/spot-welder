@@ -35,7 +35,7 @@ namespace SpotWelder.Lib.Services
     {
       _repository.ConfigureSqlClient(parameters.ServerConnection);
 
-      //Get the meta data needed about the entity
+      //Get the metadata needed about the entity
       var instructions = GetInstructions(parameters);
 
       var generator = new ClassEntitySimpleGenerator();
@@ -55,7 +55,7 @@ namespace SpotWelder.Lib.Services
 
       _genericDatabaseQueries.ConfigureSqlClient(parameters.ServerConnection);
 
-      //Get the meta data needed about the entity
+      //Get the metadata needed about the entity
       var instructions = GetInstructions(parameters);
 
       var dt = GetRowData(parameters.ServerConnection, top);

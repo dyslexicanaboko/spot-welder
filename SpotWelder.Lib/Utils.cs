@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SpotWelder.Lib
 {
   public static class Utils
   {
-    public static void LogError(Exception ex, string message = null)
-    {
-      //Logging
-      throw new NotImplementedException("Logging is not implemented anywhere yet.");
-    }
-
     public static bool HasAnyFlag(this GenerationElections elections, params GenerationElections[] flags)
       => flags.Any(f => elections.HasFlag(f));
 
@@ -60,5 +55,17 @@ namespace SpotWelder.Lib
 
       return dict;
     }
+
+    /// <summary>
+    /// Writes the specified text to a file at the given path using UTF-8 encoding, overwriting any existing content.
+    /// Specifying in one place how files are saved. C# for example defaults to UTF-8 without BOM.
+    /// </summary>
+    /// <param name="path">
+    /// The file path where the text will be written. If the file does not exist,
+    /// it will be created. Cannot be null or an empty string.
+    /// </param>
+    /// <param name="contents">The text to write to the file. If null, an empty file will be created.</param>
+    public static void WriteFile(string path, string? contents)
+      => File.WriteAllText(path, contents, new System.Text.UTF8Encoding(false));
   }
 }

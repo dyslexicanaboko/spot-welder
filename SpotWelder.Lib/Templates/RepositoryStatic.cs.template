@@ -5,111 +5,111 @@ using System.Data;
 using System.Linq;
 {{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}Repository
-	{
-		public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			const string sql = """
-				SELECT
-				{{SelectAllList}}
-				FROM {{Schema}}.{{Table}}
-				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
-				""";
+  public class {{ClassName}}Repository
+  {
+    public [AO]{{EntityName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      const string sql = """
+        SELECT
+        {{SelectAllList}}
+        FROM {{Schema}}.{{Table}}
+        WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+        """;
 
-			var p = GetPrimaryKeyParameter({{PrimaryKeyParameter}});
+      var p = GetPrimaryKeyParameter({{PrimaryKeyParameter}});
 
-			using var dr = [A]ExecuteReaderText(sql, p);
-			
-			var lst = ToList(dr, ToEntity);
+      using var dr = [A]ExecuteReaderText(sql, p);
+      
+      var lst = ToList(dr, ToEntity);
 
-			return lst.Any() ? lst.Single() : null;
-		}
+      return lst.Any() ? lst.Single() : null;
+    }
 
-		public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
-		{
-			const string sql = """
-				SELECT
-				{{SelectAllList}}
-				FROM {{Schema}}.{{Table}}
-				""";
+    public [AO]IEnumerable<{{EntityName}}>[AC] SelectAll()
+    {
+      const string sql = """
+        SELECT
+        {{SelectAllList}}
+        FROM {{Schema}}.{{Table}}
+        """;
 
-			using var dr = [A]ExecuteReaderText(sql);
-			
-			return ToList(dr, ToEntity);
-		}
+      using var dr = [A]ExecuteReaderText(sql);
+      
+      return ToList(dr, ToEntity);
+    }
 
-		public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
-		{
-			const string sql = """
-				INSERT INTO {{Schema}}.{{Table}} (
-				{{InsertColumnList}}
-				) VALUES (
-				{{InsertValuesList}}) {{ScopeIdentity}}
-				""";
+    public [AO]{{PrimaryKeyType}}[AC] Insert({{EntityName}} entity)
+    {
+      const string sql = """
+        INSERT INTO {{Schema}}.{{Table}} (
+        {{InsertColumnList}}
+        ) VALUES (
+        {{InsertValuesList}}) {{ScopeIdentity}}
+        """;
 
-			var lst = GetParameters(entity);
+      var lst = GetParameters(entity);
 
 {{PrimaryKeyInsertExecution}}
-		}
+    }
 
-		public [void] Update({{EntityName}} entity)
-		{
-			const string sql = """
-				UPDATE {{Schema}}.{{Table}} SET 
-				{{UpdateParameters}}
-				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
-				""";
+    public [void] Update({{EntityName}} entity)
+    {
+      const string sql = """
+        UPDATE {{Schema}}.{{Table}} SET 
+        {{UpdateParameters}}
+        WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+        """;
 
-			var lst = GetParameters(entity);
+      var lst = GetParameters(entity);
 
-			lst.Add(GetPrimaryKeyParameter(entity.{{PrimaryKeyProperty}}));
+      lst.Add(GetPrimaryKeyParameter(entity.{{PrimaryKeyProperty}}));
 
-			[A]ExecuteNonQuery(sql, lst.ToArray());
-		}
+      [A]ExecuteNonQuery(sql, lst.ToArray());
+    }
 
-		public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			const string sql = """
-				DELETE FROM {{Schema}}.{{Table}} 
-				WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
-				""";
+    public [void] Delete({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      const string sql = """
+        DELETE FROM {{Schema}}.{{Table}} 
+        WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+        """;
 
-			var arr = new {{ParameterObject}}[] { GetPrimaryKeyParameter({{PrimaryKeyParameter}}) };
-			
-			[A]ExecuteNonQuery(sql, arr);
-		}
-		
-		private {{ParameterObject}} GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-		{
-			var p = new {{ParameterObject}}();
-			p.ParameterName = "@{{PrimaryKeyColumn}}";
-			p.{{ParameterDbTypeProperty}} = {{ParameterDbTypeEnum}}.{{PrimaryKeySqlDbType}};
-			p.Value = {{PrimaryKeyParameter}};
-			
-			return p;
-		}
+      var arr = new {{ParameterObject}}[] { GetPrimaryKeyParameter({{PrimaryKeyParameter}}) };
+      
+      [A]ExecuteNonQuery(sql, arr);
+    }
+    
+    private {{ParameterObject}} GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      var p = new {{ParameterObject}}();
+      p.ParameterName = "@{{PrimaryKeyColumn}}";
+      p.{{ParameterDbTypeProperty}} = {{ParameterDbTypeEnum}}.{{PrimaryKeySqlDbType}};
+      p.Value = {{PrimaryKeyParameter}};
+      
+      return p;
+    }
 
-		private List<{{ParameterObject}}> GetParameters({{EntityName}} entity)
-		{
-			{{ParameterObject}} p = null;
+    private List<{{ParameterObject}}> GetParameters({{EntityName}} entity)
+    {
+      {{ParameterObject}} p = null;
 
-			var lst = new List<{{ParameterObject}}>();
-			
+      var lst = new List<{{ParameterObject}}>();
+      
 {{SqlParameters}}
-			
-			return lst;
-		}
-		
-		private {{EntityName}} ToEntity(IDataReader reader)
-		{
-			var r = reader;
+      
+      return lst;
+    }
+    
+    private {{EntityName}} ToEntity(IDataReader reader)
+    {
+      var r = reader;
 
-			var e = new {{EntityName}}();
+      var e = new {{EntityName}}();
 {{SetProperties}}
 
-			return e;
-		}
-	}
+      return e;
+    }
+  }
 }

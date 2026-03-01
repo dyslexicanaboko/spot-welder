@@ -2,11 +2,12 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
+		<EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+		<StartupObject>SpotWelder.Ui.App</StartupObject>
 		<PublishUrl>publish\</PublishUrl>
 		<UseWindowsForms>true</UseWindowsForms>
 		<UseWPF>true</UseWPF>
 		<Nullable>enable</Nullable>
-		<StartupObject></StartupObject>
 		<AssemblyVersion>3.0.0.0</AssemblyVersion>
 		<FileVersion>3.0.0.0</FileVersion>
 		<Title>Spot Welder</Title>
@@ -68,6 +69,7 @@
 		<PackageReference Include="Scrutor" Version="6.0.1" />
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="YamlDotNet" Version="16.3.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\SpotWelder.Lib\SpotWelder.Lib.csproj" />

@@ -10,7 +10,10 @@ namespace SpotWelder.Lib.Services.Generators
 
 		protected override string TemplateName => "ModelCreate.cs.template";
 
-		public override GeneratedResult FillTemplate(ClassInstructions instructions)
+    /// <inheritdoc />
+    protected override string ContainingNamespace => "Models.Client";
+
+    public override GeneratedResult FillTemplate(ClassInstructions instructions)
 		{
 			instructions.ClassName = instructions.SubjectName;
 
@@ -18,6 +21,7 @@ namespace SpotWelder.Lib.Services.Generators
 
 			var template = new StringBuilder(strTemplate);
 
+      SetContainingNamespace(template);
 			template.Replace("{{Namespace}}", instructions.Namespace);
 			template.Replace("{{ClassName}}", instructions.ClassName); //Subject is the prefix
 			template.Replace("{{InterfaceName}}", instructions.InterfaceName);

@@ -1,7 +1,12 @@
-﻿using SpotWelder.Ui.Helpers;
+﻿using SpotWelder.Lib;
+using SpotWelder.Ui.Helpers;
+using SpotWelder.Ui.Models;
 using SpotWelder.Ui.ViewModels;
+using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -10,7 +15,6 @@ using System.Windows.Input;
 using Clipboard = System.Windows.Clipboard;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace SpotWelder.Ui
@@ -23,7 +27,7 @@ namespace SpotWelder.Ui
   {
     private readonly ParentResultsWindowViewModel _viewModel = new ();
 
-    public static readonly RoutedUICommand SaveAll = new RoutedUICommand(
+    public static readonly RoutedUICommand SaveAll = new (
       "Save All", // Display text
       "SaveAll",  // Command name
       typeof(ParentResultsWindow),
@@ -32,24 +36,46 @@ namespace SpotWelder.Ui
         new KeyGesture(Key.S, ModifierKeys.Control | ModifierKeys.Shift) // Ctrl+Shift+S
       });
 
-    private static bool _applicationIsShuttingDown = false;
+    private static bool _applicationIsShuttingDown;
 
     private ResultTabViewModel SelectedTab => (ResultTabViewModel)TcResults.SelectedItem;
+
+    /// <summary>
+    /// Conduit for reporting errors to a parent window.
+    /// This helps avoid passing the parent's logger to the child window.
+    /// </summary>
+    public event EventHandler<ChildErrorEventArgs>? ErrorOccurred;
 
     public ParentResultsWindow()
     {
       InitializeComponent();
-
+      
       DataContext = _viewModel;
     }
 
-    public void AddTab(string title, string contents)
-    {
-      _viewModel.Tabs.Add(new ResultTabViewModel(
+    /// <summary>
+    /// Report the error up to the parent window so it can be handled.
+    /// </summary>
+    /// <param name="exception">Error that has occurred.</param>
+    /// <param name="message">Additional information is any.</param>
+    protected virtual void ReportError(Exception exception, string message = "")
+      => ErrorOccurred?.Invoke(this, new ChildErrorEventArgs(exception, message));
+
+    public void AddTab(string title, string contents, string containingFolder)
+      => _viewModel.Tabs.Add(new ResultTabViewModel(
         title, 
-        contents));
+        contents,
+        containingFolder));
+
+    public void ShowOnActiveWindow()
+    {
+      this.PositionWindowOnActiveMonitor();
+      
+      Show();
+     
+      //this.ConfigureChildWindowPosition(); //Doesn't work in this situation
     }
-    
+
     //When the user tries to close the window, we want to hide it instead.
     //However, when the application is exiting (shutting down), it needs to close.
     private void ParentResultsWindow_OnClosing(object? sender, CancelEventArgs e)
@@ -118,7 +144,24 @@ namespace SpotWelder.Ui
     }
 
     private void BtnCopy_Click(object sender, RoutedEventArgs e)
-      => Clipboard.SetText(SelectedTab.Content);
+    {
+      try
+      {
+        Clipboard.SetDataObject(SelectedTab.Contents);
+      }
+      catch (COMException cex)
+      {
+        UserControlExtensions.ShowWarningMessage($"Clipboard appears to be unavailable. Please try again in a moment.\r\nError: {cex.Message}");
+
+        ReportError(cex, "Clipboard is unavailable.");
+      }
+      catch (Exception ex)
+      {
+        ex.ShowAsErrorMessage();
+       
+        ReportError(ex, "Unexpected error.");
+      }
+    }
 
     private void SaveOneFile()
     {
@@ -133,7 +176,7 @@ namespace SpotWelder.Ui
 
       if (result != System.Windows.Forms.DialogResult.OK) return;
 
-      File.WriteAllText(dlg.FileName, SelectedTab.Content);
+      Utils.WriteFile(dlg.FileName, SelectedTab.Contents);
     }
 
     private void BtnSave_OnClick(object sender, RoutedEventArgs e)
@@ -152,9 +195,17 @@ namespace SpotWelder.Ui
 
       foreach (var tab in _viewModel.Tabs)
       {
-        var filePath = Path.Combine(dlg.SelectedPath, tab.Header);
+        var paths = tab.ContainingFolder.Split('.').ToList();
 
-        File.WriteAllText(filePath, tab.Content);
+        paths.Insert(0, dlg.SelectedPath);
+        paths.Add(tab.Header);
+
+        var fullFilePath = Path.Combine(paths.ToArray());
+
+        //Ensure the lineage of directories exists. They will be created if they don't exist only.
+        Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
+
+        Utils.WriteFile(fullFilePath, tab.Contents);
       }
 
       HlSaveLocation.SetHyperLink(dlg.SelectedPath, dlg.SelectedPath);

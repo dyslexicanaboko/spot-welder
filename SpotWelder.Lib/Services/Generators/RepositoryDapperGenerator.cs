@@ -16,19 +16,34 @@ namespace SpotWelder.Lib.Services.Generators
 
 		protected override string TemplateName => "RepositoryDapper.cs.template";
 
+    protected override string ContainingNamespace => "DataAccess";
+
+    //TODO: This cannot stay here, this is a temporary until I know where to take this
+    private readonly string[] _excludedColumns = [ "UserId", "CreatedOn", "UpdatedOn", "User_Id", "Created_On", "Updated_On"];
+
 		public override GeneratedResult FillTemplate(ClassInstructions instructions)
-		{
-			var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+    {
+      var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+      
+      var templateName = TemplateName;
 
-			instructions.ClassName = instructions.SubjectName;
+      /* When a query is provided, it's very likely it cannot handle CUD creation.
+			 * Therefore, this readonly template will be used. A key difference is that
+			 * the body of the queries must be overwritten by the provided query. This
+			 * will not work perfectly, but it's a start. */
+      if (instructions.SourceSqlType == SourceSqlType.Query)
+        templateName = "RepositoryDapperReadsOnly.cs.template";
+      
+      instructions.ClassName = instructions.SubjectName;
 
-			var strTemplate = GetTemplate(TemplateName);
+			var strTemplate = GetTemplate(templateName);
 
 			var template = new StringBuilder(strTemplate);
 
+      SetContainingNamespace(template);
 			template.Replace("{{Namespace}}", instructions.Namespace);
 			template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
-			template.Replace("{{EntityName}}", instructions.EntityName);
+			template.Replace("{{RecordName}}", instructions.RecordName);
 			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 			template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
 			template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
@@ -42,7 +57,9 @@ namespace SpotWelder.Lib.Services.Generators
 			var lstNoPk = instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
 			var lstInsert = new List<ClassMemberStrings>(lstNoPk);
 
-			//TODO: What to do when there is no primary key?
+			//When generating from a Query and not a Table, then the PK is determined by the DataTable somehow
+			//needs to be investigated.
+      //TODO: What to do when there is no primary key?
 			if (pk != null)
 			{
 				template.Replace("{{PrimaryKeyParameter}}", pk.Parameter); //taskId
@@ -66,21 +83,33 @@ namespace SpotWelder.Lib.Services.Generators
 				template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk, instructions.IsAsynchronous));
 			}
 
+			//{{Schema}}.{{Table}} - used when a table is provided
 			template.Replace("{{Schema}}", instructions.TableQuery.Schema);
 			template.Replace("{{Table}}", instructions.TableQuery.Table);
+			//{{SourceQuery}} - used when a query is provided
+      template.Replace("{{SourceQuery}}", FormatAsRawString(instructions.SourceQuery, 10));
 			template.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
 			template.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
 			template.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
 			template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
 			template.Replace("{{DynamicParametersInsert}}", FormatDynamicParameterList(lstInsert));
 			template.Replace("{{DynamicParametersUpdate}}", FormatDynamicParameterList(instructions.Properties));
-			
-			var rt = instructions.Elections.HasFlag(GenerationElections.RepoStatic) ? "Dapper" : string.Empty;
-			
-      return GetFormattedCSharpResult($"{instructions.ClassName}{rt}Repository.cs", template);
+
+      var rt = instructions.Elections.HasFlag(GenerationElections.RepoStatic) ? "Dapper" : string.Empty;
+
+      var result = GetFormattedCSharpResult(
+        $"{instructions.ClassName}{rt}Repository.cs", 
+        template);
+
+      result.CorrespondingInterface = GenerateInterface(
+        instructions,
+        result,
+        "IRepositoryDapper.cs.template");
+
+      return result;
 		}
 
-		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
+    private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
 		{
 			var content = GetTextBlock(
 				properties,
@@ -139,7 +168,7 @@ namespace SpotWelder.Lib.Services.Generators
 					break;
 			}
 
-			var content = $"				p.Add({string.Join(", ", lst)});";
+			var content = $"        p.Add({string.Join(", ", lst)});";
 
 			return content;
 		}

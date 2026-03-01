@@ -1,13 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using SpotWelder.Lib;
-using SpotWelder.Lib.Services.Generators;
-using SpotWelder.Lib.Services.TableQueryFormats;
-using SpotWelder.Ui.Profile;
+using SpotWelder.Ui.Containers;
 using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace SpotWelder.Ui
@@ -17,172 +12,113 @@ namespace SpotWelder.Ui
   /// </summary>
   public partial class App : System.Windows.Application
   {
-    private static readonly ProfileSaver ProfileSaver = new ();
 
-    public IServiceProvider ServiceProvider { get; private set; }
+    [DllImport("kernel32.dll")]
+    private static extern bool AttachConsole(int dwProcessId);
 
+    [DllImport("kernel32.dll")]
+    private static extern bool AllocConsole();
+
+    [DllImport("kernel32.dll")]
+    private static extern bool FreeConsole();
+
+    private const int AttachParentProcess = -1;
+
+    [STAThread]
+    public static void Main(string[] args)
+    {
+      //Debug_YamlBulkGen(ref args);
+
+      // Run CLI mode - If arguments are provided it's CLI mode
+      if (args.Length > 0)
+      {
+        // Attach to the parent console or allocate a new one
+        if (!AttachConsole(AttachParentProcess))
+        {
+          AllocConsole();
+        }
+
+        var exitCode = RunCliMode(args);
+
+        FreeConsole();
+
+        Environment.Exit(exitCode);
+
+        return;
+      }
+
+      // Run GUI mode
+      var app = new App();
+      app.InitializeComponent();
+      app.Run();
+    }
+
+    private static int RunCliMode(string[] args)
+    {
+      var exitCode = 1; // Default to error
+
+      CommonHarness(
+        true,
+        serviceProvider =>
+        {
+          var cli = serviceProvider.GetRequiredService<CliMode>();
+          
+          exitCode = cli.ProcessFile(args[0]);
+        });
+
+      return exitCode;
+    }
+
+    //GUI Mode: Called by app.Run();
     protected override void OnStartup(StartupEventArgs e)
     {
       base.OnStartup(e);
-      
-      var serviceCollection = new ServiceCollection();
 
-      ConfigureServices(serviceCollection);
+      CommonHarness(
+        false,
+        serviceProvider =>
+        {
+          var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
 
-      ServiceProvider = serviceCollection.BuildServiceProvider();
+          mainWindow.PositionWindowOnActiveMonitor();
 
-      Log.Logger = ServiceProvider.GetRequiredService<ILogger>();
-      
+          mainWindow.Show();
+
+          //Debug_ResultWindow();
+          //Debug_ParentResultWindow();
+        });
+    }
+
+    /// <summary>
+    /// Common actions that need to be taken before running the chosen mode.
+    /// </summary>
+    /// <param name="enableConsoleLogging"></param>
+    /// <param name="modeActions">Chosen mode's execution logic</param>
+    private static void CommonHarness(bool enableConsoleLogging, Action<ServiceProvider> modeActions)
+    {
+      var serviceCollection = ConfigureDependencyInjection.ConfigureServices(enableConsoleLogging);
+
+      var serviceProvider = serviceCollection.BuildServiceProvider();
+
+      Log.Logger = serviceProvider.GetRequiredService<ILogger>();
+
       try
       {
-        //var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-
-        //mainWindow.Show();
-
-        //Debug_ResultWindow();
-        Debug_ParentResultWindow();
+        modeActions(serviceProvider);
       }
       catch (Exception ex)
       {
         //Log the exception and exit
         Log.Error(ex, "Unhandled error");
+      }
+      finally
+      {
+        //TODO: I have no idea why the exe isn't quitting after finishing the CLI mode.
+        // Therefore, I'm adding this hacky prompt to let the user know to press a key to exit.
+        if (enableConsoleLogging) Log.Information("Press any key to exit");
+        
         Log.CloseAndFlush();
       }
-    }
-
-    private const string LoremIpsum = """
-                                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                                      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                                      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                                      nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
-                                      reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                                      Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                                      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                                      nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in 
-                                      reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                      """;
-
-    private static void Debug_ResultWindow()
-    {
-      var win = new ResultWindow("Test", LoremIpsum);
-
-      win.Show();
-    }
-
-    private static void Debug_ParentResultWindow()
-    {
-      var win = new ParentResultsWindow();
-
-      win.AddTab("Test", LoremIpsum);
-
-      win.Show();
-    }
-
-    private static void ConfigureServices(IServiceCollection services)
-    {
-      //Top level services
-      services.AddSerilog(configureLogger =>
-      {
-        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs", "Log.log");
-
-        configureLogger
-          .MinimumLevel.Debug()
-          .WriteTo.File(path, rollingInterval: RollingInterval.Day);
-
-#if DEBUG
-        configureLogger.WriteTo.Seq("http://localhost:5341");
-#endif
-      }).AddLogging();
-
-      //Library based services
-      ConfigureLibServices(services);
-
-      //WPF Forms and UI based services
-      services.AddTransient<MainWindow>();
-
-      //Scanned services
-      var asm = Assembly.Load("SpotWelder.Ui");
-
-      //Namespaces that must be excluded from the DI scan
-      var excludeNamespaces = asm.GetTypes()
-        .Where(t =>
-          t.Namespace != null &&
-          t.Namespace.Contains("SpotWelder.Ui.ViewModels"))
-        .Select(t => t.Namespace)
-        .Distinct()
-        .ToArray();
-
-      services.Scan(scan =>
-      {
-        scan.FromAssemblies(asm)
-          .AddClasses(classes =>
-            classes.NotInNamespaces(excludeNamespaces)
-             .WithoutAttribute<ExcludeFromDiScanAttribute>())
-          .AsMatchingInterface()
-          .WithScopedLifetime();
-      });
-
-      //This is to initialize all of the "Dependencies" objects that are used for child controls
-      services.Scan(scan =>
-      {
-        scan.FromAssemblies(asm)
-          .AddClasses(classes =>
-            classes.InNamespaces("SpotWelder.Ui.Controls"))
-          .AsSelf()
-          .WithScopedLifetime();
-      });
-    }
-
-    private static void ConfigureLibServices(IServiceCollection services)
-    {
-      //Common services
-      services.AddSingleton<IProfileManager>(_ => ProfileSaver.Load());
-
-      //Scanned services
-      var asm = Assembly.Load("SpotWelder.Lib");
-
-      //Namespaces that must be excluded from the DI scan
-      var excludeNamespaces = asm.GetTypes()
-        .Where(t =>
-          t.Namespace != null &&
-          t.Namespace.Contains("SpotWelder.Lib.Models"))
-        .Select(t => t.Namespace)
-        .Distinct()
-        .ToArray();
-
-      //Targeting classes with an exactly one matching interface - as in: IClassName -> ClassName
-      services.Scan(scan =>
-      {
-        scan.FromAssemblies(asm)
-          .AddClasses(classes =>
-            classes.NotInNamespaces(excludeNamespaces))
-          // .WithoutAttribute<ExcludeFromDiScanAttribute>())
-          .AsMatchingInterface()
-          .WithScopedLifetime();
-      });
-
-      //Targeting classes that all extend the `GeneratorBase` abstract class
-      //This will load IEnumerable<GeneratorBase> into the `CodeGenerationFactory` constructor
-      services.Scan(scan =>
-      {
-        scan.FromAssemblies(asm)
-          .AddClasses(classes =>
-            classes.AssignableTo<GeneratorBase>())
-          .As<GeneratorBase>()
-          .WithScopedLifetime();
-      });
-
-      //Targeting classes that all implement the `ITableQueryFormatStrategy` interface
-      //This will load IEnumerable<ITableQueryFormatStrategy> into the `TableQueryFormatFactory` constructor
-      services.Scan(scan =>
-      {
-        scan.FromAssemblies(asm)
-          .AddClasses(classes =>
-            classes.AssignableTo<ITableQueryFormatStrategy>())
-          .As<ITableQueryFormatStrategy>()
-          .WithScopedLifetime();
-      });
     }
   }
 }

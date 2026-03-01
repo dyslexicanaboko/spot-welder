@@ -25,16 +25,63 @@
 	  <None Remove="Templates\ModelPatch.cs.template" />
 	  <None Remove="Templates\RepositoryDapper.cs.template" />
 	  <None Remove="Templates\RepositoryStatic.cs.template" />
-	  <None Remove="Templates\Service.cs.template" />
 	  <None Remove="Templates\ServiceSerializationCsv.cs.template" />
 	  <None Remove="Templates\ServiceSerializationJson.cs.template" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
+		<Content Include="Templates\ApiControllerReadsOnly.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\ApiController.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\ClassConstructor.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\IManager.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\BaseRepository.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\BaseMapper.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\DateTimeManager.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\BaseApiController.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\IAppConfiguration.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\IRepository.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\ColumnSchema.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\UpdateInstruction.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\BaseManager.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\ManagerReadsOnly.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapEntityToRecord.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\IMapper.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\MapRecordToEntity.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Record.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\en_US.dic">
@@ -64,7 +111,13 @@
 		<Content Include="Templates\ModelCreated.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-		<Content Include="Templates\Service.cs.template">
+		<Content Include="Templates\IRepositoryDapper.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\RepositoryDapperReadsOnly.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Manager.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\ModelPatch.cs.template">
@@ -131,6 +184,7 @@
 	  <PackageReference Include="Serilog" Version="4.2.0" />
 	  <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
 	  <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+	  <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
 	  <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
 	  <PackageReference Include="System.CodeDom" Version="9.0.2" />
 	</ItemGroup>

@@ -11,14 +11,23 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "ApiController.cs.template";
 
+    /// <inheritdoc />
+    protected override string ContainingNamespace => "Controllers";
+
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       instructions.ClassName = instructions.SubjectName;
 
-      var strTemplate = GetTemplate(TemplateName);
+      var templateName = TemplateName;
 
-      var template = new StringBuilder(strTemplate);
+      /* When a query is provided, it's very likely it cannot handle CUD.
+       * Therefore, this readonly template will be used. */
+      if (instructions.SourceSqlType == SourceSqlType.Query)
+        templateName = "ApiControllerReadsOnly.cs.template";
 
+      var template = new StringBuilder(GetTemplate(templateName));
+
+      SetContainingNamespace(template);
       template.Replace("{{Namespace}}", instructions.Namespace);
       template.Replace("{{ApiRoute}}", instructions.ApiRoute);
       template.Replace("{{SubjectName}}", instructions.SubjectName);

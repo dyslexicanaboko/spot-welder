@@ -32,10 +32,13 @@ namespace SpotWelder.Lib.Models
 
     public SchemaColumn(SqlEngine sqlEngine, PropertyInfo property)
     {
+      //Used for reference types
+      var nullabilityInfo = new NullabilityInfoContext().Create(property);
+
+      //Used for value types
       var underlyingType = Nullable.GetUnderlyingType(property.PropertyType);
 
-      //Just checking if it's a value type is not enough, as it could be a nullable value type
-      IsDbNullable = underlyingType != null;
+      IsDbNullable = underlyingType != null || nullabilityInfo.WriteState == NullabilityState.Nullable;
 
       ColumnName = property.Name;
 

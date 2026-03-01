@@ -1,26 +1,43 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace SpotWelder.Lib.Models
 {
-  public class GeneratedResult
+  public class GeneratedResult(GenerationElections election, string fileName, string contents, string containingNamespace = "")
   {
-    public GeneratedResult(GenerationElections election, string fileName, StringBuilder contents)
-      : this(election, fileName, contents.ToString())
+    public GeneratedResult(GenerationElections election, string fileName, StringBuilder contents, string containingNamespace = "")
+      : this(election, fileName, contents.ToString(), containingNamespace)
     {
       
     }
 
-    public GeneratedResult(GenerationElections election, string fileName, string contents)
-    {
-      Election = election;
-      Filename = fileName;
-      Contents = contents;
-    }
+    /// <summary>
+    /// Currently used for unit and integration testing.
+    /// </summary>
+    public GenerationElections Election { get; set; } = election;
 
-    public GenerationElections Election { get; set; } = GenerationElections.None;
+    /// <summary>Optional namespace for this file. Can be used as the name for its containing folder.</summary>
+    public string ContainingNamespace { get; set; } = containingNamespace;
+    
+    /// <summary>
+    /// Filename only, no path.
+    /// </summary>
+    public string Filename { get; set; } = fileName;
 
-    public string Filename { get; set; }
+    /// <summary>
+    /// File contents.
+    /// </summary>
+    public string Contents { get; set; } = contents;
 
-    public string Contents { get; set; } = string.Empty;
+    /// <summary>
+    /// Populated when the generated subject has an optional interface to use for dependency injection.
+    /// </summary>
+    public GeneratedResult? CorrespondingInterface { get; set; }
+
+    //TODO: This is gross, I don't know that I will keep this the way it is.
+    /// <summary>
+    /// Populated when there is a heap of results to return.
+    /// </summary>
+    public List<GeneratedResult>? Heap { get; set; }
   }
 }

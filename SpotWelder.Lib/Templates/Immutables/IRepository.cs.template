@@ -1,0 +1,9 @@
+﻿namespace {{Namespace}}.DataAccess;
+
+/// <summary>
+/// This interface exists to unify all repositories as being "a type of" repository
+/// </summary>
+public interface IRepository
+{
+    
+}

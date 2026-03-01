@@ -1,11 +1,12 @@
 ﻿{{Namespaces}}
+using {{Namespace}}.Entities;
 
-namespace {{Namespace}}
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	public class {{ClassName}}{{Interface}}
-	{
-		{{Constructors}}
+  public class {{ClassName}}{{Interface}}
+  {
+    {{Constructors}}
 
-		{{Properties}}
-	}
+    {{Properties}}
+  }
 }

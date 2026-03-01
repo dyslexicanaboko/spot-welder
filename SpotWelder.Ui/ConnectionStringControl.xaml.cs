@@ -57,6 +57,7 @@ namespace SpotWelder.Ui
     public void DebugSetPostgresTestParameters()
       => CbConnectionString.SelectedIndex = 1;
 
+    //Anytime you add a new connection string, the new entry becomes zero
     public void DebugSetSqlServerTestParameters()
       => CbConnectionString.SelectedIndex = 0;
 

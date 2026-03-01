@@ -1,0 +1,45 @@
+﻿using Microsoft.AspNetCore.JsonPatch;
+using {{Namespace}}.Managers.Utility;
+using System.Reflection;
+
+namespace {{Namespace}}.Managers;
+
+public abstract class BaseManager
+{
+  protected static List<UpdateInstruction> GetDifferences<TEntity, TPatchModel>(
+    TEntity db, 
+    TEntity entity, 
+    JsonPatchDocument<TPatchModel> patchDoc,
+    Action<List<UpdateInstruction>, PropertyInfo> whenDirty)
+    where TPatchModel : class, new()
+  {
+    var properties = entity.GetType().GetProperties();
+    var instructions = new List<UpdateInstruction>(patchDoc.Operations.Count);
+
+    foreach (var op in patchDoc.Operations)
+    {
+      //For each item in the operations list (which is what was explicitly provided)
+      //Match the incoming operation to the property of the entity in question
+      //Create an instruction set
+      var prop = properties.SingleOrDefault(x 
+        => string.Equals(x.Name, op.path.TrimStart('/'), StringComparison.OrdinalIgnoreCase));
+
+      //If there is no match then skip the property, but this would indicate that there is a problem with the patch document
+      //Maybe log this as a problem?
+      if (prop == null) continue;
+
+      //Get the value from the db entity
+      var incoming = prop.GetValue(entity);
+      var existing = prop.GetValue(db);
+
+      //If the incoming value has no differences from the db entity, then skip making a change here
+      if (Equals(incoming, existing)) continue;
+
+      instructions.Add(new UpdateInstruction(prop.Name, incoming));
+
+      whenDirty(instructions, prop);
+    }
+
+    return instructions;
+  }
+}

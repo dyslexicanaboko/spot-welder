@@ -27,6 +27,8 @@ namespace SpotWelder.Ui
     {
       InitializeComponent();
 
+      this.PositionChildWindowOnActiveMonitor();
+
       _versionInfoService = new VersionInfoService();
       _versionInfoService.LoadVersionInfo();
 

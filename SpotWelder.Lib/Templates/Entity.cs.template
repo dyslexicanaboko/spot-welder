@@ -1,14 +1,14 @@
 ﻿{{Namespaces}}
 
-namespace {{Namespace}}
+namespace {{Namespace}}.{{ContainingNamespace}}
 {
-	{{ClassAttributes}}
-	public class {{ClassName}}{{Interfaces}}
-	{
-		{{Constructors}}
-		
-		{{Properties}}
+  {{ClassAttributes}}
+  public class {{ClassName}}{{Interfaces}}
+  {
+    {{Constructors}}
+    
+    {{Properties}}
 
-		{{InterfaceMethods}}
-	}
+    {{InterfaceMethods}}
+  }
 }

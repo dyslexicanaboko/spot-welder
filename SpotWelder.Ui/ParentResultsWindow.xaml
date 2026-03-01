@@ -40,7 +40,7 @@
       </TabControl.ItemTemplate>
       <TabControl.ContentTemplate>
         <DataTemplate DataType="{x:Type viewmodels:ResultTabViewModel}">
-          <uc:TextResultControl Text="{Binding Content}" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+          <uc:TextResultControl Text="{Binding Contents}" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
         </DataTemplate>
       </TabControl.ContentTemplate>
     </TabControl>

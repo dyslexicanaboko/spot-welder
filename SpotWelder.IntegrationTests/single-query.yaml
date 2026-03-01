@@ -1,0 +1,35 @@
+sqlEngine: SqlServer
+connectionString: Data Source=.;Initial Catalog=InStock;Integrated Security=True;Encrypt=False
+namespace: Namespace1
+electionsList:
+  - MakeAsynchronous
+  - GenerateEntity
+  - GenerateModel
+  - GenerateRecord
+  - GenerateMapper
+  - GenerateImmutables
+  - MapEntityToModel
+  - MapRecordToEntity
+  - Manager
+  - ApiController
+  - RepoDapper
+destinationFolder: C:\Dump\Delete2\Namespace1
+queries:
+  - subjectName: StockQuote
+    sourceSqlType: Query
+    sourceSqlText: |
+      SELECT
+         s.StockId
+        ,s.Symbol
+        ,S.[Name]
+        ,s.CreateOnUtc AS StockCreatedOn
+        ,s.Notes
+        ,s.UpdatedOnUtc AS StockUpdatedOn
+        ,q.QuoteId
+        ,q.[Date] AS QuoteDate
+        ,q.Price
+        ,q.Volume
+        ,q.CreatedOnUtc AS QuoteCreatedOn
+      FROM dbo.Stock s
+        INNER JOIN dbo.Quote q
+          ON s.StockId = q.StockId

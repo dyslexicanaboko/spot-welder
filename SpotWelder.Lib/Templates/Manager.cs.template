@@ -1,0 +1,58 @@
+﻿{{Namespaces}}
+using {{Namespace}}.DataAccess;
+using {{Namespace}}.Entities;
+using {{Namespace}}.Mappers;
+
+namespace {{Namespace}}.{{ContainingNamespace}}
+{
+  public class {{ClassName}}Manager
+    : BaseManager, I{{ClassName}}Manager
+  {
+    private readonly I{{ClassName}}Repository _repository;
+    private readonly I{{ClassName}}Mapper _mapper;
+    private readonly I{{ClassName}}Validation _validation;
+
+    public {{ClassName}}Manager(
+      I{{ClassName}}Repository repository,
+      I{{ClassName}}Mapper mapper,
+      I{{ClassName}}Validation validation)
+    {
+      _repository = repository;
+      _mapper = mapper;
+      _validation = validation;
+    }
+
+    public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
+
+      return _mapper.ToEntity([A]_repository.Select({{PrimaryKeyParameter}}));
+    }
+
+    public [AO]List<{{EntityName}}?>[AC] GetAll()
+      =>_mapper.ToEntity([A]_repository.Using(x => x.SelectAll()));
+
+    public [AO]{{EntityName}}[AC] Add({{EntityName}}? entity)
+    {
+      Validations.IsValid(_validation, entity, nameof(entity));
+
+      entity.{{PrimaryKeyProperty}} = [A]_repository.Insert(_mapper.ToRecord(entity));
+      
+      return entity;
+    }
+
+    public [void] Edit({{EntityName}} entity)
+    {
+      Validations.IsNotNull(entity, nameof(entity));
+
+      [A]_repository.Update(_mapper.ToRecord(entity));
+    }
+
+    public [void] Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    {
+      Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
+
+      [A]_repository.Delete({{PrimaryKeyParameter}});
+    }
+  }
+}
