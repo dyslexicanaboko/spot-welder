@@ -15,7 +15,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
     {
     }
 
-    public [AO]{{RecordName}}?[AC] Select({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    public [AO]{{RecordName}}?[AC] Read({{PrimaryKeyType}} {{PrimaryKeyParameter}})
     {
       const string sql = """
         SELECT
@@ -26,10 +26,10 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 
       [A]using var connection = await GetConnection();
       
-      return [AWO]connection.Query[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}))[AWC].SingleOrDefault();
+      return connection.QuerySingleOrDefault[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
     }
 
-    public [AO]List<{{RecordName}}>[AC] SelectAll()
+    public [AO]List<{{RecordName}}>[AC] ReadAll()
     {
       const string sql = """
         SELECT
@@ -39,7 +39,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
 
       var connection = await GetConnection();
       
-      return [AWO]connection.Query[AS]<{{RecordName}}>(sql)[AWC].ToList();
+      return [AWO]connection.Query[AS]<{{RecordName}}>(sql)[AWC].AsList();
     }
 
     public [AO]{{PrimaryKeyType}}[AC] Insert({{RecordName}} entity)

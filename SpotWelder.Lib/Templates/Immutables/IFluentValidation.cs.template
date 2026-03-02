@@ -1,0 +1,8 @@
+﻿using FluentValidation.Results;
+
+namespace {{Namespace}}.{{ContainingNamespace}};
+
+public interface IFluentValidation<in TEntity>
+{
+  ValidationResult Validate(TEntity instance);
+}

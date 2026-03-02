@@ -81,6 +81,9 @@
 		<Content Include="Templates\MapRecordToEntity.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Templates\Immutables\IFluentValidation.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\Record.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

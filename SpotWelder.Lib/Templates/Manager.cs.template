@@ -26,11 +26,11 @@ namespace {{Namespace}}.{{ContainingNamespace}}
     {
       Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
 
-      return _mapper.ToEntity([A]_repository.Select({{PrimaryKeyParameter}}));
+      return _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
     }
 
     public [AO]List<{{EntityName}}?>[AC] GetAll()
-      =>_mapper.ToEntity([A]_repository.Using(x => x.SelectAll()));
+      =>_mapper.ToEntity([A]_repository.Using(x => x.ReadAll()));
 
     public [AO]{{EntityName}}[AC] Add({{EntityName}}? entity)
     {

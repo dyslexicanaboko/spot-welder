@@ -20,9 +20,9 @@ namespace {{Namespace}}.{{ContainingNamespace}}
     }
 
     public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-      => _mapper.ToEntity([A]_repository.Select({{PrimaryKeyParameter}}));
+      => _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
 
     public [AO]List<{{EntityName}}?>[AC] GetAll()
-      =>_mapper.ToEntity([A]_repository.SelectAll());
+      =>_mapper.ToEntity([A]_repository.ReadAll());
   }
 }
