@@ -176,8 +176,8 @@ namespace SpotWelder.Ui
     {
       var win = new ConnectionStringBuilderWindow();
       win.Dependencies(_builderService);
-
-      if(existing != null) win.LoadConnectionString(existing);
+      
+      if (existing != null) win.LoadConnectionString(existing);
 
       if (!win.ShowDialog().GetValueOrDefault()) return;
 
