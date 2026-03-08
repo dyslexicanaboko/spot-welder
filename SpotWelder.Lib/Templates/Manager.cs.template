@@ -23,36 +23,22 @@ namespace {{Namespace}}.{{ContainingNamespace}}
     }
 
     public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-    {
-      Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
-
-      return _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
-    }
+      => return _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
 
     public [AO]List<{{EntityName}}?>[AC] GetAll()
-      =>_mapper.ToEntity([A]_repository.Using(x => x.ReadAll()));
+      =>_mapper.ToEntity([A]_repository.ReadAll());
 
     public [AO]{{EntityName}}[AC] Add({{EntityName}}? entity)
     {
-      Validations.IsValid(_validation, entity, nameof(entity));
-
       entity.{{PrimaryKeyProperty}} = [A]_repository.Insert(_mapper.ToRecord(entity));
       
       return entity;
     }
 
     public [void] Edit({{EntityName}} entity)
-    {
-      Validations.IsNotNull(entity, nameof(entity));
-
-      [A]_repository.Update(_mapper.ToRecord(entity));
-    }
+      => [A]_repository.Update(_mapper.ToRecord(entity));
 
     public [void] Remove({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-    {
-      Validations.IsGreaterThanZero({{PrimaryKeyParameter}}, nameof({{PrimaryKeyParameter}}));
-
-      [A]_repository.Delete({{PrimaryKeyParameter}});
-    }
+      => [A]_repository.Delete({{PrimaryKeyParameter}});
   }
 }

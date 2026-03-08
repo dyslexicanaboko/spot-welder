@@ -35,7 +35,8 @@ namespace SpotWelder.Lib.Services.Generators
       ["ColumnSchema.cs.template"] = "DataAccess.Utility",
       ["UpdateInstruction.cs.template"] = "Managers.Utility",
       ["BaseManager.cs.template"] = "Managers",
-      ["BaseApiController"] = "Controllers"
+      ["BaseApiController.cs.template"] = "Controllers",
+      ["IFluentValidation.cs.template"] = "Validation"
     };
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)

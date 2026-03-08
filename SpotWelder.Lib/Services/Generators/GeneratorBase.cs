@@ -133,6 +133,21 @@ namespace SpotWelder.Lib.Services.Generators
     }
 
     /// <summary>
+    /// Formatting properties for a class.
+    /// </summary>
+    /// <param name="properties">Input properties</param>
+    /// <returns>Formatted properties as one text block</returns>
+    protected virtual string FormatPropertiesForValidation(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"RuleFor(r => r.{p.Property});",
+        Environment.NewLine + Environment.NewLine);
+
+      return content;
+    }
+
+    /// <summary>
     /// Formatting properties for a record class.
     /// </summary>
     /// <param name="properties">Input properties</param>

@@ -1,0 +1,18 @@
+﻿{{Namespaces}}
+using FluentValidation;
+
+namespace {{Namespace}}.{{ContainingNamespace}};
+
+public interface I{{SubjectName}}Validation
+    : IFluentValidation<{{SubjectName}}Entity>
+{
+}
+
+public class {{SubjectName}}Validation
+  : AbstractValidator<{{SubjectName}}Entity>, I{{SubjectName}}Validation
+{
+  public {{SubjectName}}Validation()
+  {
+    {{Validation}}
+  }
+}

@@ -10,13 +10,16 @@ namespace {{Namespace}}.{{ContainingNamespace}}
   {
     private readonly I{{ClassName}}Repository _repository;
     private readonly I{{ClassName}}Mapper _mapper;
+    private readonly I{{ClassName}}Validation _validation;
 
     public {{ClassName}}Manager(
       I{{ClassName}}Repository repository,
-      I{{ClassName}}Mapper mapper)
+      I{{ClassName}}Mapper mapper,
+      I{{ClassName}}Validation validation)
     {
       _repository = repository;
       _mapper = mapper;
+      _validation = validation;
     }
 
     public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
