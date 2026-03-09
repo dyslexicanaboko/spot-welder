@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using SpotWelder.Lib;
-using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Exceptions;
 using SpotWelder.Lib.Services;
 using SpotWelder.Lib.Services.TableQueryFormats;
@@ -26,8 +25,6 @@ namespace SpotWelder.Ui
     private readonly Dictionary<GenerationElections, CheckBox> _electionToCheckBoxMap;
 
     private readonly ParentResultsWindow _parentResultsWindow;
-
-    private IGeneralDatabaseQueries _generalRepo;
 
     private IQueryToClassService _svcQueryToClass;
 
@@ -65,13 +62,15 @@ namespace SpotWelder.Ui
 
     private void QueryToClassControl_Loaded(object sender, RoutedEventArgs e)
     {
+#if DEBUG
       //These methods have been moved to a partial class
-      DebugCompoundQuerySqlServerTest();
+      DebugOneTableSqlServerTest();
+      //DebugCompoundQuerySqlServerTest();
       //DebugWholeSqlServerTest();
       //DebugMinimalPostgresTest();
       //DebugWholeSqlServerTestForParity();
       //DebugWholePostgresTestForParity();
-
+#endif
       Loaded -= QueryToClassControl_Loaded;
     }
 
@@ -87,7 +86,6 @@ namespace SpotWelder.Ui
       _logger = dependencies.Logger;
       _tableQueryFormatFactory = dependencies.TableQueryFormatFactory;
       _svcQueryToClass = dependencies.QueryToClassService;
-      _generalRepo = dependencies.Repository;
 
       ConnectionStringCb.Dependencies(dependencies.ConnectionStringControlDependencies);
 

@@ -6,7 +6,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassEntityValidationGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateCreatedModel;
+    public override GenerationElections Election => GenerationElections.GenerateValidation;
 
     protected override string TemplateName => "EntityValidation.cs.template";
 

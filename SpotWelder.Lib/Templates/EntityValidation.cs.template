@@ -1,4 +1,4 @@
-﻿{{Namespaces}}
+﻿using {{Namespace}}.Entities;
 using FluentValidation;
 
 namespace {{Namespace}}.{{ContainingNamespace}};

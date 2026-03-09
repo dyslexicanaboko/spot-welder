@@ -2,6 +2,7 @@
 using {{Namespace}}.DataAccess;
 using {{Namespace}}.Entities;
 using {{Namespace}}.Mappers;
+using {{Namespace}}.Validation;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {

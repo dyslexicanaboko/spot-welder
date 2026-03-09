@@ -106,6 +106,7 @@ namespace SpotWelder.Ui
         { GenerationElections.GenerateCreatedModel, CbClassCreatedModel },
         { GenerationElections.MakeAsynchronous, CbMakeAsynchronous },
         { GenerationElections.GenerateImmutables, CbImmutables },
+        { GenerationElections.GenerateValidation, CbValidation },
       };
 
       return dict;

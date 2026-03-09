@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpotWelder.Ui
+﻿namespace SpotWelder.Ui
 {
   /// <summary>
   ///   Interaction logic for QueryToClassControl.xaml
@@ -13,7 +7,6 @@ namespace SpotWelder.Ui
   {
     private void DebugMinimalPostgresTest()
     {
-#if DEBUG
       ConnectionStringCb.DebugSetPostgresTestParameters();
       TxtSourceSqlText.Text = "public.task";
       TxtNamespaceName.Text = "Namespace1";
@@ -25,12 +18,10 @@ namespace SpotWelder.Ui
       CbRepoDapper.IsChecked = true;
       CbRepoStatic.IsChecked = true;
       CbMakeAsynchronous.IsChecked = true;
-#endif
     }
 
     private void DebugWholeSqlServerTest()
     {
-#if DEBUG
       ConnectionStringCb.DebugSetSqlServerTestParameters();
 
       RbSourceTypeTableName.IsChecked = true;
@@ -74,12 +65,10 @@ namespace SpotWelder.Ui
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
       CbMapEntityToCreatedModel.IsChecked = true;
-#endif
     }
 
     private void DebugWholeSqlServerTestForParity()
     {
-#if DEBUG
       ConnectionStringCb.DebugSetSqlServerParityTestParameters();
 
       RbSourceTypeTableName.IsChecked = true;
@@ -123,12 +112,10 @@ namespace SpotWelder.Ui
       CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
-#endif
     }
 
     private void DebugWholePostgresTestForParity()
     {
-#if DEBUG
       ConnectionStringCb.DebugSetPostgresParityTestParameters();
 
       RbSourceTypeTableName.IsChecked = true;
@@ -172,12 +159,10 @@ namespace SpotWelder.Ui
       CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
-#endif
     }
 
     private void DebugCompoundQuerySqlServerTest()
     {
-      #if DEBUG
       //This needs to be `InStock`
       ConnectionStringCb.DebugSetSqlServerTestParameters();
 
@@ -200,7 +185,7 @@ namespace SpotWelder.Ui
                               	INNER JOIN dbo.Quote q
                               		ON s.StockId = q.StockId
                               """;
-      TxtNamespaceName.Text = "Namespace1";
+      TxtNamespaceName.Text = "Namespace2";
       TxtSubjectName.Text = "StockQuote";
       TxtClassEntityName.Text = "StockQuoteEntity";
       TxtClassModelName.Text = "StockQuoteV1Model";
@@ -225,6 +210,7 @@ namespace SpotWelder.Ui
       CbClassEntityEqualityComparer.IsChecked = false;
       CbSerializeCsv.IsChecked = false;
       CbSerializeJson.IsChecked = false;
+      CbValidation.IsChecked = true;
 
       //Layers
       CbMakeAsynchronous.IsChecked = true;
@@ -237,7 +223,55 @@ namespace SpotWelder.Ui
       CbMapCreateModelToEntity.IsChecked = false;
       CbMapPatchModelToEntity.IsChecked = false;
       CbMapEntityToCreatedModel.IsChecked = false;
-      #endif
+    }
+
+    private void DebugOneTableSqlServerTest()
+    {
+      //This needs to be `InStock`
+      ConnectionStringCb.DebugSetSqlServerTestParameters();
+
+      RbSourceTypeTableName.IsChecked = true;
+      RbSourceTypeQuery.IsChecked = false;
+      TxtSourceSqlText.Text = "dbo.Stock";
+      TxtNamespaceName.Text = "Namespace2";
+      TxtSubjectName.Text = "Stock";
+      TxtClassEntityName.Text = "StockEntity";
+      TxtClassModelName.Text = "StockModel";
+
+      CbRepoDapper.IsChecked = true;
+
+      //Entity
+      CbClassEntity.IsChecked = true;
+      CbClassEntityIEquatable.IsChecked = false;
+      CbClassEntityIComparable.IsChecked = false;
+
+      //Interface
+      CbClassInterface.IsChecked = false;
+
+      //Models
+      CbClassModel.IsChecked = true;
+      CbClassCreateModel.IsChecked = true;
+      CbClassCreatedModel.IsChecked = true;
+      CbClassPatchModel.IsChecked = true;
+
+      //Services
+      CbClassEntityEqualityComparer.IsChecked = false;
+      CbSerializeCsv.IsChecked = false;
+      CbSerializeJson.IsChecked = false;
+      CbValidation.IsChecked = true;
+
+      //Layers
+      CbMakeAsynchronous.IsChecked = true;
+      CbApiController.IsChecked = true;
+      CbManager.IsChecked = true;
+
+      //Mappings
+      CbMapEntityToModel.IsChecked = true;
+      CbMapModelToEntity.IsChecked = false;
+      CbMapCreateModelToEntity.IsChecked = true;
+      CbMapPatchModelToEntity.IsChecked = true;
+      CbMapEntityToCreatedModel.IsChecked = true;
+      CbMapEntityToRecord
     }
   }
 }

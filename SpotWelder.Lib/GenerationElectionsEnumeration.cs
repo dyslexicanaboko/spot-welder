@@ -124,5 +124,7 @@ public enum GenerationElections : long
   GenerateRecord = 1L << 31,
 
   /// <summary> Generate a record for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GenerateImmutables = 1L << 32
+  GenerateImmutables = 1L << 32,
+
+  GenerateValidation = 1L << 33
 }
