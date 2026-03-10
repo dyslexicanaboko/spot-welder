@@ -271,7 +271,6 @@
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
       CbMapEntityToCreatedModel.IsChecked = true;
-      CbMapEntityToRecord
     }
   }
 }

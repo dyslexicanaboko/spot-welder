@@ -31,8 +31,10 @@ namespace SpotWelder.Lib.Services
             GenerationElections.RepoDapper,
             GenerationElections.RepoStatic))
       {
-        parameters.Elections |= GenerationElections.GenerateRecord;
-        parameters.Elections |= GenerationElections.MapRecordToEntity;
+        parameters.Elections |= 
+          GenerationElections.GenerateRecord | 
+          GenerationElections.MapEntityToRecord |
+          GenerationElections.MapRecordToEntity;
       }
 
       //If any mapping is selected, then also generate the mapper class
@@ -106,8 +108,9 @@ namespace SpotWelder.Lib.Services
       {
         var prop = new ClassMemberStrings(sc, p.LanguageType);
 
+        //NOTE: No longer required so long as the target project is using "Implicit global usings"
         //Add the system namespace if any of the properties require it
-        if (prop.InSystemNamespace) ins.AddNamespace("System");
+        //if (prop.InSystemNamespace) ins.AddNamespace("System");
 
         ins.Properties.Add(prop);
       }

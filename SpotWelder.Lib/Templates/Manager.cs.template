@@ -24,7 +24,7 @@ namespace {{Namespace}}.{{ContainingNamespace}}
     }
 
     public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-      => return _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
+      => _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
 
     public [AO]List<{{EntityName}}?>[AC] GetAll()
       =>_mapper.ToEntity([A]_repository.ReadAll());

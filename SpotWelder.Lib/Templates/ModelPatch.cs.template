@@ -1,9 +1,20 @@
 ﻿{{Namespaces}}
+using {{Namespace}}.Entities;
 
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
   public class {{ClassName}}V1PatchModel{{Interface}}
   {
+    public {{ClassName}}V1PatchModel()
+    {
+      
+    }
+
+    public {{ClassName}}V1PatchModel({{EntityName}} target)
+    {
+      {{ConstructorFromEntity}}
+    }
+
 {{Properties}}
   }
 }
