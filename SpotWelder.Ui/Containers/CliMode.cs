@@ -82,8 +82,6 @@ namespace SpotWelder.Ui.Containers
 
           //Query level will change on each iteration
           parameters.SubjectName = query.SubjectName;
-          parameters.EntityName = $"{query.SubjectName}Entity";
-          parameters.ModelName = $"{query.SubjectName}Model";
 
           var results = queryToClassService.Generate(parameters);
 

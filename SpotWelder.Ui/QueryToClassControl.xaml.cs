@@ -7,7 +7,6 @@ using SpotWelder.Ui.Controls;
 using SpotWelder.Ui.Helpers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,22 +36,12 @@ namespace SpotWelder.Ui
     {
       InitializeComponent();
 
-      SetPathAsDefault();
-
       _parentResultsWindow = new ParentResultsWindow();
 
       TxtNamespaceName.ApplyDefault();
 
       TxtSubjectName.DefaultButton_UnregisterDefaultEvent();
       TxtSubjectName.DefaultButton.Click += BtnSubjectNameDefault_Click;
-
-      TxtClassEntityName.TextBox.TextChanged += TxtClassEntityName_TextChanged;
-      TxtClassEntityName.TextBox.MouseDown += TxtClassEntityName_MouseDown;
-      TxtClassEntityName.DefaultButton_UnregisterDefaultEvent();
-      TxtClassEntityName.DefaultButton.Click += BtnClassEntityNameDefault_Click;
-
-      TxtClassModelName.DefaultButton_UnregisterDefaultEvent();
-      TxtClassModelName.DefaultButton.Click += (_, _) => SetModelName();
 
       _electionToCheckBoxMap = GetGenerationElectionsMap();
       _classCheckBoxGroup = GetCheckBoxGroup();
@@ -73,8 +62,6 @@ namespace SpotWelder.Ui
 #endif
       Loaded -= QueryToClassControl_Loaded;
     }
-
-    private static string DefaultPath => AppDomain.CurrentDomain.BaseDirectory;
 
     public void CloseResultWindows() => _parentResultsWindow.Shutdown();
 
@@ -104,8 +91,6 @@ namespace SpotWelder.Ui
         FormatTableName(TxtSourceSqlText);
 
         TxtSubjectName.Text = GetDefaultEntityName();
-
-        TxtClassEntityName.Text = GetDefaultClassName();
       }
       catch (Exception ex)
       {
@@ -124,21 +109,6 @@ namespace SpotWelder.Ui
         return;
 
       target.Text = GetTableQueryFormatStrategy().FormatTableQuery(strName);
-    }
-
-    private void BtnClassEntityNameDefault_Click(object sender, RoutedEventArgs e)
-    {
-      try
-      {
-        TxtClassEntityName.Text = GetDefaultClassName();
-
-        if (string.IsNullOrWhiteSpace(TxtFileName.Text))
-          TxtFileName.Text = TxtClassEntityName.Text + ".cs";
-      }
-      catch
-      {
-        TxtClassEntityName.Text = "Class1";
-      }
     }
 
     private void BtnSubjectNameDefault_Click(object sender, RoutedEventArgs e)
@@ -160,134 +130,6 @@ namespace SpotWelder.Ui
       var tbl = strategy.ParseTableName(TxtSourceSqlText.Text);
 
       return strategy.GetClassName(tbl); //Entity
-    }
-
-    private string GetDefaultClassName(bool includeExtension = false)
-    {
-      string strName;
-
-      if (RbSourceTypeTableName.IsChecked == true)
-      {
-        strName = GetDefaultEntityName();
-      }
-      else
-      {
-        var i = 0;
-
-        var strDir = GetPath();
-        var strExt = includeExtension ? ".cs" : string.Empty;
-
-        strName = "Class_" + i + strExt; //Must prime the string
-
-        while (FileExist(strDir, strName))
-        {
-          i++;
-
-          strName = "Class_" + i + strExt;
-        }
-      }
-
-      if (string.IsNullOrWhiteSpace(strName))
-        strName = TxtClassEntityName.DefaultText;
-      else
-        strName += "Entity";
-
-      return strName;
-    }
-
-    private bool FileExist(string path, string fileName) => File.Exists(Path.Combine(path, fileName));
-
-    private string GetPath()
-    {
-      var strPath = TxtPath.Text;
-
-      if (!Directory.Exists(strPath))
-        strPath = SetPathAsDefault();
-
-      return strPath;
-    }
-
-    private string SetPathAsDefault()
-    {
-      TxtPath.Text = DefaultPath;
-
-      return TxtPath.Text;
-    }
-
-    private void CbSaveFileOnGeneration_Checked(object sender, RoutedEventArgs e)
-    {
-      ToggleSaveFileOnGenerationDependentControls(CbSaveFileOnGeneration.IsChecked());
-    }
-
-    private void ToggleSaveFileOnGenerationDependentControls(bool isEnabled)
-    {
-      CbReplaceExistingFiles.IsEnabled = isEnabled;
-
-      BtnPathDefault.IsEnabled = isEnabled;
-      BtnFileNameDefault.IsEnabled = isEnabled;
-
-      TxtFileName.IsEnabled = isEnabled;
-      TxtPath.IsEnabled = isEnabled;
-
-      LblFileName.IsEnabled = isEnabled;
-      LblPath.IsEnabled = isEnabled;
-    }
-
-    private void BtnPathDefault_Click(object sender, RoutedEventArgs e)
-    {
-      SetPathAsDefault();
-    }
-
-    private void BtnFileNameDefault_Click(object sender, RoutedEventArgs e)
-    {
-      if (string.IsNullOrWhiteSpace(TxtPath.Text))
-        SetPathAsDefault();
-
-      TxtFileName.Text = GetDefaultClassName(true);
-    }
-
-    private void TxtClassEntityName_TextChanged(object sender, TextChangedEventArgs e)
-    {
-      SetFileName();
-
-      if (!string.IsNullOrWhiteSpace(TxtClassModelName.Text)) return;
-
-      SetModelName();
-    }
-
-    private void SetModelName()
-    {
-      var entity = TxtClassEntityName.Text;
-
-      //If it ends with "Entity" get the index
-      var i = entity.LastIndexOf("Entity", StringComparison.InvariantCultureIgnoreCase);
-
-      //If it is found, remove it
-      if (i > 0)
-        entity = entity.Remove(i);
-
-      TxtClassModelName.Text = entity + "Model";
-    }
-
-    private void SetFileName()
-    {
-      //On startup this control is null and so it throws an exception
-      if (TxtFileName == null) return;
-
-      TxtFileName.Text = TxtClassEntityName.Text + ".cs";
-    }
-
-    private void TxtFileName_TextChanged(object sender, TextChangedEventArgs e)
-    {
-      try
-      {
-        if (FileExist(GetPath(), TxtFileName.Text))
-          TxtFileName.Text = GetDefaultClassName(true) + ".cs";
-      }
-      catch
-      {
-        //Trap Exception
-      }
     }
     
     private async void BtnGenerate_Click(object sender, RoutedEventArgs e)
@@ -350,12 +192,7 @@ namespace SpotWelder.Ui
     private SourceSqlType GetSourceType() => RbSourceTypeQuery.IsChecked.GetValueOrDefault() ?
       SourceSqlType.Query :
       SourceSqlType.TableName;
-
-    private void TxtClassEntityName_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-      TxtClassEntityName.TextBox.SelectAll();
-    }
-
+    
     private void CbClassEntity_OnChecked(object sender, RoutedEventArgs e)
       => CbClassEntity_ToggleDependents();
 

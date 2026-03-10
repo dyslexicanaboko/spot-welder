@@ -8,7 +8,6 @@ using SpotWelder.Lib.Services.TableQueryFormats;
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 using System.IO;
 
 namespace SpotWelder.IntegrationTests.Common
@@ -23,11 +22,8 @@ namespace SpotWelder.IntegrationTests.Common
       var p = new QueryToClassParameters();
 
       p.LanguageType = CodeType.CSharp;
-      p.OverwriteExistingFiles = true;
       p.Namespace = "Namespace1";
       p.SubjectName = "DataTypeTest";
-      p.EntityName = "DataTypeTestEntity";
-      p.ModelName = "DataTypeTestModel";
       p.ServerConnection.SqlEngine = sqlEngine;
       p.ServerConnection.ConnectionString = sp.ConnectionString;
       p.ServerConnection.SourceSqlType = SourceSqlType.TableName;

@@ -15,26 +15,6 @@
     public CodeType LanguageType { get; set; }
     
     /// <summary>
-    /// File name only
-    /// </summary>
-    public string Filename { get; set; }
-
-    /// <summary>
-    ///   Path where file will be saved
-    /// </summary>
-    public string FilePath { get; set; }
-
-    /// <summary>
-    /// Save generated output as a file
-    /// </summary>
-    public bool SaveAsFile { get; set; }
-
-    /// <summary>
-    /// Overwrite existing files that may have the same name
-    /// </summary>
-    public bool OverwriteExistingFiles { get; set; }
-
-    /// <summary>
     /// Namespace used for all classes that are generated
     /// </summary>
     public string Namespace { get; set; }
@@ -46,16 +26,7 @@
     /// </summary>
     /// <example> Table named: `dbo.Task`, the subject would just be `Task`.</example>
     public string SubjectName { get; set; }
-
-    /// <summary> Name of the subject with the `Entity` suffix.</summary>
-    /// <example> Subject named: `Task`, the entity would be `TaskEntity`.</example>
-    public string EntityName { get; set; }
-
-    /// <summary> Name of the subject with the `Model` suffix.</summary>
-    /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
-    public string ModelName { get; set; }
     
-    //Future: If there are too many options, then use a dictionary of data, like <string, bool> encapsulated in a class
     /// <summary> The user's elections. In other words, what should be generated. </summary>
     public GenerationElections Elections { get; set; } = GenerationElections.None;
 

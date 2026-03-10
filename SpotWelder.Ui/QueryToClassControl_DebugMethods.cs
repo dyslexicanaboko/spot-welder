@@ -11,7 +11,6 @@
       TxtSourceSqlText.Text = "public.task";
       TxtNamespaceName.Text = "Namespace1";
       TxtSubjectName.Text = "Task";
-      TxtClassEntityName.Text = "TaskEntity";
 
       CbClassEntity.IsChecked = true;
       CbClassModel.IsChecked = false; //Selected by default, so un-checking
@@ -30,8 +29,6 @@
       TxtSourceSqlText.Text = "dbo.Task";
       TxtNamespaceName.Text = "Namespace1";
       TxtSubjectName.Text = "Task";
-      TxtClassEntityName.Text = "TaskEntity";
-      TxtClassModelName.Text = "TaskV1Model";
 
       CbRepoDapper.IsChecked = true;
 
@@ -77,8 +74,6 @@
       TxtSourceSqlText.Text = "[dbo].[DataTypeTest]";
       TxtNamespaceName.Text = "Namespace1";
       TxtSubjectName.Text = "DataTypeTest";
-      TxtClassEntityName.Text = "DataTypeTestEntity";
-      TxtClassModelName.Text = "DataTypeTestModel";
 
       //Repository
       CbRepoStatic.IsChecked = true;
@@ -124,8 +119,6 @@
       TxtSourceSqlText.Text = "public.data_type_test";
       TxtNamespaceName.Text = "Namespace1";
       TxtSubjectName.Text = "DataTypeTest";
-      TxtClassEntityName.Text = "DataTypeTestEntity";
-      TxtClassModelName.Text = "DataTypeTestModel";
 
       //Repository
       CbRepoStatic.IsChecked = true;
@@ -187,8 +180,6 @@
                               """;
       TxtNamespaceName.Text = "Namespace2";
       TxtSubjectName.Text = "StockQuote";
-      TxtClassEntityName.Text = "StockQuoteEntity";
-      TxtClassModelName.Text = "StockQuoteV1Model";
 
       CbRepoDapper.IsChecked = true;
 
@@ -235,8 +226,6 @@
       TxtSourceSqlText.Text = "dbo.Stock";
       TxtNamespaceName.Text = "Namespace2";
       TxtSubjectName.Text = "Stock";
-      TxtClassEntityName.Text = "StockEntity";
-      TxtClassModelName.Text = "StockModel";
 
       CbRepoDapper.IsChecked = true;
 

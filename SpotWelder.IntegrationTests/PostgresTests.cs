@@ -42,15 +42,11 @@ public class PostgresTests
 
   private static QueryToClassParameters GetParameters()
   {
-
     var obj = new QueryToClassParameters();
 
     obj.LanguageType = CodeType.CSharp;
-    obj.OverwriteExistingFiles = true;
     obj.Namespace = "NoOneCares";
     obj.SubjectName = "Category";
-    obj.EntityName = "CategoryEntity";
-    obj.ModelName = "CategoryModel";
     obj.Elections = GenerationElections.GenerateEntity;
 
     if (obj.Elections.HasAnyFlag(

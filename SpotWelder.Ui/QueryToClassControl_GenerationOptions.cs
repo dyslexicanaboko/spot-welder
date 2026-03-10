@@ -20,16 +20,12 @@ namespace SpotWelder.Ui
       if (obj == null) return null;
 
       obj.LanguageType = CodeType.CSharp;
-      obj.OverwriteExistingFiles = CbReplaceExistingFiles.IsCheckedAndEnabled();
       obj.Namespace = TxtNamespaceName.Text;
 
-      if (TxtClassEntityName.IsTextInvalid("Class name cannot be empty."))
+      if (TxtSubjectName.IsTextInvalid("Class name cannot be empty."))
         return null;
 
-      obj.ServerConnection.TableQuery = GetTableQueryFormatStrategy().ParseTableName(TxtSourceSqlText.Text);
       obj.SubjectName = TxtSubjectName.Text;
-      obj.EntityName = TxtClassEntityName.Text;
-      obj.ModelName = TxtClassModelName.Text;
       obj.Elections = _electionToCheckBoxMap.GetChosenGenerationElections();
 
       //Election modifications has been moved to the service class
@@ -55,21 +51,6 @@ namespace SpotWelder.Ui
         return null;
 
       obj.ServerConnection.SourceSqlText = TxtSourceSqlText.Text;
-      obj.SaveAsFile = CbSaveFileOnGeneration.IsChecked();
-
-      if (obj.SaveAsFile)
-      {
-        const string s = "If saving file on generation, then {0} cannot be empty.";
-
-        if (TxtPath.IsTextInvalid(string.Format(s, "Path")))
-          return null;
-
-        if (TxtFileName.IsTextInvalid(string.Format(s, "File name")))
-          return null;
-      }
-
-      obj.FilePath = TxtPath.Text;
-      obj.Filename = TxtFileName.Text;
 
       if (_classCheckBoxGroup.HasTickedCheckBox())
         return obj;
