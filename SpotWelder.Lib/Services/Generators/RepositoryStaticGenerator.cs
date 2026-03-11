@@ -8,173 +8,173 @@ using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-	public class RepositoryStaticGenerator
-		: GeneratorBase
-	{
-		public override GenerationElections Election => GenerationElections.RepoStatic;
+  public class RepositoryStaticGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.RepoStatic;
 
-		protected override string TemplateName => "RepositoryStatic.cs.template";
+    protected override string TemplateName => "RepositoryStatic.cs.template";
 
     protected override string ContainingNamespace => "DataAccess";
 
     //TODO: Modify to handle reads-only version
     //TODO: Modify to produce interface
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
-		{
-			var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
+    {
+      var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
 
-			var strTemplate = GetTemplate(TemplateName);
+      var strTemplate = GetTemplate(TemplateName);
 
-			var template = new StringBuilder(strTemplate);
+      var template = new StringBuilder(strTemplate);
 
-			/* Context
-			 * ClassName: Refers to the name of THIS class that is being generated "Table1Repository.cs"
-			 * EntityName: Refers to the existing source Entity Class assumed to have been generated already "Table1Entity.cs"
-			 * ModelName: Refers to the existing Model Class that compliments the Entity Class "Table1Model.cs" */
+      /* Context
+       * ClassName: Refers to the name of THIS class that is being generated "Table1Repository.cs"
+       * EntityName: Refers to the existing source Entity Class assumed to have been generated already "Table1Entity.cs"
+       * ModelName: Refers to the existing Model Class that compliments the Entity Class "Table1Model.cs" */
 
       SetContainingNamespace(template);
-			template.Replace("{{Namespace}}", instructions.Namespace);
-			template.Replace("{{ClassName}}", instructions.SubjectName); //Prefix of the repository class name
-			template.Replace("{{EntityName}}", instructions.EntityName); //Class entity name
-			template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-			template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
-			template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
-			template.Replace("{{ParameterObject}}", syntax.ParameterObject);
-			template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);
-			template.Replace("{{ParameterDbTypeEnum}}", syntax.ParameterDbTypeEnum);
+      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{ClassName}}", instructions.SubjectName); //Prefix of the repository class name
+      template.Replace("{{EntityName}}", instructions.EntityName); //Class entity name
+      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+      template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
+      template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
+      template.Replace("{{ParameterObject}}", syntax.ParameterObject);
+      template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);
+      template.Replace("{{ParameterDbTypeEnum}}", syntax.ParameterDbTypeEnum);
 
-			var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
-			var lstNoPk = instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
-			var lstInsert = new List<ClassMemberStrings>(lstNoPk);
+      var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
+      var lstNoPk = instructions.Properties.Where(x => !x.IsPrimaryKey).ToList();
+      var lstInsert = new List<ClassMemberStrings>(lstNoPk);
 
-			//TODO: What to do when there is no primary key?
-			if (pk != null)
-			{
-				template.Replace("{{PrimaryKeyParameter}}", pk.Parameter);
-				template.Replace("{{PrimaryKeyProperty}}", pk.Property);
-				template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName);
-				template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias);
-				template.Replace("{{PrimaryKeySqlDbType}}", syntax.GetEngineSpecificType(pk.DatabaseType));
+      //TODO: What to do when there is no primary key?
+      if (pk != null)
+      {
+        template.Replace("{{PrimaryKeyParameter}}", pk.Parameter);
+        template.Replace("{{PrimaryKeyProperty}}", pk.Property);
+        template.Replace("{{PrimaryKeyColumn}}", pk.ColumnName);
+        template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias);
+        template.Replace("{{PrimaryKeySqlDbType}}", syntax.GetEngineSpecificType(pk.DatabaseType));
 
-				var scopeIdentity = ScopeIdentityValues.Empty();
+        var scopeIdentity = ScopeIdentityValues.Empty();
 
-				if (pk.IsIdentity)
-					//If the PK is identity then the PK needs to be returned
-					scopeIdentity = syntax.GetScopeIdentity(pk.ColumnName);
-				else
-					//If the PK is not identity, then the PK needs to explicitly be provided and inserted
-					lstInsert.Insert(0, pk);
+        if (pk.IsIdentity)
+          //If the PK is identity then the PK needs to be returned
+          scopeIdentity = syntax.GetScopeIdentity(pk.ColumnName);
+        else
+          //If the PK is not identity, then the PK needs to explicitly be provided and inserted
+          lstInsert.Insert(0, pk);
 
-				template.Replace("{{InsertPkColumnName}}", scopeIdentity.PrimaryKeyColumnName);
-				template.Replace("{{InsertPkDefault}}", scopeIdentity.PrimaryKeyDefault);
-				template.Replace("{{ScopeIdentity}}", scopeIdentity.ScopeIdentity);
-				template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk));
-			}
+        template.Replace("{{InsertPkColumnName}}", scopeIdentity.PrimaryKeyColumnName);
+        template.Replace("{{InsertPkDefault}}", scopeIdentity.PrimaryKeyDefault);
+        template.Replace("{{ScopeIdentity}}", scopeIdentity.ScopeIdentity);
+        template.Replace("{{PrimaryKeyInsertExecution}}", FormatInsertExecution(pk));
+      }
 
-			template.Replace("{{Schema}}", instructions.TableQuery.Schema);
-			template.Replace("{{Table}}", instructions.TableQuery.Table);
-			template.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
-			template.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
-			template.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
-			template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
-			template.Replace("{{SqlParameters}}", FormatSqlParameterList(syntax, lstNoPk));
-			template.Replace("{{SetProperties}}", FormatSetProperties(instructions.Properties));
+      template.Replace("{{Schema}}", instructions.TableQuery.Schema);
+      template.Replace("{{Table}}", instructions.TableQuery.Table);
+      template.Replace("{{SelectAllList}}", FormatSelectList(instructions.Properties));
+      template.Replace("{{InsertColumnList}}", FormatSelectList(lstInsert));
+      template.Replace("{{InsertValuesList}}", FormatSelectList(lstInsert, "@"));
+      template.Replace("{{UpdateParameters}}", FormatUpdateList(lstNoPk));
+      template.Replace("{{SqlParameters}}", FormatSqlParameterList(syntax, lstNoPk));
+      template.Replace("{{SetProperties}}", FormatSetProperties(instructions.Properties));
 
-			GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
+      instructions.AsynchronicityFormatStrategy.ReplaceTags(template);
 
       var rt = instructions.Elections.HasFlag(GenerationElections.RepoDapper) ? "Static" : string.Empty;
 
       return GetFormattedCSharpResult($"{instructions.SubjectName}{rt}Repository.cs", template);
-		}
+    }
 
-		private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
-		{
-			var content = GetTextBlock(
-				properties,
-				p => $"                {prefix}{p.ColumnName}",
-				"," + Environment.NewLine);
+    private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"                {prefix}{p.ColumnName}",
+        "," + Environment.NewLine);
 
-			return content;
-		}
+      return content;
+    }
 
-		private string FormatUpdateList(IList<ClassMemberStrings> properties)
-		{
-			var content = GetTextBlock(
-				properties,
-				p => $"                {p.ColumnName} = @{p.ColumnName}",
-				"," + Environment.NewLine);
+    private string FormatUpdateList(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"                {p.ColumnName} = @{p.ColumnName}",
+        "," + Environment.NewLine);
 
-			return content;
-		}
+      return content;
+    }
 
-		private string FormatSqlParameterList(BaseSqlEngineSyntax syntax, IList<ClassMemberStrings> properties)
-		{
-			var content = GetTextBlock(
-				properties,
-				p => $@"{syntax.FormatSqlParameter(p)}
-									
-			lst.Add(p);",
-				Environment.NewLine);
+    private string FormatSqlParameterList(BaseSqlEngineSyntax syntax, IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $@"{syntax.FormatSqlParameter(p)}
+                  
+      lst.Add(p);",
+        Environment.NewLine);
 
-			return content;
-		}
-		
-		private string FormatSetProperties(IList<ClassMemberStrings> properties)
-		{
-			var content = GetTextBlock(
-				properties,
-				p => $"            {FormatSetProperty(p)}",
-				Environment.NewLine);
+      return content;
+    }
+    
+    private string FormatSetProperties(IList<ClassMemberStrings> properties)
+    {
+      var content = GetTextBlock(
+        properties,
+        p => $"            {FormatSetProperty(p)}",
+        Environment.NewLine);
 
-			return content;
-		}
+      return content;
+    }
 
-		private static string FormatSetProperty(ClassMemberStrings p)
-		{
-			//Examples
-			//r["IntValue"] = Convert.ToInt32(r["IntValue"];
-			//r["NullableIntValue"] == DBNull.Value ? null : (int?)Convert.ToInt32(r["NullableIntValue"]);
-			//r["GuidValue"] = Guid.Parse(Convert.ToString(r["GuidValue")];
-			//r["NullableGuidValue"] == DBNull.Value ? null : (Guid?)Guid.Parse(Convert.ToString(r["NullableGuidValue"]));
+    private static string FormatSetProperty(ClassMemberStrings p)
+    {
+      //Examples
+      //r["IntValue"] = Convert.ToInt32(r["IntValue"];
+      //r["NullableIntValue"] == DBNull.Value ? null : (int?)Convert.ToInt32(r["NullableIntValue"]);
+      //r["GuidValue"] = Guid.Parse(Convert.ToString(r["GuidValue")];
+      //r["NullableGuidValue"] == DBNull.Value ? null : (Guid?)Guid.Parse(Convert.ToString(r["NullableGuidValue"]));
 
-			var dr = $"r[\"{p.ColumnName}\"]";
+      var dr = $"r[\"{p.ColumnName}\"]";
 
-			var method = string.Format(p.ConversionMethodSignature, dr);
+      var method = string.Format(p.ConversionMethodSignature, dr);
 
-			var content = $"e.{p.Property} = ";
+      var content = $"e.{p.Property} = ";
 
-			if (p.IsDbNullable)
+      if (p.IsDbNullable)
 
-				//The Alias already has the question mark suffix if nullable
-				content += $"{dr} == DBNull.Value ? null : ({p.SystemTypeAlias})";
+        //The Alias already has the question mark suffix if nullable
+        content += $"{dr} == DBNull.Value ? null : ({p.SystemTypeAlias})";
 
-			content += $"{method};";
+      content += $"{method};";
 
-			return content;
-		}
+      return content;
+    }
 
-		private static string FormatInsertExecution(ClassMemberStrings primaryKey)
-		{
-			string content;
+    private static string FormatInsertExecution(ClassMemberStrings primaryKey)
+    {
+      string content;
 
-			if (primaryKey.IsIdentity)
-			{
-				var method = string.Format(primaryKey.ConversionMethodSignature, "GetScalar(dr, \"PK\")");
+      if (primaryKey.IsIdentity)
+      {
+        var method = string.Format(primaryKey.ConversionMethodSignature, "GetScalar(dr, \"PK\")");
 
-				content = $@"
-			using var dr = [A]ExecuteReaderText(sql, lst.ToArray());
-			
-			return {method};";
-			}
-			else
-			{
-				content = $@"
-			[A]ExecuteNonQuery(sql, lst.ToArray());
+        content = $@"
+      using var dr = [A]ExecuteReaderText(sql, lst.ToArray());
+      
+      return {method};";
+      }
+      else
+      {
+        content = $@"
+      [A]ExecuteNonQuery(sql, lst.ToArray());
 
-			return entity.{primaryKey.Property};";
-			}
+      return entity.{primaryKey.Property};";
+      }
 
-			return content;
-		}
-	}
+      return content;
+    }
+  }
 }

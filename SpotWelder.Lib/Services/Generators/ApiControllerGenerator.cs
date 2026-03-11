@@ -37,7 +37,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
-      GetAsynchronicityFormatStrategy(instructions.IsAsynchronous).ReplaceTags(template);
+      instructions.AsynchronicityFormatStrategy.ReplaceTags(template);
 
       var pk = instructions.Properties.SingleOrDefault(x => x.IsPrimaryKey);
 

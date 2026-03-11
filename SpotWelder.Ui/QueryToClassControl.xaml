@@ -13,8 +13,8 @@
     </GroupBox>
     <GroupBox Header="Step 2: Subject Source" Height="146" HorizontalAlignment="Left" Margin="12,118,0,0" VerticalAlignment="Top" Width="652">
       <Grid>
-        <RadioButton Content="Query" Height="16" HorizontalAlignment="Left" Margin="95,8,0,0" Name="RbSourceTypeQuery" VerticalAlignment="Top" IsChecked="True" GroupName="rbgSourceType" RenderTransformOrigin="1.059,0.5" />
-        <RadioButton Content="Table Name" Height="16" HorizontalAlignment="Left" Margin="12,8,0,0" Name="RbSourceTypeTableName" VerticalAlignment="Top" GroupName="rbgSourceType" IsChecked="True" />
+        <RadioButton Content="Query" Height="16" HorizontalAlignment="Left" Margin="95,8,0,0" x:Name="RbSourceTypeQuery" VerticalAlignment="Top" IsChecked="True" GroupName="RbgSourceType" RenderTransformOrigin="1.059,0.5" />
+        <RadioButton Content="Table Name" Height="16" HorizontalAlignment="Left" Margin="12,8,0,0" x:Name="RbSourceTypeTableName" VerticalAlignment="Top" GroupName="RbgSourceType" IsChecked="True" />
         <TextBox Height="89" HorizontalAlignment="Left" Margin="10,29,0,0" Name="TxtSourceSqlText" VerticalAlignment="Top" Width="596" LostKeyboardFocus="TxtSqlSourceText_LostKeyboardFocus" AcceptsReturn="True" />
       </Grid>
     </GroupBox>

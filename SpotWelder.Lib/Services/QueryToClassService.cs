@@ -72,6 +72,16 @@ namespace SpotWelder.Lib.Services
       return GenerateClasses(ci);
     }
 
+    //TODO: Need to use DI for this, or maybe it moves to ClassInstructions.cs?
+    private static AsynchronicityFormatStrategyBase GetAsynchronicityFormatStrategy(bool isAsynchronous)
+    {
+      AsynchronicityFormatStrategyBase strategy = isAsynchronous ? new AsyncFormatStrategy() : new SyncFormatStrategy();
+
+      strategy.Configure();
+
+      return strategy;
+    }
+
     /// <summary>
     /// This is to be thought of as factual information. The properties provided here
     /// should not be overwritten, but can be when necessary.
@@ -83,7 +93,7 @@ namespace SpotWelder.Lib.Services
       //TODO: Incoming parameters require validation.
 
       var schema = GetSchema(p.ServerConnection);
-
+      
       var ins = new ClassInstructions
       {
         Namespace = p.Namespace, 
@@ -101,8 +111,10 @@ namespace SpotWelder.Lib.Services
         SqlEngine = p.ServerConnection.SqlEngine
       };
 
+      ins.AsynchronicityFormatStrategy = GetAsynchronicityFormatStrategy(ins.IsAsynchronous);
+
       //TODO: defaulting the language to CSharp, not sure what I am going to do with this at the moment
-      if(p.LanguageType == CodeType.None) p.LanguageType = CodeType.CSharp;
+      if (p.LanguageType == CodeType.None) p.LanguageType = CodeType.CSharp;
 
       foreach (var sc in schema.ColumnsAll)
       {
@@ -166,7 +178,7 @@ namespace SpotWelder.Lib.Services
     }
 
     #region Generate GridView
-    //This is a relic of the past, not sure if I will continue to support this as it is just another template esssentially
+    //This is a relic of the past, not sure if I will continue to support this as it is just another template essentially
     //public string GenerateGridViewColumns(QueryToClassParameters parameters)
     //{
     //    var p = parameters;

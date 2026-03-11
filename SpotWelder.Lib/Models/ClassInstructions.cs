@@ -1,4 +1,5 @@
 ﻿using SpotWelder.Lib.Services.CodeFactory;
+using System;
 using System.Collections.Generic;
 
 namespace SpotWelder.Lib.Models
@@ -15,6 +16,15 @@ namespace SpotWelder.Lib.Models
     /// When a <see cref="Lib.SourceSqlType.TableName"/> is provided then all CRUD can be produced so long as there is a primary key.
     /// </summary>
     public SourceSqlType SourceSqlType { get; set; }
+
+    /// <summary>
+    /// The way in which class files are organized physically. There are two types of organization currently: flat and layered.
+    ///   N-Tier architecture means class files are generated in separate folders based on their type, such as `Entities`, `Models`, `Dtos`, etc.
+    ///   Feature-based development architecture means all class files are generated in a single folder.
+    ///
+    /// Besides the physical file organization, the namespaces have to be adjusted to match.
+    /// </summary>
+    public ArchitectureType ArchitectureType { get; set; }
 
     /// <summary>
     /// Table query for the class being generated. This may not be in use depending
@@ -94,6 +104,12 @@ namespace SpotWelder.Lib.Models
     /// <summary>Properties of the source entity.</summary>
     public IList<ClassMemberStrings> Properties { get; set; } = new List<ClassMemberStrings>();
 
+    public AsynchronicityFormatStrategyBase AsynchronicityFormatStrategy { get; set; }
+
+    //TODO: Not sure if I need this anymore
+    //The intention here was to be able to add a namespace that is needed in every class,
+    //but with global namespaces now available this is obsolete
+    [Obsolete("Global namespaces makes this unnecessary.")]
     public void AddNamespace(string nameSpace)
     {
       if (Namespaces.Contains(nameSpace)) return;
@@ -118,7 +134,9 @@ namespace SpotWelder.Lib.Models
         SqlEngine = SqlEngine,
         SourceQuery = SourceQuery,
         SourceSqlType = SourceSqlType,
+        ArchitectureType = ArchitectureType,
         TableQuery = TableQuery.Clone(),
+        AsynchronicityFormatStrategy = AsynchronicityFormatStrategy.Clone(),
         ClassAttributes = new List<string>(ClassAttributes),
         Namespaces = new List<string>(Namespaces)
       };

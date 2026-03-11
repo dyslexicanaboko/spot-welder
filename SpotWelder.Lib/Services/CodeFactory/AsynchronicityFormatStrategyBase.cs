@@ -38,7 +38,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
     /// <summary>Method calls that return enumerations are wrapped with `)` to finish before the `.ToList()` extension can be called.</summary>
     public string AwaitClose { get; set; } = string.Empty;
 
-    /// <summary>Some methods requires the `Async` suffix when used in an asynchronous context.</summary>
+    /// <summary>Some methods require the `Async` suffix when used in an asynchronous context.</summary>
     public string AsyncSuffix { get; set; } = string.Empty;
 
     public abstract void Configure();
@@ -54,5 +54,20 @@ namespace SpotWelder.Lib.Services.CodeFactory
         .Replace("[AMC]", TaskMethodClose)
         .Replace("[AWO]", AwaitOpen)
         .Replace("[AWC]", AwaitClose);
+
+    /// <summary>Creates a copy of the current instance.</summary>
+    public AsynchronicityFormatStrategyBase Clone()
+      => new AsyncFormatStrategy //Arbitrarily choosing this class because it doesn't matter which
+      {
+        TaskVoid = TaskVoid,
+        TaskOpen = TaskOpen,
+        TaskClose = TaskClose,
+        Await = Await,
+        TaskMethodOpen = TaskMethodOpen,
+        TaskMethodClose = TaskMethodClose,
+        AwaitOpen = AwaitOpen,
+        AwaitClose = AwaitClose,
+        AsyncSuffix = AsyncSuffix
+      };
   }
 }

@@ -192,7 +192,11 @@ namespace SpotWelder.Ui
     private SourceSqlType GetSourceType() => RbSourceTypeQuery.IsChecked.GetValueOrDefault() ?
       SourceSqlType.Query :
       SourceSqlType.TableName;
-    
+
+    private ArchitectureType GetArchitectureType() => RbArchitectureNTier.IsChecked.GetValueOrDefault() ?
+      ArchitectureType.NTier :
+      ArchitectureType.FeatureBased;
+
     private void CbClassEntity_OnChecked(object sender, RoutedEventArgs e)
       => CbClassEntity_ToggleDependents();
 

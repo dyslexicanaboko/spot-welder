@@ -198,16 +198,6 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    //TODO: Need to use DI for this
-    protected static AsynchronicityFormatStrategyBase GetAsynchronicityFormatStrategy(bool isAsynchronous)
-    {
-      AsynchronicityFormatStrategyBase strategy = isAsynchronous ? new AsyncFormatStrategy() : new SyncFormatStrategy();
-
-      strategy.Configure();
-
-      return strategy;
-    }
-
     protected static List<GenerationElections> GetChildElections(
       GenerationElections elections,
       GenerationElections parent)
