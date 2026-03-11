@@ -32,7 +32,7 @@ namespace SpotWelder.Lib.Services.Generators
     ///   GenerationElections.CloneInterfaceToEntity
     ///   GenerationElections.CloneInterfaceToModel
     /// </summary>
-    public override GenerationElections Election => GenerationElections.GenerateMapper;
+    public override GenerationElections Election => GenerationElections.Mapper;
 
     protected override string TemplateName => "Mapper.cs.template";
 

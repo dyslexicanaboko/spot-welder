@@ -2,6 +2,7 @@
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.CodeFactory.AsynchronicityStrategy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace SpotWelder.Lib.Services
             GenerationElections.RepoStatic))
       {
         parameters.Elections |= 
-          GenerationElections.GenerateRecord | 
+          GenerationElections.Record | 
           GenerationElections.MapEntityToRecord |
           GenerationElections.MapRecordToEntity;
       }
@@ -44,7 +45,7 @@ namespace SpotWelder.Lib.Services
             GenerationElections.MapCreateModelToEntity,
             GenerationElections.MapPatchModelToEntity,
             GenerationElections.MapRecordToEntity))
-        parameters.Elections |= GenerationElections.GenerateMapper;
+        parameters.Elections |= GenerationElections.Mapper;
 
       _queryToClassRepository.ConfigureSqlClient(parameters.ServerConnection);
 
@@ -64,7 +65,7 @@ namespace SpotWelder.Lib.Services
         Namespace = "Namespace1",
         Languages = instructions.Languages,
         Properties = instructions.Properties,
-        IsPartial = instructions.Elections.HasFlag(GenerationElections.GenerateEntityIEquatable),
+        IsPartial = instructions.Elections.HasFlag(GenerationElections.EntityIEquatable),
         Elections = instructions.Elections,
         TableQuery = new TableQuery() //Won't be used, but will be cloned, avoid null ref
       };
@@ -72,7 +73,7 @@ namespace SpotWelder.Lib.Services
       return GenerateClasses(ci);
     }
 
-    //TODO: Need to use DI for this, or maybe it moves to ClassInstructions.cs?
+    //TODO: Need to use DI for this?
     private static AsynchronicityFormatStrategyBase GetAsynchronicityFormatStrategy(bool isAsynchronous)
     {
       AsynchronicityFormatStrategyBase strategy = isAsynchronous ? new AsyncFormatStrategy() : new SyncFormatStrategy();

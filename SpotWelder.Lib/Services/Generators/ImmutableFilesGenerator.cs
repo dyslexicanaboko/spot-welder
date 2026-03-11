@@ -15,7 +15,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class ImmutableFilesGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateImmutables;
+    public override GenerationElections Election => GenerationElections.Immutables;
 
     //TODO: Unfortunately, I am breaking the paradigm of this template generator. I will have to reconsider this later.
     protected override string TemplateName => "MULTIPLE"; //Multiple templates will be used, so this will have to be handled differently.

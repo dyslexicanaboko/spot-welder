@@ -59,12 +59,12 @@ namespace SpotWelder.Ui
       
       _electionToCheckBoxMap = new Dictionary<GenerationElections, CheckBox>
       {
-        { GenerationElections.GenerateInterface, CbExtractInterface },
-        { GenerationElections.GenerateEntityIEquatable, CbImplementIEquatableOfTInterface },
+        { GenerationElections.Interface, CbExtractInterface },
+        { GenerationElections.EntityIEquatable, CbImplementIEquatableOfTInterface },
         { GenerationElections.MapEntityToModel, CbMethodEntityToDto },
         { GenerationElections.MapModelToEntity, CbMethodDtoToEntity },
-        { GenerationElections.GenerateEntityAsJavaScript, CbEquivalentJavaScript },
-        { GenerationElections.GenerateEntityAsTypeScript, CbEquivalentTypeScript }
+        { GenerationElections.EntityAsJavaScript, CbEquivalentJavaScript },
+        { GenerationElections.EntityAsTypeScript, CbEquivalentTypeScript }
       };
     }
 
@@ -192,8 +192,8 @@ Please keep in mind casing matters.";
       {
         SourceClassName = t.Name,
         Elections = 
-          GenerationElections.GenerateEntity | 
-          GenerationElections.GenerateModel |
+          GenerationElections.Entity | 
+          GenerationElections.Model |
           _electionToCheckBoxMap.GetChosenGenerationElections()
       };
       

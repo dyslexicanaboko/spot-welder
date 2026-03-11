@@ -6,7 +6,7 @@ namespace SpotWelder.Lib.Services.Generators
 	public class ClassModelPatchGenerator
 		: GeneratorBase
 	{
-		public override GenerationElections Election => GenerationElections.GeneratePatchModel;
+		public override GenerationElections Election => GenerationElections.PatchModel;
 
 		protected override string TemplateName => "ModelPatch.cs.template";
 
@@ -27,7 +27,7 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{EntityName}}", instructions.EntityName);
 			template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Interface}}",
-        instructions.Elections.HasFlag(GenerationElections.GenerateInterface) ?
+        instructions.Elections.HasFlag(GenerationElections.Interface) ?
         FormatInterface(instructions.InterfaceName) : string.Empty);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 

@@ -65,12 +65,12 @@ namespace SpotWelder.Ui
     {
       var dict = new Dictionary<GenerationElections, CheckBox>
       {
-        { GenerationElections.GenerateEntity, CbClassEntity },
-        { GenerationElections.GenerateEntityIEquatable, CbClassEntityIEquatable },
-        { GenerationElections.GenerateEntityIComparable, CbClassEntityIComparable },
-        { GenerationElections.GenerateEntityEqualityComparer, CbClassEntityEqualityComparer },
-        { GenerationElections.GenerateInterface, CbClassInterface },
-        { GenerationElections.GenerateModel, CbClassModel },
+        { GenerationElections.Entity, CbClassEntity },
+        { GenerationElections.EntityIEquatable, CbClassEntityIEquatable },
+        { GenerationElections.EntityIComparable, CbClassEntityIComparable },
+        { GenerationElections.EntityEqualityComparer, CbClassEntityEqualityComparer },
+        { GenerationElections.Interface, CbClassInterface },
+        { GenerationElections.Model, CbClassModel },
         { GenerationElections.MapEntityToModel, CbMapEntityToModel },
         { GenerationElections.MapModelToEntity, CbMapModelToEntity },
         { GenerationElections.MapCreateModelToEntity, CbMapCreateModelToEntity },
@@ -82,12 +82,12 @@ namespace SpotWelder.Ui
         { GenerationElections.RepoDapper, CbRepoDapper },
         { GenerationElections.Manager, CbManager },
         { GenerationElections.ApiController, CbApiController },
-        { GenerationElections.GenerateCreateModel, CbClassCreateModel },
-        { GenerationElections.GeneratePatchModel, CbClassPatchModel },
-        { GenerationElections.GenerateCreatedModel, CbClassCreatedModel },
+        { GenerationElections.CreateModel, CbClassCreateModel },
+        { GenerationElections.PatchModel, CbClassPatchModel },
+        { GenerationElections.CreatedModel, CbClassCreatedModel },
         { GenerationElections.MakeAsynchronous, CbMakeAsynchronous },
-        { GenerationElections.GenerateImmutables, CbImmutables },
-        { GenerationElections.GenerateValidation, CbValidation },
+        { GenerationElections.Immutables, CbImmutables },
+        { GenerationElections.Validation, CbValidation },
       };
 
       return dict;

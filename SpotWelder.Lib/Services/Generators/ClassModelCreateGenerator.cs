@@ -6,7 +6,7 @@ namespace SpotWelder.Lib.Services.Generators
 	public class ClassModelCreateGenerator
 		: GeneratorBase
 	{
-		public override GenerationElections Election => GenerationElections.GenerateCreateModel;
+		public override GenerationElections Election => GenerationElections.CreateModel;
 
 		protected override string TemplateName => "ModelCreate.cs.template";
 
@@ -26,7 +26,7 @@ namespace SpotWelder.Lib.Services.Generators
 			template.Replace("{{ClassName}}", instructions.ClassName); //Subject is the prefix
 			template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Interface}}",
-        instructions.Elections.HasFlag(GenerationElections.GenerateInterface) ?
+        instructions.Elections.HasFlag(GenerationElections.Interface) ?
         FormatInterface(instructions.InterfaceName) : string.Empty);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 

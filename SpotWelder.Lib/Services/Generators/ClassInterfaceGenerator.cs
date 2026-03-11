@@ -10,7 +10,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassInterfaceGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateInterface;
+    public override GenerationElections Election => GenerationElections.Interface;
 
     protected override string TemplateName => "Interface.cs.template";
 

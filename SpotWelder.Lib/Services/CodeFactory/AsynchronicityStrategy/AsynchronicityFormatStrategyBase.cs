@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SpotWelder.Lib.Services.CodeFactory
+namespace SpotWelder.Lib.Services.CodeFactory.AsynchronicityStrategy
 {
   public abstract class AsynchronicityFormatStrategyBase
   {

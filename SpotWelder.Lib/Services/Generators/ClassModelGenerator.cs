@@ -8,7 +8,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassModelGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateModel;
+    public override GenerationElections Election => GenerationElections.Model;
 
     protected override string TemplateName => "Model.cs.template";
 
@@ -33,7 +33,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Interface}}", 
-        instructions.Elections.HasFlag(GenerationElections.GenerateInterface) ? 
+        instructions.Elections.HasFlag(GenerationElections.Interface) ? 
         FormatInterface(instructions.InterfaceName) : string.Empty);
       template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
 
@@ -50,7 +50,7 @@ namespace SpotWelder.Lib.Services.Generators
       var arr = new[]
       {
         //GenerationElections.GenerateInterface, //TODO: Not supporting this anymore
-        GenerationElections.GenerateEntity,
+        GenerationElections.Entity,
       };
 
       var lst = new List<string>(arr.Length);
@@ -62,11 +62,11 @@ namespace SpotWelder.Lib.Services.Generators
           switch (e)
           {
             //TODO: Not supporting this anymore
-            case GenerationElections.GenerateInterface:
+            case GenerationElections.Interface:
               lst.Add(ConstructorTemplate("{{InterfaceName}}", "target", "{{ConstructorFromInterface}}"));
 
               break;
-            case GenerationElections.GenerateEntity:
+            case GenerationElections.Entity:
               lst.Add(ConstructorTemplate("{{EntityName}}", "entity", "{{ConstructorFromEntity}}"));
 
               break;

@@ -22,48 +22,48 @@ public enum GenerationElections : long
   MakeAsynchronous = 1L << 0,
 
   /// <summary> Generate an entity for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GenerateEntity = 1L << 1,
+  Entity = 1L << 1,
 
   /// <summary> Generate the <see cref="IEquatable{T}"/> interface implementation for the target entity. </summary>
-  [Child(GenerateEntity)]
-  GenerateEntityIEquatable = 1L << 2,
+  [Child(Entity)]
+  EntityIEquatable = 1L << 2,
 
   /// <summary> Generate the <see cref="IComparable"/> interface implementation for the target entity. </summary>
-  [Child(GenerateEntity)]
-  GenerateEntityIComparable = 1L << 3,
+  [Child(Entity)]
+  EntityIComparable = 1L << 3,
 
   /// <summary> Generate an <see cref="EqualityComparer{T}"/> class for the target entity. </summary>
-  GenerateEntityEqualityComparer = 1L << 4,
+  EntityEqualityComparer = 1L << 4,
 
   /// <summary> Generate a model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GenerateModel = 1L << 5,
+  Model = 1L << 5,
 
   /// <summary> Generate a REST API Create model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GenerateCreateModel = 1L << 6,
+  CreateModel = 1L << 6,
 
   /// <summary> Generate a REST API Patch model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GeneratePatchModel = 1L << 7,
+  PatchModel = 1L << 7,
 
   /// <summary> Name of the subject with the `I` prefix.</summary>
   /// <example> Subject named: `Task`, the interface would be `ITask`.</example>
-  GenerateInterface = 1L << 8,
+  Interface = 1L << 8,
 
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapEntityToModel = 1L << 9,
 
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapModelToEntity = 1L << 10,
 
   //TODO: Am I keeping this? Currently disconnected and unused.
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapInterfaceToEntity = 1L << 11,
 
   //TODO: Am I keeping this? Currently disconnected and unused.
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapInterfaceToModel = 1L << 12,
 
   SerializeCsv = 1L << 13,
@@ -90,41 +90,41 @@ public enum GenerationElections : long
 
   ApiController = 1L << 21,
 
-  GenerateEntityAsTypeScript = 1L << 22,
+  EntityAsTypeScript = 1L << 22,
     
-  GenerateEntityAsJavaScript = 1L << 23,
+  EntityAsJavaScript = 1L << 23,
     
   /// <summary> Services all mapper elections. </summary>
-  GenerateMapper = 1L << 24,
+  Mapper = 1L << 24,
 
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapCreateModelToEntity = 1L << 25,
 
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapPatchModelToEntity = 1L << 26,
 
   /// <summary> Generate a REST API Created model for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GenerateCreatedModel = 1L << 27,
+  CreatedModel = 1L << 27,
 
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapEntityToCreatedModel = 1L << 28,
 
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapRecordToEntity = 1L << 29,
 
-  /// <summary> Dependent on <see cref="GenerateMapper"/> </summary>
-  [Child(GenerateMapper)]
+  /// <summary> Dependent on <see cref="Mapper"/> </summary>
+  [Child(Mapper)]
   MapEntityToRecord = 1L << 30,
 
   /// <summary> Generate a record for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GenerateRecord = 1L << 31,
+  Record = 1L << 31,
 
   /// <summary> Generate a record for the target <see cref="ClassInstructions.SubjectName"/>. </summary>
-  GenerateImmutables = 1L << 32,
+  Immutables = 1L << 32,
 
-  GenerateValidation = 1L << 33
+  Validation = 1L << 33
 }

@@ -65,7 +65,7 @@ namespace SpotWelder.Tests.Lib.Services
       {
         LanguageType = CodeType.CSharp,
         Namespace = "SimpleClassCreator.Tests.DummyObjects",
-        Elections = GenerationElections.GenerateEntity,
+        Elections = GenerationElections.Entity,
         SubjectName = sq.TableQuery.Table
       };
 

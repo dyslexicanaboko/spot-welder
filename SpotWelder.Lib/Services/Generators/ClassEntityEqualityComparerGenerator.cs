@@ -9,7 +9,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassEntityEqualityComparerGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateEntityEqualityComparer;
+    public override GenerationElections Election => GenerationElections.EntityEqualityComparer;
 
     protected override string TemplateName => "EntityEqualityComparer.cs.template";
 

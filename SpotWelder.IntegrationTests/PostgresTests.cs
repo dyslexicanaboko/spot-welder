@@ -47,7 +47,7 @@ public class PostgresTests
     obj.LanguageType = CodeType.CSharp;
     obj.Namespace = "NoOneCares";
     obj.SubjectName = "Category";
-    obj.Elections = GenerationElections.GenerateEntity;
+    obj.Elections = GenerationElections.Entity;
 
     if (obj.Elections.HasAnyFlag(
           GenerationElections.MapModelToEntity,
@@ -56,7 +56,7 @@ public class PostgresTests
           GenerationElections.MapInterfaceToModel,
           GenerationElections.MapCreateModelToEntity,
           GenerationElections.MapPatchModelToEntity))
-      obj.Elections |= GenerationElections.GenerateMapper;
+      obj.Elections |= GenerationElections.Mapper;
 
     return obj;
   }

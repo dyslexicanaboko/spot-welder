@@ -1,4 +1,5 @@
 ﻿using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.CodeFactory.AsynchronicityStrategy;
 using System;
 using System.Collections.Generic;
 
@@ -104,6 +105,7 @@ namespace SpotWelder.Lib.Models
     /// <summary>Properties of the source entity.</summary>
     public IList<ClassMemberStrings> Properties { get; set; } = new List<ClassMemberStrings>();
 
+    /// <summary>Formatter for formatting asynchronous syntax if elected. Otherwise, formatted as synchronous syntax.</summary>
     public AsynchronicityFormatStrategyBase AsynchronicityFormatStrategy { get; set; }
 
     //TODO: Not sure if I need this anymore

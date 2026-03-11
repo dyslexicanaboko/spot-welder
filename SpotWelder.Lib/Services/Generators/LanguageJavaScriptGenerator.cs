@@ -9,7 +9,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class LanguageJavaScriptGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateEntityAsJavaScript;
+    public override GenerationElections Election => GenerationElections.EntityAsJavaScript;
 
     protected override string TemplateName => "Prototype.js.template";
 

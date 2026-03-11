@@ -38,13 +38,13 @@ namespace SpotWelder.IntegrationTests.Common
       //Since I am testing every election, they all have to be set here since there are interdependencies.
       //The sub-elections are set here explicitly as they are dynamically selected based on the main election.
       p.Elections |= 
-        GenerationElections.GenerateInterface | 
-        GenerationElections.GenerateEntity | 
-        GenerationElections.GenerateModel |
-        GenerationElections.GenerateCreateModel | 
-        GenerationElections.GeneratePatchModel |
-        GenerationElections.GenerateEntityIEquatable |
-        GenerationElections.GenerateEntityIComparable |
+        GenerationElections.Interface | 
+        GenerationElections.Entity | 
+        GenerationElections.Model |
+        GenerationElections.CreateModel | 
+        GenerationElections.PatchModel |
+        GenerationElections.EntityIEquatable |
+        GenerationElections.EntityIComparable |
         GenerationElections.MapEntityToModel |
         GenerationElections.MapModelToEntity |
         GenerationElections.MapInterfaceToModel |

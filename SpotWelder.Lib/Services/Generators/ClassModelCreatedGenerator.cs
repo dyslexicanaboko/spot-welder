@@ -6,7 +6,7 @@ namespace SpotWelder.Lib.Services.Generators
 	public class ClassModelCreatedGenerator
 		: GeneratorBase
 	{
-		public override GenerationElections Election => GenerationElections.GenerateCreatedModel;
+		public override GenerationElections Election => GenerationElections.CreatedModel;
 
 		protected override string TemplateName => "ModelCreated.cs.template";
 

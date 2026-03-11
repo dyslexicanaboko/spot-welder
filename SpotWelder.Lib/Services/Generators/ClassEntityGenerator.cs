@@ -10,7 +10,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassEntityGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateEntity;
+    public override GenerationElections Election => GenerationElections.Entity;
 
     protected override string TemplateName => "Entity.cs.template";
 
@@ -61,9 +61,9 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var arr = new[]
       {
-        GenerationElections.GenerateInterface,
-        GenerationElections.GenerateEntityIEquatable,
-        GenerationElections.GenerateEntityIComparable
+        GenerationElections.Interface,
+        GenerationElections.EntityIEquatable,
+        GenerationElections.EntityIComparable
       };
 
       var lst = new List<string>(arr.Length);
@@ -74,15 +74,15 @@ namespace SpotWelder.Lib.Services.Generators
         {
           switch (e)
           {
-            case GenerationElections.GenerateInterface:
+            case GenerationElections.Interface:
               lst.Add("{{InterfaceName}}");
 
               break;
-            case GenerationElections.GenerateEntityIEquatable:
+            case GenerationElections.EntityIEquatable:
               lst.Add("IEquatable<{{ClassName}}>");
 
               break;
-            case GenerationElections.GenerateEntityIComparable:
+            case GenerationElections.EntityIComparable:
               lst.Add("IComparable");
            
               break;
@@ -99,8 +99,8 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var dict = new Dictionary<GenerationElections, string>
       {
-        { GenerationElections.GenerateEntityIEquatable, "EntityIEquatable.cs.template" },
-        { GenerationElections.GenerateEntityIComparable, "EntityIComparable.cs.template" }
+        { GenerationElections.EntityIEquatable, "EntityIEquatable.cs.template" },
+        { GenerationElections.EntityIComparable, "EntityIComparable.cs.template" }
       };
 
       var sb = new StringBuilder();
@@ -121,11 +121,11 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var arr = new[]
       {
-        GenerationElections.GenerateInterface,
-        GenerationElections.GenerateModel,
-        GenerationElections.GenerateCreateModel,
-        GenerationElections.GeneratePatchModel,
-        GenerationElections.GenerateRecord
+        GenerationElections.Interface,
+        GenerationElections.Model,
+        GenerationElections.CreateModel,
+        GenerationElections.PatchModel,
+        GenerationElections.Record
       };
 
       var lst = new List<string>(arr.Length);
@@ -136,26 +136,26 @@ namespace SpotWelder.Lib.Services.Generators
         {
           switch (e)
           {
-            case GenerationElections.GenerateInterface:
+            case GenerationElections.Interface:
               lst.Add(ConstructorTemplate("{{InterfaceName}}", "target", "{{ConstructorFromInterface}}"));
 
               break;
-            case GenerationElections.GenerateRecord:
+            case GenerationElections.Record:
               namespaces.Add("{{Namespace}}.Records");
               lst.Add(ConstructorTemplate("{{RecordName}}", "record", "{{ConstructorFromRecord}}"));
 
               break;
-            case GenerationElections.GenerateModel:
+            case GenerationElections.Model:
               namespaces.Add("{{Namespace}}.Models");
               lst.Add(ConstructorTemplate("{{ModelName}}", "model", "{{ConstructorFromModel}}"));
 
               break;
-            case GenerationElections.GenerateCreateModel:
+            case GenerationElections.CreateModel:
               namespaces.Add("{{Namespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1CreateModel", "model", "{{ConstructorFromModel}}"));
 
               break;
-            case GenerationElections.GeneratePatchModel:
+            case GenerationElections.PatchModel:
               namespaces.Add("{{Namespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1PatchModel", "model", "{{ConstructorFromModel}}"));
 

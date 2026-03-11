@@ -1,4 +1,4 @@
-﻿namespace SpotWelder.Lib.Services.CodeFactory;
+﻿namespace SpotWelder.Lib.Services.CodeFactory.AsynchronicityStrategy;
 
 public class SyncFormatStrategy
   : AsynchronicityFormatStrategyBase

@@ -6,7 +6,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class ClassRecordGenerator
     : GeneratorBase
   {
-    public override GenerationElections Election => GenerationElections.GenerateRecord;
+    public override GenerationElections Election => GenerationElections.Record;
 
     protected override string TemplateName => "Record.cs.template";
 
