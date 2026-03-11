@@ -13,11 +13,6 @@ namespace SpotWelder.Lib.Services.Generators
     {
       { GenerationElections.MapEntityToModel, new TemplateInfo("MapEntityToModel.cs.template", ["Entities", "Models"]) },
       { GenerationElections.MapModelToEntity, new TemplateInfo("MapModelToEntity.cs.template", ["Entities", "Models"]) },
-
-      //FYI: Commenting out these two mapping options for now as they are just confusing things.
-      //I might eliminate these entirely later. They have not been useful in practice.
-      //{ GenerationElections.MapInterfaceToEntity, "MapInterfaceToEntity.cs.template" },
-      //{ GenerationElections.MapInterfaceToModel, "MapInterfaceToModel.cs.template" },
       { GenerationElections.MapCreateModelToEntity, new TemplateInfo("MapCreateModelToEntity.cs.template", ["Entities", "Models.Client"]) },
       { GenerationElections.MapPatchModelToEntity, new TemplateInfo("MapPatchModelToEntity.cs.template", ["Entities", "Models.Client"]) },
       { GenerationElections.MapEntityToCreatedModel, new TemplateInfo("MapEntityToCreatedModel.cs.template", ["Entities", "Models.Client"]) },
@@ -113,7 +108,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var content = GetTextBlock(
         instructions.Properties,
-        p => $"			{to}.{p.Property} = {from}.{p.Property};",
+        p => $"      {to}.{p.Property} = {from}.{p.Property};",
         Environment.NewLine);
 
       return content;

@@ -3,7 +3,7 @@
 namespace {{Namespace}}.{{ContainingNamespace}}
 {
   public class {{ClassName}}Mapper
-    : BaseMapper
+    : BaseMapper, I{{ClassName}}Mapper
   {
     {{Body}}
   }
