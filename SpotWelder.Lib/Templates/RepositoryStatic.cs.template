@@ -1,11 +1,11 @@
-{{SqlNamespaces}}
+{{SqlUsingDirectives}}
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-{{Namespaces}}
+{{UsingDirectives}}
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public class {{ClassName}}Repository
   {

@@ -1,12 +1,12 @@
-﻿{{Namespaces}}
-using {{Namespace}}.Managers;
-using {{Namespace}}.Mappers;
-using {{Namespace}}.Models;
-using {{Namespace}}.Models.Client;
+﻿{{UsingDirectives}}
+using {{RootContainingNamespace}}.Managers;
+using {{RootContainingNamespace}}.Mappers;
+using {{RootContainingNamespace}}.Models;
+using {{RootContainingNamespace}}.Models.Client;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   [Route("api/v1/{{ApiRoute}}")]
   [ApiController]

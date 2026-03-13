@@ -1,7 +1,7 @@
-﻿{{Namespaces}}
-using {{Namespace}}.Entities;
+﻿{{UsingDirectives}}
+using {{RootContainingNamespace}}.Entities;
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public interface I{{ClassName}}Manager
   {

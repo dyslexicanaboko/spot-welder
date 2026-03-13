@@ -1,7 +1,7 @@
 ﻿//https://www.nuget.org/packages/Newtonsoft.Json/
 using Newtonsoft.Json;
 
-namespace {{Namespace}}
+namespace {{RootContainingNamespace}}
 {
     public partial class SerializationService
     {

@@ -1,4 +1,4 @@
-﻿namespace {{Namespace}}.{{ContainingNamespace}}
+﻿namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public record {{ClassName}}
   {

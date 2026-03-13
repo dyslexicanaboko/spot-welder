@@ -1,4 +1,4 @@
-﻿namespace {{Namespace}}.Mappers;
+﻿namespace {{RootContainingNamespace}}.Mappers;
 
 public abstract class BaseMapper
 {

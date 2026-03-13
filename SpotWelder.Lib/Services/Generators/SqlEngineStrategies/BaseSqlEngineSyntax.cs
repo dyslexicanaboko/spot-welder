@@ -17,7 +17,7 @@ namespace SpotWelder.Lib.Services.Generators.SqlEngineStrategies
     }
 
     /// <summary> The Sql Engine's SDK namespaces. </summary>
-    public abstract HashSet<string> SqlNamespaces { get; protected set; }
+    public abstract HashSet<string> SqlUsingDirectives { get; protected set; }
 
     /// <summary> The Sql Engine's SDK connection object name. </summary>
     public abstract string ConnectionObject { get; protected set; }

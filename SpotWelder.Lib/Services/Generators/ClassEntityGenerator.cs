@@ -33,8 +33,8 @@ namespace SpotWelder.Lib.Services.Generators
       //Full template replacements
       SetContainingNamespace(template);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
-      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
+      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{RecordName}}", instructions.RecordName);
@@ -141,22 +141,22 @@ namespace SpotWelder.Lib.Services.Generators
 
               break;
             case GenerationElections.Record:
-              usings.Add("{{Namespace}}.Records");
+              usings.Add("{{RootContainingNamespace}}.Records");
               lst.Add(ConstructorTemplate("{{RecordName}}", "record", "{{ConstructorFromRecord}}"));
 
               break;
             case GenerationElections.Model:
-              usings.Add("{{Namespace}}.Models");
+              usings.Add("{{RootContainingNamespace}}.Models");
               lst.Add(ConstructorTemplate("{{ModelName}}", "model", "{{ConstructorFromModel}}"));
 
               break;
             case GenerationElections.CreateModel:
-              usings.Add("{{Namespace}}.Models.Client");
+              usings.Add("{{RootContainingNamespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1CreateModel", "model", "{{ConstructorFromModel}}"));
 
               break;
             case GenerationElections.PatchModel:
-              usings.Add("{{Namespace}}.Models.Client");
+              usings.Add("{{RootContainingNamespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1PatchModel", "model", "{{ConstructorFromModel}}"));
 
               break;

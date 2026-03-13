@@ -41,11 +41,11 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(strTemplate);
 
       SetContainingNamespace(template);
-      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
+      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
       template.Replace("{{RecordName}}", instructions.RecordName);
-      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
-      template.Replace("{{SqlNamespaces}}", FormatUsingDirectives(syntax.SqlNamespaces));
+      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{SqlUsingDirectives}}", FormatUsingDirectives(syntax.SqlUsingDirectives));
       template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
       template.Replace("{{ParameterObject}}", syntax.ParameterObject);
       template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);

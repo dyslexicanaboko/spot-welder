@@ -41,8 +41,8 @@ namespace SpotWelder.Lib.Services.Generators
 
       template.Replace("{{Body}}", BuildBodyTemplate(instructions.UsingDirectives, instructions.Elections));
       SetContainingNamespace(template);
-      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
-      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
+      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{RecordName}}", instructions.RecordName);
@@ -71,7 +71,7 @@ namespace SpotWelder.Lib.Services.Generators
       {
         var templateInfo = ChildTemplates[child];
 
-        var arr = templateInfo.Namespaces.Select(x => $"{{{{Namespace}}}}.{x}").ToArray();
+        var arr = templateInfo.Namespaces.Select(x => $"{{{{RootContainingNamespace}}}}.{x}").ToArray();
 
         //HashSet will prevent duplicates.
         foreach (var ns in arr)

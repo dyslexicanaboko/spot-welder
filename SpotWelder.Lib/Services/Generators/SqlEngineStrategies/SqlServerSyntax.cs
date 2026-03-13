@@ -16,7 +16,7 @@ namespace SpotWelder.Lib.Services.Generators.SqlEngineStrategies
     }
 
     /// <inheritdoc />
-    public override HashSet<string> SqlNamespaces { get; protected set; } = 
+    public override HashSet<string> SqlUsingDirectives { get; protected set; } = 
     [
       "Microsoft.Data.SqlClient"
     ];

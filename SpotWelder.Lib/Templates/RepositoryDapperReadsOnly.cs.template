@@ -1,11 +1,11 @@
 using Dapper;
-using {{Namespace}}.Records;
+using {{RootContainingNamespace}}.Records;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-{{Namespaces}}
+{{UsingDirectives}}
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public class {{ClassName}}Repository
     : BaseRepository, I{{ClassName}}Repository

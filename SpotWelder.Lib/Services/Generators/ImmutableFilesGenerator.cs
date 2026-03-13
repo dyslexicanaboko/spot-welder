@@ -60,11 +60,11 @@ namespace SpotWelder.Lib.Services.Generators
       {
         //Replace just the Namespace for each template
         var template = new StringBuilder(File.ReadAllText(fi.FullName))
-          .Replace("{{Namespace}}", instructions.RootContainingNamespace);
+          .Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
 
         if (fi.Name == "BaseRepository.cs.template")
         {
-          template.Replace("{{SqlNamespaces}}", FormatUsingDirectives(syntax.SqlNamespaces));
+          template.Replace("{{SqlUsingDirectives}}", FormatUsingDirectives(syntax.SqlUsingDirectives));
           template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
           template.Replace("{{ParameterObject}}", syntax.ParameterObject);
         }

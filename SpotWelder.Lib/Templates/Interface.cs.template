@@ -1,6 +1,6 @@
-﻿{{Namespaces}}
+﻿{{UsingDirectives}}
 
-namespace {{Namespace}}.Entities
+namespace {{RootContainingNamespace}}.Entities
 {
     public interface {{ClassName}}
     {

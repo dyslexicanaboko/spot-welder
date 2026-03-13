@@ -3,7 +3,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
 
-namespace {{Namespace}}
+namespace {{RootContainingNamespace}}
 {
     public partial class SerializationService
     {

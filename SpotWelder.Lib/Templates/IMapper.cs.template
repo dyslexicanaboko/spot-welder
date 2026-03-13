@@ -1,6 +1,6 @@
-﻿{{Namespaces}}
+﻿{{UsingDirectives}}
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public interface I{{ClassName}}Mapper
   {

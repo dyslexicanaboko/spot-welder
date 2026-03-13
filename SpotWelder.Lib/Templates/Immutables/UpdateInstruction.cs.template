@@ -1,4 +1,4 @@
-﻿namespace {{Namespace}}.Managers.Utility;
+﻿namespace {{RootContainingNamespace}}.Managers.Utility;
 
 public class UpdateInstruction(string property, object? value)
 {

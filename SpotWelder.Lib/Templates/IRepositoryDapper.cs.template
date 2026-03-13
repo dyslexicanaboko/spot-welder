@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using {{Namespace}}.Records;
-{{Namespaces}}
+using {{RootContainingNamespace}}.Records;
+{{UsingDirectives}}
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public interface I{{ClassName}}Repository
   {

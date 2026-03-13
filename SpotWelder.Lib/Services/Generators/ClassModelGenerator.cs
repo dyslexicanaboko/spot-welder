@@ -28,14 +28,14 @@ namespace SpotWelder.Lib.Services.Generators
 
       //Full template replacements
       SetContainingNamespace(template);
-      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
+      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Interface}}", 
         instructions.Elections.HasFlag(GenerationElections.Interface) ? 
         FormatInterface(instructions.InterfaceName) : string.Empty);
-      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
 
       //Constructors
       template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));

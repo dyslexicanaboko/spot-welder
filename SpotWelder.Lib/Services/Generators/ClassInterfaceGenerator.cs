@@ -22,9 +22,9 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
+      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
-      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
       return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);

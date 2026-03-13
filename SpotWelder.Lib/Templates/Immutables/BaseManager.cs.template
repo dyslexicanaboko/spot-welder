@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
-using {{Namespace}}.Managers.Utility;
+using {{RootContainingNamespace}}.Managers.Utility;
 using System.Reflection;
 
-namespace {{Namespace}}.Managers;
+namespace {{RootContainingNamespace}}.Managers;
 
 public abstract class BaseManager
 {

@@ -1,7 +1,7 @@
-﻿{{Namespaces}}
-using {{Namespace}}.Entities;
+﻿{{UsingDirectives}}
+using {{RootContainingNamespace}}.Entities;
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public class {{ClassName}}V1CreatedModel
   {

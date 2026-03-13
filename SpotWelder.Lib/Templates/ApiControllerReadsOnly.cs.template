@@ -1,10 +1,10 @@
-﻿{{Namespaces}}
+﻿{{UsingDirectives}}
 using Microsoft.AspNetCore.Mvc;
-using {{Namespace}}.Managers;
-using {{Namespace}}.Mappers;
-using {{Namespace}}.Models;
+using {{RootContainingNamespace}}.Managers;
+using {{RootContainingNamespace}}.Mappers;
+using {{RootContainingNamespace}}.Models;
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   [Route("api/v1/{{ApiRoute}}")]
   [ApiController]

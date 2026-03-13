@@ -1,10 +1,10 @@
-﻿{{Namespaces}}
-using {{Namespace}}.DataAccess;
-using {{Namespace}}.Entities;
-using {{Namespace}}.Mappers;
-using {{Namespace}}.Validation;
+﻿{{UsingDirectives}}
+using {{RootContainingNamespace}}.DataAccess;
+using {{RootContainingNamespace}}.Entities;
+using {{RootContainingNamespace}}.Mappers;
+using {{RootContainingNamespace}}.Validation;
 
-namespace {{Namespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
 {
   public class {{ClassName}}Manager
     : BaseManager, I{{ClassName}}Manager

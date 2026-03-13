@@ -278,8 +278,8 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(GetTemplate(templateName));
 
       SetContainingNamespace(template);
-      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
-      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
+      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{Contracts}}", ExtractCSharpClassContracts(classResult.Contents));
 

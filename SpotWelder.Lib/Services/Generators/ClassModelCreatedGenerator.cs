@@ -22,10 +22,10 @@ namespace SpotWelder.Lib.Services.Generators
 			var template = new StringBuilder(strTemplate);
 
       SetContainingNamespace(template);
-			template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
+			template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
 			template.Replace("{{ClassName}}", instructions.ClassName); //Subject is the prefix
 			template.Replace("{{EntityName}}", instructions.EntityName); //Subject is the prefix
-      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
 
 			//Constructors
 			template.Replace("{{ConstructorFromEntity}}", FormatConstructorBody(instructions.Properties, "target"));

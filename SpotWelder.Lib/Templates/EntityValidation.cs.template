@@ -1,7 +1,7 @@
-﻿using {{Namespace}}.Entities;
+﻿using {{RootContainingNamespace}}.Entities;
 using FluentValidation;
 
-namespace {{Namespace}}.{{ContainingNamespace}};
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}};
 
 public interface I{{SubjectName}}Validation
     : IFluentValidation<{{SubjectName}}Entity>
