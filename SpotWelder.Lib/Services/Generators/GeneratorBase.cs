@@ -96,13 +96,10 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    protected virtual string FormatNamespaces(IList<string> namespaces)
+    protected virtual string FormatUsingDirectives(HashSet<string> usingDirectives)
     {
       //Purposely not going to sort the namespaces just in case a specific order was wanted
-      //Will remove the redundant namespaces though
-      namespaces = namespaces.Distinct().ToList();
-
-      var content = GetTextBlock(namespaces, ns => $"using {ns};");
+      var content = GetTextBlock(usingDirectives.ToList(), ns => $"using {ns};");
 
       return content;
     }
@@ -281,8 +278,8 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(GetTemplate(templateName));
 
       SetContainingNamespace(template);
-      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{Contracts}}", ExtractCSharpClassContracts(classResult.Contents));
 

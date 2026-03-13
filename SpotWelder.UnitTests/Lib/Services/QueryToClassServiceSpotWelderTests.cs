@@ -25,7 +25,7 @@ namespace SpotWelder.Tests.Lib.Services
       //Arrange
       var p = new QueryToClassParameters
       {
-        LanguageType = CodeType.CSharp, Namespace = "SimpleClassCreator.Tests.DummyObjects"
+        LanguageType = CodeType.CSharp, RootContainingNamespace = "SimpleClassCreator.Tests.DummyObjects"
       };
 
       p.ServerConnection.SourceSqlType = SourceSqlType.TableName;
@@ -64,7 +64,7 @@ namespace SpotWelder.Tests.Lib.Services
       var p = new QueryToClassParameters
       {
         LanguageType = CodeType.CSharp,
-        Namespace = "SimpleClassCreator.Tests.DummyObjects",
+        RootContainingNamespace = "SimpleClassCreator.Tests.DummyObjects",
         Elections = GenerationElections.Entity,
         SubjectName = sq.TableQuery.Table
       };

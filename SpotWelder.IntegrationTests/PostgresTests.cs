@@ -45,7 +45,7 @@ public class PostgresTests
     var obj = new QueryToClassParameters();
 
     obj.LanguageType = CodeType.CSharp;
-    obj.Namespace = "NoOneCares";
+    obj.RootContainingNamespace = "NoOneCares";
     obj.SubjectName = "Category";
     obj.Elections = GenerationElections.Entity;
 

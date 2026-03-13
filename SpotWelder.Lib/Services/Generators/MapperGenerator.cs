@@ -39,10 +39,10 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(GetTemplate(TemplateName));
 
-      template.Replace("{{Body}}", BuildBodyTemplate(instructions.Namespaces, instructions.Elections));
+      template.Replace("{{Body}}", BuildBodyTemplate(instructions.UsingDirectives, instructions.Elections));
       SetContainingNamespace(template);
-      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{RecordName}}", instructions.RecordName);
@@ -60,7 +60,7 @@ namespace SpotWelder.Lib.Services.Generators
       return result;
     }
 
-    private string BuildBodyTemplate(IList<string> namespaces, GenerationElections elections)
+    private string BuildBodyTemplate(HashSet<string> namespaces, GenerationElections elections)
     {
       var childElections = GetChildElections(elections, Election);
 

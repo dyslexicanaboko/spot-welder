@@ -16,7 +16,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = new StringBuilder(strTemplate);
 
-      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.EntityName);
 
       return GetFormattedCSharpResult("SerializationService_Csv.cs", template);

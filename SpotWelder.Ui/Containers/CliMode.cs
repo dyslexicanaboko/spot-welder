@@ -50,7 +50,7 @@ namespace SpotWelder.Ui.Containers
         var parameters = new QueryToClassParameters();
 
         //Common level
-        parameters.Namespace = bulk.Namespace;
+        parameters.RootContainingNamespace = bulk.Namespace;
         parameters.ServerConnection = new ServerConnection
         {
           ConnectionString = bulk.ConnectionString,

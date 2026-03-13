@@ -33,11 +33,11 @@ namespace SpotWelder.Lib.Services.Generators
        * ModelName: Refers to the existing Model Class that compliments the Entity Class "Table1Model.cs" */
 
       SetContainingNamespace(template);
-      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.SubjectName); //Prefix of the repository class name
       template.Replace("{{EntityName}}", instructions.EntityName); //Class entity name
-      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-      template.Replace("{{SqlNamespaces}}", FormatNamespaces(syntax.SqlNamespaces));
+      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{SqlNamespaces}}", FormatUsingDirectives(syntax.SqlNamespaces));
       template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
       template.Replace("{{ParameterObject}}", syntax.ParameterObject);
       template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);

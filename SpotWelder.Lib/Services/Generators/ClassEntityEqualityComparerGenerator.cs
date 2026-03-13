@@ -25,10 +25,10 @@ namespace SpotWelder.Lib.Services.Generators
       var template = new StringBuilder(strTemplate);
 
       SetContainingNamespace(template);
-      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
+      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
 
       //Method bodies
       template.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));

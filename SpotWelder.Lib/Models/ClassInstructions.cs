@@ -70,8 +70,11 @@ namespace SpotWelder.Lib.Models
     /// <example> Subject named: `Task`, the API Route would be `tasks` as in `api/v1/tasks`.</example>
     public string ApiRoute { get; set; }
 
-    /// <summary>Namespace used for all classes. It's just a container for the code and not intended for use.</summary>
-    public string Namespace { get; set; }
+    /// <summary>
+    /// Root containing namespace for all classes. It should not be modified for any one class.
+    /// During generation namespaces can be appended to it.
+    /// </summary>
+    public string RootContainingNamespace { get; set; }
 
     /// <summary>
     /// Name of the subject with the `I` prefix. Single interface name for now.
@@ -87,11 +90,11 @@ namespace SpotWelder.Lib.Models
     /// <summary> Should class methods be asynchronous? </summary>
     public bool IsAsynchronous { get; set; }
 
-    /// <summary>Namespaces that the class being generated should be using (importing).</summary>
-    public IList<string> Namespaces { get; set; } = new List<string>();
+    /// <summary>Namespaces that the class being generated should be using (importing) at the top of the class.</summary>
+    public HashSet<string> UsingDirectives { get; set; } = [];
 
     /// <summary>Class attributes</summary>
-    public IList<string> ClassAttributes { get; set; } = new List<string>();
+    public List<string> ClassAttributes { get; set; } = [];
 
     /// <summary>
     /// This is a temporary concept until I can do better. The different languages to
@@ -103,7 +106,7 @@ namespace SpotWelder.Lib.Models
     public GenerationElections Elections { get; set; } = GenerationElections.None;
 
     /// <summary>Properties of the source entity.</summary>
-    public IList<ClassMemberStrings> Properties { get; set; } = new List<ClassMemberStrings>();
+    public List<ClassMemberStrings> Properties { get; set; } = [];
 
     /// <summary>Formatter for formatting asynchronous syntax if elected. Otherwise, formatted as synchronous syntax.</summary>
     public AsynchronicityFormatStrategyBase AsynchronicityFormatStrategy { get; set; }
@@ -112,12 +115,8 @@ namespace SpotWelder.Lib.Models
     //The intention here was to be able to add a namespace that is needed in every class,
     //but with global namespaces now available this is obsolete
     [Obsolete("Global namespaces makes this unnecessary.")]
-    public void AddNamespace(string nameSpace)
-    {
-      if (Namespaces.Contains(nameSpace)) return;
-
-      Namespaces.Add(nameSpace);
-    }
+    public void AddUsingDirective(string usingDirective)
+      => UsingDirectives.Add(usingDirective);
 
     public ClassInstructions Clone()
     {
@@ -127,7 +126,7 @@ namespace SpotWelder.Lib.Models
         RecordName = RecordName,
         EntityName = EntityName,
         ModelName = ModelName,
-        Namespace = Namespace,
+        RootContainingNamespace = RootContainingNamespace,
         InterfaceName = InterfaceName,
         ApiRoute = ApiRoute,
         IsAsynchronous = IsAsynchronous,
@@ -139,8 +138,8 @@ namespace SpotWelder.Lib.Models
         ArchitectureType = ArchitectureType,
         TableQuery = TableQuery.Clone(),
         AsynchronicityFormatStrategy = AsynchronicityFormatStrategy.Clone(),
-        ClassAttributes = new List<string>(ClassAttributes),
-        Namespaces = new List<string>(Namespaces)
+        ClassAttributes = [..ClassAttributes],
+        UsingDirectives = [..UsingDirectives]
       };
 
       foreach (var p in Properties) c.Properties.Add(p.Clone());

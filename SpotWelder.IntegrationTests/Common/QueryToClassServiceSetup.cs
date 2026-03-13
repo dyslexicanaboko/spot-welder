@@ -22,7 +22,7 @@ namespace SpotWelder.IntegrationTests.Common
       var p = new QueryToClassParameters();
 
       p.LanguageType = CodeType.CSharp;
-      p.Namespace = "Namespace1";
+      p.RootContainingNamespace = "Namespace1";
       p.SubjectName = "DataTypeTest";
       p.ServerConnection.SqlEngine = sqlEngine;
       p.ServerConnection.ConnectionString = sp.ConnectionString;

@@ -20,6 +20,6 @@ namespace SpotWelder.Lib.Models
 
     public GenerationElections Elections { get; set; } = GenerationElections.None;
 
-    public IList<ClassMemberStrings> Properties { get; set; } = new List<ClassMemberStrings>();
+    public List<ClassMemberStrings> Properties { get; set; } = [];
   }
 }

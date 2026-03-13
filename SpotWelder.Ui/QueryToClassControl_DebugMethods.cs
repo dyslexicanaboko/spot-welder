@@ -9,7 +9,7 @@
     {
       ConnectionStringCb.DebugSetPostgresTestParameters();
       TxtSourceSqlText.Text = "public.task";
-      TxtNamespaceName.Text = "Namespace1";
+      TxtRootContainingNamespace.Text = "Namespace1";
       TxtSubjectName.Text = "Task";
 
       CbClassEntity.IsChecked = true;
@@ -27,7 +27,7 @@
       RbSourceTypeQuery.IsChecked = false;
 
       TxtSourceSqlText.Text = "dbo.Task";
-      TxtNamespaceName.Text = "Namespace1";
+      TxtRootContainingNamespace.Text = "Namespace1";
       TxtSubjectName.Text = "Task";
 
       CbRepoDapper.IsChecked = true;
@@ -72,7 +72,7 @@
       RbSourceTypeQuery.IsChecked = false;
 
       TxtSourceSqlText.Text = "[dbo].[DataTypeTest]";
-      TxtNamespaceName.Text = "Namespace1";
+      TxtRootContainingNamespace.Text = "Namespace1";
       TxtSubjectName.Text = "DataTypeTest";
 
       //Repository
@@ -117,7 +117,7 @@
       RbSourceTypeQuery.IsChecked = false;
 
       TxtSourceSqlText.Text = "public.data_type_test";
-      TxtNamespaceName.Text = "Namespace1";
+      TxtRootContainingNamespace.Text = "Namespace1";
       TxtSubjectName.Text = "DataTypeTest";
 
       //Repository
@@ -178,7 +178,7 @@
                               	INNER JOIN dbo.Quote q
                               		ON s.StockId = q.StockId
                               """;
-      TxtNamespaceName.Text = "Namespace2";
+      TxtRootContainingNamespace.Text = "Namespace2";
       TxtSubjectName.Text = "StockQuote";
 
       CbRepoDapper.IsChecked = true;
@@ -224,7 +224,7 @@
       RbSourceTypeTableName.IsChecked = true;
       RbSourceTypeQuery.IsChecked = false;
       TxtSourceSqlText.Text = "dbo.Stock";
-      TxtNamespaceName.Text = "Namespace2";
+      TxtRootContainingNamespace.Text = "Namespace2";
       TxtSubjectName.Text = "Stock";
 
       CbRepoDapper.IsChecked = true;

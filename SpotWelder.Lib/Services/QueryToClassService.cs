@@ -62,7 +62,7 @@ namespace SpotWelder.Lib.Services
         EntityName = instructions.SourceClassName,
         ModelName = $"{instructions.SourceClassName}Dto",
         InterfaceName = $"I{instructions.SourceClassName}",
-        Namespace = "Namespace1",
+        RootContainingNamespace = "Namespace1",
         Languages = instructions.Languages,
         Properties = instructions.Properties,
         IsPartial = instructions.Elections.HasFlag(GenerationElections.EntityIEquatable),
@@ -97,7 +97,7 @@ namespace SpotWelder.Lib.Services
       
       var ins = new ClassInstructions
       {
-        Namespace = p.Namespace, 
+        RootContainingNamespace = p.RootContainingNamespace, 
         SubjectName = p.SubjectName,
         EntityName = $"{p.SubjectName}Entity",
         ModelName = $"{p.SubjectName}V1Model",

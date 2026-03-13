@@ -26,7 +26,7 @@
     /// <summary>
     /// Root namespace used for all classes that are generated. All architecture is appended to this root.
     /// </summary>
-    public string Namespace { get; set; }
+    public string RootContainingNamespace { get; set; }
 
     /// <summary>
     /// Name of the target subject for generation. The subject can be a source class, table or query.

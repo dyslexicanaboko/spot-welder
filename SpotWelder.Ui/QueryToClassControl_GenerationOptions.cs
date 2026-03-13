@@ -20,7 +20,7 @@ namespace SpotWelder.Ui
       if (obj == null) return null;
 
       obj.LanguageType = CodeType.CSharp;
-      obj.Namespace = TxtNamespaceName.Text;
+      obj.RootContainingNamespace = TxtRootContainingNamespace.Text;
 
       if (TxtSubjectName.IsTextInvalid("Class name cannot be empty."))
         return null;

@@ -27,14 +27,14 @@ namespace SpotWelder.Lib.Services.Generators
 
       //Child templates
       template.Replace("{{Interfaces}}", FillInterfaceImplementations(instructions.Elections));
-      template.Replace("{{Constructors}}", FillConstructors(instructions.Namespaces, instructions.Elections));
+      template.Replace("{{Constructors}}", FillConstructors(instructions.UsingDirectives, instructions.Elections));
       template.Replace("{{InterfaceMethods}}", FillInterfaceMethods(instructions.Elections));
 
       //Full template replacements
       SetContainingNamespace(template);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-      template.Replace("{{Namespaces}}", FormatNamespaces(instructions.Namespaces));
-      template.Replace("{{Namespace}}", instructions.Namespace);
+      template.Replace("{{Namespaces}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{Namespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{RecordName}}", instructions.RecordName);
@@ -117,7 +117,7 @@ namespace SpotWelder.Lib.Services.Generators
       return sb.ToString();
     }
 
-    private string FillConstructors(IList<string> namespaces, GenerationElections elections)
+    private string FillConstructors(HashSet<string> usings, GenerationElections elections)
     {
       var arr = new[]
       {
@@ -141,22 +141,22 @@ namespace SpotWelder.Lib.Services.Generators
 
               break;
             case GenerationElections.Record:
-              namespaces.Add("{{Namespace}}.Records");
+              usings.Add("{{Namespace}}.Records");
               lst.Add(ConstructorTemplate("{{RecordName}}", "record", "{{ConstructorFromRecord}}"));
 
               break;
             case GenerationElections.Model:
-              namespaces.Add("{{Namespace}}.Models");
+              usings.Add("{{Namespace}}.Models");
               lst.Add(ConstructorTemplate("{{ModelName}}", "model", "{{ConstructorFromModel}}"));
 
               break;
             case GenerationElections.CreateModel:
-              namespaces.Add("{{Namespace}}.Models.Client");
+              usings.Add("{{Namespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1CreateModel", "model", "{{ConstructorFromModel}}"));
 
               break;
             case GenerationElections.PatchModel:
-              namespaces.Add("{{Namespace}}.Models.Client");
+              usings.Add("{{Namespace}}.Models.Client");
               lst.Add(ConstructorTemplate("{{SubjectName}}V1PatchModel", "model", "{{ConstructorFromModel}}"));
 
               break;

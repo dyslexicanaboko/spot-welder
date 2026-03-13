@@ -31,14 +31,13 @@ namespace SpotWelder.Ui
 
     private ILogger<QueryToClassControl> _logger;
 
-    // Empty constructor Required by WPF
     public QueryToClassControl()
     {
       InitializeComponent();
 
       _parentResultsWindow = new ParentResultsWindow();
 
-      TxtNamespaceName.ApplyDefault();
+      TxtRootContainingNamespace.ApplyDefault();
 
       TxtSubjectName.DefaultButton_UnregisterDefaultEvent();
       TxtSubjectName.DefaultButton.Click += BtnSubjectNameDefault_Click;
