@@ -66,7 +66,6 @@ namespace SpotWelder.Lib.Services
         RootContainingNamespace = "Namespace1",
         Languages = instructions.Languages,
         Properties = instructions.Properties,
-        IsPartial = instructions.Elections.HasFlag(GenerationElections.EntityIEquatable),
         Elections = instructions.Elections,
         TableQuery = new TableQuery() //Won't be used, but will be cloned, avoid null ref
       };

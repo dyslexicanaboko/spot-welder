@@ -197,7 +197,7 @@ namespace SpotWelder.Lib.Services.Generators
       return string.Join(Environment.NewLine + Environment.NewLine, lst);
     }
     
-    private string FormatForEquals(IList<ClassMemberStrings> properties)
+    private string FormatForEquals(List<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,
@@ -207,7 +207,7 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    private string FormatForHashCode(IList<ClassMemberStrings> properties)
+    private string FormatForHashCode(List<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,

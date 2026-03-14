@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -15,8 +14,6 @@ namespace SpotWelder.Lib.Services.Generators
     public override GenerationElections Election => GenerationElections.RepoDapper;
 
     protected override string TemplateName => "RepositoryDapper.cs.template";
-
-    
 
     //TODO: This cannot stay here, this is a temporary until I know where to take this
     private readonly string[] _excludedColumns = [ "UserId", "CreatedOn", "UpdatedOn", "User_Id", "Created_On", "Updated_On"];
@@ -108,7 +105,7 @@ namespace SpotWelder.Lib.Services.Generators
       return result;
     }
 
-    private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
+    private string FormatSelectList(List<ClassMemberStrings> properties, string? prefix = null)
     {
       var content = GetTextBlock(
         properties,
@@ -118,7 +115,7 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    private string FormatUpdateList(IList<ClassMemberStrings> properties)
+    private string FormatUpdateList(List<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,
@@ -128,7 +125,7 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    private string FormatDynamicParameterList(IList<ClassMemberStrings> properties)
+    private string FormatDynamicParameterList(List<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,

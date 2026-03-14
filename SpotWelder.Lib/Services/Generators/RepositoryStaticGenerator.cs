@@ -4,7 +4,6 @@ using SpotWelder.Lib.Services.CodeFactory.SqlEngineStrategy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -15,10 +14,6 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "RepositoryStatic.cs.template";
 
-    //protected override string ContainingNamespace => "DataAccess";
-
-    //TODO: Modify to handle reads-only version
-    //TODO: Modify to produce interface
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
@@ -95,7 +90,7 @@ namespace SpotWelder.Lib.Services.Generators
       return GetFormattedCSharpResult($"{instructions.SubjectName}{rt}Repository.cs", template, containingNamespace);
     }
 
-    private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)
+    private string FormatSelectList(List<ClassMemberStrings> properties, string? prefix = null)
     {
       var content = GetTextBlock(
         properties,
@@ -105,7 +100,7 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    private string FormatUpdateList(IList<ClassMemberStrings> properties)
+    private string FormatUpdateList(List<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,
@@ -115,7 +110,7 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
 
-    private string FormatSqlParameterList(BaseSqlEngineSyntax syntax, IList<ClassMemberStrings> properties)
+    private string FormatSqlParameterList(BaseSqlEngineSyntax syntax, List<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,
@@ -127,7 +122,7 @@ namespace SpotWelder.Lib.Services.Generators
       return content;
     }
     
-    private string FormatSetProperties(IList<ClassMemberStrings> properties)
+    private string FormatSetProperties(List<ClassMemberStrings> properties)
     {
       var content = GetTextBlock(
         properties,

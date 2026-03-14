@@ -19,7 +19,7 @@ namespace SpotWelder.Lib.Services
 
         Type GetClass(string fullyQualifiedClassName);
 
-        IList<ClassMemberStrings> GetProperties(Type metaClass);
+        List<ClassMemberStrings> GetProperties(Type metaClass);
 
         MetaAssembly GetMetaClassProperties(string className);
 

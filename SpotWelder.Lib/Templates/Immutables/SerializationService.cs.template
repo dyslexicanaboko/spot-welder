@@ -1,0 +1,50 @@
+﻿//https://www.nuget.org/packages/CsvHelper/
+using CsvHelper;
+using CsvHelper.Configuration;
+using System.Globalization;
+//https://www.nuget.org/packages/Newtonsoft.Json/
+using Newtonsoft.Json;
+
+namespace {{AbsoluteContainingNamespace}};
+
+public class SerializationService<TEntity>
+  where TEntity : class, new()
+{
+  private static CsvConfiguration GetCsvConfig()
+  {
+    var config = new CsvConfiguration(CultureInfo.CurrentCulture)
+    {
+      Delimiter = "|",
+      HasHeaderRecord = false
+    };
+    
+    return config;
+  }
+
+  public string ToCsv(IEnumerable<TEntity> input)
+  {
+    using var writer = new StringWriter();
+    
+    using var csvWriter = new CsvWriter(writer, GetCsvConfig());
+      
+    csvWriter.WriteRecords(input);
+      
+    return writer.ToString();
+  }
+
+  public IEnumerable<TEntity> FromCsv(string csv)
+  {
+    using var reader = new StringReader(csv);
+    
+    using var csvReader = new CsvReader(reader, GetCsvConfig());
+    
+    var records = csvReader.GetRecords<TEntity>();
+        
+    //Has to be forced to a List otherwise a NullReference Exception will occur
+    return records.ToList();
+  }
+
+  public string ToJson(IEnumerable<TEntity> input) => JsonConvert.SerializeObject(input);
+
+  public IEnumerable<TEntity>? FromJson(string json) => JsonConvert.DeserializeObject<IEnumerable<TEntity>>(json);
+}

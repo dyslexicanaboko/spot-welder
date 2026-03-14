@@ -24,21 +24,18 @@
         <CheckBox x:Name="CbClassEntity" Content="Entity" HorizontalAlignment="Left" Margin="27,148,0,0" VerticalAlignment="Top" Height="15" Width="50" IsChecked="True" Checked="CbClassEntity_OnChecked" Unchecked="CbClassEntity_OnUnchecked" />
         <CheckBox x:Name="CbClassEntityIEquatable" Content="IEquatable" HorizontalAlignment="Left" Margin="96,148,0,0" VerticalAlignment="Top" Height="15" Width="78"/>
         <CheckBox x:Name="CbClassEntityIComparable" Content="IComparable" HorizontalAlignment="Left" Margin="179,148,0,0" VerticalAlignment="Top" Height="15" Width="91"/>
-        <CheckBox x:Name="CbClassEntityEqualityComparer" Content="EqualityComparer" HorizontalAlignment="Left" Margin="511,192,0,0" VerticalAlignment="Top" Height="15" Width="119"/>
+        <CheckBox x:Name="CbClassEntityEqualityComparer" Content="EqualityComparer" HorizontalAlignment="Left" Margin="430,175,0,0" VerticalAlignment="Top" Height="15" Width="119"/>
         <CheckBox x:Name="CbClassModel" Content="Model" HorizontalAlignment="Left" Margin="26,189,0,0" VerticalAlignment="Top" Height="15" Width="54" Checked="CbClassModel_Checked" Unchecked="CbClassModel_Unchecked" IsChecked="True"/>
         <CheckBox x:Name="CbClassInterface" Content="Interface" HorizontalAlignment="Left" Margin="179,171,0,0" VerticalAlignment="Top" Height="15" Width="66" IsEnabled="False"/>
         <Label Content="Mappers" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="304,4,0,0" FontWeight="Bold" FontSize="14" Width="105" />
         <CheckBox x:Name="CbMapEntityToModel" Content="Entity to Model" HorizontalAlignment="Left" Margin="333,32,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
         <CheckBox x:Name="CbMapModelToEntity" Content="Model to Entity" HorizontalAlignment="Left" Margin="333,50,0,0" VerticalAlignment="Top" Height="15" Width="101"/>
-        <Label Content="Services" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="482,131,0,0" FontWeight="Bold" FontSize="14" Width="149" />
-        <CheckBox x:Name="CbSerializeCsv" Content="CSV Serialization" HorizontalAlignment="Left" Margin="511,157,0,0" VerticalAlignment="Top" Height="15" Width="114"/>
-        <CheckBox x:Name="CbSerializeJson" Content="JSON Serialization" HorizontalAlignment="Left" Margin="511,175,0,0" VerticalAlignment="Top" Height="15" Width="120"/>
-        <Label Content="Repository" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="458,3,0,0" FontWeight="Bold" FontSize="14" Width="81" />
-        <CheckBox x:Name="CbRepoStatic" Content="Static statements" HorizontalAlignment="Left" Margin="485,31,0,0" VerticalAlignment="Top" Height="15" Width="110"/>
-        <CheckBox x:Name="CbRepoDapper" Content="Dapper" HorizontalAlignment="Left" Margin="485,48,0,0" VerticalAlignment="Top" Height="15" Width="59"/>
+        <Label Content="Repository" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="467,3,0,0" FontWeight="Bold" FontSize="14" Width="81" />
+        <CheckBox x:Name="CbRepoStatic" Content="Static statements" HorizontalAlignment="Left" Margin="491,31,0,0" VerticalAlignment="Top" Height="15" Width="110"/>
+        <CheckBox x:Name="CbRepoDapper" Content="Dapper" HorizontalAlignment="Left" Margin="491,48,0,0" VerticalAlignment="Top" Height="15" Width="59"/>
         <Label Content="Architecture" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.722,0.571" FontWeight="Bold" FontSize="14" Width="92" Margin="0,1,0,0" />
         <local:TextBoxWithDefaultControl x:Name="TxtSubjectName" Margin="97,31,339,0" DefaultText="Subject1" VerticalAlignment="Top" Width="Auto"/>
-        <Button x:Name="BtnDynamicStatements" HorizontalAlignment="Left" Margin="485,89,0,0" VerticalAlignment="Top" Width="145" Height="37" Click="BtnDynamicStatements_OnClick">
+        <Button x:Name="BtnDynamicStatements" HorizontalAlignment="Left" Margin="489,89,0,0" VerticalAlignment="Top" Width="145" Height="37" Click="BtnDynamicStatements_OnClick">
           <TextBlock Text="Need dynamic statements and bulk copy?" TextWrapping="Wrap" />
         </Button>
         <CheckBox x:Name="CbMapEntityToCreatedModel" Content="Entity to Created Model" HorizontalAlignment="Left" Margin="333,99,0,0" VerticalAlignment="Top" Height="15" Width="147"/>
@@ -47,12 +44,12 @@
         <CheckBox x:Name="CbClassCreateModel" Content="Create" HorizontalAlignment="Left" Margin="48,213,0,0" VerticalAlignment="Top" Height="15" Width="60"/>
         <CheckBox x:Name="CbClassPatchModel" Content="Patch" HorizontalAlignment="Left" Margin="110,213,0,0" VerticalAlignment="Top" Height="15" Width="96"/>
         <CheckBox x:Name="CbClassCreatedModel" Content="Created" HorizontalAlignment="Left" Margin="167,213,0,0" VerticalAlignment="Top" Height="15" Width="60"/>
-        <Label Content="Layers" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="320,142,0,0" FontWeight="Bold" FontSize="14" Width="56" />
-        <CheckBox x:Name="CbApiController" Content="API Controller" HorizontalAlignment="Left" Margin="346,189,0,0" VerticalAlignment="Top" Height="15" Width="100"/>
-        <CheckBox x:Name="CbManager" Content="Manager" HorizontalAlignment="Left" Margin="346,209,0,0" VerticalAlignment="Top" Height="15" Width="75"/>
+        <Label Content="Features" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.208,2.893" Margin="320,142,0,0" FontWeight="Bold" FontSize="14" Width="76" />
+        <CheckBox x:Name="CbApiController" Content="API Controller" HorizontalAlignment="Left" Margin="330,172,0,0" VerticalAlignment="Top" Height="15" Width="100"/>
+        <CheckBox x:Name="CbManager" Content="Manager" HorizontalAlignment="Left" Margin="330,192,0,0" VerticalAlignment="Top" Height="15" Width="75"/>
         <CheckBox x:Name="CbMakeAsynchronous" Content="Asynchronous" HorizontalAlignment="Left" Margin="4,98,0,0" VerticalAlignment="Top" Height="15" Width="100"/>
-        <CheckBox x:Name="CbImmutables" Content="Immutables" HorizontalAlignment="Left" Margin="485,68,0,0" VerticalAlignment="Top" Height="15" Width="86" IsChecked="True"/>
-        <CheckBox x:Name="CbValidation" Content="Validation" HorizontalAlignment="Left" Margin="512,209,0,0" VerticalAlignment="Top" Height="15" Width="118"/>
+        <CheckBox x:Name="CbImmutables" Content="Immutables" HorizontalAlignment="Left" Margin="491,68,0,0" VerticalAlignment="Top" Height="15" Width="86" IsChecked="True"/>
+        <CheckBox x:Name="CbValidation" Content="Validation" HorizontalAlignment="Left" Margin="430,192,0,0" VerticalAlignment="Top" Height="15" Width="118"/>
         <Label Content="Subject" HorizontalAlignment="Left" Margin="0,27,0,0" VerticalAlignment="Top"/>
         <Label HorizontalAlignment="Left" Margin="-1,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.107,0.335">
           <TextBlock TextWrapping="Wrap">

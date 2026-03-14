@@ -52,7 +52,7 @@ namespace SpotWelder.Lib.Services
       return asm;
     }
 
-    public IList<ClassMemberStrings> GetProperties(Type metaClass)
+    public List<ClassMemberStrings> GetProperties(Type metaClass)
     {
       var lst = metaClass.GetProperties().Select(x => new ClassMemberStrings(x)).ToList();
 

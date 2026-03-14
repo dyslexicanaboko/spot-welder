@@ -88,6 +88,10 @@ namespace SpotWelder.Lib
       if (election == GenerationElections.None)
         throw new ArgumentException($"One election must be selected. Value was: {election}");
 
+      /* Pulled from Copilot - I wouldn't have come up with this on my own, but this is a very clever way to do this.
+       *   Use the classic power‑of‑two bit trick.
+       *   A value with exactly one bit set is always a power of two.
+       *   Powers of two satisfy: 𝑥&(𝑥−1)=0 */
       if ((election & (election - 1)) != 0)
         throw new ArgumentException($"Only one election may be selected. Value was: {election}");
     }

@@ -41,6 +41,7 @@ public class FeatureBasedArchitectureStrategy
       ["IAppConfiguration.cs.template"] = Root,
       ["IFluentValidation.cs.template"] = Root,
       ["IRepository.cs.template"] = Root,
+      ["SerializationService.cs.template"] = Root,
       ["UpdateInstruction.cs.template"] = "Utilities"
     };
 

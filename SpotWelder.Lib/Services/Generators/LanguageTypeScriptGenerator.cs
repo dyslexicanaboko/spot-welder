@@ -4,36 +4,31 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpotWelder.Lib.Services.Generators
+namespace SpotWelder.Lib.Services.Generators;
+
+public class LanguageTypeScriptGenerator
+  : GeneratorBase
 {
-  public class LanguageTypeScriptGenerator
-    : GeneratorBase
+  public override GenerationElections Election => GenerationElections.EntityAsTypeScript;
+
+  protected override string TemplateName => "Type.ts.template";
+
+  public override GeneratedResult FillTemplate(ClassInstructions instructions)
   {
-    public override GenerationElections Election => GenerationElections.EntityAsTypeScript;
+    var strTemplate = GetTemplate(TemplateName);
 
-    protected override string TemplateName => "Type.ts.template";
+    var template = new StringBuilder(strTemplate);
 
-    public override GeneratedResult FillTemplate(ClassInstructions instructions)
-    {
-      var strTemplate = GetTemplate(TemplateName);
+    template.Replace("{{ClassName}}", instructions.EntityName);
+    template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      var template = new StringBuilder(strTemplate);
-
-      template.Replace("{{ClassName}}", instructions.EntityName);
-      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
-
-      return new GeneratedResult(Election, $"{instructions.SubjectName}.ts", template);
-    }
-
-    protected override string FormatProperties(IList<ClassMemberStrings> properties)
-    {
-      //FYI: The `Parameter` property is being used because it's camelCase
-      var content = GetTextBlock(
-        properties,
-        p => $"    {p.Parameter}{(p.IsDbNullable ? "?" : string.Empty)}: {p.TypeScriptType};",
-        Environment.NewLine);
-
-      return content;
-    }
+    return new GeneratedResult(Election, $"{instructions.SubjectName}.ts", template);
   }
+
+  //FYI: The `Parameter` property is being used because it's camelCase
+  protected override string FormatProperties(List<ClassMemberStrings> properties)
+    => GetTextBlock(
+      properties,
+      p => $"    {p.Parameter}{(p.IsDbNullable ? "?" : string.Empty)}: {p.TypeScriptType};",
+      Environment.NewLine);
 }

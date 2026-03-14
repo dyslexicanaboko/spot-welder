@@ -28,14 +28,10 @@ namespace SpotWelder.Lib.Services.Generators
       return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template, string.Empty);
     }
 
-    protected override string FormatProperties(IList<ClassMemberStrings> properties)
-    {
-      var content = GetTextBlock(
+    protected override string FormatProperties(List<ClassMemberStrings> properties)
+      => GetTextBlock(
         properties,
         p => $"        {p.SystemTypeAlias} {p.Property} {{ get; set; }}",
         Environment.NewLine + Environment.NewLine);
-
-      return content;
-    }
   }
 }

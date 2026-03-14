@@ -39,7 +39,8 @@ public class NTierArchitectureStrategy(string rootContainingNamespace, string su
     ["IAppConfiguration.cs.template"] = Root,
     ["IFluentValidation.cs.template"] = "Validation",
     ["IRepository.cs.template"] = "DataAccess",
-    ["UpdateInstruction.cs.template"] = "Managers.Utilities"
+    ["SerializationService.cs.template"] = Root,
+    ["UpdateInstruction.cs.template"] = "Managers.Utilities",
   };
 
   //These templates will always need these namespaces to be imported

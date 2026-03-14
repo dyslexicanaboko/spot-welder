@@ -12,9 +12,6 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "EntityEqualityComparer.cs.template";
 
-    /// <inheritdoc />
-    
-
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
@@ -33,24 +30,16 @@ namespace SpotWelder.Lib.Services.Generators
       return GetFormattedCSharpResult($"{instructions.EntityName}EqualityComparer.cs", template, containingNamespace);
     }
 
-    private string FormatForEquals(IList<ClassMemberStrings> properties)
-    {
-      var content = GetTextBlock(
+    private string FormatForEquals(List<ClassMemberStrings> properties)
+      => GetTextBlock(
         properties,
         p => $"        left.{p.Property} == right.{p.Property}",
         " && " + Environment.NewLine);
 
-      return content;
-    }
-
-    private string FormatForHashCode(IList<ClassMemberStrings> properties)
-    {
-      var content = GetTextBlock(
+    private string FormatForHashCode(List<ClassMemberStrings> properties)
+      => GetTextBlock(
         properties,
         p => $"        obj.{p.Property}.GetHashCode()",
         " + " + Environment.NewLine);
-
-      return content;
-    }
   }
 }

@@ -25,8 +25,6 @@
 	  <None Remove="Templates\ModelPatch.cs.template" />
 	  <None Remove="Templates\RepositoryDapper.cs.template" />
 	  <None Remove="Templates\RepositoryStatic.cs.template" />
-	  <None Remove="Templates\ServiceSerializationCsv.cs.template" />
-	  <None Remove="Templates\ServiceSerializationJson.cs.template" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Templates\ReadMe.md" />
@@ -67,6 +65,9 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\Immutables\ColumnSchema.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\Immutables\SerializationService.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Templates\Immutables\UpdateInstruction.cs.template">
@@ -171,12 +172,6 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="Templates\Mapper.cs.template">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Templates\ServiceSerializationCsv.cs.template">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Templates\ServiceSerializationJson.cs.template">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>

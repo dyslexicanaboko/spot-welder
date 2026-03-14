@@ -48,8 +48,6 @@
 
       //Services
       CbClassEntityEqualityComparer.IsChecked = true;
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
 
       //Layers
       CbMakeAsynchronous.IsChecked = true;
@@ -94,8 +92,6 @@
 
       //Services
       CbClassEntityEqualityComparer.IsChecked = true;
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
 
       //Layers
       CbMakeAsynchronous.IsChecked = false;
@@ -139,8 +135,6 @@
 
       //Services
       CbClassEntityEqualityComparer.IsChecked = true;
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
 
       //Layers
       CbMakeAsynchronous.IsChecked = false;
@@ -199,8 +193,6 @@
 
       //Services
       CbClassEntityEqualityComparer.IsChecked = false;
-      CbSerializeCsv.IsChecked = false;
-      CbSerializeJson.IsChecked = false;
       CbValidation.IsChecked = true;
 
       //Layers
@@ -247,8 +239,6 @@
       CbClassPatchModel.IsChecked = true;
 
       //Services
-      CbSerializeCsv.IsChecked = true;
-      CbSerializeJson.IsChecked = true;
       CbValidation.IsChecked = true;
 
       //Layers

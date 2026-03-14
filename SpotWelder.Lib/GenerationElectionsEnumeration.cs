@@ -66,25 +66,24 @@ public enum GenerationElections : long
   [Child(Mapper)]
   MapInterfaceToModel = 1L << 12,
 
-  SerializeCsv = 1L << 13,
+  [Ignore]
+  Unused0 = 1L << 13,
 
-  SerializeJson = 1L << 14,
+  [Ignore]
+  Unused1 = 1L << 14,
 
   RepoStatic = 1L << 15,
 
-  //TODO: Support for this ended
   [Ignore]
-  RepoDynamic = 1L << 16,
+  Unused2 = 1L << 16,
 
-  //TODO: Support for this ended
   [Ignore]
-  RepoBulkCopy = 1L << 17,
+  Unused3 = 1L << 17,
 
   RepoDapper = 1L << 18,
 
-  //TODO: Support for this ended
   [Ignore]
-  RepoEfFluentApi = 1L << 19,
+  Unused4 = 1L << 19,
 
   Manager = 1L << 20,
 

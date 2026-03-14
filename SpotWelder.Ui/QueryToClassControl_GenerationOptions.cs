@@ -80,8 +80,6 @@ namespace SpotWelder.Ui
         { GenerationElections.MapCreateModelToEntity, CbMapCreateModelToEntity },
         { GenerationElections.MapPatchModelToEntity, CbMapPatchModelToEntity },
         { GenerationElections.MapEntityToCreatedModel, CbMapEntityToCreatedModel },
-        { GenerationElections.SerializeCsv, CbSerializeCsv },
-        { GenerationElections.SerializeJson, CbSerializeJson },
         { GenerationElections.RepoStatic, CbRepoStatic },
         { GenerationElections.RepoDapper, CbRepoDapper },
         { GenerationElections.Manager, CbManager },

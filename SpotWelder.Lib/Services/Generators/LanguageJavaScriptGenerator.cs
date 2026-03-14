@@ -4,48 +4,39 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpotWelder.Lib.Services.Generators
+namespace SpotWelder.Lib.Services.Generators;
+
+public class LanguageJavaScriptGenerator
+  : GeneratorBase
 {
-  public class LanguageJavaScriptGenerator
-    : GeneratorBase
+  public override GenerationElections Election => GenerationElections.EntityAsJavaScript;
+
+  protected override string TemplateName => "Prototype.js.template";
+
+  public override GeneratedResult FillTemplate(ClassInstructions instructions)
   {
-    public override GenerationElections Election => GenerationElections.EntityAsJavaScript;
+    var strTemplate = GetTemplate(TemplateName);
 
-    protected override string TemplateName => "Prototype.js.template";
+    var template = new StringBuilder(strTemplate);
 
-    public override GeneratedResult FillTemplate(ClassInstructions instructions)
-    {
-      var strTemplate = GetTemplate(TemplateName);
-
-      var template = new StringBuilder(strTemplate);
-
-      template.Replace("{{ClassName}}", instructions.EntityName);
+    template.Replace("{{ClassName}}", instructions.EntityName);
       
-      //FYI: The `Parameters` property is being used because it's camelCase
-      template.Replace("{{Parameters}}", FormatParameters(instructions.Properties));
-      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
+    //FYI: The `Parameters` property is being used because it's camelCase
+    template.Replace("{{Parameters}}", FormatParameters(instructions.Properties));
+    template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      return new GeneratedResult(Election, $"{instructions.SubjectName}.js", template);
-    }
-
-    private string FormatParameters(IList<ClassMemberStrings> properties)
-    {
-      var content = GetTextBlock(
-        properties,
-        p => $"    {p.Parameter}",
-        "," + Environment.NewLine);
-
-      return content;
-    }
-
-    protected override string FormatProperties(IList<ClassMemberStrings> properties)
-    {
-      var content = GetTextBlock(
-        properties,
-        p => $"    this.{p.Parameter} = {p.Parameter};",
-        Environment.NewLine);
-
-      return content;
-    }
+    return new GeneratedResult(Election, $"{instructions.SubjectName}.js", template);
   }
+
+  private string FormatParameters(List<ClassMemberStrings> properties)
+    => GetTextBlock(
+      properties,
+      p => $"    {p.Parameter}",
+      "," + Environment.NewLine);
+
+  protected override string FormatProperties(List<ClassMemberStrings> properties)
+    => GetTextBlock(
+      properties,
+      p => $"    this.{p.Parameter} = {p.Parameter};",
+      Environment.NewLine);
 }

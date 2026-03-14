@@ -42,13 +42,6 @@ namespace SpotWelder.Lib.Models
     public string SourceQuery { get; set; }
 
     /// <summary>
-    /// Name of the class being generated. This is a property that is dedicated to being
-    /// the name of whatever is being generated regardless of its purpose.
-    /// </summary>
-    [Obsolete("Going to phase this out. Use SubjectName instead.")]
-    public string ClassName { get; set; }
-
-    /// <summary>
     ///   Name of the target subject for generation. The subject can be a source class, table or query.
     ///   Additionally, this name does not have a prefix or suffix such as `Entity`, `Model`, `Dto`, etc.
     ///   In other words, it's JUST the name of the subject.
@@ -60,8 +53,11 @@ namespace SpotWelder.Lib.Models
     /// <example> Subject named: `Task`, the entity would be `TaskEntity`.</example>
     public string EntityName { get; set; }
 
-    /// <summary> Name of the subject with the `Model` suffix.</summary>
-    /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
+    //TODO: This is still being used by the DTO maker
+    [Obsolete("Going to phase this out. Use SubjectName instead.")]
+    public string ClassName { get; set; }
+
+    //TODO: This is still being used by the DTO maker
     [Obsolete("Going to phase this out. Use SubjectName instead.")]
     public string ModelName { get; set; }
 
@@ -82,9 +78,6 @@ namespace SpotWelder.Lib.Models
     /// </summary>
     /// <example> Subject named: `Task`, the interface would be `ITask`.</example>
     public string InterfaceName { get; set; }
-
-    /// <summary> Should class be a partial class? </summary>
-    public bool IsPartial { get; set; }
 
     /// <summary> Should class methods be asynchronous? </summary>
     public bool IsAsynchronous { get; set; }
@@ -112,13 +105,6 @@ namespace SpotWelder.Lib.Models
 
     /// <summary>Formatter for formatting containing namespaces and using directives depending on the <see cref="ArchitectureType"/> chosen.</summary>
     public ArchitectureStrategyBase ArchitectureStrategy { get; set; }
-
-    //TODO: Not sure if I need this anymore
-    //The intention here was to be able to add a namespace that is needed in every class,
-    //but with global namespaces now available this is obsolete
-    [Obsolete("Global namespaces makes this unnecessary.")]
-    public void AddUsingDirective(string usingDirective)
-      => UsingDirectives.Add(usingDirective);
 
     public ClassInstructions Clone()
     {
