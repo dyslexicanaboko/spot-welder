@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace {{RootContainingNamespace}}.DataAccess.Utility;
+namespace {{AbsoluteContainingNamespace}};
 
 public class ColumnSchema(
   string property,

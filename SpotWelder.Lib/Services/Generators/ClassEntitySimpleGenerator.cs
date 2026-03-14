@@ -26,9 +26,7 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      var strTemplate = GetTemplate(TemplateName);
-
-      var template = new StringBuilder(strTemplate);
+      var template = GetTemplateAsStringBuilder(TemplateName);
 
       template.Replace("{{ClassName}}", instructions.EntityName);
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));

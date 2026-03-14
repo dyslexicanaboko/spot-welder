@@ -1,2 +1,2 @@
-﻿public {{EntityName}}? ToEntity({{ClassName}}V1CreateModel? model)
+﻿public {{EntityName}}? ToEntity({{SubjectName}}V1CreateModel? model)
   => model == null ? null : new {{EntityName}}(model);

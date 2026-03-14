@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace {{RootContainingNamespace}}.Validation;
+namespace {{AbsoluteContainingNamespace}};
 
 public interface IFluentValidation<in TEntity>
 {

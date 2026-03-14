@@ -1,104 +1,100 @@
 ﻿{{UsingDirectives}}
-using {{RootContainingNamespace}}.Managers;
-using {{RootContainingNamespace}}.Mappers;
-using {{RootContainingNamespace}}.Models;
-using {{RootContainingNamespace}}.Models.Client;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{RootContainingNamespace}}.{{ContainingNamespace}};
+
+[Route("api/v1/{{ApiRoute}}")]
+[ApiController]
+public class {{ClassName}}Controller
+  : BaseApiController
 {
-  [Route("api/v1/{{ApiRoute}}")]
-  [ApiController]
-  public class {{ClassName}}Controller
-    : BaseApiController
+  private readonly I{{SubjectName}}Mapper _mapper;
+
+  private readonly I{{SubjectName}}Manager _manager;
+
+  public {{SubjectName}}Controller(
+    I{{SubjectName}}Manager manager,
+    I{{SubjectName}}Mapper mapper)
   {
-    private readonly I{{SubjectName}}Mapper _mapper;
+    _manager = manager;
 
-    private readonly I{{SubjectName}}Manager _manager;
+    _mapper = mapper;
+  }
 
-    public {{SubjectName}}Controller(
-      I{{SubjectName}}Manager manager,
-      I{{SubjectName}}Mapper mapper)
-    {
-      _manager = manager;
+  // GET api/v1/{{ApiRoute}}/5
+  [HttpGet("{id:{{PrimaryKeyType}}}")]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
+  [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+  public async Task<ActionResult<{{ModelName}}>> Get({{PrimaryKeyType}} id)
+  {
+    var entity = [AMO]_manager.Get(id)[AMC];
 
-      _mapper = mapper;
-    }
+    if (entity == null) throw new Exception($"{{SubjectName}}:{id} not found.");
 
-    // GET api/v1/{{ApiRoute}}/5
-    [HttpGet("{id:{{PrimaryKeyType}}}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
-    public async Task<ActionResult<{{ModelName}}>> Get({{PrimaryKeyType}} id)
-    {
-      var entity = [AMO]_manager.Get(id)[AMC];
+    return Ok(_mapper.ToModel(entity));
+  }
 
-      if (entity == null) throw new Exception($"{{SubjectName}}:{id} not found.");
+  // GET api/v1/{{ApiRoute}}
+  [HttpGet]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
+  public async Task<ActionResult<{{ModelName}}>> GetAll()
+  {
+    var entity = [AMO]_manager.GetAll()[AMC];
 
-      return Ok(_mapper.ToModel(entity));
-    }
+    return Ok(_mapper.ToModel(entity));
+  }
+  
+  // POST api/v1/{{ApiRoute}}
+  [HttpPost]
+  [ProducesResponseType(StatusCodes.Status201Created, Type = typeof({{SubjectName}}V1CreatedModel))]
+  [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorModel))]
+  [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorModel))]
+  public async Task<ActionResult<{{SubjectName}}V1CreatedModel>> Post([FromBody] {{SubjectName}}V1CreateModel model)
+  {
+    var entity = _mapper.ToEntity(model);
 
-    // GET api/v1/{{ApiRoute}}
-    [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
-    public async Task<ActionResult<{{ModelName}}>> GetAll()
-    {
-      var entity = [AMO]_manager.GetAll()[AMC];
+    if (entity == null) throw new Exception("Model cannot be null.");
 
-      return Ok(_mapper.ToModel(entity));
-    }
-    
-    // POST api/v1/{{ApiRoute}}
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof({{SubjectName}}V1CreatedModel))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorModel))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorModel))]
-    public async Task<ActionResult<{{SubjectName}}V1CreatedModel>> Post([FromBody] {{SubjectName}}V1CreateModel model)
-    {
-      var entity = _mapper.ToEntity(model);
+    var result = [AMO]_manager.Add(entity)[AMC];
 
-      if (entity == null) throw new Exception("Model cannot be null.");
+    var m = _mapper.ToModel(result);
 
-      var result = [AMO]_manager.Add(entity)[AMC];
+    return CreatedAtAction(nameof(Get), new { id = m!.{{PrimaryKeyProperty}} }, m);
+  }
+  
+  // PATCH api/v1/{{ApiRoute}}/5
+  [HttpPatch("{id:{{PrimaryKeyType}}}")]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorModel))]
+  [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorModel))]
+  public async Task<ActionResult> Patch({{PrimaryKeyType}} id, [FromBody] JsonPatchDocument<{{SubjectName}}V1PatchModel> patchDoc)
+  {
+    var db = [AMO]_manager.Get(id)[AMC];
+          
+    var model = _mapper.ToPatchModel(db);
 
-      var m = _mapper.ToModel(result);
+    if (model == null) throw new Exception($"{{SubjectName}}:{id} not found.");
 
-      return CreatedAtAction(nameof(Get), new { id = m!.{{PrimaryKeyProperty}} }, m);
-    }
-    
-    // PATCH api/v1/{{ApiRoute}}/5
-    [HttpPatch("{id:{{PrimaryKeyType}}}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorModel))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorModel))]
-    public async Task<ActionResult> Patch({{PrimaryKeyType}} id, [FromBody] JsonPatchDocument<{{SubjectName}}V1PatchModel> patchDoc)
-    {
-      var db = [AMO]_manager.Get(id)[AMC];
-            
-      var model = _mapper.ToPatchModel(db);
+    patchDoc.ApplyTo(model);
 
-      if (model == null) throw new Exception($"{{SubjectName}}:{id} not found.");
+    var entity = _mapper.ToEntity(model);
 
-      patchDoc.ApplyTo(model);
+    [AMO]_manager.Edit(entity)[AMC];
 
-      var entity = _mapper.ToEntity(model);
+    return NoContent();
+  }
 
-      [AMO]_manager.Edit(entity)[AMC];
+  // DELETE api/v1/{{ApiRoute}}/5
+  [HttpDelete("{id:{{PrimaryKeyType}}}")]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  public async Task<ActionResult> Delete({{PrimaryKeyType}} id)
+  {
+    [AMO]_manager.Remove(id)[AMC];
 
-      return NoContent();
-    }
-
-    // DELETE api/v1/{{ApiRoute}}/5
-    [HttpDelete("{id:{{PrimaryKeyType}}}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult> Delete({{PrimaryKeyType}} id)
-    {
-      [AMO]_manager.Remove(id)[AMC];
-
-      return NoContent();
-    }
+    return NoContent();
   }
 }
+

@@ -40,4 +40,10 @@ namespace SpotWelder.Lib
     SqlServer = 0,
     Postgres = 1
   }
+
+  public enum ResolutionMethod
+  {
+    Static = 0,
+    Dynamic = 1
+  }
 }

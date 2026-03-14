@@ -10,13 +10,15 @@ namespace SpotWelder.Lib
     public static bool HasAnyFlag(this GenerationElections elections, params GenerationElections[] flags)
       => flags.Any(f => elections.HasFlag(f));
 
-    public static List<T> GetFlags<T>(this T enumValue) where T : Enum
+    public static List<T> GetFlags<T>(this T enumValue)
+      where T : Enum
     {
       var flags = new List<T>();
 
       foreach (T value in Enum.GetValues(typeof(T)))
       {
-        if (enumValue.HasFlag(value) && Convert.ToInt64(value) != 0) // Exclude the 'None' value, assuming it's represented by 0
+        if (enumValue.HasFlag(value) &&
+            Convert.ToInt64(value) != 0) // Exclude the 'None' value, assuming it's represented by 0
         {
           flags.Add(value);
         }
@@ -67,5 +69,18 @@ namespace SpotWelder.Lib
     /// <param name="contents">The text to write to the file. If null, an empty file will be created.</param>
     public static void WriteFile(string path, string? contents)
       => File.WriteAllText(path, contents, new System.Text.UTF8Encoding(false));
+
+    /// <summary>
+    /// Adds the elements of the specified collection to the HashSet.
+    /// </summary>
+    /// <remarks>This method iterates through the provided collection and adds each element to the HashSet.
+    /// Duplicate elements are ignored, and the HashSet will only contain unique items.</remarks>
+    /// <typeparam name="T">The type of the elements in the collection being added to the HashSet.</typeparam>
+    /// <param name="set">The HashSet to which the elements will be added.</param>
+    /// <param name="items">The collection of items to add to the HashSet. If the collection is null, no items will be added.</param>
+    public static void AddRange<T>(this HashSet<T> set, IEnumerable<T> items)
+    {
+      foreach (var item in items) set.Add(item);
+    }
   }
 }

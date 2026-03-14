@@ -1,5 +1,4 @@
 ﻿using SpotWelder.Lib.Models;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -15,20 +14,15 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      instructions.ClassName = instructions.RecordName;
+      var template = GetTemplateAsStringBuilder(TemplateName);
+
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
       
-      var strTemplate = GetTemplate(TemplateName);
-
-      var template = new StringBuilder(strTemplate);
-
       //Full template replacements
-      SetContainingNamespace(template);
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{Properties}}", FormatPropertiesForRecord(instructions.Properties));
       
-      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
+      return GetFormattedCSharpResult($"{instructions.SubjectName}Record.cs", template);
     }
   }
 }

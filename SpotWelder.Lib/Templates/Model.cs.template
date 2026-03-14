@@ -1,12 +1,10 @@
 ﻿{{UsingDirectives}}
-using {{RootContainingNamespace}}.Entities;
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public class {{SubjectName}}V1Model{{Interface}}
 {
-  public class {{ClassName}}{{Interface}}
-  {
-    {{Constructors}}
+  {{Constructors}}
 
-    {{Properties}}
-  }
+  {{Properties}}
 }

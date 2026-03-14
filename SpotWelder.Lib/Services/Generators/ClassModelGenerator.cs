@@ -1,7 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using System.Collections.Generic;
 using System;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -17,35 +16,37 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      instructions.ClassName = instructions.ModelName;
+      var className = $"{instructions.SubjectName}V1Model";
 
-      var strTemplate = GetTemplate(TemplateName);
-
-      var template = new StringBuilder(strTemplate);
+      var template = GetTemplateAsStringBuilder(TemplateName);
 
       //Child templates
-      template.Replace("{{Constructors}}", FillConstructors(instructions.Elections));
+      template.Replace("{{Constructors}}", FillConstructors(instructions.Elections, className));
+
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Dynamic);
 
       //Full template replacements
-      SetContainingNamespace(template);
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Interface}}", 
         instructions.Elections.HasFlag(GenerationElections.Interface) ? 
         FormatInterface(instructions.InterfaceName) : string.Empty);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
 
       //Constructors
       template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
       template.Replace("{{ConstructorFromEntity}}", FormatConstructorBody(instructions.Properties, "entity"));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
       
-      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
+      return GetFormattedCSharpResult($"{className}.cs", template);
     }
 
-    private string FillConstructors(GenerationElections elections)
+    private string FillConstructors(GenerationElections elections, string className)
     {
       var arr = new[]
       {
@@ -61,13 +62,12 @@ namespace SpotWelder.Lib.Services.Generators
         {
           switch (e)
           {
-            //TODO: Not supporting this anymore
-            case GenerationElections.Interface:
-              lst.Add(ConstructorTemplate("{{InterfaceName}}", "target", "{{ConstructorFromInterface}}"));
-
-              break;
             case GenerationElections.Entity:
-              lst.Add(ConstructorTemplate("{{EntityName}}", "entity", "{{ConstructorFromEntity}}"));
+              lst.Add(ConstructorTemplate(
+                "{{SubjectName}}Entity",
+                "entity",
+                "{{ConstructorFromEntity}}",
+                className));
 
               break;
           }
@@ -77,7 +77,11 @@ namespace SpotWelder.Lib.Services.Generators
       if (lst.Count == 0) return string.Empty;
 
       //Only add in the default constructor, if and only if there are other constructors
-      lst.Insert(0, ConstructorTemplate(string.Empty, string.Empty, string.Empty));
+      lst.Insert(0, ConstructorTemplate(
+        string.Empty,
+        string.Empty,
+        string.Empty,
+        className));
 
       return string.Join(Environment.NewLine + Environment.NewLine, lst);
     }

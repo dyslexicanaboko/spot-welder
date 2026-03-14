@@ -1,49 +1,47 @@
 using Dapper;
-using {{RootContainingNamespace}}.Records;
+{{UsingDirectives}}
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-{{UsingDirectives}}
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public class {{SubjectName}}Repository
+  : BaseRepository, I{{SubjectName}}Repository
 {
-  public class {{ClassName}}Repository
-    : BaseRepository, I{{ClassName}}Repository
+  public {{SubjectName}}Repository(IAppConfiguration configuration)
+    : base(configuration)
   {
-    public {{ClassName}}Repository(IAppConfiguration configuration)
-      : base(configuration)
-    {
-    }
+  }
 
-    public [AO]{{RecordName}}?[AC] Read({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-    {
+  public [AO]{{SubjectName}}Record?[AC] Read({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+  {
+  const string sql = """
+{{SourceQuery}}
+        WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
+        """;
+
+    [A]using var connection = await GetConnection();
+    
+    return [A]connection.QuerySingleOrDefault[AS]<{{SubjectName}}Record>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
+  }
+
+  public [AO]List<{{SubjectName}}Record>[AC] ReadAll()
+  {
     const string sql = """
 {{SourceQuery}}
-          WHERE {{PrimaryKeyColumn}} = @{{PrimaryKeyColumn}}
-          """;
+        """;
 
-      [A]using var connection = await GetConnection();
-      
-      return [A]connection.QuerySingleOrDefault[AS]<{{RecordName}}>(sql, GetPrimaryKeyParameter({{PrimaryKeyParameter}}));
-    }
+    [A]using var connection = await GetConnection();
+    
+    return [AWO]connection.Query[AS]<{{SubjectName}}Record>(sql)[AWC].AsList();
+  }
 
-    public [AO]List<{{RecordName}}>[AC] ReadAll()
-    {
-      const string sql = """
-{{SourceQuery}}
-          """;
-
-      [A]using var connection = await GetConnection();
-      
-      return [AWO]connection.Query[AS]<{{RecordName}}>(sql)[AWC].AsList();
-    }
-
-    private static DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-    {
-      var p = new DynamicParameters();
-      p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});
-      
-      return p;
-    }
+  private static DynamicParameters GetPrimaryKeyParameter({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+  {
+    var p = new DynamicParameters();
+    p.Add(name: "@{{PrimaryKeyColumn}}", dbType: DbType.{{PrimaryKeyDbType}}, value: {{PrimaryKeyParameter}});
+    
+    return p;
   }
 }

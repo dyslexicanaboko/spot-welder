@@ -1,14 +1,14 @@
 ﻿{{UsingDirectives}}
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
-{
-  {{ClassAttributes}}
-  public class {{ClassName}}{{Interfaces}}
-  {
-    {{Constructors}}
-    
-    {{Properties}}
+namespace {{AbsoluteContainingNamespace}};
 
-    {{InterfaceMethods}}
-  }
+{{ClassAttributes}}
+public class {{ClassName}}{{Interfaces}}
+{
+  {{Constructors}}
+  
+  {{Properties}}
+
+  {{InterfaceMethods}}
 }
+

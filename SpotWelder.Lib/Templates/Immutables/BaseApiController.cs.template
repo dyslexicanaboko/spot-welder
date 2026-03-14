@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace {{RootContainingNamespace}}.Controllers;
+namespace {{AbsoluteContainingNamespace}};
 
 /// <summary>
 /// This abstract class exists to have base level operations that apply to all controllers.

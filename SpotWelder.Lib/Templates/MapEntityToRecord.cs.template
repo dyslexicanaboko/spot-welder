@@ -1,4 +1,4 @@
-﻿public {{RecordName}}? ToRecord({{EntityName}}? entity)
+﻿public {{SubjectName}}Record? ToRecord({{EntityName}}? entity)
   => new()
   {
     {{ObjectInitializer}}

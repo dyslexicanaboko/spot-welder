@@ -3,48 +3,48 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
 
-namespace {{RootContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public partial class SerializationService
 {
-    public partial class SerializationService
+  private CsvConfiguration GetCsvConfig()
+  {
+    var config = new CsvConfiguration(CultureInfo.CurrentCulture)
     {
-    private CsvConfiguration GetCsvConfig()
+      Delimiter = "|",
+      HasHeaderRecord = false
+    };
+    
+    return config;
+  }
+
+  public string ToCsv(IEnumerable<{{EntityName}}> input)
+  {
+    using (var writer = new StringWriter())
     {
-      var config = new CsvConfiguration(CultureInfo.CurrentCulture)
+      using (var csvWriter = new CsvWriter(writer, GetCsvConfig()))
       {
-        Delimiter = "|",
-        HasHeaderRecord = false
-      };
+        csvWriter.WriteRecords(input);
+      }
       
-      return config;
+      return writer.ToString();
     }
+  }
 
-    public string ToCsv(IEnumerable<{{ClassName}}> input)
+  public IEnumerable<{{EntityName}}> FromCsv(string csv)
+  {
+    using (var reader = new StringReader(csv))
     {
-      using (var writer = new StringWriter())
+      using (var csvReader = new CsvReader(reader, GetCsvConfig()))
       {
-        using (var csvWriter = new CsvWriter(writer, GetCsvConfig()))
-        {
-          csvWriter.WriteRecords(input);
-        }
+        var records = csvReader.GetRecords<{{EntityName}}>();
         
-        return writer.ToString();
+        //Has to be forced to a List otherwise a NullReference Exception will occur
+        var lst = records.ToList();
+        
+        return lst;
       }
     }
-
-    public IEnumerable<{{ClassName}}> FromCsv(string csv)
-    {
-      using (var reader = new StringReader(csv))
-      {
-        using (var csvReader = new CsvReader(reader, GetCsvConfig()))
-        {
-          var records = csvReader.GetRecords<{{ClassName}}>();
-          
-          //Has to be forced to a List otherwise a NullReference Exception will occur
-          var lst = records.ToList();
-          
-          return lst;
-        }
-      }
-    }
-    }
+  }
 }
+

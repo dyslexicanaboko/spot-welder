@@ -1,2 +1,2 @@
-﻿public {{ClassName}}V1CreatedModel? ToCreatedModel({{EntityName}}? entity)
-  => entity == null ? null : new {{ClassName}}V1CreatedModel(entity);
+﻿public {{SubjectName}}V1CreatedModel? ToCreatedModel({{EntityName}}? entity)
+  => entity == null ? null : new {{SubjectName}}V1CreatedModel(entity);

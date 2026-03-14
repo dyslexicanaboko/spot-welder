@@ -1,5 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 using System.Collections.Generic;
 using System;
 using System.Text;
@@ -19,23 +20,28 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      instructions.ClassName = instructions.EntityName;
-      
-      var strTemplate = GetTemplate(TemplateName);
-
-      var template = new StringBuilder(strTemplate);
+      var template = GetTemplateAsStringBuilder(TemplateName);
 
       //Child templates
       template.Replace("{{Interfaces}}", FillInterfaceImplementations(instructions.Elections));
-      template.Replace("{{Constructors}}", FillConstructors(instructions.UsingDirectives, instructions.Elections));
+      template.Replace("{{Constructors}}", FillConstructors(
+        instructions.ArchitectureStrategy, 
+        instructions.UsingDirectives, 
+        instructions.Elections,
+        instructions.EntityName));
       template.Replace("{{InterfaceMethods}}", FillInterfaceMethods(instructions.Elections));
 
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+
+      //Depending on the elections, the using directives will change.
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Dynamic);
+
       //Full template replacements
-      SetContainingNamespace(template);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
       template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{RecordName}}", instructions.RecordName);
       template.Replace("{{ClassAttributes}}", FormatClassAttributes(instructions.ClassAttributes));
@@ -52,9 +58,11 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
 
       //IComparable
+      //Property1 refers to "First property" which is arbitrary on purpose
+      //The user is supposed to update the comparison logic based on their needs, but this serves as a starting point.
       template.Replace("{{Property1}}", instructions.Properties.First().Property);
       
-      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
+      return GetFormattedCSharpResult($"{instructions.EntityName}.cs", template);
     }
 
     private static string FillInterfaceImplementations(GenerationElections elections)
@@ -117,7 +125,11 @@ namespace SpotWelder.Lib.Services.Generators
       return sb.ToString();
     }
 
-    private string FillConstructors(HashSet<string> usings, GenerationElections elections)
+    private string FillConstructors(
+      ArchitectureStrategyBase architectureStrategy, 
+      HashSet<string> usingDirectives, 
+      GenerationElections elections,
+      string className)
     {
       var arr = new[]
       {
@@ -137,27 +149,43 @@ namespace SpotWelder.Lib.Services.Generators
           switch (e)
           {
             case GenerationElections.Interface:
-              lst.Add(ConstructorTemplate("{{InterfaceName}}", "target", "{{ConstructorFromInterface}}"));
+              lst.Add(ConstructorTemplate(
+                "{{InterfaceName}}", 
+                "target", 
+                "{{ConstructorFromInterface}}",
+                className));
 
               break;
             case GenerationElections.Record:
-              usings.Add("{{RootContainingNamespace}}.Records");
-              lst.Add(ConstructorTemplate("{{RecordName}}", "record", "{{ConstructorFromRecord}}"));
+              lst.Add(ConstructorTemplate(
+                "{{RecordName}}",
+                "record", 
+                "{{ConstructorFromRecord}}",
+                className));
 
               break;
             case GenerationElections.Model:
-              usings.Add("{{RootContainingNamespace}}.Models");
-              lst.Add(ConstructorTemplate("{{ModelName}}", "model", "{{ConstructorFromModel}}"));
+              lst.Add(ConstructorTemplate(
+                "{{ModelName}}",
+                "model",
+                "{{ConstructorFromModel}}",
+                className));
 
               break;
             case GenerationElections.CreateModel:
-              usings.Add("{{RootContainingNamespace}}.Models.Client");
-              lst.Add(ConstructorTemplate("{{SubjectName}}V1CreateModel", "model", "{{ConstructorFromModel}}"));
+              lst.Add(ConstructorTemplate(
+                "{{SubjectName}}V1CreateModel",
+                "model",
+                "{{ConstructorFromModel}}", 
+                className));
 
               break;
             case GenerationElections.PatchModel:
-              usings.Add("{{RootContainingNamespace}}.Models.Client");
-              lst.Add(ConstructorTemplate("{{SubjectName}}V1PatchModel", "model", "{{ConstructorFromModel}}"));
+              lst.Add(ConstructorTemplate(
+                "{{SubjectName}}V1PatchModel",
+                "model",
+                "{{ConstructorFromModel}}",
+                className));
 
               break;
           }
@@ -167,7 +195,14 @@ namespace SpotWelder.Lib.Services.Generators
       if (lst.Count == 0) return string.Empty;
 
       //Only add in the default constructor, if and only if there are other constructors
-      lst.Insert(0, ConstructorTemplate(string.Empty, string.Empty, string.Empty));
+      lst.Insert(0, ConstructorTemplate(
+        string.Empty, 
+        string.Empty, 
+        string.Empty, 
+        className));
+
+      //Using directives are only included based on the elections provided which is why it's conditional.
+      architectureStrategy.ResolveDynamicUsingDirectives(usingDirectives, TemplateName, elections);
 
       return string.Join(Environment.NewLine + Environment.NewLine, lst);
     }

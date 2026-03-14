@@ -1,20 +1,18 @@
 ﻿{{UsingDirectives}}
-using {{RootContainingNamespace}}.Entities;
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public class {{SubjectName}}V1PatchModel{{Interface}}
 {
-  public class {{ClassName}}V1PatchModel{{Interface}}
+  public {{SubjectName}}V1PatchModel()
   {
-    public {{ClassName}}V1PatchModel()
-    {
-      
-    }
+    
+  }
 
-    public {{ClassName}}V1PatchModel({{EntityName}} target)
-    {
-      {{ConstructorFromEntity}}
-    }
+  public {{SubjectName}}V1PatchModel({{EntityName}} target)
+  {
+    {{ConstructorFromEntity}}
+  }
 
 {{Properties}}
-  }
 }

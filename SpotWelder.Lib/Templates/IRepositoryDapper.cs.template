@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using {{RootContainingNamespace}}.Records;
 {{UsingDirectives}}
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public interface I{{SubjectName}}Repository
 {
-  public interface I{{ClassName}}Repository
-  {
-    {{Contracts}}
-  }
+  {{Contracts}}
 }

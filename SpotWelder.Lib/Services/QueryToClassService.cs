@@ -2,6 +2,7 @@
 using SpotWelder.Lib.DataAccess;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 using SpotWelder.Lib.Services.CodeFactory.AsynchronicityStrategy;
 using System;
 using System.Collections.Generic;
@@ -83,6 +84,16 @@ namespace SpotWelder.Lib.Services
       return strategy;
     }
 
+    private static ArchitectureStrategyBase GetArchitectureStrategy(ArchitectureType architectureType, string rootContainingNamespace)
+    {
+      return architectureType switch
+      {
+        ArchitectureType.NTier => new NTierArchitectureStrategy(rootContainingNamespace),
+        ArchitectureType.FeatureBased => new FeatureBasedArchitectureStrategy(rootContainingNamespace),
+        _ => throw new NotSupportedException($"The provided architecture type of {architectureType} is not supported.")
+      };
+    }
+
     /// <summary>
     /// This is to be thought of as factual information. The properties provided here
     /// should not be overwritten, but can be when necessary.
@@ -113,6 +124,7 @@ namespace SpotWelder.Lib.Services
       };
 
       ins.AsynchronicityFormatStrategy = GetAsynchronicityFormatStrategy(ins.IsAsynchronous);
+      ins.ArchitectureStrategy = GetArchitectureStrategy(p.ArchitectureType, p.RootContainingNamespace);
 
       //TODO: defaulting the language to CSharp, not sure what I am going to do with this at the moment
       if (p.LanguageType == CodeType.None) p.LanguageType = CodeType.CSharp;

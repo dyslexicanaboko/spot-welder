@@ -1,10 +1,9 @@
 ﻿using Dapper;
-using {{RootContainingNamespace}}.DataAccess.Utility;
-using {{RootContainingNamespace}}.Managers.Utility;
+{{UsingDirectives}}
 {{SqlUsingDirectives}}
 using System.Data;
 
-namespace {{RootContainingNamespace}}.DataAccess;
+namespace {{AbsoluteContainingNamespace}};
 
 public abstract class BaseRepository
 {

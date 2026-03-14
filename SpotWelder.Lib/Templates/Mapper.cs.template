@@ -1,10 +1,9 @@
 ﻿{{UsingDirectives}}
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public class {{SubjectName}}Mapper
+  : BaseMapper, I{{SubjectName}}Mapper
 {
-  public class {{ClassName}}Mapper
-    : BaseMapper, I{{ClassName}}Mapper
-  {
-    {{Body}}
-  }
+  {{Body}}
 }

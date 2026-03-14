@@ -2,7 +2,6 @@
 using SpotWelder.Lib.Services.CodeFactory;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -18,19 +17,17 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      instructions.ClassName = instructions.EntityName;
-      
-      var strTemplate = GetTemplate(TemplateName);
+      var template = GetTemplateAsStringBuilder(TemplateName);
 
-      var template = new StringBuilder(strTemplate);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
 
-      SetContainingNamespace(template);
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Static);
+
       template.Replace("{{EntityName}}", instructions.EntityName);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
-
-      //Method bodies
       template.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
       template.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
 

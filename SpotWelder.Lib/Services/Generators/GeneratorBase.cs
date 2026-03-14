@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Formatting;
 using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 using SpotWelder.Lib.Services.Generators.Elections;
 using System;
 using System.Collections.Generic;
@@ -48,12 +49,13 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var file = Path.Combine(TemplatesPath, templateName);
 
-      if(!File.Exists(file)) throw new FileNotFoundException("Template file not found. Check the spelling and try again. Ex: ReadOnly vs. ReadsOnly", file);
-
-      var str = File.ReadAllText(file);
-
-      return str;
+      return !File.Exists(file) ? 
+        throw new FileNotFoundException("Template file not found. Check the spelling and try again. Ex: ReadOnly vs. ReadsOnly", file) : 
+        File.ReadAllText(file);
     }
+
+    protected virtual StringBuilder GetTemplateAsStringBuilder(string templateName)
+      => new(GetTemplate(templateName));
 
     protected virtual string GetTextBlock<T>(IList<T> items, Func<T, string> formatting, string separator = null)
     {
@@ -97,12 +99,7 @@ namespace SpotWelder.Lib.Services.Generators
     }
 
     protected virtual string FormatUsingDirectives(HashSet<string> usingDirectives)
-    {
-      //Purposely not going to sort the namespaces just in case a specific order was wanted
-      var content = GetTextBlock(usingDirectives.ToList(), ns => $"using {ns};");
-
-      return content;
-    }
+      => GetTextBlock(usingDirectives.OrderBy(x => x).ToList(), ns => $"using {ns};");
 
     protected virtual string FormatInterface(string interfaceName)
     {
@@ -219,10 +216,25 @@ namespace SpotWelder.Lib.Services.Generators
       return lst;
     }
 
+    /// <summary>
+    /// Generates a constructor definition by substituting specified parameter values into a predefined template.
+    /// </summary>
+    /// <remarks>This method uses a template file to create constructor definitions dynamically. The template
+    /// must contain placeholders for parameter type, parameter name, and constructor body, which are replaced with the
+    /// provided values.</remarks>
+    /// <param name="parameterType">The type of the parameter to be included in the generated constructor template. This value is inserted into the
+    /// template at the designated parameter type placeholder.</param>
+    /// <param name="parameterName">The name of the parameter to be included in the generated constructor template. This value is inserted into the
+    /// template at the designated parameter name placeholder.</param>
+    /// <param name="constructorBody">The body of the constructor, which will be inserted into the template at the constructor body placeholder. This
+    /// typically contains initialization logic or assignments.</param>
+    /// <returns>A string containing the completed constructor definition with the specified parameter values substituted into
+    /// the template.</returns>
     protected string ConstructorTemplate(
       string parameterType,
       string parameterName,
-      string constructorBody)
+      string constructorBody,
+      string className)
     {
       var sb = new StringBuilder(GetTemplate("ClassConstructor.cs.template"));
 
@@ -230,7 +242,8 @@ namespace SpotWelder.Lib.Services.Generators
       sb
         .Replace("[ParameterType]", parameterType)
         .Replace("[ParameterName]", parameterName)
-        .Replace("[ConstructorBody]", constructorBody);
+        .Replace("[ConstructorBody]", constructorBody)
+        .Replace("[ClassName]", className);
 
       return sb.ToString();
     }
@@ -263,6 +276,33 @@ namespace SpotWelder.Lib.Services.Generators
     protected StringBuilder SetContainingNamespace(StringBuilder sb)
       => sb.Replace("{{ContainingNamespace}}", ContainingNamespace);
 
+    protected StringBuilder SetAbsoluteContainingNamespace(StringBuilder sb, ArchitectureStrategyBase architectureStrategy)
+      => sb.Replace("{{AbsoluteContainingNamespace}}", architectureStrategy.ResolveAbsoluteContainingNamespace(Election));
+
+    protected StringBuilder SetUsingDirectives(
+      StringBuilder sb, 
+      ArchitectureStrategyBase architectureStrategy,
+      HashSet<string> usingDirectives,
+      ResolutionMethod resolutionMethod,
+      string? templateName = null)
+    {
+      templateName ??= TemplateName;
+
+      switch (resolutionMethod)
+      {
+        case ResolutionMethod.Static:
+          architectureStrategy.ResolveStaticUsingDirectives(usingDirectives, templateName);
+          break;
+        case ResolutionMethod.Dynamic:
+          architectureStrategy.ResolveDynamicUsingDirectives(usingDirectives, templateName, Election);
+          break;
+        default:
+          throw new NotSupportedException($"The resolution method {resolutionMethod} is not supported. Check the implementation of {nameof(ArchitectureStrategyBase)} and try again.");
+      }
+
+      return sb.Replace("{{UsingDirectives}}", FormatUsingDirectives(usingDirectives));
+    }
+
     /// <summary>
     /// Generates an interface file from a class by extracting its public method contracts.
     /// </summary>
@@ -275,12 +315,19 @@ namespace SpotWelder.Lib.Services.Generators
       GeneratedResult classResult,
       string templateName)
     {
-      var template = new StringBuilder(GetTemplate(templateName));
+      var template = GetTemplateAsStringBuilder(templateName);
 
-      SetContainingNamespace(template);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+
+      //Depending on the elections, the using directives will change.
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        templateName == "IMapper.cs.template" ? ResolutionMethod.Dynamic : ResolutionMethod.Static,
+        templateName);
+
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{Contracts}}", ExtractCSharpClassContracts(classResult.Contents));
 
       //Reminder: The containing namespace is set at the generator level.

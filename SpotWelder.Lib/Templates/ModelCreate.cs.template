@@ -1,9 +1,6 @@
-﻿{{UsingDirectives}}
+﻿namespace {{AbsoluteContainingNamespace}};
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+public class {{SubjectName}}V1CreateModel{{Interface}}
 {
-  public class {{ClassName}}V1CreateModel{{Interface}}
-  {
 {{Properties}}
-  }
 }

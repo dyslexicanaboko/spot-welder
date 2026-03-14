@@ -1,4 +1,4 @@
-﻿namespace {{RootContainingNamespace}}.DataAccess;
+﻿namespace {{AbsoluteContainingNamespace}};
 
 /// <summary>
 /// This interface exists to unify all repositories as being "a type of" repository

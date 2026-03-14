@@ -1,5 +1,5 @@
-﻿public {{EntityName}}? ToEntity({{RecordName}}? record)
+﻿public {{EntityName}}? ToEntity({{SubjectName}}Record? record)
   => record == null ? null : new {{EntityName}}(record);
 
-public List<{{EntityName}}?> ToEntity(List<{{RecordName}}>? records)
+public List<{{EntityName}}?> ToEntity(List<{{SubjectName}}Record>? records)
   => ToListR(records, ToEntity);

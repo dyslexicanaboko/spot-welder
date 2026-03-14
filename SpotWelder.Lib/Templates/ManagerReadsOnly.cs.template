@@ -1,32 +1,27 @@
 ﻿{{UsingDirectives}}
-using {{RootContainingNamespace}}.DataAccess;
-using {{RootContainingNamespace}}.Entities;
-using {{RootContainingNamespace}}.Mappers;
-using {{RootContainingNamespace}}.Validation;
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public class {{SubjectName}}Manager
+  : BaseManager, I{{SubjectName}}Manager
 {
-  public class {{ClassName}}Manager
-    : BaseManager, I{{ClassName}}Manager
+  private readonly I{{SubjectName}}Repository _repository;
+  private readonly I{{SubjectName}}Mapper _mapper;
+  private readonly I{{SubjectName}}Validation _validation;
+
+  public {{SubjectName}}Manager(
+    I{{SubjectName}}Repository repository,
+    I{{SubjectName}}Mapper mapper,
+    I{{SubjectName}}Validation validation)
   {
-    private readonly I{{ClassName}}Repository _repository;
-    private readonly I{{ClassName}}Mapper _mapper;
-    private readonly I{{ClassName}}Validation _validation;
-
-    public {{ClassName}}Manager(
-      I{{ClassName}}Repository repository,
-      I{{ClassName}}Mapper mapper,
-      I{{ClassName}}Validation validation)
-    {
-      _repository = repository;
-      _mapper = mapper;
-      _validation = validation;
-    }
-
-    public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
-      => _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
-
-    public [AO]List<{{EntityName}}?>[AC] GetAll()
-      =>_mapper.ToEntity([A]_repository.ReadAll());
+    _repository = repository;
+    _mapper = mapper;
+    _validation = validation;
   }
+
+  public [AO]{{EntityName}}?[AC] Get({{PrimaryKeyType}} {{PrimaryKeyParameter}})
+    => _mapper.ToEntity([A]_repository.Read({{PrimaryKeyParameter}}));
+
+  public [AO]List<{{EntityName}}?>[AC] GetAll()
+    =>_mapper.ToEntity([A]_repository.ReadAll());
 }

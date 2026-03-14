@@ -1,7 +1,6 @@
-﻿namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+﻿namespace {{AbsoluteContainingNamespace}};
+
+public record {{SubjectName}}Record
 {
-  public record {{ClassName}}
-  {
-    {{Properties}}
-  }
+  {{Properties}}
 }

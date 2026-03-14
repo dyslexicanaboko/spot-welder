@@ -34,17 +34,18 @@ namespace SpotWelder.Lib.Services.Generators
       if (instructions.SourceSqlType == SourceSqlType.Query)
         templateName = "RepositoryDapperReadsOnly.cs.template";
       
-      instructions.ClassName = instructions.SubjectName;
+      var template = GetTemplateAsStringBuilder(templateName);
 
-      var strTemplate = GetTemplate(templateName);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
 
-      var template = new StringBuilder(strTemplate);
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Static,
+        templateName);
 
-      SetContainingNamespace(template);
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName); //Prefix of the repository class
-      template.Replace("{{RecordName}}", instructions.RecordName);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{SqlUsingDirectives}}", FormatUsingDirectives(syntax.SqlUsingDirectives));
       template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
       template.Replace("{{ParameterObject}}", syntax.ParameterObject);
@@ -98,7 +99,7 @@ namespace SpotWelder.Lib.Services.Generators
       var rt = instructions.Elections.HasFlag(GenerationElections.RepoStatic) ? "Dapper" : string.Empty;
 
       var result = GetFormattedCSharpResult(
-        $"{instructions.ClassName}{rt}Repository.cs", 
+        $"{instructions.SubjectName}{rt}Repository.cs", 
         template);
 
       result.CorrespondingInterface = GenerateInterface(

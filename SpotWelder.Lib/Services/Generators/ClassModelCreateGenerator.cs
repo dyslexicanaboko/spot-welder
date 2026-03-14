@@ -1,40 +1,34 @@
 ﻿using SpotWelder.Lib.Models;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-	public class ClassModelCreateGenerator
-		: GeneratorBase
-	{
-		public override GenerationElections Election => GenerationElections.CreateModel;
+  public class ClassModelCreateGenerator
+    : GeneratorBase
+  {
+    public override GenerationElections Election => GenerationElections.CreateModel;
 
-		protected override string TemplateName => "ModelCreate.cs.template";
+    protected override string TemplateName => "ModelCreate.cs.template";
 
     /// <inheritdoc />
     protected override string ContainingNamespace => "Models.Client";
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
-		{
-			instructions.ClassName = instructions.SubjectName;
+    {
+      var template = GetTemplateAsStringBuilder(TemplateName);
 
-			var strTemplate = GetTemplate(TemplateName);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
 
-			var template = new StringBuilder(strTemplate);
-
-      SetContainingNamespace(template);
-			template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-			template.Replace("{{ClassName}}", instructions.ClassName); //Subject is the prefix
-			template.Replace("{{InterfaceName}}", instructions.InterfaceName);
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
+      template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Interface}}",
         instructions.Elections.HasFlag(GenerationElections.Interface) ?
         FormatInterface(instructions.InterfaceName) : string.Empty);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
 
-			//Constructors
-			template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
-			template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
+      //Constructors
+      template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
+      template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-			return GetFormattedCSharpResult($"{instructions.ClassName}V1CreateModel.cs", template);
-		}
-	}
+      return GetFormattedCSharpResult($"{instructions.SubjectName}V1CreateModel.cs", template);
+    }
+  }
 }

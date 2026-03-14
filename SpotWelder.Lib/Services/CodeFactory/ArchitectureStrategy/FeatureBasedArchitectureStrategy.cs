@@ -2,32 +2,37 @@
 
 namespace SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 
-public class FeatureBasedArchitectureStrategy(string rootNamespace)
-  : ArchitectureStrategyBase(rootNamespace)
+public class FeatureBasedArchitectureStrategy(string rootContainingNamespace)
+  : ArchitectureStrategyBase(rootContainingNamespace)
 {
-  protected override Dictionary<GenerationElections, string> ContainingNamespaces { get; set; } = new();
+  protected override Dictionary<GenerationElections, string> ContainingNamespaces { get; } = new();
+
+  protected override Dictionary<string, string> ContainingNamespacesForImmutables { get; } = new();
 
   /// <inheritdoc />
-  protected override Dictionary<string, string[]> StaticTemplateUsings { get; set; } = new();
+  protected override Dictionary<string, string[]> StaticTemplateUsingDirectives { get; } = new();
 
-  protected override Dictionary<string, GenerationElections[]> ConditionalTemplateUsings { get; set; } = new();
+  protected override Dictionary<string, GenerationElections[]> DynamicTemplateUsingDirectives { get; } = new();
 
   /// <param name="election"></param>
   /// <inheritdoc />
-  public override string ResolveNamespace(GenerationElections election)
-    => RootNamespace; //Requires the subject too...
+  public override string ResolveAbsoluteContainingNamespace(GenerationElections election)
+    => RootContainingNamespace; //Requires the subject too...
 
-  public override void ResolveStaticUsings(ref List<string> namespaces, string templateName)
+  public override string ResolveAbsoluteContainingNamespace(string immutableTemplateName)
+    => RootContainingNamespace; //Requires the subject too...
+
+  public override void ResolveStaticUsingDirectives(HashSet<string> usingDirectives, string templateName)
   {
 
   }
 
-  /// <param name="namespaces"></param>
+  /// <param name="usingDirectives"></param>
   /// <param name="templateName"></param>
   /// <param name="elections"></param>
   /// <inheritdoc />
-  public override void ResolveConditionalUsings(
-    ref List<string> namespaces,
+  public override void ResolveDynamicUsingDirectives(
+    HashSet<string> usingDirectives,
     string templateName,
     GenerationElections elections)
   {
@@ -35,4 +40,7 @@ public class FeatureBasedArchitectureStrategy(string rootNamespace)
     //In some cases you add nothing like for Entity
     //But for anything that utilizes a base class it's going to be weird.
   }
+
+  public override ArchitectureStrategyBase Clone() 
+    => new FeatureBasedArchitectureStrategy(RootContainingNamespace);
 }

@@ -24,19 +24,19 @@ namespace SpotWelder.Lib.Services.Generators
 
     private const string ImmutablesFolderName = "Immutables";
 
-    //TODO: Since I had to explicitly log the mappings here, then just do the find/replace in the loop below
-    // I don't want the containing namespaces to be in two places
+    //TODO: This has to be absorbed by the Architecture classes, specifically for the containing folders
     private readonly Dictionary<string, string> _containingNamespaces = new()
     {
-      ["BaseRepository.cs.template"] = "DataAccess",
-      ["BaseMapper.cs.template"] = "Mappers",
-      ["DateTimeManager.cs.template"] = "Managers",
-      ["IRepository.cs.template"] = "DataAccess",
-      ["ColumnSchema.cs.template"] = "DataAccess.Utility",
-      ["UpdateInstruction.cs.template"] = "Managers.Utility",
-      ["BaseManager.cs.template"] = "Managers",
-      ["BaseApiController.cs.template"] = "Controllers",
-      ["IFluentValidation.cs.template"] = "Validation"
+      ["BaseApiController.cs.template"] = "Controllers", //no using directives
+      ["BaseManager.cs.template"] = "Managers", //needs using directives
+      ["BaseMapper.cs.template"] = "Mappers", //no using directives
+      ["BaseRepository.cs.template"] = "DataAccess", //needs using directives
+      ["ColumnSchema.cs.template"] = "DataAccess.Utility", //no using directives
+      ["DateTimeManager.cs.template"] = "Managers", //no using directives
+      ["IAppConfiguration.cs.template"] = string.Empty, //no using directives
+      ["IFluentValidation.cs.template"] = "Validation", //no using directives
+      ["IRepository.cs.template"] = "DataAccess", //no using directives
+      ["UpdateInstruction.cs.template"] = "Managers.Utility" //no using directives
     };
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
@@ -58,11 +58,23 @@ namespace SpotWelder.Lib.Services.Generators
 
       foreach (var fi in templates)
       {
-        //Replace just the Namespace for each template
-        var template = new StringBuilder(File.ReadAllText(fi.FullName))
-          .Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
+        var templateName = fi.Name;
+        var usingDirectives = new HashSet<string>();
 
-        if (fi.Name == "BaseRepository.cs.template")
+        //Replace just the absolute containing namespace for each template
+        var template = new StringBuilder(File.ReadAllText(fi.FullName))
+          .Replace("{{AbsoluteContainingNamespace}}", 
+            instructions.ArchitectureStrategy.ResolveAbsoluteContainingNamespace(templateName));
+
+        SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+
+        SetUsingDirectives(
+          template,
+          instructions.ArchitectureStrategy,
+          usingDirectives,
+          ResolutionMethod.Static);
+
+        if (templateName == "BaseRepository.cs.template")
         {
           template.Replace("{{SqlUsingDirectives}}", FormatUsingDirectives(syntax.SqlUsingDirectives));
           template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
@@ -70,10 +82,11 @@ namespace SpotWelder.Lib.Services.Generators
         }
 
         //Strip the .template extension for the output file. Filename will be named after the template file.
-        var fileName = fi.Name.Replace(".template", string.Empty);
+        var fileName = templateName.Replace(".template", string.Empty);
 
+        //TODO: This has to be absorbed by the Architecture classes
         //Get the containing namespace when it exists for the template.
-        if(!_containingNamespaces.TryGetValue(fi.Name, out var containingNamespace))
+        if (!_containingNamespaces.TryGetValue(templateName, out var containingNamespace))
           containingNamespace = string.Empty; //If it doesn't exist, blank is acceptable for now
 
         //Add to the heap

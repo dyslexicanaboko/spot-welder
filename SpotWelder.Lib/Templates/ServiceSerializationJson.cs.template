@@ -1,12 +1,11 @@
 ﻿//https://www.nuget.org/packages/Newtonsoft.Json/
 using Newtonsoft.Json;
 
-namespace {{RootContainingNamespace}}
-{
-    public partial class SerializationService
-    {
-    public string ToJson(IEnumerable<{{ClassName}}> input) => JsonConvert.SerializeObject(input);
+namespace {{AbsoluteContainingNamespace}};
 
-    public IEnumerable<{{ClassName}}> FromJson(string json) => JsonConvert.DeserializeObject<IEnumerable<{{ClassName}}>>(json);
-    }
+public partial class SerializationService
+{
+  public string ToJson(IEnumerable<{{EntityName}}> input) => JsonConvert.SerializeObject(input);
+
+  public IEnumerable<{{EntityName}}> FromJson(string json) => JsonConvert.DeserializeObject<IEnumerable<{{EntityName}}>>(json);
 }

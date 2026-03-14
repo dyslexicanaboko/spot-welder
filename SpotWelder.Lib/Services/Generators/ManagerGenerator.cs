@@ -15,8 +15,6 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      instructions.ClassName = instructions.SubjectName;
-
       var templateName = TemplateName;
 
       /* When a query is provided, it's very likely it cannot handle CUD.
@@ -24,13 +22,20 @@ namespace SpotWelder.Lib.Services.Generators
       if (instructions.SourceSqlType == SourceSqlType.Query)
         templateName = "ManagerReadsOnly.cs.template";
 
-      var template = new StringBuilder(GetTemplate(templateName));
+      var template = GetTemplateAsStringBuilder(templateName);
 
-      SetContainingNamespace(template);
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+
+      //Depending on the elections, the using directives will change.
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Static,
+        templateName);
+
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{EntityName}}", instructions.EntityName);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
 
       instructions.AsynchronicityFormatStrategy.ReplaceTags(template);
 
@@ -43,7 +48,7 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
 
-      var result = GetFormattedCSharpResult($"{instructions.ClassName}Manager.cs", template);
+      var result = GetFormattedCSharpResult($"{instructions.SubjectName}Manager.cs", template);
 
       result.CorrespondingInterface = GenerateInterface(
         instructions,

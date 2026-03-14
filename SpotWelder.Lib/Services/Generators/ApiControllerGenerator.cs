@@ -1,6 +1,5 @@
 ﻿using SpotWelder.Lib.Models;
 using System.Linq;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -25,7 +24,15 @@ namespace SpotWelder.Lib.Services.Generators
       if (instructions.SourceSqlType == SourceSqlType.Query)
         templateName = "ApiControllerReadsOnly.cs.template";
 
-      var template = new StringBuilder(GetTemplate(templateName));
+      var template = GetTemplateAsStringBuilder(templateName);
+
+      //The same namespaces are always needed which is why it's static
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Static,
+        templateName);
 
       SetContainingNamespace(template);
       template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);

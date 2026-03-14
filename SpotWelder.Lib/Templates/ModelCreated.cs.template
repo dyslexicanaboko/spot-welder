@@ -1,20 +1,18 @@
 ﻿{{UsingDirectives}}
-using {{RootContainingNamespace}}.Entities;
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public class {{SubjectName}}V1CreatedModel
 {
-  public class {{ClassName}}V1CreatedModel
+  public {{SubjectName}}V1CreatedModel()
   {
-    public {{ClassName}}V1CreatedModel()
-    {
-      
-    }
+    
+  }
 
-    public {{ClassName}}V1CreatedModel({{EntityName}} target)
-    {
-      {{ConstructorFromEntity}}
-    }
+  public {{SubjectName}}V1CreatedModel({{EntityName}} target)
+  {
+    {{ConstructorFromEntity}}
+  }
 
 {{Properties}}
-  }
 }

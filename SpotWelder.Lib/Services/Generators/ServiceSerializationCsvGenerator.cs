@@ -1,5 +1,4 @@
 ﻿using SpotWelder.Lib.Models;
-using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
 {
@@ -12,12 +11,11 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      var strTemplate = GetTemplate(TemplateName);
+      var template = GetTemplateAsStringBuilder(TemplateName);
 
-      var template = new StringBuilder(strTemplate);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
 
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.EntityName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
 
       return GetFormattedCSharpResult("SerializationService_Csv.cs", template);
     }

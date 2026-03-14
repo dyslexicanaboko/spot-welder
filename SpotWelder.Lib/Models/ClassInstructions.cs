@@ -1,4 +1,5 @@
 ﻿using SpotWelder.Lib.Services.CodeFactory;
+using SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 using SpotWelder.Lib.Services.CodeFactory.AsynchronicityStrategy;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,7 @@ namespace SpotWelder.Lib.Models
     /// Name of the class being generated. This is a property that is dedicated to being
     /// the name of whatever is being generated regardless of its purpose.
     /// </summary>
+    [Obsolete("Going to phase this out. Use SubjectName instead.")]
     public string ClassName { get; set; }
 
     /// <summary>
@@ -60,10 +62,12 @@ namespace SpotWelder.Lib.Models
 
     /// <summary> Name of the subject with the `Record` suffix.</summary>
     /// <example> Subject named: `Task`, the record would be `TaskRecord`.</example>
+    [Obsolete("Going to phase this out. Use SubjectName instead.")]
     public string RecordName { get; set; }
 
     /// <summary> Name of the subject with the `Model` suffix.</summary>
     /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
+    [Obsolete("Going to phase this out. Use SubjectName instead.")]
     public string ModelName { get; set; }
 
     /// <summary> Name of the subject in camelCase and pluralized.</summary>
@@ -111,6 +115,9 @@ namespace SpotWelder.Lib.Models
     /// <summary>Formatter for formatting asynchronous syntax if elected. Otherwise, formatted as synchronous syntax.</summary>
     public AsynchronicityFormatStrategyBase AsynchronicityFormatStrategy { get; set; }
 
+    /// <summary>Formatter for formatting containing namespaces and using directives depending on the <see cref="ArchitectureType"/> chosen.</summary>
+    public ArchitectureStrategyBase ArchitectureStrategy { get; set; }
+
     //TODO: Not sure if I need this anymore
     //The intention here was to be able to add a namespace that is needed in every class,
     //but with global namespaces now available this is obsolete
@@ -120,9 +127,10 @@ namespace SpotWelder.Lib.Models
 
     public ClassInstructions Clone()
     {
-      var c = new ClassInstructions
+      var clone = new ClassInstructions
       {
         SubjectName = SubjectName,
+        ClassName = ClassName,
         RecordName = RecordName,
         EntityName = EntityName,
         ModelName = ModelName,
@@ -138,13 +146,14 @@ namespace SpotWelder.Lib.Models
         ArchitectureType = ArchitectureType,
         TableQuery = TableQuery.Clone(),
         AsynchronicityFormatStrategy = AsynchronicityFormatStrategy.Clone(),
+        ArchitectureStrategy = ArchitectureStrategy.Clone(),
         ClassAttributes = [..ClassAttributes],
         UsingDirectives = [..UsingDirectives]
       };
 
-      foreach (var p in Properties) c.Properties.Add(p.Clone());
+      foreach (var p in Properties) clone.Properties.Add(p.Clone());
 
-      return c;
+      return clone;
     }
   }
 }

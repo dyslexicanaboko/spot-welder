@@ -1,7 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace SpotWelder.Lib.Services.Generators
@@ -9,6 +8,7 @@ namespace SpotWelder.Lib.Services.Generators
   public class MapperGenerator
     : GeneratorBase
   {
+    //TODO: Remove the mappings
     private static readonly Dictionary<GenerationElections, TemplateInfo> ChildTemplates = new()
     {
       { GenerationElections.MapEntityToModel, new TemplateInfo("MapEntityToModel.cs.template", ["Entities", "Models"]) },
@@ -35,22 +35,23 @@ namespace SpotWelder.Lib.Services.Generators
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      instructions.ClassName = instructions.SubjectName;
+      var template = GetTemplateAsStringBuilder(TemplateName);
 
-      var template = new StringBuilder(GetTemplate(TemplateName));
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
 
-      template.Replace("{{Body}}", BuildBodyTemplate(instructions.UsingDirectives, instructions.Elections));
-      SetContainingNamespace(template);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.ClassName);
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Dynamic);
+
+      template.Replace("{{Body}}", BuildBodyTemplate(instructions.Elections));
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{EntityName}}", instructions.EntityName);
-      template.Replace("{{RecordName}}", instructions.RecordName);
-      template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{ObjectInitializer}}", FormatObjectInitializerBody(instructions.Properties, "entity"));
 
-      var result = GetFormattedCSharpResult($"{instructions.ClassName}Mapper.cs", template);
+      var result = GetFormattedCSharpResult($"{instructions.SubjectName}Mapper.cs", template);
 
       result.CorrespondingInterface = GenerateInterface(
         instructions,
@@ -60,31 +61,18 @@ namespace SpotWelder.Lib.Services.Generators
       return result;
     }
 
-    private string BuildBodyTemplate(HashSet<string> namespaces, GenerationElections elections)
+    private string BuildBodyTemplate(GenerationElections elections)
     {
       var childElections = GetChildElections(elections, Election);
 
       var sb = new StringBuilder();
-      var hs = new HashSet<string>();
-
+      
       foreach (var child in childElections)
       {
-        var templateInfo = ChildTemplates[child];
-
-        var arr = templateInfo.Namespaces.Select(x => $"{{{{RootContainingNamespace}}}}.{x}").ToArray();
-
-        //HashSet will prevent duplicates.
-        foreach (var ns in arr)
-          hs.Add(ns);
-
         sb
-          .AppendLine(GetTemplate(templateInfo.TemplateName))
+          .AppendLine(GetTemplate(ChildTemplates[child].TemplateName))
           .AppendLine();
       }
-
-      //Add to main list of namespaces
-      foreach (var ns in hs)
-        namespaces.Add(ns);
       
       return sb.ToString();
     }

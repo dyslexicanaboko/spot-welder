@@ -1,9 +1,8 @@
 ﻿{{UsingDirectives}}
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}}
+namespace {{AbsoluteContainingNamespace}};
+
+public interface I{{SubjectName}}Mapper
 {
-  public interface I{{ClassName}}Mapper
-  {
-    {{Contracts}}
-  }
+  {{Contracts}}
 }
