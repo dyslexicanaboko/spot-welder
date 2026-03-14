@@ -83,7 +83,7 @@ namespace SpotWelder.Tests.Lib.Services
       var svc = new QueryToClassService(
         repoQueryToClass,
         repoGeneral,
-        new CodeGenerationFactory(new[] { new ClassEntityGenerator() }));
+        new CodeGenerationFactory(new[] { new EntityGenerator() }));
 
       //Act
       var actual = svc.Generate(p).Single().Contents;

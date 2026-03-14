@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -118,7 +120,22 @@ namespace SpotWelder.Ui.Controls
       if (e.Command != ApplicationCommands.Copy) return;
 
       //This is for when the user highlights a section and copies it with Ctrl + C.
-      Clipboard.SetText(TxtResult.SelectedText);
+      //The clipboard can be locked by another process, so retry a few times.
+      Application.Current.Dispatcher.Invoke(() =>
+      {
+        for (var i = 0; i < 10; i++)
+        {
+          try
+          {
+            Clipboard.SetText(TxtResult.SelectedText);
+            return;
+          }
+          catch (COMException ex) when (ex.ErrorCode == unchecked((int)0x800401D0))
+          {
+            Thread.Sleep(10);
+          }
+        }
+      });
     }
   }
 }

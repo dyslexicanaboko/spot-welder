@@ -13,7 +13,7 @@ namespace SpotWelder.Lib.Services.Generators
   /// This is a one-off generator that's not part of the normal generation process.
   /// Used for generating simple entities for the purposes of mock data generation.
   /// </summary>
-  public class ClassEntitySimpleGenerator
+  public class EntitySimpleGenerator
     : GeneratorBase
   {
     public override GenerationElections Election => GenerationElections.None; //Cannot be elected

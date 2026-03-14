@@ -7,7 +7,7 @@ namespace SpotWelder.Lib.Services.Generators
 {
   //TODO: Not sure if I am going to keep this anymore. Has not been practical.
   [Obsolete("Not sure if I am going to keep this anymore. Has not been practical.")]
-  public class ClassInterfaceGenerator
+  public class InterfaceGenerator
     : GeneratorBase
   {
     public override GenerationElections Election => GenerationElections.Interface;

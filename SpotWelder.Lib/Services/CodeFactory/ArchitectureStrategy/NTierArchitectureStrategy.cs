@@ -32,24 +32,32 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
     ["BaseRepository.cs.template"] = "DataAccess",
     ["ColumnSchema.cs.template"] = "DataAccess.Utility",
     ["DateTimeManager.cs.template"] = "Managers",
+    ["ErrorModel.cs.template"] = "Controllers",
     ["IAppConfiguration.cs.template"] = string.Empty,
     ["IFluentValidation.cs.template"] = "Validation",
     ["IRepository.cs.template"] = "DataAccess",
     ["UpdateInstruction.cs.template"] = "Managers.Utility"
   };
 
+  //These templates will always need these namespaces to be imported
   protected override Dictionary<string, string[]> StaticTemplateUsingDirectives => new()
   {
     {"ApiController.cs.template", ["Managers", "Mappers", "Models", "Models.Client"]},
     {"ApiControllerReadsOnly.cs.template", ["Managers", "Mappers", "Models"]},
     {"BaseManager.cs.template", ["Managers.Utility"]},
-    {"BaseRepository.cs.template", ["DataAccess.Utility"]},
+    {"BaseRepository.cs.template", ["DataAccess.Utility", "Managers.Utility", "System.Data", "Dapper"]},
     {"EntityEqualityComparer.cs.template", ["Entities"]},
     {"EntityValidation.cs.template", ["Entities"]},
+    {"IManager.cs.template", ["Entities"]},
+    {"IRepositoryDapper.cs.template", ["Records"]},
     {"Manager.cs.template", ["DataAccess", "Entities", "Mappers", "Validation"]},
     {"ManagerReadsOnly.cs.template", ["DataAccess", "Entities", "Mappers", "Validation"]},
     {"ModelCreated.cs.template", ["Entities"]},
     {"ModelPatch.cs.template", ["Entities"]},
+    {"RepositoryDapper.cs.template", ["Entities", "System.Data", "Dapper"]},
+    {"RepositoryDapperReadsOnly.cs.template", ["Entities", "System.Data", "Dapper"]},
+    {"ServiceSerializationCsv.cs.template", ["Entities"]},
+    {"ServiceSerializationJson.cs.template", ["Entities"]},
   };
 
   //These are the templates that have dynamic using directives based on elections.
@@ -80,6 +88,7 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
   private readonly Dictionary<GenerationElections, string[]> _usingDirectives = new()
   {
     { GenerationElections.CreateModel, ["Models.Client"] },
+    { GenerationElections.Entity, ["Entities"] },
     { GenerationElections.MapCreateModelToEntity, ["Entities", "Models.Client"] },
     { GenerationElections.MapEntityToCreatedModel, ["Entities", "Models.Client"] },
     { GenerationElections.MapEntityToModel, ["Entities", "Models"] },
@@ -87,7 +96,7 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
     { GenerationElections.MapModelToEntity, ["Entities", "Models"] },
     { GenerationElections.MapPatchModelToEntity, ["Entities", "Models.Client"] },
     { GenerationElections.MapRecordToEntity, ["Entities", "Records"] },
-    { GenerationElections.Model, ["Entities"] },
+    { GenerationElections.Model, ["Models"] },
     { GenerationElections.PatchModel, ["Models.Client"] },
     { GenerationElections.Record, ["Records"] },
   };
@@ -97,14 +106,14 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
   public override NamespaceModel ResolveAbsoluteContainingNamespace(GenerationElections election)
     => new(
       ContainingNamespaces.TryGetValue(election, out var containingNamespace)
-      ? $"{RootContainingNamespace}.{containingNamespace}"
+      ? Join(RootContainingNamespace, containingNamespace)
       : RootContainingNamespace, 
       containingNamespace ?? string.Empty);
 
   public override NamespaceModel ResolveAbsoluteContainingNamespace(string immutableTemplateName)
     => new (
       ContainingNamespacesForImmutables.TryGetValue(immutableTemplateName, out var containingNamespace)
-      ? $"{RootContainingNamespace}.{containingNamespace}"
+      ? Join(RootContainingNamespace, containingNamespace)
       : RootContainingNamespace,
       containingNamespace ?? string.Empty);
 
@@ -112,7 +121,7 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
   {
     if(!StaticTemplateUsingDirectives.TryGetValue(templateName, out var staticUsingDirectives)) return;
 
-    usingDirectives.AddRange(staticUsingDirectives.Select(cn => $"{RootContainingNamespace}.{cn}"));
+    usingDirectives.AddRange(staticUsingDirectives.Select(cn => Join(RootContainingNamespace, cn)));
   }
 
   //Each generator already has the logic baked in on when to add a namespace for NTier
@@ -138,7 +147,7 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
 
   private string[] ResolveUsingDirectives(GenerationElections election)
     => _usingDirectives.TryGetValue(election, out var usingDirectives)
-      ? usingDirectives.Select(cn => $"{RootContainingNamespace}.{cn}").ToArray()
+      ? usingDirectives.Select(cn => Join(RootContainingNamespace, cn)).ToArray()
       : [];
 
   public override ArchitectureStrategyBase Clone() 

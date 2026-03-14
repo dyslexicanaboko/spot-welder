@@ -29,7 +29,7 @@ public class PostgresTests
       new QueryToClassRepository(),
       new GeneralDatabaseQueries(),
       new CodeGenerationFactory(new GeneratorBase[] { 
-        new ClassEntityGenerator(),
+        new EntityGenerator(),
         new MapperGenerator()
       }));
 

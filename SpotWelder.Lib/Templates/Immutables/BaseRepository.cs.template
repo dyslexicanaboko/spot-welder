@@ -1,7 +1,5 @@
-﻿using Dapper;
-{{UsingDirectives}}
+﻿{{UsingDirectives}}
 {{SqlUsingDirectives}}
-using System.Data;
 
 namespace {{AbsoluteContainingNamespace}};
 

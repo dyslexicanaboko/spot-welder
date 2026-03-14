@@ -1,5 +1,5 @@
 ﻿using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
+using SpotWelder.Lib.Services.CodeFactory.SqlEngineStrategy;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -53,11 +53,11 @@ namespace SpotWelder.Lib.Services.Generators
         var template = new StringBuilder(File.ReadAllText(fi.FullName))
           .Replace("{{AbsoluteContainingNamespace}}", namespaceModel.AbsoluteContainingNamespace);
 
-        SetUsingDirectives(
+        SetUsingDirectivesStatic(
           template,
           instructions.ArchitectureStrategy,
           usingDirectives,
-          ResolutionMethod.Static);
+          templateName);
 
         if (templateName == "BaseRepository.cs.template")
         {

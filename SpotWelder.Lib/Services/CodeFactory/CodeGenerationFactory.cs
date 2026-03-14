@@ -17,7 +17,7 @@ namespace SpotWelder.Lib.Services.CodeFactory
     public CodeGenerationFactory(IEnumerable<GeneratorBase> generators)
     {
       _generators = generators
-        .Where(g => g.GetType().Name != nameof(ClassEntitySimpleGenerator))
+        .Where(g => g.GetType().Name != nameof(EntitySimpleGenerator))
         .ToDictionary(g => g.Election);
     }
 

@@ -2,7 +2,7 @@
 
 namespace SpotWelder.Lib.Services.Generators
 {
-  public class ClassRecordGenerator
+  public class RecordGenerator
     : GeneratorBase
   {
     public override GenerationElections Election => GenerationElections.Record;

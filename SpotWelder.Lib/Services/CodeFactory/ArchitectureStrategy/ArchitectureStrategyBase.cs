@@ -23,4 +23,9 @@ public abstract class ArchitectureStrategyBase(string rootContainingNamespace)
   public abstract void ResolveDynamicUsingDirectives(HashSet<string> usingDirectives, string templateName, GenerationElections elections);
 
   public abstract ArchitectureStrategyBase Clone();
+
+  protected virtual string Join(string rootContainingNamespace, string containingNamespace)
+    => string.IsNullOrWhiteSpace(containingNamespace)
+      ? rootContainingNamespace
+      : $"{rootContainingNamespace}.{containingNamespace}";
 }

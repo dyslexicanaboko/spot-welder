@@ -32,12 +32,6 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected abstract string TemplateName { get; }
 
-    /// <summary>
-    /// The namespace where the generated content will reside.
-    /// Can be used to name folders too.
-    /// </summary>
-    //protected virtual string ContainingNamespace => string.Empty;
-
     public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
 
     protected virtual GeneratedResult GetFormattedCSharpResult(
@@ -290,26 +284,29 @@ namespace SpotWelder.Lib.Services.Generators
         namespaceModel.AbsoluteContainingNamespace);
     }
 
-    protected StringBuilder SetUsingDirectives(
+    protected StringBuilder SetUsingDirectivesStatic(
       StringBuilder sb, 
       ArchitectureStrategyBase architectureStrategy,
       HashSet<string> usingDirectives,
-      ResolutionMethod resolutionMethod,
+      string? overrideTemplateName = null)
+    {
+      overrideTemplateName ??= TemplateName;
+
+      architectureStrategy.ResolveStaticUsingDirectives(usingDirectives, overrideTemplateName);
+
+      return sb.Replace("{{UsingDirectives}}", FormatUsingDirectives(usingDirectives));
+    }
+
+    protected StringBuilder SetUsingDirectivesDynamic(
+      StringBuilder sb,
+      ArchitectureStrategyBase architectureStrategy,
+      HashSet<string> usingDirectives,
+      GenerationElections elections,
       string? templateName = null)
     {
       templateName ??= TemplateName;
 
-      switch (resolutionMethod)
-      {
-        case ResolutionMethod.Static:
-          architectureStrategy.ResolveStaticUsingDirectives(usingDirectives, templateName);
-          break;
-        case ResolutionMethod.Dynamic:
-          architectureStrategy.ResolveDynamicUsingDirectives(usingDirectives, templateName, Election);
-          break;
-        default:
-          throw new NotSupportedException($"The resolution method {resolutionMethod} is not supported. Check the implementation of {nameof(ArchitectureStrategyBase)} and try again.");
-      }
+      architectureStrategy.ResolveDynamicUsingDirectives(usingDirectives, templateName, elections);
 
       return sb.Replace("{{UsingDirectives}}", FormatUsingDirectives(usingDirectives));
     }
@@ -330,13 +327,23 @@ namespace SpotWelder.Lib.Services.Generators
 
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
-      //Depending on the elections, the using directives will change.
-      SetUsingDirectives(
-        template,
-        instructions.ArchitectureStrategy,
-        instructions.UsingDirectives,
-        templateName == "IMapper.cs.template" ? ResolutionMethod.Dynamic : ResolutionMethod.Static,
-        templateName);
+      if (templateName == "IMapper.cs.template")
+      {
+        SetUsingDirectivesDynamic(
+          template,
+          instructions.ArchitectureStrategy,
+          instructions.UsingDirectives,
+          instructions.Elections,
+          templateName);
+      }
+      else
+      {
+        SetUsingDirectivesStatic(
+          template,
+          instructions.ArchitectureStrategy,
+          instructions.UsingDirectives,
+          templateName);
+      }
 
       template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{Contracts}}", ExtractCSharpClassContracts(classResult.Contents));

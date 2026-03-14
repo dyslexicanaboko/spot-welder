@@ -2,7 +2,7 @@
 
 namespace SpotWelder.Lib.Services.Generators
 {
-  public class ClassEntityValidationGenerator
+  public class EntityValidationGenerator
     : GeneratorBase
   {
     public override GenerationElections Election => GenerationElections.Validation;
@@ -18,11 +18,10 @@ namespace SpotWelder.Lib.Services.Generators
 
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
-      SetUsingDirectives(
+      SetUsingDirectivesStatic(
         template,
         instructions.ArchitectureStrategy,
-        instructions.UsingDirectives,
-        ResolutionMethod.Static);
+        instructions.UsingDirectives);
 
       template.Replace("{{SubjectName}}", instructions.SubjectName); //Subject is the prefix only
 

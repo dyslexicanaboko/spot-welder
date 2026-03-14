@@ -15,6 +15,11 @@ namespace SpotWelder.Lib.Services.Generators
 
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
+      SetUsingDirectivesStatic(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives);
+
       template.Replace("{{EntityName}}", instructions.EntityName);
 
       return GetFormattedCSharpResult("SerializationService_Csv.cs", template, containingNamespace);

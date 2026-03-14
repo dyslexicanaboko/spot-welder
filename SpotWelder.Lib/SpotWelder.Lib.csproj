@@ -51,6 +51,9 @@
 		<Content Include="Templates\Immutables\BaseMapper.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Include="Templates\Immutables\ErrorModel.cs.template">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Templates\Immutables\DateTimeManager.cs.template">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

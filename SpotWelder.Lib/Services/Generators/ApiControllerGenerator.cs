@@ -24,11 +24,10 @@ namespace SpotWelder.Lib.Services.Generators
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       //The same namespaces are always needed which is why it's static
-      SetUsingDirectives(
+      SetUsingDirectivesStatic(
         template,
         instructions.ArchitectureStrategy,
         instructions.UsingDirectives,
-        ResolutionMethod.Static,
         templateName);
 
       template.Replace("{{ApiRoute}}", instructions.ApiRoute);

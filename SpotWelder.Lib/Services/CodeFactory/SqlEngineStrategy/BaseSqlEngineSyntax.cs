@@ -1,11 +1,10 @@
 ﻿using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 using SpotWelder.Lib.Services.TypeMappings;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace SpotWelder.Lib.Services.Generators.SqlEngineStrategies
+namespace SpotWelder.Lib.Services.CodeFactory.SqlEngineStrategy
 {
   public abstract class BaseSqlEngineSyntax
   {

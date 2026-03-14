@@ -3,15 +3,15 @@ using FluentValidation;
 
 namespace {{AbsoluteContainingNamespace}};
 
-public interface I{{SubjectName}}EntityValidation
+public interface I{{SubjectName}}Validation
     : IFluentValidation<{{SubjectName}}Entity>
 {
 }
 
-public class {{SubjectName}}EntityValidation
-  : AbstractValidator<{{SubjectName}}Entity>, I{{SubjectName}}EntityValidation
+public class {{SubjectName}}Validation
+  : AbstractValidator<{{SubjectName}}Entity>, I{{SubjectName}}Validation
 {
-  public {{SubjectName}}EntityValidation()
+  public {{SubjectName}}Validation()
   {
     {{Validation}}
   }

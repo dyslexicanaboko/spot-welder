@@ -38,7 +38,7 @@ namespace SpotWelder.Lib.Services
       //Get the metadata needed about the entity
       var instructions = GetInstructions(parameters);
 
-      var generator = new ClassEntitySimpleGenerator();
+      var generator = new EntitySimpleGenerator();
 
       //Generate the string representation of the class for preview
       var res = generator.FillTemplate(instructions);
@@ -60,7 +60,7 @@ namespace SpotWelder.Lib.Services
 
       var dt = GetRowData(parameters.ServerConnection, top);
 
-      var generator = new ClassEntitySimpleGenerator();
+      var generator = new EntitySimpleGenerator();
       generator.RowProcessed += MockData_RowProcessed;
 
       //Generate the string representation of the class for preview

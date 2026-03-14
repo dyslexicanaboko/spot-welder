@@ -27,11 +27,10 @@ namespace SpotWelder.Lib.Services.Generators
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       //Depending on the elections, the using directives will change.
-      SetUsingDirectives(
+      SetUsingDirectivesStatic(
         template,
         instructions.ArchitectureStrategy,
         instructions.UsingDirectives,
-        ResolutionMethod.Static,
         templateName);
 
       template.Replace("{{SubjectName}}", instructions.SubjectName);

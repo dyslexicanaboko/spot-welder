@@ -226,13 +226,16 @@
       TxtSourceSqlText.Text = "dbo.Stock";
       TxtRootContainingNamespace.Text = "Namespace2";
       TxtSubjectName.Text = "Stock";
+      RbArchitectureNTier.IsChecked = false;
+      RbArchitectureFeatureBased.IsChecked = true;
 
       CbRepoDapper.IsChecked = true;
 
       //Entity
       CbClassEntity.IsChecked = true;
-      CbClassEntityIEquatable.IsChecked = false;
-      CbClassEntityIComparable.IsChecked = false;
+      CbClassEntityIEquatable.IsChecked = true;
+      CbClassEntityIComparable.IsChecked = true;
+      CbClassEntityEqualityComparer.IsChecked = true;
 
       //Interface
       CbClassInterface.IsChecked = false;
@@ -244,9 +247,8 @@
       CbClassPatchModel.IsChecked = true;
 
       //Services
-      CbClassEntityEqualityComparer.IsChecked = false;
-      CbSerializeCsv.IsChecked = false;
-      CbSerializeJson.IsChecked = false;
+      CbSerializeCsv.IsChecked = true;
+      CbSerializeJson.IsChecked = true;
       CbValidation.IsChecked = true;
 
       //Layers
@@ -256,7 +258,7 @@
 
       //Mappings
       CbMapEntityToModel.IsChecked = true;
-      CbMapModelToEntity.IsChecked = false;
+      CbMapModelToEntity.IsChecked = true;
       CbMapCreateModelToEntity.IsChecked = true;
       CbMapPatchModelToEntity.IsChecked = true;
       CbMapEntityToCreatedModel.IsChecked = true;

@@ -1,4 +1,5 @@
 ﻿//https://www.nuget.org/packages/Newtonsoft.Json/
+{{UsingDirectives}}
 using Newtonsoft.Json;
 
 namespace {{AbsoluteContainingNamespace}};

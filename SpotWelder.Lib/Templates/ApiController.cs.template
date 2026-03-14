@@ -24,7 +24,7 @@ public class {{SubjectName}}Controller
 
   // GET api/v1/{{ApiRoute}}/5
   [HttpGet("{id:{{PrimaryKeyType}}}")]
-  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{SubjectName}}V1Model))]
   [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
   public async Task<ActionResult<{{SubjectName}}V1Model>> Get({{PrimaryKeyType}} id)
   {

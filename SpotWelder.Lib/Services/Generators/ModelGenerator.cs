@@ -4,7 +4,7 @@ using System;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-  public class ClassModelGenerator
+  public class ModelGenerator
     : GeneratorBase
   {
     public override GenerationElections Election => GenerationElections.Model;
@@ -25,13 +25,14 @@ namespace SpotWelder.Lib.Services.Generators
 
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
-      SetUsingDirectives(
+      SetUsingDirectivesDynamic(
         template,
         instructions.ArchitectureStrategy,
         instructions.UsingDirectives,
-        ResolutionMethod.Dynamic);
+        instructions.Elections);
 
       //Full template replacements
+      template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{Interface}}", 

@@ -39,11 +39,11 @@ namespace SpotWelder.Lib.Services.Generators
 
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
-      SetUsingDirectives(
+      SetUsingDirectivesDynamic(
         template,
         instructions.ArchitectureStrategy,
         instructions.UsingDirectives,
-        ResolutionMethod.Dynamic);
+        instructions.Elections);
 
       template.Replace("{{Body}}", BuildBodyTemplate(instructions.Elections));
       template.Replace("{{SubjectName}}", instructions.SubjectName);

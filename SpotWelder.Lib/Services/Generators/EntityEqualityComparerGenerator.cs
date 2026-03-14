@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-  public class ClassEntityEqualityComparerGenerator
+  public class EntityEqualityComparerGenerator
     : GeneratorBase
   {
     public override GenerationElections Election => GenerationElections.EntityEqualityComparer;
@@ -21,11 +21,10 @@ namespace SpotWelder.Lib.Services.Generators
 
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
-      SetUsingDirectives(
+      SetUsingDirectivesStatic(
         template,
         instructions.ArchitectureStrategy,
-        instructions.UsingDirectives,
-        ResolutionMethod.Static);
+        instructions.UsingDirectives);
 
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));

@@ -3,7 +3,7 @@
 namespace {{AbsoluteContainingNamespace}};
 
 {{ClassAttributes}}
-public class {{ClassName}}{{Interfaces}}
+public class {{SubjectName}}Entity{{Interfaces}}
 {
   {{Constructors}}
   

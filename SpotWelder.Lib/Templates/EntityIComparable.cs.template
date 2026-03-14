@@ -1,6 +1,6 @@
 ﻿  public int CompareTo(object obj)
   {
-    var other = ({{ClassName}})obj;
+    var other = ({{SubjectName}}Entity)obj;
 
     if ({{Property1}} == other.{{Property1}})
     {

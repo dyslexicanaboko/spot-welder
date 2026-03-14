@@ -49,8 +49,11 @@ namespace SpotWelder.Ui
 
       if (TxtSourceSqlText.IsTextInvalid(obj.ServerConnection.SourceSqlType + " cannot be empty."))
         return null;
+      
+      var strategy = GetTableQueryFormatStrategy();
 
       obj.ServerConnection.SourceSqlText = TxtSourceSqlText.Text;
+      obj.ServerConnection.TableQuery = strategy.ParseTableName(TxtSourceSqlText.Text);
 
       if (_classCheckBoxGroup.HasTickedCheckBox())
         return obj;

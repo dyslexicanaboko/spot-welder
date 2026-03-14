@@ -1,0 +1,6 @@
+﻿namespace {{AbsoluteContainingNamespace}};
+
+public class ErrorModel
+{
+  //This is a stand in for a real Error Model
+}

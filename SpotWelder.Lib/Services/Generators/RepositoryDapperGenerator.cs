@@ -1,6 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
+using SpotWelder.Lib.Services.CodeFactory.SqlEngineStrategy;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -38,15 +38,13 @@ namespace SpotWelder.Lib.Services.Generators
 
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
-      SetUsingDirectives(
+      SetUsingDirectivesStatic(
         template,
         instructions.ArchitectureStrategy,
         instructions.UsingDirectives,
-        ResolutionMethod.Static,
         templateName);
 
       template.Replace("{{SubjectName}}", instructions.SubjectName);
-      template.Replace("{{SqlUsingDirectives}}", FormatUsingDirectives(syntax.SqlUsingDirectives));
       template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
       template.Replace("{{ParameterObject}}", syntax.ParameterObject);
       template.Replace("{{ParameterDbTypeProperty}}", syntax.ParameterDbTypeProperty);

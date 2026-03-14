@@ -11,11 +11,11 @@ namespace SpotWelder.Tests.Lib.Services.Generator
     public class ModelGeneratorSpotWelderTests
         : SpotWelderTestBase
     {
-        private readonly ClassEntityGenerator _generator;
+        private readonly EntityGenerator _generator;
 
         public ModelGeneratorSpotWelderTests()
         {
-            _generator = new ClassEntityGenerator();
+            _generator = new EntityGenerator();
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace SpotWelder.Tests.Lib.Services.Generator
             var lst = new List<string>();
 
             //Act
-            var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatClassAttributes", lst);
+            var actual = InvokePrivateMethod<EntityGenerator, string>(_generator, "FormatClassAttributes", lst);
 
             //Assert
             Assert.That(string.Empty, Is.EqualTo(actual));
@@ -38,7 +38,7 @@ namespace SpotWelder.Tests.Lib.Services.Generator
             var lst = new List<string>();
 
             //Act
-            var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatNamespaces", lst);
+            var actual = InvokePrivateMethod<EntityGenerator, string>(_generator, "FormatNamespaces", lst);
 
             //Assert
             Assert.That(string.Empty, Is.EqualTo(actual));
@@ -51,7 +51,7 @@ namespace SpotWelder.Tests.Lib.Services.Generator
             var lst = new List<ClassMemberStrings>();
 
             //Act
-            var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatProperties", lst);
+            var actual = InvokePrivateMethod<EntityGenerator, string>(_generator, "FormatProperties", lst);
 
             //Assert
             Assert.That(string.Empty, Is.EqualTo(actual));
@@ -71,7 +71,7 @@ namespace SpotWelder.Tests.Lib.Services.Generator
             var expected = "[" + item + "]";
 
             //Act
-            var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatClassAttributes", lst);
+            var actual = InvokePrivateMethod<EntityGenerator, string>(_generator, "FormatClassAttributes", lst);
 
             //Assert
             Assert.That(expected, Is.EqualTo(actual));
@@ -91,7 +91,7 @@ namespace SpotWelder.Tests.Lib.Services.Generator
             var expected = "using " + item + ";";
 
             //Act
-            var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatNamespaces", lst);
+            var actual = InvokePrivateMethod<EntityGenerator, string>(_generator, "FormatNamespaces", lst);
 
             //Assert
             Assert.That(expected, Is.EqualTo(actual));
@@ -113,7 +113,7 @@ namespace SpotWelder.Tests.Lib.Services.Generator
             var expected = "        public int DoesNotMatter { get; set; }";
 
             //Act
-            var actual = InvokePrivateMethod<ClassEntityGenerator, string>(_generator, "FormatProperties", lst);
+            var actual = InvokePrivateMethod<EntityGenerator, string>(_generator, "FormatProperties", lst);
 
             //Assert
             Assert.That(expected, Is.EqualTo(actual));

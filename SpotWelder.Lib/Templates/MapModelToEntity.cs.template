@@ -1,2 +1,2 @@
-﻿public {{EntityName}}? ToEntity({{ModelName}}? model)
-      => model == null ? null : new {{EntityName}}(model);
+﻿public {{EntityName}}? ToEntity({{SubjectName}}V1Model? model)
+  => model == null ? null : new {{EntityName}}(model);

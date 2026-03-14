@@ -1,49 +1,48 @@
 ﻿using SpotWelder.Lib.Models;
-using SpotWelder.Lib.Services.CodeFactory;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace SpotWelder.Lib.Services.Generators.SqlEngineStrategies
+namespace SpotWelder.Lib.Services.CodeFactory.SqlEngineStrategy
 {
-  public class PostgresSyntax
+  public class SqlServerSyntax
     : BaseSqlEngineSyntax
   {
-    public PostgresSyntax(SqlEngine sqlEngine) 
+    public SqlServerSyntax(SqlEngine sqlEngine) 
       : base(sqlEngine)
     {
       
     }
 
     /// <inheritdoc />
-    public override HashSet<string> SqlUsingDirectives { get; protected set; } =
+    public override HashSet<string> SqlUsingDirectives { get; protected set; } = 
     [
-      "Npgsql",
-      "NpgsqlTypes"
+      "Microsoft.Data.SqlClient"
     ];
 
     /// <inheritdoc />
-    public override string ConnectionObject { get; protected set; } = "NpgsqlConnection";
+    public override string ConnectionObject { get; protected set; } = "SqlConnection";
 
     /// <inheritdoc />
-    public override string ParameterObject { get; protected set; } = "NpgsqlParameter";
+    public override string ParameterObject { get; protected set; } = "SqlParameter";
 
     /// <inheritdoc />
-    public override string ParameterDbTypeProperty { get; protected set; } = "NpgsqlDbType";
+    public override string ParameterDbTypeProperty { get; protected set; } = "SqlDbType";
 
     /// <inheritdoc />
-    public override string ParameterDbTypeEnum { get; protected set; } = "NpgsqlDbType";
+    public override string ParameterDbTypeEnum { get; protected set; } = "SqlDbType";
 
     /// <inheritdoc />
     public override ScopeIdentityValues GetScopeIdentity(string pkColumnName) => new()
     {
-      PrimaryKeyColumnName = $"{pkColumnName},",
-      PrimaryKeyDefault = "DEFAULT,",
-      ScopeIdentity = $"""
-      RETURNING {pkColumnName} AS PK;
+      PrimaryKeyColumnName = string.Empty,
+      PrimaryKeyDefault = string.Empty,
+      ScopeIdentity = """
+
+      SELECT SCOPE_IDENTITY() AS PK;
       """
     };
-
+    
     /// <inheritdoc />
     public override string FormatSqlParameter(ClassMemberStrings properties)
     {
@@ -56,9 +55,9 @@ namespace SpotWelder.Lib.Services.Generators.SqlEngineStrategies
         $"entity.{properties.Property}";
 
       var content =
-        $@"            p = new NpgsqlParameter();
+        $@"            p = new SqlParameter();
       p.ParameterName = ""@{properties.ColumnName}"";
-      p.NpgsqlDbType = NpgsqlDbType.{sqlDataType};
+      p.SqlDbType = SqlDbType.{sqlDataType};
       p.Value = {valueContent};";
 
       //TODO: Need to work through every type to see what the combinations are

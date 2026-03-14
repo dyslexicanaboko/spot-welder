@@ -1,6 +1,6 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Lib.Services.Generators.SqlEngineStrategies;
+using SpotWelder.Lib.Services.CodeFactory.SqlEngineStrategy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,11 +37,10 @@ namespace SpotWelder.Lib.Services.Generators
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       //The same namespaces are always needed which is why it's static
-      SetUsingDirectives(
+      SetUsingDirectivesStatic(
         template,
         instructions.ArchitectureStrategy,
         instructions.UsingDirectives,
-        ResolutionMethod.Static,
         templateName);
 
       template.Replace("{{ClassName}}", instructions.SubjectName); //TODO: Replace with SubjectName

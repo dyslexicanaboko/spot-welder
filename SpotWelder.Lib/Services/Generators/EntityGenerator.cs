@@ -1,6 +1,5 @@
 ﻿using SpotWelder.Lib.Models;
 using SpotWelder.Lib.Services.CodeFactory;
-using SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 using System.Collections.Generic;
 using System;
 using System.Text;
@@ -8,7 +7,7 @@ using System.Linq;
 
 namespace SpotWelder.Lib.Services.Generators
 {
-  public class ClassEntityGenerator
+  public class EntityGenerator
     : GeneratorBase
   {
     public override GenerationElections Election => GenerationElections.Entity;
@@ -25,8 +24,6 @@ namespace SpotWelder.Lib.Services.Generators
       //Child templates
       template.Replace("{{Interfaces}}", FillInterfaceImplementations(instructions.Elections));
       template.Replace("{{Constructors}}", FillConstructors(
-        instructions.ArchitectureStrategy, 
-        instructions.UsingDirectives, 
         instructions.Elections,
         instructions.EntityName));
       template.Replace("{{InterfaceMethods}}", FillInterfaceMethods(instructions.Elections));
@@ -34,16 +31,14 @@ namespace SpotWelder.Lib.Services.Generators
       SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       //Depending on the elections, the using directives will change.
-      SetUsingDirectives(
+      SetUsingDirectivesDynamic(
         template,
         instructions.ArchitectureStrategy,
         instructions.UsingDirectives,
-        ResolutionMethod.Dynamic);
+        instructions.Elections);
 
       //Full template replacements
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-      template.Replace("{{ModelName}}", instructions.ModelName);
-      template.Replace("{{RecordName}}", instructions.RecordName);
       template.Replace("{{ClassAttributes}}", FormatClassAttributes(instructions.ClassAttributes));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
@@ -87,7 +82,7 @@ namespace SpotWelder.Lib.Services.Generators
 
               break;
             case GenerationElections.EntityIEquatable:
-              lst.Add("IEquatable<{{ClassName}}>");
+              lst.Add("IEquatable<{{SubjectName}}Entity>");
 
               break;
             case GenerationElections.EntityIComparable:
@@ -126,8 +121,6 @@ namespace SpotWelder.Lib.Services.Generators
     }
 
     private string FillConstructors(
-      ArchitectureStrategyBase architectureStrategy, 
-      HashSet<string> usingDirectives, 
       GenerationElections elections,
       string className)
     {
@@ -158,7 +151,7 @@ namespace SpotWelder.Lib.Services.Generators
               break;
             case GenerationElections.Record:
               lst.Add(ConstructorTemplate(
-                "{{RecordName}}",
+                "{{SubjectName}}Record",
                 "record", 
                 "{{ConstructorFromRecord}}",
                 className));
@@ -166,7 +159,7 @@ namespace SpotWelder.Lib.Services.Generators
               break;
             case GenerationElections.Model:
               lst.Add(ConstructorTemplate(
-                "{{ModelName}}",
+                "{{SubjectName}}V1Model",
                 "model",
                 "{{ConstructorFromModel}}",
                 className));
