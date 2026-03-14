@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SpotWelder.Lib.Services.Generators;
 
@@ -146,11 +147,16 @@ public partial class GeneratorBase
     // Format the syntax tree
     var formattedRoot = Formatter.Format(syntaxTree.GetRoot(), workspace, options);
 
-    // Convert the formatted syntax tree back to a string
     var formattedCode = formattedRoot.ToFullString();
 
-    // Output the formatted code
-    return formattedCode;
+    // Remove blank lines immediately after opening braces
+    formattedCode = ReRemoveBlankLinesBeforeBraces().Replace(formattedCode, "$1");
+
+    // Remove blank lines immediately before closing braces
+    formattedCode = ReRemoveBlankLinesAfterBraces().Replace(formattedCode, "$1$3");
+
+    // Convert the formatted syntax tree back to a string
+    return formattedCode.Trim();
   }
 
   /// <summary>

@@ -4,80 +4,67 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 
-namespace SpotWelder.Lib.Services.Generators
+namespace SpotWelder.Lib.Services.Generators;
+
+/* Root base class broken down into partials
+ *  Contract creation
+ *  Namespace handling
+ *  Text formatting
+ *  Regular expressions */
+public abstract partial class GeneratorBase
 {
-  /* Root base class broken down into partials
-   *  Contract creation
-   *  Namespace handling
-   *  Text formatting */
-  public abstract partial class GeneratorBase
+  protected readonly string TemplatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
+
+  public abstract GenerationElections Election { get; }
+
+  protected abstract string TemplateName { get; }
+
+  public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
+
+  protected virtual GeneratedResult GetFormattedCSharpResult(
+    string fileNameWithExtension, 
+    StringBuilder contents,
+    string containingNamespace)
+    => new(
+      Election, 
+      fileNameWithExtension, 
+      FormatCSharp(contents.ToString()), 
+      containingNamespace);
+
+  protected virtual string GetTemplate(string templateName)
   {
-    [GeneratedRegex(@"^\s+$[\r\n]*", RegexOptions.Multiline)]
-    protected static partial Regex ReBlankLines();
+    var file = Path.Combine(TemplatesPath, templateName);
 
-    [GeneratedRegex(@"^\s+$^[\r\n]", RegexOptions.Multiline)]
-    protected static partial Regex ReBlankSpace();
+    return !File.Exists(file) ? 
+      throw new FileNotFoundException("Template file not found. Check the spelling and try again. Ex: ReadOnly vs. ReadsOnly", file) : 
+      File.ReadAllText(file);
+  }
 
-    [GeneratedRegex(@"^public .+ .+\(.*\)$")]
-    protected static partial Regex ReContracts();
+  protected virtual StringBuilder GetTemplateAsStringBuilder(string templateName)
+    => new(GetTemplate(templateName));
 
-    [GeneratedRegex("^public (async )?")]
-    protected static partial Regex RePublic();
+  protected static List<GenerationElections> GetChildElections(
+    GenerationElections elections,
+    GenerationElections parent)
+  {
+    var lst = new List<GenerationElections>();
 
-    protected readonly string TemplatesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
-
-    public abstract GenerationElections Election { get; }
-
-    protected abstract string TemplateName { get; }
-
-    public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
-
-    protected virtual GeneratedResult GetFormattedCSharpResult(
-      string fileNameWithExtension, 
-      StringBuilder contents,
-      string containingNamespace)
-      => new(
-        Election, 
-        fileNameWithExtension, 
-        FormatCSharp(contents.ToString()), 
-        containingNamespace);
-
-    protected virtual string GetTemplate(string templateName)
+    elections.GetFlags().ForEach(e =>
     {
-      var file = Path.Combine(TemplatesPath, templateName);
+      var fi = e.GetType().GetField(e.ToString());
 
-      return !File.Exists(file) ? 
-        throw new FileNotFoundException("Template file not found. Check the spelling and try again. Ex: ReadOnly vs. ReadsOnly", file) : 
-        File.ReadAllText(file);
-    }
+      if (fi == null) return;
 
-    protected virtual StringBuilder GetTemplateAsStringBuilder(string templateName)
-      => new(GetTemplate(templateName));
+      var attr = fi.GetCustomAttributes(false);
 
-    protected static List<GenerationElections> GetChildElections(
-      GenerationElections elections,
-      GenerationElections parent)
-    {
-      var lst = new List<GenerationElections>();
+      if (attr.Length == 0) return;
 
-      elections.GetFlags().ForEach(e =>
-      {
-        var fi = e.GetType().GetField(e.ToString());
+      var child = attr[0];
 
-        if (fi == null) return;
+      if(child is GenerationElectionChildAttribute childAttr && childAttr.Parent == parent) lst.Add(e);
+    });
 
-        var attr = fi.GetCustomAttributes(false);
-
-        if (attr.Length == 0) return;
-
-        var child = attr[0];
-
-        if(child is GenerationElectionChildAttribute childAttr && childAttr.Parent == parent) lst.Add(e);
-      });
-
-      return lst;
-    }
+    return lst;
   }
 }

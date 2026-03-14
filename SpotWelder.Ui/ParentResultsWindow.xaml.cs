@@ -186,7 +186,7 @@ namespace SpotWelder.Ui
     {
       using var dlg = new FolderBrowserDialog();
 
-      dlg.Description = "Select a folder to save all your files to.";
+      dlg.Description = @"Select a folder to save all your files to.";
       dlg.ShowNewFolderButton = true;
 
       var result = dlg.ShowDialog();
