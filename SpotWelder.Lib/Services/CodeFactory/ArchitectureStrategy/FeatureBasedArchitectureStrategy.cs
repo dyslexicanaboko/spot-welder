@@ -16,11 +16,11 @@ public class FeatureBasedArchitectureStrategy(string rootContainingNamespace)
 
   /// <param name="election"></param>
   /// <inheritdoc />
-  public override string ResolveAbsoluteContainingNamespace(GenerationElections election)
-    => RootContainingNamespace; //Requires the subject too...
+  public override NamespaceModel ResolveAbsoluteContainingNamespace(GenerationElections election)
+    => new (RootContainingNamespace, string.Empty); //Requires the subject too...
 
-  public override string ResolveAbsoluteContainingNamespace(string immutableTemplateName)
-    => RootContainingNamespace; //Requires the subject too...
+  public override NamespaceModel ResolveAbsoluteContainingNamespace(string immutableTemplateName)
+    => new (RootContainingNamespace, string.Empty); //Requires the subject too...
 
   public override void ResolveStaticUsingDirectives(HashSet<string> usingDirectives, string templateName)
   {

@@ -16,7 +16,7 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "RepositoryDapper.cs.template";
 
-    protected override string ContainingNamespace => "DataAccess";
+    
 
     //TODO: This cannot stay here, this is a temporary until I know where to take this
     private readonly string[] _excludedColumns = [ "UserId", "CreatedOn", "UpdatedOn", "User_Id", "Created_On", "Updated_On"];
@@ -36,7 +36,7 @@ namespace SpotWelder.Lib.Services.Generators
       
       var template = GetTemplateAsStringBuilder(templateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       SetUsingDirectives(
         template,
@@ -100,7 +100,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var result = GetFormattedCSharpResult(
         $"{instructions.SubjectName}{rt}Repository.cs", 
-        template);
+        template, containingNamespace);
 
       result.CorrespondingInterface = GenerateInterface(
         instructions,

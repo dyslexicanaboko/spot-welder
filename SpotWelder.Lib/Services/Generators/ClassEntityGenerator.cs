@@ -16,7 +16,7 @@ namespace SpotWelder.Lib.Services.Generators
     protected override string TemplateName => "Entity.cs.template";
 
     /// <inheritdoc />
-    protected override string ContainingNamespace => "Entities";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
@@ -31,7 +31,7 @@ namespace SpotWelder.Lib.Services.Generators
         instructions.EntityName));
       template.Replace("{{InterfaceMethods}}", FillInterfaceMethods(instructions.Elections));
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       //Depending on the elections, the using directives will change.
       SetUsingDirectives(
@@ -62,7 +62,7 @@ namespace SpotWelder.Lib.Services.Generators
       //The user is supposed to update the comparison logic based on their needs, but this serves as a starting point.
       template.Replace("{{Property1}}", instructions.Properties.First().Property);
       
-      return GetFormattedCSharpResult($"{instructions.EntityName}.cs", template);
+      return GetFormattedCSharpResult($"{instructions.EntityName}.cs", template, containingNamespace);
     }
 
     private static string FillInterfaceImplementations(GenerationElections elections)
@@ -200,9 +200,6 @@ namespace SpotWelder.Lib.Services.Generators
         string.Empty, 
         string.Empty, 
         className));
-
-      //Using directives are only included based on the elections provided which is why it's conditional.
-      architectureStrategy.ResolveDynamicUsingDirectives(usingDirectives, TemplateName, elections);
 
       return string.Join(Environment.NewLine + Environment.NewLine, lst);
     }

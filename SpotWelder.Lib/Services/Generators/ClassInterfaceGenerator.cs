@@ -25,7 +25,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template);
+      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template, string.Empty);
     }
 
     protected override string FormatProperties(IList<ClassMemberStrings> properties)

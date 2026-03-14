@@ -10,13 +10,8 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "ApiController.cs.template";
 
-    /// <inheritdoc />
-    protected override string ContainingNamespace => "Controllers";
-
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
-      instructions.ClassName = instructions.SubjectName;
-
       var templateName = TemplateName;
 
       /* When a query is provided, it's very likely it cannot handle CUD.
@@ -26,6 +21,8 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = GetTemplateAsStringBuilder(templateName);
 
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
+
       //The same namespaces are always needed which is why it's static
       SetUsingDirectives(
         template,
@@ -34,15 +31,10 @@ namespace SpotWelder.Lib.Services.Generators
         ResolutionMethod.Static,
         templateName);
 
-      SetContainingNamespace(template);
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
       template.Replace("{{ApiRoute}}", instructions.ApiRoute);
       template.Replace("{{SubjectName}}", instructions.SubjectName);
-      template.Replace("{{ClassName}}", instructions.ClassName);
-      template.Replace("{{ModelName}}", instructions.ModelName);
       template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
 
       instructions.AsynchronicityFormatStrategy.ReplaceTags(template);
 
@@ -54,7 +46,7 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
 
-      return GetFormattedCSharpResult($"{instructions.ClassName}V1Controller.cs", template);
+      return GetFormattedCSharpResult($"{instructions.SubjectName}V1Controller.cs", template, containingNamespace);
     }
   }
 }

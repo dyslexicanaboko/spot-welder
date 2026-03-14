@@ -13,11 +13,11 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       template.Replace("{{EntityName}}", instructions.EntityName);
 
-      return GetFormattedCSharpResult("SerializationService_Csv.cs", template);
+      return GetFormattedCSharpResult("SerializationService_Csv.cs", template, containingNamespace);
     }
   }
 }

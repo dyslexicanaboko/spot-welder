@@ -11,7 +11,7 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "Manager.cs.template";
 
-    protected override string ContainingNamespace => "Managers";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
@@ -24,7 +24,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var template = GetTemplateAsStringBuilder(templateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       //Depending on the elections, the using directives will change.
       SetUsingDirectives(
@@ -48,7 +48,7 @@ namespace SpotWelder.Lib.Services.Generators
         template.Replace("{{PrimaryKeyType}}", pk.SystemTypeAlias); //int
       }
 
-      var result = GetFormattedCSharpResult($"{instructions.SubjectName}Manager.cs", template);
+      var result = GetFormattedCSharpResult($"{instructions.SubjectName}Manager.cs", template, containingNamespace);
 
       result.CorrespondingInterface = GenerateInterface(
         instructions,

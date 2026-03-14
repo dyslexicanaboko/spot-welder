@@ -10,19 +10,19 @@ namespace SpotWelder.Lib.Services.Generators
     protected override string TemplateName => "Record.cs.template";
 
     /// <inheritdoc />
-    protected override string ContainingNamespace => "Records";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
       
       //Full template replacements
       template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{Properties}}", FormatPropertiesForRecord(instructions.Properties));
       
-      return GetFormattedCSharpResult($"{instructions.SubjectName}Record.cs", template);
+      return GetFormattedCSharpResult($"{instructions.SubjectName}Record.cs", template, containingNamespace);
     }
   }
 }

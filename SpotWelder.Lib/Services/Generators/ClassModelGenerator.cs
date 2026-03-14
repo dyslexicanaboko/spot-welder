@@ -12,7 +12,7 @@ namespace SpotWelder.Lib.Services.Generators
     protected override string TemplateName => "Model.cs.template";
 
     /// <inheritdoc />
-    protected override string ContainingNamespace => "Models";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
@@ -23,7 +23,7 @@ namespace SpotWelder.Lib.Services.Generators
       //Child templates
       template.Replace("{{Constructors}}", FillConstructors(instructions.Elections, className));
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       SetUsingDirectives(
         template,
@@ -43,7 +43,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{ConstructorFromEntity}}", FormatConstructorBody(instructions.Properties, "entity"));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
       
-      return GetFormattedCSharpResult($"{className}.cs", template);
+      return GetFormattedCSharpResult($"{className}.cs", template, containingNamespace);
     }
 
     private string FillConstructors(GenerationElections elections, string className)

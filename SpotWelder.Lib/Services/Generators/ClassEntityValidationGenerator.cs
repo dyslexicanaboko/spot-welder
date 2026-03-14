@@ -10,13 +10,13 @@ namespace SpotWelder.Lib.Services.Generators
     protected override string TemplateName => "EntityValidation.cs.template";
 
     /// <inheritdoc />
-    protected override string ContainingNamespace => "Validation";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       SetUsingDirectives(
         template,
@@ -29,7 +29,7 @@ namespace SpotWelder.Lib.Services.Generators
       //Validation of all properties by default
       template.Replace("{{Validation}}", FormatPropertiesForValidation(instructions.Properties));
 
-      return GetFormattedCSharpResult($"{instructions.SubjectName}Validation.cs", template);
+      return GetFormattedCSharpResult($"{instructions.SubjectName}Validation.cs", template, containingNamespace);
     }
   }
 }

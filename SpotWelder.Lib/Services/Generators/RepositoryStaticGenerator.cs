@@ -15,7 +15,7 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "RepositoryStatic.cs.template";
 
-    protected override string ContainingNamespace => "DataAccess";
+    //protected override string ContainingNamespace => "DataAccess";
 
     //TODO: Modify to handle reads-only version
     //TODO: Modify to produce interface
@@ -23,20 +23,29 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var syntax = BaseSqlEngineSyntax.GetSyntax(instructions.SqlEngine);
 
-      var strTemplate = GetTemplate(TemplateName);
+      var templateName = TemplateName;
 
-      var template = new StringBuilder(strTemplate);
+      //TODO: Needs readonly version selection
+
+      var template = GetTemplateAsStringBuilder(templateName);
 
       /* Context
        * ClassName: Refers to the name of THIS class that is being generated "Table1Repository.cs"
        * EntityName: Refers to the existing source Entity Class assumed to have been generated already "Table1Entity.cs"
        * ModelName: Refers to the existing Model Class that compliments the Entity Class "Table1Model.cs" */
 
-      SetContainingNamespace(template);
-      template.Replace("{{RootContainingNamespace}}", instructions.RootContainingNamespace);
-      template.Replace("{{ClassName}}", instructions.SubjectName); //Prefix of the repository class name
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
+
+      //The same namespaces are always needed which is why it's static
+      SetUsingDirectives(
+        template,
+        instructions.ArchitectureStrategy,
+        instructions.UsingDirectives,
+        ResolutionMethod.Static,
+        templateName);
+
+      template.Replace("{{ClassName}}", instructions.SubjectName); //TODO: Replace with SubjectName
       template.Replace("{{EntityName}}", instructions.EntityName); //Class entity name
-      template.Replace("{{UsingDirectives}}", FormatUsingDirectives(instructions.UsingDirectives));
       template.Replace("{{SqlUsingDirectives}}", FormatUsingDirectives(syntax.SqlUsingDirectives));
       template.Replace("{{ConnectionObject}}", syntax.ConnectionObject);
       template.Replace("{{ParameterObject}}", syntax.ParameterObject);
@@ -84,7 +93,7 @@ namespace SpotWelder.Lib.Services.Generators
 
       var rt = instructions.Elections.HasFlag(GenerationElections.RepoDapper) ? "Static" : string.Empty;
 
-      return GetFormattedCSharpResult($"{instructions.SubjectName}{rt}Repository.cs", template);
+      return GetFormattedCSharpResult($"{instructions.SubjectName}{rt}Repository.cs", template, containingNamespace);
     }
 
     private string FormatSelectList(IList<ClassMemberStrings> properties, string? prefix = null)

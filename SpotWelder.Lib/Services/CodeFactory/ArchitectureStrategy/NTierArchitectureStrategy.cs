@@ -94,15 +94,19 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
 
   /// <param name="election"></param>
   /// <inheritdoc />
-  public override string ResolveAbsoluteContainingNamespace(GenerationElections election)
-    => ContainingNamespaces.TryGetValue(election, out var containingNamespace)
+  public override NamespaceModel ResolveAbsoluteContainingNamespace(GenerationElections election)
+    => new(
+      ContainingNamespaces.TryGetValue(election, out var containingNamespace)
       ? $"{RootContainingNamespace}.{containingNamespace}"
-      : RootContainingNamespace;
+      : RootContainingNamespace, 
+      containingNamespace ?? string.Empty);
 
-  public override string ResolveAbsoluteContainingNamespace(string immutableTemplateName)
-    => ContainingNamespacesForImmutables.TryGetValue(immutableTemplateName, out var containingNamespace)
+  public override NamespaceModel ResolveAbsoluteContainingNamespace(string immutableTemplateName)
+    => new (
+      ContainingNamespacesForImmutables.TryGetValue(immutableTemplateName, out var containingNamespace)
       ? $"{RootContainingNamespace}.{containingNamespace}"
-      : RootContainingNamespace;
+      : RootContainingNamespace,
+      containingNamespace ?? string.Empty);
 
   public override void ResolveStaticUsingDirectives(HashSet<string> usingDirectives, string templateName)
   {

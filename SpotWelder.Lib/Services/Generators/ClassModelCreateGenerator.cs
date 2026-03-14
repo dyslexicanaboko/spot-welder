@@ -10,13 +10,13 @@ namespace SpotWelder.Lib.Services.Generators
     protected override string TemplateName => "ModelCreate.cs.template";
 
     /// <inheritdoc />
-    protected override string ContainingNamespace => "Models.Client";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       template.Replace("{{SubjectName}}", instructions.SubjectName);
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
@@ -28,7 +28,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{ConstructorFromInterface}}", FormatConstructorBody(instructions.Properties, "target"));
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      return GetFormattedCSharpResult($"{instructions.SubjectName}V1CreateModel.cs", template);
+      return GetFormattedCSharpResult($"{instructions.SubjectName}V1CreateModel.cs", template, containingNamespace);
     }
   }
 }

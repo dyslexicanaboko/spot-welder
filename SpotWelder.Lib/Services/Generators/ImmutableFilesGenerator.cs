@@ -20,24 +20,9 @@ namespace SpotWelder.Lib.Services.Generators
     //TODO: Unfortunately, I am breaking the paradigm of this template generator. I will have to reconsider this later.
     protected override string TemplateName => "MULTIPLE"; //Multiple templates will be used, so this will have to be handled differently.
 
-    protected override string ContainingNamespace => "MULTIPLE"; //Multiple namespaces will be used, so this will have to be handled differently.
+     //Multiple namespaces will be used, so this will have to be handled differently.
 
     private const string ImmutablesFolderName = "Immutables";
-
-    //TODO: This has to be absorbed by the Architecture classes, specifically for the containing folders
-    private readonly Dictionary<string, string> _containingNamespaces = new()
-    {
-      ["BaseApiController.cs.template"] = "Controllers", //no using directives
-      ["BaseManager.cs.template"] = "Managers", //needs using directives
-      ["BaseMapper.cs.template"] = "Mappers", //no using directives
-      ["BaseRepository.cs.template"] = "DataAccess", //needs using directives
-      ["ColumnSchema.cs.template"] = "DataAccess.Utility", //no using directives
-      ["DateTimeManager.cs.template"] = "Managers", //no using directives
-      ["IAppConfiguration.cs.template"] = string.Empty, //no using directives
-      ["IFluentValidation.cs.template"] = "Validation", //no using directives
-      ["IRepository.cs.template"] = "DataAccess", //no using directives
-      ["UpdateInstruction.cs.template"] = "Managers.Utility" //no using directives
-    };
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
@@ -61,12 +46,12 @@ namespace SpotWelder.Lib.Services.Generators
         var templateName = fi.Name;
         var usingDirectives = new HashSet<string>();
 
+        //NOTE: This works off of template names, not elections.
+        var namespaceModel = instructions.ArchitectureStrategy.ResolveAbsoluteContainingNamespace(templateName);
+
         //Replace just the absolute containing namespace for each template
         var template = new StringBuilder(File.ReadAllText(fi.FullName))
-          .Replace("{{AbsoluteContainingNamespace}}", 
-            instructions.ArchitectureStrategy.ResolveAbsoluteContainingNamespace(templateName));
-
-        SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+          .Replace("{{AbsoluteContainingNamespace}}", namespaceModel.AbsoluteContainingNamespace);
 
         SetUsingDirectives(
           template,
@@ -82,19 +67,12 @@ namespace SpotWelder.Lib.Services.Generators
         }
 
         //Strip the .template extension for the output file. Filename will be named after the template file.
-        var fileName = templateName.Replace(".template", string.Empty);
-
-        //TODO: This has to be absorbed by the Architecture classes
-        //Get the containing namespace when it exists for the template.
-        if (!_containingNamespaces.TryGetValue(templateName, out var containingNamespace))
-          containingNamespace = string.Empty; //If it doesn't exist, blank is acceptable for now
-
         //Add to the heap
         result.Heap.Add(new GeneratedResult(
           Election,
-          fileName,
+          templateName.Replace(".template", string.Empty),
           FormatCSharp(template.ToString()),
-          containingNamespace));
+          namespaceModel.ContainingNamespace));
       }
 
       return result;

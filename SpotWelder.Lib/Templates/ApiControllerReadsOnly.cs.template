@@ -1,11 +1,11 @@
 ﻿{{UsingDirectives}}
 using Microsoft.AspNetCore.Mvc;
 
-namespace {{RootContainingNamespace}}.{{ContainingNamespace}};
+namespace {{AbsoluteContainingNamespace}};
 
 [Route("api/v1/{{ApiRoute}}")]
 [ApiController]
-public class {{ClassName}}Controller
+public class {{SubjectName}}Controller
   : BaseApiController
 {
   private readonly I{{SubjectName}}Mapper _mapper;
@@ -23,9 +23,9 @@ public class {{ClassName}}Controller
 
   // GET api/v1/{{ApiRoute}}/5
   [HttpGet("{id:{{PrimaryKeyType}}}")]
-  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{SubjectName}}V1Model))]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
-  public async Task<ActionResult<{{ModelName}}>> Get({{PrimaryKeyType}} id)
+  public async Task<ActionResult<{{SubjectName}}V1Model>> Get({{PrimaryKeyType}} id)
   {
     var entity = [AMO]_manager.Get(id)[AMC];
 
@@ -36,8 +36,8 @@ public class {{ClassName}}Controller
   
   // GET api/v1/{{ApiRoute}}
   [HttpGet]
-  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{ModelName}}))]
-  public async Task<ActionResult<{{ModelName}}>> GetAll()
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof({{SubjectName}}V1Model))]
+  public async Task<ActionResult<{{SubjectName}}V1Model>> GetAll()
   {
     var entity = [AMO]_manager.GetAll()[AMC];
 

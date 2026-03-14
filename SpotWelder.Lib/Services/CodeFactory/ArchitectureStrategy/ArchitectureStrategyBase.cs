@@ -14,9 +14,9 @@ public abstract class ArchitectureStrategyBase(string rootContainingNamespace)
   
   protected abstract Dictionary<string, GenerationElections[]> DynamicTemplateUsingDirectives { get; }
 
-  public abstract string ResolveAbsoluteContainingNamespace(GenerationElections election);
+  public abstract NamespaceModel ResolveAbsoluteContainingNamespace(GenerationElections election);
   
-  public abstract string ResolveAbsoluteContainingNamespace(string immutableTemplateName);
+  public abstract NamespaceModel ResolveAbsoluteContainingNamespace(string immutableTemplateName);
   
   public abstract void ResolveStaticUsingDirectives(HashSet<string> usingDirectives, string templateName);
   

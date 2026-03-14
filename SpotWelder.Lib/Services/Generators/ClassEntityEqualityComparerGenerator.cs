@@ -13,13 +13,13 @@ namespace SpotWelder.Lib.Services.Generators
     protected override string TemplateName => "EntityEqualityComparer.cs.template";
 
     /// <inheritdoc />
-    protected override string ContainingNamespace => "Entities";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       SetUsingDirectives(
         template,
@@ -31,7 +31,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{PropertiesEquals}}", FormatForEquals(instructions.Properties));
       template.Replace("{{PropertiesHashCode}}", FormatForHashCode(instructions.Properties));
 
-      return GetFormattedCSharpResult($"{instructions.EntityName}EqualityComparer.cs", template);
+      return GetFormattedCSharpResult($"{instructions.EntityName}EqualityComparer.cs", template, containingNamespace);
     }
 
     private string FormatForEquals(IList<ClassMemberStrings> properties)

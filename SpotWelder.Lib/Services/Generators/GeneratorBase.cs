@@ -36,14 +36,19 @@ namespace SpotWelder.Lib.Services.Generators
     /// The namespace where the generated content will reside.
     /// Can be used to name folders too.
     /// </summary>
-    protected virtual string ContainingNamespace => string.Empty;
+    //protected virtual string ContainingNamespace => string.Empty;
 
     public abstract GeneratedResult FillTemplate(ClassInstructions instructions);
 
     protected virtual GeneratedResult GetFormattedCSharpResult(
       string fileNameWithExtension, 
-      StringBuilder contents)
-      => new(Election, fileNameWithExtension, FormatCSharp(contents.ToString()), ContainingNamespace);
+      StringBuilder contents,
+      string containingNamespace)
+      => new(
+        Election, 
+        fileNameWithExtension, 
+        FormatCSharp(contents.ToString()), 
+        containingNamespace);
 
     protected virtual string GetTemplate(string templateName)
     {
@@ -273,11 +278,17 @@ namespace SpotWelder.Lib.Services.Generators
       return formattedCode;
     }
 
-    protected StringBuilder SetContainingNamespace(StringBuilder sb)
-      => sb.Replace("{{ContainingNamespace}}", ContainingNamespace);
+    protected StringBuilder SetAbsoluteContainingNamespace(StringBuilder sb, ArchitectureStrategyBase architectureStrategy, out string containingNamespace)
+    {
+      var namespaceModel = architectureStrategy.ResolveAbsoluteContainingNamespace(Election);
 
-    protected StringBuilder SetAbsoluteContainingNamespace(StringBuilder sb, ArchitectureStrategyBase architectureStrategy)
-      => sb.Replace("{{AbsoluteContainingNamespace}}", architectureStrategy.ResolveAbsoluteContainingNamespace(Election));
+      //This is needed later for the folder creation
+      containingNamespace = namespaceModel.ContainingNamespace;
+
+      return sb.Replace(
+        "{{AbsoluteContainingNamespace}}",
+        namespaceModel.AbsoluteContainingNamespace);
+    }
 
     protected StringBuilder SetUsingDirectives(
       StringBuilder sb, 
@@ -317,7 +328,7 @@ namespace SpotWelder.Lib.Services.Generators
     {
       var template = GetTemplateAsStringBuilder(templateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       //Depending on the elections, the using directives will change.
       SetUsingDirectives(
@@ -331,7 +342,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{Contracts}}", ExtractCSharpClassContracts(classResult.Contents));
 
       //Reminder: The containing namespace is set at the generator level.
-      return GetFormattedCSharpResult($"I{classResult.Filename}", template);
+      return GetFormattedCSharpResult($"I{classResult.Filename}", template, containingNamespace);
     }
 
     /// <summary>

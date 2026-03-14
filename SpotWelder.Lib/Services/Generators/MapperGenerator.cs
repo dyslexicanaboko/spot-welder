@@ -31,13 +31,13 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "Mapper.cs.template";
 
-    protected override string ContainingNamespace => "Mappers";
+    
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
 
-      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy);
+      SetAbsoluteContainingNamespace(template, instructions.ArchitectureStrategy, out var containingNamespace);
 
       SetUsingDirectives(
         template,
@@ -51,7 +51,7 @@ namespace SpotWelder.Lib.Services.Generators
       template.Replace("{{InterfaceName}}", instructions.InterfaceName);
       template.Replace("{{ObjectInitializer}}", FormatObjectInitializerBody(instructions.Properties, "entity"));
 
-      var result = GetFormattedCSharpResult($"{instructions.SubjectName}Mapper.cs", template);
+      var result = GetFormattedCSharpResult($"{instructions.SubjectName}Mapper.cs", template, containingNamespace);
 
       result.CorrespondingInterface = GenerateInterface(
         instructions,
