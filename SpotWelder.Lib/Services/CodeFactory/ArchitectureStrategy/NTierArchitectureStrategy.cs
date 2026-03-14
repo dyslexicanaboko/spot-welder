@@ -3,9 +3,12 @@ using System.Linq;
 
 namespace SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 
-public class NTierArchitectureStrategy(string rootContainingNamespace)
-  : ArchitectureStrategyBase(rootContainingNamespace)
+public class NTierArchitectureStrategy(string rootContainingNamespace, string subjectName)
+  : ArchitectureStrategyBase(rootContainingNamespace, subjectName)
 {
+  /* Not being present in a list means that the class will end up in the root.
+   * ServiceSerialization*.cs.template are examples of this. */
+
   //This has to remain 1:1
   protected override Dictionary<GenerationElections, string> ContainingNamespaces => new()
   {
@@ -30,13 +33,13 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
     ["BaseManager.cs.template"] = "Managers",
     ["BaseMapper.cs.template"] = "Mappers",
     ["BaseRepository.cs.template"] = "DataAccess",
-    ["ColumnSchema.cs.template"] = "DataAccess.Utility",
+    ["ColumnSchema.cs.template"] = "DataAccess.Utilities",
     ["DateTimeManager.cs.template"] = "Managers",
     ["ErrorModel.cs.template"] = "Controllers",
-    ["IAppConfiguration.cs.template"] = string.Empty,
+    ["IAppConfiguration.cs.template"] = Root,
     ["IFluentValidation.cs.template"] = "Validation",
     ["IRepository.cs.template"] = "DataAccess",
-    ["UpdateInstruction.cs.template"] = "Managers.Utility"
+    ["UpdateInstruction.cs.template"] = "Managers.Utilities"
   };
 
   //These templates will always need these namespaces to be imported
@@ -44,8 +47,8 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
   {
     {"ApiController.cs.template", ["Managers", "Mappers", "Models", "Models.Client"]},
     {"ApiControllerReadsOnly.cs.template", ["Managers", "Mappers", "Models"]},
-    {"BaseManager.cs.template", ["Managers.Utility"]},
-    {"BaseRepository.cs.template", ["DataAccess.Utility", "Managers.Utility", "System.Data", "Dapper"]},
+    {"BaseManager.cs.template", ["Managers.Utilities"]},
+    {"BaseRepository.cs.template", ["DataAccess.Utilities", "Managers.Utilities"]},
     {"EntityEqualityComparer.cs.template", ["Entities"]},
     {"EntityValidation.cs.template", ["Entities"]},
     {"IManager.cs.template", ["Entities"]},
@@ -54,8 +57,8 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
     {"ManagerReadsOnly.cs.template", ["DataAccess", "Entities", "Mappers", "Validation"]},
     {"ModelCreated.cs.template", ["Entities"]},
     {"ModelPatch.cs.template", ["Entities"]},
-    {"RepositoryDapper.cs.template", ["Entities", "System.Data", "Dapper"]},
-    {"RepositoryDapperReadsOnly.cs.template", ["Entities", "System.Data", "Dapper"]},
+    {"RepositoryDapper.cs.template", ["Records"]},
+    {"RepositoryDapperReadsOnly.cs.template", ["Records"]},
     {"ServiceSerializationCsv.cs.template", ["Entities"]},
     {"ServiceSerializationJson.cs.template", ["Entities"]},
   };
@@ -101,29 +104,6 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
     { GenerationElections.Record, ["Records"] },
   };
 
-  /// <param name="election"></param>
-  /// <inheritdoc />
-  public override NamespaceModel ResolveAbsoluteContainingNamespace(GenerationElections election)
-    => new(
-      ContainingNamespaces.TryGetValue(election, out var containingNamespace)
-      ? Join(RootContainingNamespace, containingNamespace)
-      : RootContainingNamespace, 
-      containingNamespace ?? string.Empty);
-
-  public override NamespaceModel ResolveAbsoluteContainingNamespace(string immutableTemplateName)
-    => new (
-      ContainingNamespacesForImmutables.TryGetValue(immutableTemplateName, out var containingNamespace)
-      ? Join(RootContainingNamespace, containingNamespace)
-      : RootContainingNamespace,
-      containingNamespace ?? string.Empty);
-
-  public override void ResolveStaticUsingDirectives(HashSet<string> usingDirectives, string templateName)
-  {
-    if(!StaticTemplateUsingDirectives.TryGetValue(templateName, out var staticUsingDirectives)) return;
-
-    usingDirectives.AddRange(staticUsingDirectives.Select(cn => Join(RootContainingNamespace, cn)));
-  }
-
   //Each generator already has the logic baked in on when to add a namespace for NTier
   //so, the only thing this method will do is construct the using.
   /// <param name="usingDirectives"></param>
@@ -151,5 +131,5 @@ public class NTierArchitectureStrategy(string rootContainingNamespace)
       : [];
 
   public override ArchitectureStrategyBase Clone() 
-    => new NTierArchitectureStrategy(RootContainingNamespace);
+    => new NTierArchitectureStrategy(RootContainingNamespace, SubjectName);
 }

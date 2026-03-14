@@ -2,30 +2,67 @@
 
 namespace SpotWelder.Lib.Services.CodeFactory.ArchitectureStrategy;
 
-public class FeatureBasedArchitectureStrategy(string rootContainingNamespace)
-  : ArchitectureStrategyBase(rootContainingNamespace)
+public class FeatureBasedArchitectureStrategy
+  : ArchitectureStrategyBase
 {
-  protected override Dictionary<GenerationElections, string> ContainingNamespaces { get; } = new();
+  private const string Subjects = "Subjects";
 
-  protected override Dictionary<string, string> ContainingNamespacesForImmutables { get; } = new();
-
-  /// <inheritdoc />
-  protected override Dictionary<string, string[]> StaticTemplateUsingDirectives { get; } = new();
-
-  protected override Dictionary<string, GenerationElections[]> DynamicTemplateUsingDirectives { get; } = new();
-
-  /// <param name="election"></param>
-  /// <inheritdoc />
-  public override NamespaceModel ResolveAbsoluteContainingNamespace(GenerationElections election)
-    => new (RootContainingNamespace, string.Empty); //Requires the subject too...
-
-  public override NamespaceModel ResolveAbsoluteContainingNamespace(string immutableTemplateName)
-    => new (RootContainingNamespace, string.Empty); //Requires the subject too...
-
-  public override void ResolveStaticUsingDirectives(HashSet<string> usingDirectives, string templateName)
+  public FeatureBasedArchitectureStrategy(string rootContainingNamespace, string subjectName)
+    : base(rootContainingNamespace, subjectName)
   {
+    var subjectContainingNamespace = Join(Subjects, subjectName);
 
+    ContainingNamespaces = new Dictionary<GenerationElections, string>
+    {
+      { GenerationElections.Entity, subjectContainingNamespace },
+      { GenerationElections.EntityEqualityComparer, subjectContainingNamespace },
+      { GenerationElections.Model, subjectContainingNamespace },
+      { GenerationElections.CreateModel, subjectContainingNamespace },
+      { GenerationElections.PatchModel, subjectContainingNamespace },
+      { GenerationElections.CreatedModel, subjectContainingNamespace },
+      { GenerationElections.Record, subjectContainingNamespace },
+      { GenerationElections.Validation, subjectContainingNamespace },
+      { GenerationElections.Mapper, subjectContainingNamespace },
+      { GenerationElections.ApiController, "Controllers" },
+      { GenerationElections.Manager, subjectContainingNamespace },
+      { GenerationElections.RepoDapper, subjectContainingNamespace },
+      { GenerationElections.RepoStatic, subjectContainingNamespace },
+    };
+
+    ContainingNamespacesForImmutables = new Dictionary<string, string>
+    {
+      ["BaseApiController.cs.template"] = "Controllers",
+      ["BaseManager.cs.template"] = Root,
+      ["BaseMapper.cs.template"] = Root,
+      ["BaseRepository.cs.template"] = Root,
+      ["ColumnSchema.cs.template"] = "Utilities",
+      ["DateTimeManager.cs.template"] = Root,
+      ["ErrorModel.cs.template"] = "Controllers",
+      ["IAppConfiguration.cs.template"] = Root,
+      ["IFluentValidation.cs.template"] = Root,
+      ["IRepository.cs.template"] = Root,
+      ["UpdateInstruction.cs.template"] = "Utilities"
+    };
+
+    StaticTemplateUsingDirectives = new Dictionary<string, string[]>
+    {
+      {"ApiController.cs.template", [subjectContainingNamespace]},
+      {"ApiControllerReadsOnly.cs.template", [subjectContainingNamespace]},
+      {"BaseManager.cs.template", ["Utilities"]},
+      {"BaseRepository.cs.template", ["Utilities"]},
+    };
   }
+
+  protected override Dictionary<GenerationElections, string> ContainingNamespaces { get; }
+
+  protected override Dictionary<string, string> ContainingNamespacesForImmutables { get; }
+
+  //These templates will always need these namespaces to be imported
+  protected override Dictionary<string, string[]> StaticTemplateUsingDirectives { get; }
+
+  //These are the templates that would have dynamic using directives based on elections if it were NTier.
+  //In this case the appropriate answer is nothing every time because everything lives in the same `Subjects.SubjectName` namespace always.
+  protected override Dictionary<string, GenerationElections[]> DynamicTemplateUsingDirectives => new();
 
   /// <param name="usingDirectives"></param>
   /// <param name="templateName"></param>
@@ -36,11 +73,10 @@ public class FeatureBasedArchitectureStrategy(string rootContainingNamespace)
     string templateName,
     GenerationElections elections)
   {
-    //This is going to be confusing for Feature Based...
-    //In some cases you add nothing like for Entity
-    //But for anything that utilizes a base class it's going to be weird.
+    //The three would be dynamics in this case don't do anything.
+    //Read the comment about the DynamicTemplateUsingDirectives property for more info.
   }
 
   public override ArchitectureStrategyBase Clone() 
-    => new FeatureBasedArchitectureStrategy(RootContainingNamespace);
+    => new FeatureBasedArchitectureStrategy(RootContainingNamespace, SubjectName);
 }

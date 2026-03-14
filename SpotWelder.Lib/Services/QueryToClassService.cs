@@ -84,12 +84,15 @@ namespace SpotWelder.Lib.Services
       return strategy;
     }
 
-    private static ArchitectureStrategyBase GetArchitectureStrategy(ArchitectureType architectureType, string rootContainingNamespace)
+    private static ArchitectureStrategyBase GetArchitectureStrategy(
+      ArchitectureType architectureType,
+      string rootContainingNamespace,
+      string subjectName)
     {
       return architectureType switch
       {
-        ArchitectureType.NTier => new NTierArchitectureStrategy(rootContainingNamespace),
-        ArchitectureType.FeatureBased => new FeatureBasedArchitectureStrategy(rootContainingNamespace),
+        ArchitectureType.NTier => new NTierArchitectureStrategy(rootContainingNamespace, subjectName),
+        ArchitectureType.FeatureBased => new FeatureBasedArchitectureStrategy(rootContainingNamespace, subjectName),
         _ => throw new NotSupportedException($"The provided architecture type of {architectureType} is not supported.")
       };
     }
@@ -112,7 +115,6 @@ namespace SpotWelder.Lib.Services
         SubjectName = p.SubjectName,
         EntityName = $"{p.SubjectName}Entity",
         ModelName = $"{p.SubjectName}V1Model",
-        RecordName = $"{p.SubjectName}Record",
         InterfaceName = $"I{p.SubjectName}",
         ApiRoute = p.SubjectName.ToLower().Pluralize(),
         IsAsynchronous = p.Elections.HasFlag(GenerationElections.MakeAsynchronous),
@@ -124,7 +126,7 @@ namespace SpotWelder.Lib.Services
       };
 
       ins.AsynchronicityFormatStrategy = GetAsynchronicityFormatStrategy(ins.IsAsynchronous);
-      ins.ArchitectureStrategy = GetArchitectureStrategy(p.ArchitectureType, p.RootContainingNamespace);
+      ins.ArchitectureStrategy = GetArchitectureStrategy(p.ArchitectureType, p.RootContainingNamespace, p.SubjectName);
 
       //TODO: defaulting the language to CSharp, not sure what I am going to do with this at the moment
       if (p.LanguageType == CodeType.None) p.LanguageType = CodeType.CSharp;
@@ -134,6 +136,7 @@ namespace SpotWelder.Lib.Services
         var prop = new ClassMemberStrings(sc, p.LanguageType);
 
         //NOTE: No longer required so long as the target project is using "Implicit global usings"
+        // This has to be added to the documentation, it's not obvious
         //Add the system namespace if any of the properties require it
         //if (prop.InSystemNamespace) ins.AddNamespace("System");
 

@@ -22,16 +22,16 @@ namespace SpotWelder.Lib.Services.Generators
 
     protected override string TemplateName => "EntitySimple.cs.template";
 
-    public event RowProcessedHandler RowProcessed;
+    public event RowProcessedHandler? RowProcessed;
 
     public override GeneratedResult FillTemplate(ClassInstructions instructions)
     {
       var template = GetTemplateAsStringBuilder(TemplateName);
 
-      template.Replace("{{ClassName}}", instructions.EntityName);
+      template.Replace("{{EntityName}}", instructions.EntityName);
       template.Replace("{{Properties}}", FormatProperties(instructions.Properties));
 
-      return GetFormattedCSharpResult($"{instructions.ClassName}.cs", template, string.Empty);
+      return GetFormattedCSharpResult($"{instructions.EntityName}.cs", template, string.Empty);
     }
 
     public GeneratedResult FillMockDataTemplate(ClassInstructions instructions, DataTable dataTable)

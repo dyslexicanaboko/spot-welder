@@ -27,6 +27,7 @@ namespace SpotWelder.Ui
 
       obj.SubjectName = TxtSubjectName.Text;
       obj.Elections = _electionToCheckBoxMap.GetChosenGenerationElections();
+      obj.ArchitectureType = GetArchitectureType();
 
       //Election modifications has been moved to the service class
       //Go look at the Generate() method.

@@ -60,11 +60,6 @@ namespace SpotWelder.Lib.Models
     /// <example> Subject named: `Task`, the entity would be `TaskEntity`.</example>
     public string EntityName { get; set; }
 
-    /// <summary> Name of the subject with the `Record` suffix.</summary>
-    /// <example> Subject named: `Task`, the record would be `TaskRecord`.</example>
-    [Obsolete("Going to phase this out. Use SubjectName instead.")]
-    public string RecordName { get; set; }
-
     /// <summary> Name of the subject with the `Model` suffix.</summary>
     /// <example> Subject named: `Task`, the entity would be `TaskModel`.</example>
     [Obsolete("Going to phase this out. Use SubjectName instead.")]
@@ -131,7 +126,6 @@ namespace SpotWelder.Lib.Models
       {
         SubjectName = SubjectName,
         ClassName = ClassName,
-        RecordName = RecordName,
         EntityName = EntityName,
         ModelName = ModelName,
         RootContainingNamespace = RootContainingNamespace,

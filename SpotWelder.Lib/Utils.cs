@@ -82,5 +82,14 @@ namespace SpotWelder.Lib
     {
       foreach (var item in items) set.Add(item);
     }
+
+    public static void EnsureSingleElection(this GenerationElections election)
+    {
+      if (election == GenerationElections.None)
+        throw new ArgumentException($"One election must be selected. Value was: {election}");
+
+      if ((election & (election - 1)) != 0)
+        throw new ArgumentException($"Only one election may be selected. Value was: {election}");
+    }
   }
 }
