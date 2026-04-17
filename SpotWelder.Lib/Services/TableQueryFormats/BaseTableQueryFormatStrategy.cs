@@ -6,16 +6,16 @@ using System.Text.RegularExpressions;
 
 namespace SpotWelder.Lib.Services.TableQueryFormats
 {
-  public abstract class BaseTableQueryFormatStrategy
+  public abstract partial class BaseTableQueryFormatStrategy
   {
-    protected readonly Regex _whiteSpace = new(@"\s+");
+    protected readonly Regex WhiteSpace = WhiteSpaceRegex();
 
     public abstract SqlEngine SqlEngine { get; }
 
     protected abstract string DefaultSchema { get; }
 
     public virtual string GetClassName(TableQuery tableQuery)
-      => _whiteSpace.Replace(tableQuery.TableUnqualified, string.Empty).Dehumanize();
+      => WhiteSpace.Replace(tableQuery.TableUnqualified, string.Empty).Dehumanize();
 
     protected abstract string RemoveQualifiers(string tableNameQuery);
 
@@ -110,5 +110,8 @@ namespace SpotWelder.Lib.Services.TableQueryFormats
 
       return str;
     }
+
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex WhiteSpaceRegex();
   }
 }

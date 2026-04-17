@@ -52,7 +52,7 @@ namespace SpotWelder.Ui
     {
 #if DEBUG
       //These methods have been moved to a partial class
-      DebugOneTableSqlServerTest();
+      //DebugOneTableSqlServerTest();
       //DebugCompoundQuerySqlServerTest();
       //DebugWholeSqlServerTest();
       //DebugMinimalPostgresTest();

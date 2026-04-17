@@ -149,11 +149,13 @@ public partial class GeneratorBase
 
     var formattedCode = formattedRoot.ToFullString();
 
+    //TODO: These blank line detections aren't working correctly, so commenting it out for now
+    
     // Remove blank lines immediately after opening braces
-    formattedCode = ReRemoveBlankLinesBeforeBraces().Replace(formattedCode, "$1");
+    //formattedCode = ReRemoveBlankLinesBeforeBraces().Replace(formattedCode, "$1");
 
     // Remove blank lines immediately before closing braces
-    formattedCode = ReRemoveBlankLinesAfterBraces().Replace(formattedCode, "$1$3");
+    // formattedCode = ReRemoveBlankLinesAfterBraces().Replace(formattedCode, "$1$3");
 
     // Convert the formatted syntax tree back to a string
     return formattedCode.Trim();

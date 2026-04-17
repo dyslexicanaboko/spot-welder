@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SpotWelder.Lib.Services.TableQueryFormats
 {
@@ -17,14 +16,20 @@ namespace SpotWelder.Lib.Services.TableQueryFormats
     {
       if (string.IsNullOrWhiteSpace(segment)) throw new ArgumentException($"{qualifier} cannot be null or whitespace.");
 
-      var qualified = segment;
+      // One less thing to worry about, just make it lowercase
+      var qualified = segment.ToLowerInvariant();
+
+      //NOTE: the strict rules of postgres are if there is any whitespace or an uppercase letter, qualify the segment
+      // To not drive anyone crazy, I will just be lowercasing everything automatically.
 
       //If there is any whitespace or an uppercase letter, qualify the segment
-      if (_whiteSpace.IsMatch(segment) || ContainsUpperCase(segment)) qualified = $"\"{segment}\"";
+      if (WhiteSpace.IsMatch(segment)) qualified = $"\"{segment}\"";
 
       segments.Add(qualified);
 
-      bool ContainsUpperCase(string s) => s.Any(char.IsUpper);
+      //return;
+
+      //static bool ContainsUpperCase(string s) => s.Any(char.IsUpper);
     }
   }
 }
